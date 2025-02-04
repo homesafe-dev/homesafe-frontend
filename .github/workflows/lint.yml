@@ -22,5 +22,5 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Run Linter Only on Changed Files
+      - name: Run Lint Only on Changed Files
         run: npx eslint $(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '\.js\|\.jsx\|\.ts\|\.tsx')
