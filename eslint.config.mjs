@@ -1,7 +1,7 @@
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { FlatCompat } from "@eslint/eslintrc";
-import jest from "eslint-plugin-jest"; // Import Jest plugin
+import jest from "eslint-plugin-jest";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
