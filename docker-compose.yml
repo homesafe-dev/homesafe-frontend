@@ -1,0 +1,11 @@
+frontend-app:
+  build:
+    context: ./frontend
+    dockerfile: Dockerfile
+  image: your-nextjs-app-image
+  container_name: nextjs-app-container
+  restart: unless-stopped
+  ports:
+    - "3000:3000"
+  networks:
+    - homesafe-app-network

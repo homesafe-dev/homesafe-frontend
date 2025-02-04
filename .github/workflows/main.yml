@@ -1,0 +1,46 @@
+name: Homesafe Frontend CI/CD Workflow
+
+on:
+  push:
+    branches:
+      - main
+      - staging
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  linting:
+    name: Run Static Code Analysis
+    uses: ./.github/workflows/lint.yml
+
+  testing:
+    name: Run Tests
+    needs: linting
+    uses: ./.github/workflows/test.yml
+
+  notify-slack:
+    name: Notify Slack - Frontend Workflow
+    needs: [linting, testing] # Later, add deploy-staging and deploy-production
+    runs-on: ubuntu-latest
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+    steps:
+      - name: Send Slack Notification
+        uses: act10ns/slack@v2
+        with:
+          channel: '#git-action-build'
+          status: ${{ job.status }}
+          steps: ${{ toJson(steps) }}
+        if: always()
+
+
+  # deploy-staging:
+  #   if: github.ref == 'refs/heads/staging'
+  #   needs: testing
+  #   uses: ./.github/workflows/deploy-staging.yml
+
+  # deploy-production:
+  #   if: github.ref == 'refs/heads/main'
+  #   needs: testing
+  #   uses: ./.github/workflows/deploy-production.yml
