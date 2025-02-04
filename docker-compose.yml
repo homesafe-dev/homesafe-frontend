@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  frontend-app:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: ayorinde3/homesafe-frontend-app-image:v1.0.0
+    container_name: homesafe-frontend-app-container
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}  # API URL for the backend
+    networks:
+      - homesafe-frontend-network
+
+networks:
+  homesafe-frontend-network:
+    driver: bridge
