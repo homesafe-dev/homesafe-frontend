@@ -1,13 +1,16 @@
-name: Lint
+name: Lint Frontend Code
 
 on:
   pull_request:
     branches:
-      - main
       - staging
+      - main
+  workflow_call:
+
 
 jobs:
   lint:
+    name: Lint Code
     runs-on: ubuntu-latest
 
     steps:
@@ -17,10 +20,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18.x'
+          node-version: '20.x'
 
       - name: Install Dependencies
         run: npm install
 
-      - name: Run Lint Only on Changed Files
-        run: npx eslint $(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '\.js\|\.jsx\|\.ts\|\.tsx')
+      - name: Run ESLint
+        run: npm run lint
