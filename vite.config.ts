@@ -1,13 +1,24 @@
-import { defineConfig, UserConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import tailwindcss from '@tailwindcss/vite';
+// import { defineConfig } from 'vite';
+// import react from '@vitejs/plugin-react';
 
-// https://vite.dev/config/
-export default defineConfig({
-  plugins: [react(), tailwindcss()],
-  test: {
-    environment: 'jsdom',
-    globals: true,
-    setupFiles: './tests/setupTests.ts',
-  },
-} as UserConfig);
+// // https://vitejs.dev/config/
+// export default defineConfig({
+//   plugins: [react()],
+//   css: {
+//     postcss: './postcss.config.cjs',
+//   },
+// });
+
+import { defineConfig } from "vite"; 
+import react from "@vitejs/plugin-react"; 
+import tailwindcss from "@tailwindcss/postcss";
+
+// https://vitejs.dev/config/ 
+export default defineConfig({   
+    plugins: [react()],   
+    css: {
+        postcss: {
+            plugins: [tailwindcss()],
+        },   
+    }, 
+});

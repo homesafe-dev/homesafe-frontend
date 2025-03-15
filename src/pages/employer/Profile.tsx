@@ -1,0 +1,176 @@
+import React, { useState } from 'react';
+import { FaArrowLeft } from 'react-icons/fa';
+
+interface ProfileFormData {
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  email: string;
+}
+
+const ProfilePage: React.FC = () => {
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [formData, setFormData] = useState<ProfileFormData>({
+    firstName: '',
+    lastName: '',
+    phoneNumber: '',
+    email: ''
+  });
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setProfileImage(e.target?.result as string);
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  };
+
+  const handleDeleteImage = () => {
+    setProfileImage(null);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Handle form submission logic here
+    console.log('Form submitted:', formData);
+  };
+
+  return (
+    <div className= "min-h-screen">
+      {/* Profile header with back button */}
+      <div className="mb-6">
+        <button className="flex items-center text-gray-600 hover:text-gray-800">
+          <FaArrowLeft className="mr-2" />
+          <span className="text-lg font-medium">Profile</span>
+        </button>
+      </div>
+
+      {/* Main content card */}
+      <div className="bg-white rounded-lg shadow p-8 max-w-4xl mb-6">
+        <form onSubmit={handleSubmit}>
+          {/* Profile Image Section */}
+          <div className="flex flex-col items-center mb-8">
+            <div className="relative mb-4">
+              <div className="w-32 h-32 rounded-full bg-[#D9D9D9] flex items-center justify-center overflow-hidden">
+                {profileImage ? (
+                  <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full" />
+                )}
+                <div className="absolute top-2 right-0 mr-2">
+                  <div className="w-4 h-4 bg-gray-600 rounded-full"></div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="flex space-x-4">
+              <button 
+                type="button"
+                onClick={handleDeleteImage}
+                className="px-4 py-2 border border-gray-300 rounded-md text-sm hover:bg-gray-50"
+              >
+                Delete Image
+              </button>
+              
+              <label className="px-4 py-2 bg-[#A5EA91] text-[#24292E] rounded-md text-sm cursor-pointer hover:bg-green-200">
+                Change Image
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  className="hidden" 
+                  onChange={handleImageChange} 
+                />
+              </label>
+            </div>
+          </div>
+
+          {/* Form Fields */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+            <div>
+              <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
+                First Name
+              </label>
+              <input
+                type="text"
+                id="firstName"
+                name="firstName"
+                placeholder="eg. John"
+                value={formData.firstName}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800 placeholder-[#BDC2C7]"
+              />
+            </div>
+            
+            <div>
+              <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
+                Last Name
+              </label>
+              <input
+                type="text"
+                id="lastName"
+                name="lastName"
+                placeholder="eg. Duke"
+                value={formData.lastName}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800 placeholder-[#BDC2C7]"
+              />
+            </div>
+            
+            <div>
+              <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-1">
+                Phone Number
+              </label>
+              <input
+                type="tel"
+                id="phoneNumber"
+                name="phoneNumber"
+                placeholder="e.g 080*******"
+                value={formData.phoneNumber}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800 placeholder-[#BDC2C7]"
+              />
+            </div>
+            
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="example@gmail.com"
+                value={formData.email}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800 placeholder-[#BDC2C7]"
+              />
+            </div>
+          </div>
+        </form>
+      </div>
+
+      {/* Save Button - moved outside and below the form card */}
+      <div className="flex justify-end max-w-4xl">
+        <button
+          onClick={handleSubmit}
+          type="button"
+          className="px-6 py-2 bg-[#A5EA91] text-[#24292E] rounded-md hover:bg-green-300 focus:outline-none focus:ring-2 focus:ring-green-500 mt-[1rem]"
+        >
+          Save Changes
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default ProfilePage;
