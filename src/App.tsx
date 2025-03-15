@@ -1,13 +1,13 @@
 import { RouterProvider } from 'react-router-dom';
-import router from './router';
-import Navbar from './components/Navbar/Navbar';
+import { router } from './router';
+import { AuthProvider } from './contexts/AuthContext';
+import './App.css';
 
 function App() {
   return (
-    <>
-      <Navbar />
+    <AuthProvider>
       <RouterProvider router={router} />
-    </>
+    </AuthProvider>
   );
 }
 

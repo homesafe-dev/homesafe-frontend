@@ -1,11 +1,192 @@
-import { createBrowserRouter } from 'react-router-dom';
-import Home from '../components/pages/Home/Home';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 
-const router = createBrowserRouter([
+// Auth Components
+import EmployerLoginForm from '../components/auth/employer/LoginForm';
+import EmployerSignupForm from '../components/auth/employer/SignupFrom'
+import EmployerSignupOTP from '../components/auth/employer/SignupOTP'
+import EmployerSignupPassword from '../components/auth/employer/SignupPassword'
+import EmployerSigninPassword from '../components/auth/employer/SigninPassword'
+import EmployerSigninCreatePassword from '../components/auth/employer/SigninCreatePassword'
+import EmployeeLoginForm from '../components/auth/employer/LoginForm';
+import EmployerForgotPassword from '../components/auth/employer/ForgotPassword';
+import EmployerForgotPasswordOTP from '../components/auth/employer/ForgotPasswordOTP';
+import AgentLoginForm from '../components/auth/agent/LoginForm';
+import OnboardingForm from '../components/auth/employer/OnboardingForm';
+import NotificationsPage from '../components/Employer/NotificationsPage';
+
+// Dashboard Components
+import EmployerDashboard from '../pages/employer/Dashboard';
+import EmployeeDashboard from '../pages/employee/Dashboard';
+import AgentDashboard from '../pages/agent/Dashboard';
+import FacialCapturePage from '../components/auth/employer/FacialCapture';
+
+// Layouts
+import EmployerLayout from '../components/layouts/Employer/Layout';
+import EmployeeLayout from '../components/layouts/Employee/Layout';
+import WalletPage from '../pages/employer/WalletPage';
+import WalletHistory from '../pages/employer/WalletHistory';
+import WalletTopUp from '../pages/employer/WalletTopUp';
+import Profile from '../pages/employer/Profile';
+import Security from '../pages/employer/Security';
+import KYCPage from '../pages/employer/KYCPage';
+
+export const router = createBrowserRouter([
   {
     path: '/',
-    element: <Home />,
+    element: <Navigate to="/employer/login" replace />,
+  },
+  // Employer Routes
+  {
+    path: '/employer',
+    children: [
+      {
+        path: '',
+        element: <Navigate to="/employer/login" replace />,
+      },
+      {
+        path: 'login',
+        element: <EmployerLoginForm />,
+      },
+      {
+        path: 'signup',
+        element: <EmployerSignupForm />,
+      },
+      {
+        path: 'signup/otp',
+        element: <EmployerSignupOTP />,
+      },
+      {
+        path: 'forgot-password/otp',
+        element: <EmployerForgotPasswordOTP />,
+      },
+      {
+        path: 'signup/password',
+        element: <EmployerSignupPassword />,
+      },
+      {
+        path: 'signup/onboarding-form',
+        element: <OnboardingForm />,
+      },
+      {
+        path: 'signup/facial-capture',
+        element: <FacialCapturePage />,
+      },
+      {
+        path: 'signin/password',
+        element: <EmployerSigninPassword />,
+      },
+      {
+        path: 'signin/forgot-password',
+        element: <EmployerForgotPassword />,
+      },
+      {
+        path: 'signin/create-password',
+        element: <EmployerSigninCreatePassword />,
+      },
+      {
+        path: 'dashboard',
+        element: (
+          <EmployerLayout>
+            <EmployerDashboard />
+          </EmployerLayout>
+        ),
+      },
+      {
+        path: 'profile',
+        element: (
+          <EmployerLayout>
+            <Profile />
+          </EmployerLayout>
+        ),
+      },
+        {
+          path: 'security',
+          element: (
+            <EmployerLayout>
+              <Security />
+            </EmployerLayout>
+          ),
+      },
+      {
+        path: 'kyc',
+        element: (
+          <EmployerLayout>
+            <KYCPage />
+          </EmployerLayout>
+        ),
+    },
+      {
+        path: 'notifications',
+        element: (
+          <EmployerLayout>
+            <NotificationsPage />
+          </EmployerLayout>
+        ),
+      },
+      {
+        path: 'wallet',
+        element: (
+          <EmployerLayout>
+            <WalletPage />
+          </EmployerLayout>
+        ),
+      },
+      {
+        path: 'wallet-history',
+        element: (
+          <EmployerLayout>
+            <WalletHistory />
+          </EmployerLayout>
+        ),
+      },
+      {
+        path: 'wallet/top-up',
+        element: (
+          <EmployerLayout>
+            <WalletTopUp />
+          </EmployerLayout>
+        ),
+      },
+    ],
+  },
+  // Employee Routes
+  {
+    path: '/employee',
+    children: [
+      {
+        path: '',
+        element: <Navigate to="/employee/login" replace />,
+      },
+      {
+        path: 'login',
+        element: <EmployeeLoginForm />,
+      },
+      {
+        path: 'dashboard',
+        element: (
+          <EmployeeLayout>
+            <EmployeeDashboard />
+          </EmployeeLayout>
+        ),
+      },
+    ],
+  },
+  // Agent Routes
+  {
+    path: '/agent',
+    children: [
+      {
+        path: '',
+        element: <Navigate to="/agent/login" replace />,
+      },
+      {
+        path: 'login',
+        element: <AgentLoginForm />,
+      },
+      {
+        path: 'dashboard',
+        element: <AgentDashboard />,
+      },
+    ],
   },
 ]);
-
-export default router;
