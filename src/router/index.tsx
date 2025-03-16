@@ -31,6 +31,7 @@ import Security from '../pages/employer/Security';
 import KYCPage from '../pages/employer/KYCPage';
 import AritisansPage from '../pages/employer/AritisansPage';
 import ArtisanProfileView from '../pages/employer/ArtisansProfile';
+import Staff from '../pages/employer/Staff';
 
 export const router = createBrowserRouter([
   {
@@ -162,6 +163,14 @@ export const router = createBrowserRouter([
         element: (
           <EmployerLayout>
             <ArtisanProfileView goBack={() => window.history.back()} />
+          </EmployerLayout>
+        ),
+      },
+      {
+        path: 'staff',
+        element: (
+          <EmployerLayout>
+            <Staff />
           </EmployerLayout>
         ),
       },
