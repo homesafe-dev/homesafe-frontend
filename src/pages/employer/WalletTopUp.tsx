@@ -1,6 +1,5 @@
 import React from 'react';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
-import { HiOutlineEye } from 'react-icons/hi';
 
 const WalletTopUp: React.FC = () => {
   return (

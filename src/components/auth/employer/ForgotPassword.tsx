@@ -2,14 +2,9 @@ import React, { useState } from 'react';
 import signupImg1 from '../../../assets/images/signupimg1.png';
 import signupImg2 from '../../../assets/images/signupimg2.png';
 import { Link } from 'react-router-dom';
-import HomesafeLogo from '../../../assets/images/HomesafeLogo.png'
-import HomesafeLogo2 from '../../../assets/images/HomesafeLogo2.svg'
+import HomesafeLogo from '../../../assets/images/HomesafeLogo.png';
 
-interface HomesafeSignupPageProps {
-  // Add any props if needed
-}
-
-const HomesafeForgotPasswordPage: React.FC<HomesafeSignupPageProps> = () => {
+const HomesafeForgotPasswordPage: React.FC = () => {
   const [email, setEmail] = useState<string>('');
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -56,21 +51,28 @@ const HomesafeForgotPasswordPage: React.FC<HomesafeSignupPageProps> = () => {
           {/* Mission statement */}
           <div className="max-w-md">
             <p className="text-center text-[#F4F4F4] text-[24px] font-normal">
-              "Our Mission at Homesafe is to make hiring safe, simple, and efficient for every Living Space, and to create a job search space for Artisans to apply through".
+              "Our Mission at Homesafe is to make hiring safe, simple, and
+              efficient for every Living Space, and to create a job search space
+              for Artisans to apply through".
             </p>
           </div>
         </div>
       </div>
-      
+
       {/* Right side with sign up form */}
       <div className="w-full md:w-1/2 flex items-center justify-center p-6">
         <div className="flex flex-col items-center space-y-4">
           <div className="w-[545px] bg-white rounded-lg shadow-lg p-8">
-         <h1 className='text-[36px] text-[#24292E] font-semibold'>Forgot Password</h1>
-            
+            <h1 className="text-[36px] text-[#24292E] font-semibold">
+              Forgot Password
+            </h1>
+
             <form onSubmit={handleSubmit}>
               <div className="mb-4 mt-[1rem]">
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Email
                 </label>
                 <input
@@ -83,17 +85,16 @@ const HomesafeForgotPasswordPage: React.FC<HomesafeSignupPageProps> = () => {
                   required
                 />
               </div>
-              
+
               <Link to="/employer/forgot-password/otp">
-              <button
-                type="submit"
-                className="w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors"
-              >
-                Continue
-              </button>
+                <button
+                  type="submit"
+                  className="w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors"
+                >
+                  Continue
+                </button>
               </Link>
             </form>
-            
           </div>
         </div>
       </div>

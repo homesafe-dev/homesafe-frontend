@@ -14,7 +14,7 @@ const ProfilePage: React.FC = () => {
     firstName: '',
     lastName: '',
     phoneNumber: '',
-    email: ''
+    email: '',
   });
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,7 +35,7 @@ const ProfilePage: React.FC = () => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
     });
   };
 
@@ -46,7 +46,7 @@ const ProfilePage: React.FC = () => {
   };
 
   return (
-    <div className= "min-h-screen">
+    <div className="min-h-screen">
       {/* Profile header with back button */}
       <div className="mb-6">
         <button className="flex items-center text-gray-600 hover:text-gray-800">
@@ -63,7 +63,11 @@ const ProfilePage: React.FC = () => {
             <div className="relative mb-4">
               <div className="w-32 h-32 rounded-full bg-[#D9D9D9] flex items-center justify-center overflow-hidden">
                 {profileImage ? (
-                  <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
+                  <img
+                    src={profileImage}
+                    alt="Profile"
+                    className="w-full h-full object-cover"
+                  />
                 ) : (
                   <div className="w-full h-full" />
                 )}
@@ -72,23 +76,23 @@ const ProfilePage: React.FC = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="flex space-x-4">
-              <button 
+              <button
                 type="button"
                 onClick={handleDeleteImage}
                 className="px-4 py-2 border border-gray-300 rounded-md text-sm hover:bg-gray-50"
               >
                 Delete Image
               </button>
-              
+
               <label className="px-4 py-2 bg-[#A5EA91] text-[#24292E] rounded-md text-sm cursor-pointer hover:bg-green-200">
                 Change Image
-                <input 
-                  type="file" 
-                  accept="image/*" 
-                  className="hidden" 
-                  onChange={handleImageChange} 
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleImageChange}
                 />
               </label>
             </div>
@@ -97,7 +101,10 @@ const ProfilePage: React.FC = () => {
           {/* Form Fields */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
             <div>
-              <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="firstName"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 First Name
               </label>
               <input
@@ -110,9 +117,12 @@ const ProfilePage: React.FC = () => {
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800 placeholder-[#BDC2C7]"
               />
             </div>
-            
+
             <div>
-              <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="lastName"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Last Name
               </label>
               <input
@@ -125,9 +135,12 @@ const ProfilePage: React.FC = () => {
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800 placeholder-[#BDC2C7]"
               />
             </div>
-            
+
             <div>
-              <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="phoneNumber"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Phone Number
               </label>
               <input
@@ -140,9 +153,12 @@ const ProfilePage: React.FC = () => {
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800 placeholder-[#BDC2C7]"
               />
             </div>
-            
+
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Email
               </label>
               <input

@@ -2,11 +2,11 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 
 // Auth Components
 import EmployerLoginForm from '../components/auth/employer/LoginForm';
-import EmployerSignupForm from '../components/auth/employer/SignupFrom'
-import EmployerSignupOTP from '../components/auth/employer/SignupOTP'
-import EmployerSignupPassword from '../components/auth/employer/SignupPassword'
-import EmployerSigninPassword from '../components/auth/employer/SigninPassword'
-import EmployerSigninCreatePassword from '../components/auth/employer/SigninCreatePassword'
+import EmployerSignupForm from '../components/auth/employer/SignupFrom';
+import EmployerSignupOTP from '../components/auth/employer/SignupOTP';
+import EmployerSignupPassword from '../components/auth/employer/SignupPassword';
+import EmployerSigninPassword from '../components/auth/employer/SigninPassword';
+import EmployerSigninCreatePassword from '../components/auth/employer/SigninCreatePassword';
 import EmployeeLoginForm from '../components/auth/employer/LoginForm';
 import EmployerForgotPassword from '../components/auth/employer/ForgotPassword';
 import EmployerForgotPasswordOTP from '../components/auth/employer/ForgotPasswordOTP';
@@ -99,13 +99,13 @@ export const router = createBrowserRouter([
           </EmployerLayout>
         ),
       },
-        {
-          path: 'security',
-          element: (
-            <EmployerLayout>
-              <Security />
-            </EmployerLayout>
-          ),
+      {
+        path: 'security',
+        element: (
+          <EmployerLayout>
+            <Security />
+          </EmployerLayout>
+        ),
       },
       {
         path: 'kyc',
@@ -114,7 +114,7 @@ export const router = createBrowserRouter([
             <KYCPage />
           </EmployerLayout>
         ),
-    },
+      },
       {
         path: 'notifications',
         element: (

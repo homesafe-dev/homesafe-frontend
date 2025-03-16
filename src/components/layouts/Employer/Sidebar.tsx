@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import HomesafeLogo from '../../../assets/images/HomesafeLogo2.svg'
-import DashboardIcon from '../../../assets/icons/dashboard.svg'
-import WalletIcon from '../../../assets/icons/wallet.svg'
-import ArtisansIcon from '../../../assets/icons/artisans.svg'
-import StaffsIcon from '../../../assets/icons/staffs.svg'
-import PayrollIcon from '../../../assets/icons/payroll.svg'
-import ResourcesIcon from '../../../assets/icons/resources.svg'
-import MedicalIcon from '../../../assets/icons/medical.svg'
-import ReviewIcon from '../../../assets/icons/review.svg'
-import AllContractsIcon from '../../../assets/icons/contracts.svg'
+import HomesafeLogo from '../../../assets/images/HomesafeLogo2.svg';
+import DashboardIcon from '../../../assets/icons/dashboard.svg';
+import WalletIcon from '../../../assets/icons/wallet.svg';
+import ArtisansIcon from '../../../assets/icons/artisans.svg';
+import StaffsIcon from '../../../assets/icons/staffs.svg';
+import PayrollIcon from '../../../assets/icons/payroll.svg';
+import ResourcesIcon from '../../../assets/icons/resources.svg';
+import MedicalIcon from '../../../assets/icons/medical.svg';
+import ReviewIcon from '../../../assets/icons/review.svg';
+import AllContractsIcon from '../../../assets/icons/contracts.svg';
 
 // Define the sidebar item type
 interface SidebarItemProps {
@@ -21,10 +21,16 @@ interface SidebarItemProps {
 }
 
 // Sidebar Item Component
-const SidebarItem: React.FC<SidebarItemProps> = ({ icon, text, path, isActive = false, onClick }) => {
+const SidebarItem: React.FC<SidebarItemProps> = ({
+  icon,
+  text,
+  path,
+  isActive = false,
+  onClick,
+}) => {
   return (
     <Link to={path} className="text-decoration-none">
-      <div 
+      <div
         className={`flex items-center gap-3 py-3 px-4 cursor-pointer hover:bg-gray-100 rounded-md ${isActive ? 'bg-[#C8EDDF80]' : ''}`}
         onClick={onClick}
       >
@@ -38,29 +44,68 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ icon, text, path, isActive = 
 // Main Sidebar Component
 const Sidebar: React.FC = () => {
   const location = useLocation();
-  const [activeItem, setActiveItem] = useState<string>('Dashboard');
 
-  const handleItemClick = (itemName: string) => {
-    setActiveItem(itemName);
+  const handleItemClick = () => {
+    // Handle any click events if needed
   };
 
   // Sidebar items configuration
   const sidebarItems = [
-    { name: 'Dashboard', icon: <img src={DashboardIcon}/>, path: '/employer/dashboard' },
-    { name: 'Wallet', icon: <img src={WalletIcon} />, path: '/employer/wallet' },
-    { name: 'Artisans', icon: <img src={ArtisansIcon} />, path: '/employer/artisans' },
-    { name: 'My Staff', icon: <img src={StaffsIcon} />, path: '/employer/staff' },
-    { name: 'Payroll', icon: <img src={PayrollIcon} />, path: '/employer/payroll' },
-    { name: 'Resources', icon: <img src={ResourcesIcon} />, path: '/employer/resources' },
-    { name: 'Medical', icon: <img src={MedicalIcon} />, path: '/employer/medical' },
-    { name: 'Review', icon: <img src={ReviewIcon} />, path: '/employer/review' },
-    { name: 'All Contracts', icon: <img src={AllContractsIcon} />, path: '/employer/contracts' },
+    {
+      name: 'Dashboard',
+      icon: <img src={DashboardIcon} />,
+      path: '/employer/dashboard',
+    },
+    {
+      name: 'Wallet',
+      icon: <img src={WalletIcon} />,
+      path: '/employer/wallet',
+    },
+    {
+      name: 'Artisans',
+      icon: <img src={ArtisansIcon} />,
+      path: '/employer/artisans',
+    },
+    {
+      name: 'My Staff',
+      icon: <img src={StaffsIcon} />,
+      path: '/employer/staff',
+    },
+    {
+      name: 'Payroll',
+      icon: <img src={PayrollIcon} />,
+      path: '/employer/payroll',
+    },
+    {
+      name: 'Resources',
+      icon: <img src={ResourcesIcon} />,
+      path: '/employer/resources',
+    },
+    {
+      name: 'Medical',
+      icon: <img src={MedicalIcon} />,
+      path: '/employer/medical',
+    },
+    {
+      name: 'Review',
+      icon: <img src={ReviewIcon} />,
+      path: '/employer/review',
+    },
+    {
+      name: 'All Contracts',
+      icon: <img src={AllContractsIcon} />,
+      path: '/employer/contracts',
+    },
   ];
 
   return (
     <div className="w-64 h-screen bg-white border-r border-gray-200 flex flex-col">
       {/* Logo Container */}
-     <img  src={HomesafeLogo} alt="homesafe logo" className='w-[178px] mx-auto mt-[3rem]  mb-[3rem]'/>
+      <img
+        src={HomesafeLogo}
+        alt="homesafe logo"
+        className="w-[178px] mx-auto mt-[3rem]  mb-[3rem]"
+      />
 
       {/* Navigation Items */}
       <div className="flex-1 px-3 py-4">
@@ -71,7 +116,7 @@ const Sidebar: React.FC = () => {
             text={item.name}
             path={item.path}
             isActive={location.pathname === item.path}
-            onClick={() => handleItemClick(item.name)}
+            onClick={() => handleItemClick()}
           />
         ))}
       </div>
