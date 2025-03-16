@@ -38,6 +38,9 @@ const ArtisanProfileView: React.FC<ArtisanProfileProps> = ({ goBack }) => {
                 (e.target as HTMLImageElement).src = 'https://via.placeholder.com/100';
               }}
             />
+            <div 
+              className={`absolute top-1 right-1 w-4 h-4 border-2 border-white rounded-full bg-[#37A379]`}
+            />
           </div>
 
           <h2 className="text-[16px] text-gray-700 mt-[1rem] font-medium">Cali Foster Jenkins</h2>
