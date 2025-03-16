@@ -2,13 +2,9 @@ import React, { useState } from 'react';
 import signupImg1 from '../../../assets/images/signupimg1.png';
 import signupImg2 from '../../../assets/images/signupimg2.png';
 import { Link } from 'react-router-dom';
-import HomesafeLogo from '../../../assets/images/HomesafeLogo.png'
+import HomesafeLogo from '../../../assets/images/HomesafeLogo.png';
 
-interface HomesafeSignupPageProps {
-  // Add any props if needed
-}
-
-const OnboardingForm: React.FC<HomesafeSignupPageProps> = () => {
+const OnboardingForm: React.FC = () => {
   const [formData, setFormData] = useState({
     title: '',
     firstName: '',
@@ -16,21 +12,23 @@ const OnboardingForm: React.FC<HomesafeSignupPageProps> = () => {
     email: '',
     phoneNumber: '',
     homeAddress: '',
-    userType: 'employer'
+    userType: 'employer',
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleRadioChange = (value: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      userType: value
+      userType: value,
     }));
   };
 
@@ -78,24 +76,33 @@ const OnboardingForm: React.FC<HomesafeSignupPageProps> = () => {
           {/* Mission statement */}
           <div className="max-w-md">
             <p className="text-center text-[#F4F4F4] text-[24px] font-normal">
-              "Our Mission at Homesafe is to make hiring safe, simple, and efficient for every Living Space, and to create a job search space for Artisans to apply through".
+              "Our Mission at Homesafe is to make hiring safe, simple, and
+              efficient for every Living Space, and to create a job search space
+              for Artisans to apply through".
             </p>
           </div>
         </div>
       </div>
-      
+
       {/* Right side with onboarding form */}
       <div className="w-full md:w-1/2 flex items-center justify-center p-6">
         <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
           <div className="text-center mb-6">
-            <h1 className="text-[36px] font-semibold text-[#24292E]">Welcome Onboard</h1>
-            <p className="text-[13px] text-[#24292E] mt-2">Kindly tell us a few things about you</p>
+            <h1 className="text-[36px] font-semibold text-[#24292E]">
+              Welcome Onboard
+            </h1>
+            <p className="text-[13px] text-[#24292E] mt-2">
+              Kindly tell us a few things about you
+            </p>
           </div>
-          
+
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Title Field */}
             <div>
-              <label htmlFor="title" className="block text-[13px] font-medium text-[#24292E] mb-1">
+              <label
+                htmlFor="title"
+                className="block text-[13px] font-medium text-[#24292E] mb-1"
+              >
                 Title
               </label>
               <select
@@ -112,10 +119,13 @@ const OnboardingForm: React.FC<HomesafeSignupPageProps> = () => {
                 <option value="Dr">Dr</option>
               </select>
             </div>
-            
+
             {/* First Name Field */}
             <div>
-              <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="firstName"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 First Name
               </label>
               <input
@@ -129,10 +139,13 @@ const OnboardingForm: React.FC<HomesafeSignupPageProps> = () => {
                 required
               />
             </div>
-            
+
             {/* Last Name Field */}
             <div>
-              <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="lastName"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Last Name
               </label>
               <input
@@ -146,10 +159,13 @@ const OnboardingForm: React.FC<HomesafeSignupPageProps> = () => {
                 required
               />
             </div>
-            
+
             {/* Email Field */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Email
               </label>
               <input
@@ -163,10 +179,13 @@ const OnboardingForm: React.FC<HomesafeSignupPageProps> = () => {
                 required
               />
             </div>
-            
+
             {/* Phone Number Field */}
             <div>
-              <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="phoneNumber"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Phone Number
               </label>
               <input
@@ -180,10 +199,13 @@ const OnboardingForm: React.FC<HomesafeSignupPageProps> = () => {
                 required
               />
             </div>
-            
+
             {/* Home Address Field */}
             <div>
-              <label htmlFor="homeAddress" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="homeAddress"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Home Address
               </label>
               <input
@@ -197,7 +219,7 @@ const OnboardingForm: React.FC<HomesafeSignupPageProps> = () => {
                 required
               />
             </div>
-            
+
             {/* User Type Field */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -213,7 +235,10 @@ const OnboardingForm: React.FC<HomesafeSignupPageProps> = () => {
                     checked={formData.userType === 'employer'}
                     onChange={() => handleRadioChange('employer')}
                   />
-                  <label htmlFor="employer" className="ml-2 text-sm text-gray-700">
+                  <label
+                    htmlFor="employer"
+                    className="ml-2 text-sm text-gray-700"
+                  >
                     An Employer
                   </label>
                 </div>
@@ -232,14 +257,15 @@ const OnboardingForm: React.FC<HomesafeSignupPageProps> = () => {
                 </div>
               </div>
             </div>
-            
+
             {/* Submit Button */}
-            <Link to="/employer/signup/facial-capture"><button
-              type="submit"
-              className="w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors mt-4"
-            >
-              Save & Continue
-            </button>
+            <Link to="/employer/signup/facial-capture">
+              <button
+                type="submit"
+                className="w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors mt-4"
+              >
+                Save & Continue
+              </button>
             </Link>
           </form>
         </div>

@@ -1,21 +1,23 @@
 import React, { useState } from 'react';
-import { LuBellDot } from "react-icons/lu";
+import { LuBellDot } from 'react-icons/lu';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
-import NotificationsModal, { NotificationItem } from '../../Employer/NotificationsModal';
-import ProfileIcon from '../../../assets/icons/profile.svg'
-import LogoutIcon from '../../../assets/icons/logout.svg'
-import KycIcon from '../../../assets/icons/kyc.svg'
-import SecurityIcon from '../../../assets/icons/security.svg'
+import NotificationsModal, {
+  NotificationItem,
+} from '../../Employer/NotificationsModal';
+import ProfileIcon from '../../../assets/icons/profile.svg';
+import LogoutIcon from '../../../assets/icons/logout.svg';
+import KycIcon from '../../../assets/icons/kyc.svg';
+import SecurityIcon from '../../../assets/icons/security.svg';
 
 interface HeaderProps {
   userEmail?: string;
   userName?: string;
 }
 
-const Header: React.FC<HeaderProps> = ({ 
-  userEmail = 'Johnduke@gmail.com', 
-  userName = 'John'
+const Header: React.FC<HeaderProps> = ({
+  userEmail = 'Johnduke@gmail.com',
+  userName = 'John',
 }) => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,40 +26,47 @@ const Header: React.FC<HeaderProps> = ({
     {
       id: '1',
       title: 'Medical Check-up for Cali Foster',
-      message: "It's time for one of your staff medical checkup. A reminder will also be sent to your staff.",
+      message:
+        "It's time for one of your staff medical checkup. A reminder will also be sent to your staff.",
       date: 'Nov 24',
       read: false,
-      type: 'medical'
+      type: 'medical',
     },
     {
       id: '2',
       title: 'Salary Advance',
-      message: "A staff of yours has requested for Salary advance, click to view who it is.",
+      message:
+        'A staff of yours has requested for Salary advance, click to view who it is.',
       date: 'Nov 24',
       read: false,
-      type: 'salary'
+      type: 'salary',
     },
     {
       id: '3',
       title: 'Medical Check-up for Cali Foster',
-      message: "It's time for one of your staff medical checkup. A reminder will also be sent to your staff.",
+      message:
+        "It's time for one of your staff medical checkup. A reminder will also be sent to your staff.",
       date: 'Nov 24',
       read: false,
-      type: 'medical'
-    }
+      type: 'medical',
+    },
   ]);
 
   const handleMarkAllAsRead = () => {
-    setNotifications(notifications.map(notification => ({
-      ...notification,
-      read: true
-    })));
+    setNotifications(
+      notifications.map((notification) => ({
+        ...notification,
+        read: true,
+      }))
+    );
   };
 
   const handleViewNotification = (id: string) => {
-    setNotifications(notifications.map(notification => 
-      notification.id === id ? { ...notification, read: true } : notification
-    ));
+    setNotifications(
+      notifications.map((notification) =>
+        notification.id === id ? { ...notification, read: true } : notification
+      )
+    );
   };
 
   const handleLogout = () => {
@@ -65,79 +74,92 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <div className="w-full bg-[#F7F4F4] border-b border-gray-200 px-6 py-3 flex items-center justify-end">
-      {/* Right side - User info and controls */}
-      <div className="flex items-center space-x-4">
-        {/* Notification bell */}
-        <button 
-          className="p-1 rounded-full hover:bg-gray-100"
-          onClick={() => setIsModalOpen(true)}
-        >
-          <LuBellDot size={22} className="text-gray-600" />
-        </button>
-        
-        {/* User profile */}
-        <div className="relative">
-          <button 
-            className="flex items-center space-x-2"
-            onClick={() => setShowDropdown(!showDropdown)}
-          >
-            <div className="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center text-white">
-              <span>OP</span>
-            </div>
-            
-            {/* User email with dropdown */}
-            <div className="flex items-center text-gray-700">
-              <span className="text-sm">{userEmail}</span>
-              <MdOutlineKeyboardArrowDown size={20} className="text-gray-500" />
-            </div>
-          </button>
+    <header className="bg-white shadow-sm">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center">
+            <span className="text-xl font-semibold text-gray-800">
+              Welcome, {userName}
+            </span>
+          </div>
 
-          {/* Dropdown Menu */}
-          {showDropdown && (
-            <div className="absolute right-0 mt-4 ml-8 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+          {/* Right side - User info and controls */}
+          <div className="flex items-center space-x-4">
+            {/* Notification bell */}
+            <button
+              className="p-1 rounded-full hover:bg-gray-100"
+              onClick={() => setIsModalOpen(true)}
+            >
+              <LuBellDot size={22} className="text-gray-600" />
+            </button>
+
+            {/* User profile */}
+            <div className="relative">
               <button
-                onClick={() => {
-                  setShowDropdown(false);
-                  navigate('/employer/profile');
-                }}
-                className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                className="flex items-center space-x-2"
+                onClick={() => setShowDropdown(!showDropdown)}
               >
-                <img src={ProfileIcon} className="mr-3" />
-                Profile
+                <div className="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center text-white">
+                  <span>OP</span>
+                </div>
+
+                {/* User email with dropdown */}
+                <div className="flex items-center text-gray-700">
+                  <span className="text-sm">{userEmail}</span>
+                  <MdOutlineKeyboardArrowDown
+                    size={20}
+                    className="text-gray-500"
+                  />
+                </div>
               </button>
-              <button
-                onClick={() => {
-                  setShowDropdown(false);
-                  navigate('/employer/security');
-                }}
-                className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >
-                 <img src={SecurityIcon} className="mr-3" />
-                Security
-              </button>
-              <button
-                onClick={() => {
-                  setShowDropdown(false);
-                  navigate('/employer/kyc');
-                }}
-                className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >
-                <img src={KycIcon} className="mr-3" />
-                KYC
-              </button>
-              <button
-                onClick={() => {
-                  setShowDropdown(false);
-                  handleLogout();
-                }}
-                className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >
-               <img src={LogoutIcon} className="mr-3" />
-                Log Out
-              </button>
+
+              {/* Dropdown Menu */}
+              {showDropdown && (
+                <div className="absolute right-0 mt-4 ml-8 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                  <button
+                    onClick={() => {
+                      setShowDropdown(false);
+                      navigate('/employer/profile');
+                    }}
+                    className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    <img src={ProfileIcon} className="mr-3" />
+                    Profile
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowDropdown(false);
+                      navigate('/employer/security');
+                    }}
+                    className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    <img src={SecurityIcon} className="mr-3" />
+                    Security
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowDropdown(false);
+                      navigate('/employer/kyc');
+                    }}
+                    className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    <img src={KycIcon} className="mr-3" />
+                    KYC
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowDropdown(false);
+                      handleLogout();
+                    }}
+                    className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    <img src={LogoutIcon} className="mr-3" />
+                    Log Out
+                  </button>
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </div>
 
@@ -149,7 +171,7 @@ const Header: React.FC<HeaderProps> = ({
         onMarkAllAsRead={handleMarkAllAsRead}
         onViewNotification={handleViewNotification}
       />
-    </div>
+    </header>
   );
 };
 

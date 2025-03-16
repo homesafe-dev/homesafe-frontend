@@ -4,11 +4,7 @@ import signupImg2 from '../../../assets/images/signupimg2.png';
 import { Link } from 'react-router-dom';
 import HomesafeLogo from '../../../assets/images/HomesafeLogo.png';
 
-interface FacialCapturePageProps {
-  // Add any props if needed
-}
-
-const FacialCapturePage: React.FC<FacialCapturePageProps> = () => {
+const FacialCapturePage: React.FC = () => {
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -71,12 +67,14 @@ const FacialCapturePage: React.FC<FacialCapturePageProps> = () => {
           {/* Mission statement */}
           <div className="max-w-md">
             <p className="text-center text-[#F4F4F4] text-[24px] font-normal">
-              "Our Mission at Homesafe is to make hiring safe, simple, and efficient for every Living Space, and to create a job search space for Artisans to apply through".
+              "Our Mission at Homesafe is to make hiring safe, simple, and
+              efficient for every Living Space, and to create a job search space
+              for Artisans to apply through".
             </p>
           </div>
         </div>
       </div>
-      
+
       {/* Right side with facial capture form */}
       <div className="w-full md:w-1/2 flex items-center justify-center p-6">
         <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
@@ -88,7 +86,7 @@ const FacialCapturePage: React.FC<FacialCapturePageProps> = () => {
               Kindly look into your camera and take a picture
             </p>
           </div>
-          
+
           <div className="flex flex-col items-center justify-center ">
             {/* Hidden file input */}
             <input
@@ -99,19 +97,19 @@ const FacialCapturePage: React.FC<FacialCapturePageProps> = () => {
               onChange={handleFileChange}
               capture="user"
             />
-            
+
             {/* Wrapper div with white background and shadow */}
             <div className="bg-white p-6 rounded-lg drop-shadow-[0_0_10px_rgba(0,0,0,0.15)] w-[344px] flex flex-col justify-center items-center">
               {/* Image preview area */}
-              <div 
-                className="w-full flex justify-center mb-4" 
+              <div
+                className="w-full flex justify-center mb-4"
                 onClick={capturedImage ? undefined : triggerFileInput}
               >
                 <div className="w-40 h-40 rounded-full overflow-hidden border border-gray-200 flex items-center justify-center bg-gray-100">
                   {capturedImage ? (
-                    <img 
-                      src={capturedImage} 
-                      alt="Captured facial" 
+                    <img
+                      src={capturedImage}
+                      alt="Captured facial"
                       className="w-full h-full object-cover"
                     />
                   ) : (
@@ -121,7 +119,7 @@ const FacialCapturePage: React.FC<FacialCapturePageProps> = () => {
                   )}
                 </div>
               </div>
-              
+
               {/* Buttons */}
               {capturedImage ? (
                 <div className="flex items-center space-x-2 mb-8">
@@ -131,9 +129,7 @@ const FacialCapturePage: React.FC<FacialCapturePageProps> = () => {
                   >
                     Retake Photo
                   </button>
-                  <button
-                    className="px-4 py-2 bg-green-300 text-black rounded-md hover:bg-green-400 transition-colors text-sm font-medium"
-                  >
+                  <button className="px-4 py-2 bg-green-300 text-black rounded-md hover:bg-green-400 transition-colors text-sm font-medium">
                     Save Picture
                   </button>
                 </div>
@@ -146,14 +142,12 @@ const FacialCapturePage: React.FC<FacialCapturePageProps> = () => {
                 </button>
               )}
             </div>
-            
+
             {/* Continue button */}
             <Link to="/employer/login">
-            <button
-              className="w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors mt-8"
-            >
-              Continue
-            </button>
+              <button className="w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors mt-8">
+                Continue
+              </button>
             </Link>
           </div>
         </div>

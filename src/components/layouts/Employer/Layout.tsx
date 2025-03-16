@@ -18,4 +18,4 @@ export default function Layout({ children }: EmployerLayoutProps) {
       </div>
     </div>
   );
-} 
+}

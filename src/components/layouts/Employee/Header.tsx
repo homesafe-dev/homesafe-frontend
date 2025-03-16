@@ -1,10 +1,3 @@
 export default function Header() {
-
- 
-
-  return (
-    <header className="bg-white shadow-sm">
-      
-    </header>
-  );
-} 
+  return <header className="bg-white shadow-sm"></header>;
+}

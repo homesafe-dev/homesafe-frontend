@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { IoCheckmarkCircleOutline, IoArrowBack } from 'react-icons/io5';
+import { useNavigate } from 'react-router-dom';
+import { IoArrowBack } from 'react-icons/io5';
 
 interface Transaction {
   id: string;
@@ -16,28 +16,107 @@ const WalletHistory: React.FC = () => {
   // Add pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-  
+
   // Sample transactions data
   const transactions: Transaction[] = [
-    { id: '12345HY54345U76', type: 'Credit', date: '24th Dec 2024', amount: 50000, description: 'Wallet top-up', from: 'GT Bank' },
-    { id: '12345HY54345U76', type: 'Credit', date: '24th Dec 2024', amount: 50000, description: 'Wallet top-up', from: 'GT Bank' },
-    { id: '12345HY54345U76', type: 'Credit', date: '24th Dec 2024', amount: 50000, description: 'Wallet top-up', from: 'GT Bank' },
-    { id: '12345HY54345U76', type: 'Credit', date: '24th Dec 2024', amount: 50000, description: 'Wallet top-up', from: 'GT Bank' },
-    { id: '12345HY54345U76', type: 'Credit', date: '24th Dec 2024', amount: 50000, description: 'Wallet top-up', from: 'GT Bank' },
-    { id: '12345HY54345U76', type: 'Credit', date: '24th Dec 2024', amount: 50000, description: 'Wallet top-up', from: 'GT Bank' },
-    { id: '12345HY54345U76', type: 'Credit', date: '24th Dec 2024', amount: 50000, description: 'Wallet top-up', from: 'GT Bank' },
-    { id: '12345HY54345U76', type: 'Credit', date: '24th Dec 2024', amount: 50000, description: 'Wallet top-up', from: 'GT Bank' },
-    { id: '12345HY54345U76', type: 'Credit', date: '24th Dec 2024', amount: 50000, description: 'Wallet top-up', from: 'GT Bank' },
-    { id: '12345HY54345U76', type: 'Credit', date: '24th Dec 2024', amount: 50000, description: 'Wallet top-up', from: 'GT Bank' },
-    { id: '12345HY54345U76', type: 'Credit', date: '24th Dec 2024', amount: 50000, description: 'Wallet top-up', from: 'GT Bank' },
-    { id: '12345HY54345U76', type: 'Credit', date: '24th Dec 2024', amount: 50000, description: 'Wallet top-up', from: 'GT Bank' },
+    {
+      id: '12345HY54345U76',
+      type: 'Credit',
+      date: '24th Dec 2024',
+      amount: 50000,
+      description: 'Wallet top-up',
+      from: 'GT Bank',
+    },
+    {
+      id: '12345HY54345U76',
+      type: 'Credit',
+      date: '24th Dec 2024',
+      amount: 50000,
+      description: 'Wallet top-up',
+      from: 'GT Bank',
+    },
+    {
+      id: '12345HY54345U76',
+      type: 'Credit',
+      date: '24th Dec 2024',
+      amount: 50000,
+      description: 'Wallet top-up',
+      from: 'GT Bank',
+    },
+    {
+      id: '12345HY54345U76',
+      type: 'Credit',
+      date: '24th Dec 2024',
+      amount: 50000,
+      description: 'Wallet top-up',
+      from: 'GT Bank',
+    },
+    {
+      id: '12345HY54345U76',
+      type: 'Credit',
+      date: '24th Dec 2024',
+      amount: 50000,
+      description: 'Wallet top-up',
+      from: 'GT Bank',
+    },
+    {
+      id: '12345HY54345U76',
+      type: 'Credit',
+      date: '24th Dec 2024',
+      amount: 50000,
+      description: 'Wallet top-up',
+      from: 'GT Bank',
+    },
+    {
+      id: '12345HY54345U76',
+      type: 'Credit',
+      date: '24th Dec 2024',
+      amount: 50000,
+      description: 'Wallet top-up',
+      from: 'GT Bank',
+    },
+    {
+      id: '12345HY54345U76',
+      type: 'Credit',
+      date: '24th Dec 2024',
+      amount: 50000,
+      description: 'Wallet top-up',
+      from: 'GT Bank',
+    },
+    {
+      id: '12345HY54345U76',
+      type: 'Credit',
+      date: '24th Dec 2024',
+      amount: 50000,
+      description: 'Wallet top-up',
+      from: 'GT Bank',
+    },
+    {
+      id: '12345HY54345U76',
+      type: 'Credit',
+      date: '24th Dec 2024',
+      amount: 50000,
+      description: 'Wallet top-up',
+      from: 'GT Bank',
+    },
+    {
+      id: '12345HY54345U76',
+      type: 'Credit',
+      date: '24th Dec 2024',
+      amount: 50000,
+      description: 'Wallet top-up',
+      from: 'GT Bank',
+    },
   ];
 
   // Calculate pagination
   const totalPages = Math.ceil(transactions.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentTransactions = transactions.slice(indexOfFirstItem, indexOfLastItem);
+  const currentTransactions = transactions.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
 
   // Handle page changes
   const handlePageChange = (pageNumber: number) => {
@@ -51,16 +130,17 @@ const WalletHistory: React.FC = () => {
   return (
     <div className="bg-white rounded-lg border-gray-200">
       <div className="flex items-center mb-1">
-        <IoArrowBack 
-          className="text-gray-600 mr-2 cursor-pointer" 
-          size={20} 
+        <IoArrowBack
+          className="text-gray-600 mr-2 cursor-pointer"
+          size={20}
           onClick={handleBack}
         />
         <h1 className="text-lg font-medium">See All</h1>
       </div>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-[16px] text-[#24292E] font-semibold mt-[1rem]">Transaction History</h2>
-      
+        <h2 className="text-[16px] text-[#24292E] font-semibold mt-[1rem]">
+          Transaction History
+        </h2>
       </div>
 
       <div className="overflow-x-auto">
@@ -77,11 +157,16 @@ const WalletHistory: React.FC = () => {
           </thead>
           <tbody>
             {currentTransactions.map((transaction, index) => (
-              <tr key={index} className="border-b border-gray-200 hover:bg-gray-50">
+              <tr
+                key={index}
+                className="border-b border-gray-200 hover:bg-gray-50"
+              >
                 <td className="py-3 px-2">{transaction.type}</td>
                 <td className="py-3 px-2">{transaction.id}</td>
                 <td className="py-3 px-2">{transaction.date}</td>
-                <td className="py-3 px-2">₦ {transaction.amount.toLocaleString()}</td>
+                <td className="py-3 px-2">
+                  ₦ {transaction.amount.toLocaleString()}
+                </td>
                 <td className="py-3 px-2">{transaction.description}</td>
                 <td className="py-3 px-2">{transaction.from}</td>
               </tr>
@@ -99,21 +184,19 @@ const WalletHistory: React.FC = () => {
         >
           &lt;
         </button>
-        
+
         {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
           <button
             key={pageNum}
             onClick={() => handlePageChange(pageNum)}
             className={`w-8 h-8 rounded-full flex items-center justify-center ${
-              currentPage === pageNum
-                ? 'bg-gray-200'
-                : 'hover:bg-gray-100'
+              currentPage === pageNum ? 'bg-gray-200' : 'hover:bg-gray-100'
             }`}
           >
             {pageNum}
           </button>
         ))}
-        
+
         <button
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}

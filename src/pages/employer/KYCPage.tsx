@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { FaArrowLeft, FaChevronDown } from 'react-icons/fa';
-import { IoCloudUploadOutline } from "react-icons/io5";
-import { LuCalendarDays } from "react-icons/lu";
+import { IoCloudUploadOutline } from 'react-icons/io5';
+import { LuCalendarDays } from 'react-icons/lu';
 
 const KYCPage: React.FC = () => {
-  const [formData, setFormData] = useState({
+  const formData = {
     title: 'Mr',
     firstName: 'John',
     lastName: 'Duke',
@@ -16,8 +16,8 @@ const KYCPage: React.FC = () => {
     occupation: '',
     meansOfIdentification1: '',
     meansOfIdentification2: '',
-    proofOfAddress: ''
-  });
+    proofOfAddress: '',
+  };
 
   return (
     <div className=" w-[85%]">
@@ -34,7 +34,10 @@ const KYCPage: React.FC = () => {
         <div className="grid grid-cols-2 gap-x-6 gap-y-4">
           {/* Title */}
           <div>
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="title"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Title
             </label>
             <div className="relative">
@@ -56,7 +59,10 @@ const KYCPage: React.FC = () => {
 
           {/* Bank Verification Number */}
           <div>
-            <label htmlFor="bvn" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="bvn"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Bank Verification Number
             </label>
             <div className="relative">
@@ -71,7 +77,10 @@ const KYCPage: React.FC = () => {
 
           {/* First Name */}
           <div>
-            <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="firstName"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               First Name
             </label>
             <input
@@ -95,7 +104,10 @@ const KYCPage: React.FC = () => {
 
           {/* Last Name */}
           <div>
-            <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="lastName"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Last Name
             </label>
             <input
@@ -108,7 +120,10 @@ const KYCPage: React.FC = () => {
 
           {/* Occupation */}
           <div>
-            <label htmlFor="occupation" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="occupation"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Occupation
             </label>
             <div className="relative">
@@ -126,7 +141,10 @@ const KYCPage: React.FC = () => {
 
           {/* Email */}
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Email
             </label>
             <input
@@ -139,7 +157,10 @@ const KYCPage: React.FC = () => {
 
           {/* Means of Identification 1 */}
           <div>
-            <label htmlFor="id1" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="id1"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Means of Identification
             </label>
             <div className="relative">
@@ -157,7 +178,10 @@ const KYCPage: React.FC = () => {
 
           {/* Phone Number */}
           <div>
-            <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="phoneNumber"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Phone Number
             </label>
             <input
@@ -170,7 +194,10 @@ const KYCPage: React.FC = () => {
 
           {/* Means of Identification 2 */}
           <div>
-            <label htmlFor="id2" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="id2"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Means of Identification
             </label>
             <button className="w-full h-[50px] flex items-center px-3 py-2 border border-[#DEE0E3] rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 bg-white text-gray-400 text-sm">
@@ -181,7 +208,10 @@ const KYCPage: React.FC = () => {
 
           {/* Home Address */}
           <div>
-            <label htmlFor="homeAddress" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="homeAddress"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Home Address
             </label>
             <input
@@ -194,7 +224,10 @@ const KYCPage: React.FC = () => {
 
           {/* Proof of Address */}
           <div>
-            <label htmlFor="proofAddress" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="proofAddress"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Proof of Address
             </label>
             <div className="relative">
@@ -212,7 +245,10 @@ const KYCPage: React.FC = () => {
 
           {/* Date of Birth */}
           <div>
-            <label htmlFor="dob" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="dob"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Date of Birth
             </label>
             <div className="relative">
@@ -230,7 +266,10 @@ const KYCPage: React.FC = () => {
 
           {/* Proof of Address (E.g Utility bill, Bank statement) */}
           <div>
-            <label htmlFor="proofUtility" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="proofUtility"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Proof of Address (E.g Utility bill, Bank statement)
             </label>
             <button className="w-full h-[50px] flex items-center px-3 py-2 border border-[#DEE0E3] rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 bg-white text-gray-400 text-sm">
@@ -241,7 +280,10 @@ const KYCPage: React.FC = () => {
 
           {/* Gender */}
           <div>
-            <label htmlFor="gender" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="gender"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Gender
             </label>
             <div className="relative">
