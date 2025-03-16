@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FaEye, FaPlus } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import WithdrawModal from '../../components/Employer/WithdrawModal';
 
 interface Transaction {
   id: string;
@@ -13,6 +14,15 @@ interface Transaction {
 
 const WalletPage: React.FC = () => {
   const [showBalance, setShowBalance] = useState(true);
+  const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
+
+  const handleOpenWithdrawModal = () => {
+    setIsWithdrawModalOpen(true);
+  };
+
+  const handleCloseWithdrawModal = () => {
+    setIsWithdrawModalOpen(false);
+  };
 
   // Sample transactions data
   const transactions: Transaction[] = [
@@ -155,7 +165,10 @@ const WalletPage: React.FC = () => {
                   <FaPlus className="mr-2" /> Top-up
                 </button>
               </Link>
-              <button className="bg-white text-green-800 px-4 py-2 rounded-md flex items-center text-sm">
+              <button 
+                className="bg-white text-green-800 px-4 py-2 rounded-md flex items-center text-sm"
+                onClick={handleOpenWithdrawModal}
+              >
                 Withdraw
               </button>
             </div>
@@ -209,6 +222,10 @@ const WalletPage: React.FC = () => {
           </table>
         </div>
       </div>
+      <WithdrawModal 
+        isOpen={isWithdrawModalOpen}
+        onClose={handleCloseWithdrawModal}
+      />
     </div>
   );
 };
