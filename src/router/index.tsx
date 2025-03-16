@@ -29,6 +29,8 @@ import WalletTopUp from '../pages/employer/WalletTopUp';
 import Profile from '../pages/employer/Profile';
 import Security from '../pages/employer/Security';
 import KYCPage from '../pages/employer/KYCPage';
+import AritisansPage from '../pages/employer/AritisansPage';
+import ArtisanProfileView from '../pages/employer/ArtisansProfile';
 
 export const router = createBrowserRouter([
   {
@@ -144,6 +146,22 @@ export const router = createBrowserRouter([
         element: (
           <EmployerLayout>
             <WalletTopUp />
+          </EmployerLayout>
+        ),
+      },
+      {
+        path: 'artisans',
+        element: (
+          <EmployerLayout>
+            <AritisansPage />
+          </EmployerLayout>
+        ),
+      },
+      {
+        path: 'artisan/profile',
+        element: (
+          <EmployerLayout>
+            <ArtisanProfileView goBack={() => window.history.back()} />
           </EmployerLayout>
         ),
       },
