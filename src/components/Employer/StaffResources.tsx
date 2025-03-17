@@ -1,7 +1,6 @@
 // EducationalResources.tsx
 import React from 'react';
 import Resources from '../../assets/images/Er1.png'
-import MedicalImg from '../../assets/images/medical.png'
 interface ResourceProps {
   title: string;
   startDate: string;
@@ -17,7 +16,6 @@ const ResourceCard: React.FC<ResourceProps> = ({
   description,
   chapterCount,
   recipeCount,
-  thumbnail
 }) => {
   return (
     <div className="flex items-center mb-6">
