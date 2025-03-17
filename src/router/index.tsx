@@ -35,6 +35,8 @@ import Staff from '../pages/employer/Staff';
 import Payroll from '../pages/employer/Payroll';
 import AllPayroll from '../pages/employer/AllPayroll';
 import StaffProfile from '../pages/employer/StaffProfile';
+import Resources from '../pages/employer/Resources';
+import Medical from '../pages/employer/Medical';
 
 export const router = createBrowserRouter([
   {
@@ -198,6 +200,22 @@ export const router = createBrowserRouter([
         element: (
           <EmployerLayout>
             <AllPayroll />
+          </EmployerLayout>
+        ),
+      },
+      {
+        path: 'resources',
+        element: (
+          <EmployerLayout>
+            <Resources />
+          </EmployerLayout>
+        ),
+      },
+      {
+        path: 'medical',
+        element: (
+          <EmployerLayout>
+          <Medical />
           </EmployerLayout>
         ),
       },
