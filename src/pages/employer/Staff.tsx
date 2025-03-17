@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaUser, FaStar, FaRegStar } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 interface StaffMember {
   name: string;
@@ -79,9 +80,9 @@ const StaffPage: React.FC = () => {
             <div>{member.age}</div>
             <div className="flex justify-between items-center">
               {renderRatingStars(member.rating)}
-              <button className="bg-green-200 text-green-800 px-3 py-1 rounded-md text-sm">
+              <Link to='/employer/staff/profile'> <button className="bg-green-200 text-green-800 px-3 py-1 rounded-md text-sm">
                 View Profile
-              </button>
+              </button></Link>
             </div>
           </div>
         ))}
