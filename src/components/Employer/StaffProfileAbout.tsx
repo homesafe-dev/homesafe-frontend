@@ -1,6 +1,7 @@
 // StaffProfileAbout.tsx
-import React from 'react';
-
+import React, { useState } from 'react';
+import TerminateStaffModal from './TerminateStaffModal';
+import TerminateContractConfirmation from './TerminateConfirmation';
 
 interface StaffProfileAboutProps {
   name: string;
@@ -26,7 +27,27 @@ const StaffProfileAbout: React.FC<StaffProfileAboutProps> = ({
   profileImage,
   isOnline = true,
 }) => {
- 
+  const [isTerminateModalOpen, setIsTerminateModalOpen] = useState(false);
+  const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
+  const [selectedNoticePeriod, setSelectedNoticePeriod] = useState('');
+
+  const handleOpenTerminateModal = () => {
+    setIsTerminateModalOpen(true);
+  };
+
+  const handleCloseTerminateModal = () => {
+    setIsTerminateModalOpen(false);
+  };
+
+  const handleSubmitTermination = (noticePeriod: string) => {
+    setSelectedNoticePeriod(noticePeriod);
+    setIsTerminateModalOpen(false);
+    setIsConfirmationOpen(true);
+  };
+
+  const handleCloseConfirmation = () => {
+    setIsConfirmationOpen(false);
+  };
 
   return (
     <div className="flex flex-col items-center bg-white rounded-lg p-4 h-full">
@@ -67,11 +88,27 @@ const StaffProfileAbout: React.FC<StaffProfileAboutProps> = ({
         <p className="text-[13px] text-[#246D51]">{email}</p>
         
         <div className="mt-4">
-          <button className="text-white rounded-md py-2 text-sm w-[117px] h-[34px] bg-[#993018]">
+          <button 
+            className="text-white rounded-md py-2 text-sm w-[117px] h-[34px] bg-[#993018]"
+            onClick={handleOpenTerminateModal}
+          >
             Terminate Staff
           </button>
         </div>
       </div>
+
+      <TerminateStaffModal 
+        isOpen={isTerminateModalOpen}
+        onClose={handleCloseTerminateModal}
+        onSubmit={handleSubmitTermination}
+      />
+
+      <TerminateContractConfirmation 
+        isOpen={isConfirmationOpen}
+        employeeName={name}
+        terminationPeriod={selectedNoticePeriod}
+        onClose={handleCloseConfirmation}
+      />
     </div>
   );
 };
