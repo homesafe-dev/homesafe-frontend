@@ -34,6 +34,7 @@ import ArtisanProfileView from '../pages/employer/ArtisansProfile';
 import Staff from '../pages/employer/Staff';
 import Payroll from '../pages/employer/Payroll';
 import AllPayroll from '../pages/employer/AllPayroll';
+import StaffProfile from '../pages/employer/StaffProfile';
 
 export const router = createBrowserRouter([
   {
@@ -173,6 +174,14 @@ export const router = createBrowserRouter([
         element: (
           <EmployerLayout>
             <Staff />
+          </EmployerLayout>
+        ),
+      },
+      {
+        path: 'staff/profile',
+        element: (
+          <EmployerLayout>
+            <StaffProfile />
           </EmployerLayout>
         ),
       },
