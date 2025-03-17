@@ -32,6 +32,8 @@ import KYCPage from '../pages/employer/KYCPage';
 import AritisansPage from '../pages/employer/AritisansPage';
 import ArtisanProfileView from '../pages/employer/ArtisansProfile';
 import Staff from '../pages/employer/Staff';
+import Payroll from '../pages/employer/Payroll';
+import AllPayroll from '../pages/employer/AllPayroll';
 
 export const router = createBrowserRouter([
   {
@@ -171,6 +173,22 @@ export const router = createBrowserRouter([
         element: (
           <EmployerLayout>
             <Staff />
+          </EmployerLayout>
+        ),
+      },
+      {
+        path: 'payroll',
+        element: (
+          <EmployerLayout>
+            <Payroll />
+          </EmployerLayout>
+        ),
+      },
+      {
+        path: 'payroll/all',
+        element: (
+          <EmployerLayout>
+            <AllPayroll />
           </EmployerLayout>
         ),
       },

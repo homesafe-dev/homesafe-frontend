@@ -135,7 +135,7 @@ const WalletHistory: React.FC = () => {
           size={20}
           onClick={handleBack}
         />
-        <h1 className="text-lg font-medium">See All</h1>
+        <h1 className="text-[20px] font-semibold text-[#24292E]">See All</h1>
       </div>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-[16px] text-[#24292E] font-semibold mt-[1rem]">
