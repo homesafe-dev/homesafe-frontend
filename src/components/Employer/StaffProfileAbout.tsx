@@ -67,7 +67,7 @@ const StaffProfileAbout: React.FC<StaffProfileAboutProps> = ({
         <p className="text-[13px] text-[#246D51]">{email}</p>
         
         <div className="mt-4">
-          <button className="bg-red-700 text-white rounded-md py-2 text-sm w-[117px] h-[34px] bg-[#993018]">
+          <button className="text-white rounded-md py-2 text-sm w-[117px] h-[34px] bg-[#993018]">
             Terminate Staff
           </button>
         </div>
