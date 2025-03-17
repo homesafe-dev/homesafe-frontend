@@ -54,7 +54,7 @@ const StaffPage: React.FC = () => {
       </div>
 
       <div className="bg-white rounded-lg overflow-hidden">
-        <div className="grid grid-cols-5 bg-[#C8EDDF80] px-4 h-[56px] flex items-center text-sm font-medium text-gray-600">
+        <div className="grid grid-cols-5 bg-[#C8EDDF80] px-4 h-[56px] items-center text-sm font-medium text-gray-600">
           <div>Employee Name</div>
           <div>State</div>
           <div>Position</div>
