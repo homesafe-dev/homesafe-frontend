@@ -108,7 +108,7 @@ const ArtisansPage: React.FC = () => {
           <input
             type="text"
             placeholder="Search by role, location or skills"
-            className="w-full pl-10 pr-4 py-2 border rounded-md text-[16px] text-[#5A6672] focus:outline-none focus:ring-1 focus:ring-green-500"
+            className="w-full pl-10 pr-4 py-2 border border-gray-100 rounded-[16px] text-[16px] text-[#5A6672] focus:outline-none focus:ring-1 focus:ring-green-500"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
