@@ -3,10 +3,13 @@ import { FiMoreVertical, FiShare2, FiDownload, FiSearch } from 'react-icons/fi';
 import ResourceImg1 from '../../assets/images/Resource1.png'
 import ResourceImg2 from '../../assets/images/Resource2.png'
 import ResourceImg3 from '../../assets/images/Resource3.png'
+import ShareModal from '../../components/Employer/ResourceShareModal';
 
 const ResourcesPage: React.FC = () => {
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [selectedResourceId, setSelectedResourceId] = useState<string | null>(null);
 
   // Sample resources data
   const resources = [
@@ -65,7 +68,8 @@ const ResourcesPage: React.FC = () => {
   };
 
   const handleShare = (id: string) => {
-    console.log(`Sharing resource ${id}`);
+    setSelectedResourceId(id);
+    setIsShareModalOpen(true);
     setActiveMenuId(null);
   };
 
@@ -89,11 +93,17 @@ const ResourcesPage: React.FC = () => {
   return (
     <div className=" min-h-screen">
       <div className="max-w-7xl mx-auto px-4 py-6">
+        {/* Share Modal */}
+        <ShareModal 
+          isOpen={isShareModalOpen} 
+          onClose={() => setIsShareModalOpen(false)} 
+        />
+
         {/* Header with search and user info */}
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-2xl font-semibold">Resources</h1>
           <div className="flex items-center">
-            <div className="relative rounded-full border border-gray-100 px-4 py-2 flex items-center w-64">
+            <div className="relative rounded-[16px] border border-gray-100 px-4 py-2 flex items-center w-[480px]">
               <FiSearch className="text-gray-400 mr-2" />
               <input
                 type="text"

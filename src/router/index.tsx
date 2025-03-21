@@ -37,6 +37,8 @@ import AllPayroll from '../pages/employer/AllPayroll';
 import StaffProfile from '../pages/employer/StaffProfile';
 import Resources from '../pages/employer/Resources';
 import Medical from '../pages/employer/Medical';
+import ReviewsPage from '../pages/employer/Reviews';
+import Contracts from '../pages/employer/Contracts';
 
 export const router = createBrowserRouter([
   {
@@ -219,6 +221,22 @@ export const router = createBrowserRouter([
           </EmployerLayout>
         ),
       },
+      {
+        path: 'review',
+        element: (
+          <EmployerLayout>
+          <ReviewsPage />
+          </EmployerLayout>
+        ),
+      },
+      {
+        path: 'contracts',
+        element: (
+          <EmployerLayout>
+          <Contracts />
+          </EmployerLayout>
+        ),
+    },
     ],
   },
   // Employee Routes

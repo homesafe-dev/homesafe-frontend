@@ -21,7 +21,7 @@ const MedicalReportCard: React.FC<MedicalReportCardProps> = ({ date }) => {
       <p className="text-gray-600 text-sm mb-4">
         Here is your medical report for the {date}.
       </p>
-      <button className="inline-flex items-center text-primary hover:text-primary/80 text-sm font-medium">
+      <button className="inline-flex items-center justify-center text-[#6C7A89] text-sm font-medium border border-[#DCDEE5] w-[88px] h-[32px] rounded-[6px]">
         <AiOutlineEye className="mr-2" />
         View
       </button>
@@ -45,7 +45,7 @@ const Medical: React.FC = () => {
           <input
             type="text"
             placeholder="Search by date, staff name"
-            className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg w-64 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+            className="pl-10 pr-4 py-2 w-[480px] border border-gray-100 rounded-[16px] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
           />
           <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
         </div>
