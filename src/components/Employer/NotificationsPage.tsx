@@ -60,7 +60,6 @@ const NotificationsPage: React.FC = () => {
 
   return (
     <div className="bg-white p-6">
-      {/* Back navigation and title */}
       <div className="flex items-center mb-1">
         <IoArrowBack
           className="text-gray-600 mr-2 cursor-pointer"
@@ -70,12 +69,10 @@ const NotificationsPage: React.FC = () => {
         <h1 className="text-lg font-medium">Notification</h1>
       </div>
 
-      {/* Subtitle */}
       <p className="text-sm text-gray-500 mb-6">
         Keep track of all your notifications
       </p>
 
-      {/* Tabs and mark as read */}
       <div className="flex justify-between mb-6">
         {/* Tabs */}
         <div className="flex space-x-2">
@@ -101,7 +98,6 @@ const NotificationsPage: React.FC = () => {
           </button>
         </div>
 
-        {/* Mark all as read button */}
         <button
           className="flex items-center gap-1 border border-gray-300 rounded-md px-3 py-1 text-sm text-gray-600 hover:bg-gray-50"
           onClick={handleMarkAllAsRead}
@@ -111,7 +107,6 @@ const NotificationsPage: React.FC = () => {
         </button>
       </div>
 
-      {/* Notifications list with shadow */}
       <div className="shadow-lg rounded-md overflow-hidden border border-gray-200">
         {notifications.map((notification, index) => (
           <div
@@ -122,7 +117,6 @@ const NotificationsPage: React.FC = () => {
                 : ''
             }`}
           >
-            {/* Unread dot indicator */}
             <div className="absolute left-4 top-5 w-1 h-1 bg-gray-300 rounded-full"></div>
 
             <div className="pl-4">

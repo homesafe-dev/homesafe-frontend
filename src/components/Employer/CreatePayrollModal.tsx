@@ -34,7 +34,6 @@ const CreatePayrollModal: React.FC<CreatePayrollModalProps> = ({
 
           {/* Form */}
           <form>
-            {/* Staff */}
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Staff
@@ -72,7 +71,6 @@ const CreatePayrollModal: React.FC<CreatePayrollModalProps> = ({
               </div>
             </div>
 
-            {/* Amount */}
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Amount
@@ -84,7 +82,6 @@ const CreatePayrollModal: React.FC<CreatePayrollModalProps> = ({
               />
             </div>
 
-            {/* Date to Pay */}
             <div className="mb-5">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Date to Pay
@@ -102,7 +99,6 @@ const CreatePayrollModal: React.FC<CreatePayrollModalProps> = ({
               </div>
             </div>
 
-            {/* Enable automate payment */}
             <div className="flex items-center mb-6">
               <input
                 type="checkbox"
@@ -119,7 +115,6 @@ const CreatePayrollModal: React.FC<CreatePayrollModalProps> = ({
               </label>
             </div>
 
-            {/* Create Payroll button */}
             <button
               type="button"
               className="w-full bg-[#A5EA91] text-[#24292E] h-[50px] font-medium py-3 rounded-lg mb-3 hover:bg-green-400 transition-colors"
@@ -127,7 +122,6 @@ const CreatePayrollModal: React.FC<CreatePayrollModalProps> = ({
               Create Payroll
             </button>
 
-            {/* Add Staff button */}
             <button
               type="button"
               className="w-full border border-gray-300 h-[50px] text-gray-700 font-medium py-3 rounded-lg flex items-center justify-center hover:bg-gray-50 transition-colors"

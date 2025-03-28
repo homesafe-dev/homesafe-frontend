@@ -35,14 +35,11 @@ const OnboardingForm: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Form submitted:', formData);
-    // Add your signup logic here
   };
 
   return (
     <div className="flex h-screen bg-gray-100">
-      {/* Left side with images, overlay, and mission statement */}
       <div className="hidden md:flex md:w-1/2 bg-white relative overflow-hidden">
-        {/* Top image */}
         <div className="absolute top-0 left-0 w-full h-1/2">
           <div className="relative w-full h-full">
             <img
@@ -54,7 +51,6 @@ const OnboardingForm: React.FC = () => {
           </div>
         </div>
 
-        {/* Bottom image */}
         <div className="absolute bottom-0 left-0 w-full h-1/2">
           <div className="relative w-full h-full">
             <img
@@ -66,14 +62,11 @@ const OnboardingForm: React.FC = () => {
           </div>
         </div>
 
-        {/* Logo and mission statement overlay */}
         <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
-          {/* Logo */}
           <div className="mb-8">
             <img src={HomesafeLogo} alt="Homesafe Logo" className="" />
           </div>
 
-          {/* Mission statement */}
           <div className="max-w-md">
             <p className="text-center text-[#F4F4F4] text-[24px] font-normal">
               "Our Mission at Homesafe is to make hiring safe, simple, and
@@ -97,7 +90,6 @@ const OnboardingForm: React.FC = () => {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Title Field */}
             <div>
               <label
                 htmlFor="title"
@@ -140,7 +132,6 @@ const OnboardingForm: React.FC = () => {
               />
             </div>
 
-            {/* Last Name Field */}
             <div>
               <label
                 htmlFor="lastName"
@@ -160,7 +151,6 @@ const OnboardingForm: React.FC = () => {
               />
             </div>
 
-            {/* Email Field */}
             <div>
               <label
                 htmlFor="email"
@@ -180,7 +170,6 @@ const OnboardingForm: React.FC = () => {
               />
             </div>
 
-            {/* Phone Number Field */}
             <div>
               <label
                 htmlFor="phoneNumber"
@@ -200,7 +189,6 @@ const OnboardingForm: React.FC = () => {
               />
             </div>
 
-            {/* Home Address Field */}
             <div>
               <label
                 htmlFor="homeAddress"
@@ -220,7 +208,6 @@ const OnboardingForm: React.FC = () => {
               />
             </div>
 
-            {/* User Type Field */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 What are you?
@@ -258,7 +245,6 @@ const OnboardingForm: React.FC = () => {
               </div>
             </div>
 
-            {/* Submit Button */}
             <Link to="/employer/signup/facial-capture">
               <button
                 type="submit"

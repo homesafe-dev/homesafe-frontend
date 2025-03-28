@@ -81,7 +81,6 @@ const ArtisansPage: React.FC = () => {
     },
   ];
 
-  // Render stars based on rating
   const renderStars = (rating: number) => {
     const stars = [];
     for (let i = 1; i <= 5; i++) {
@@ -106,7 +105,6 @@ const ArtisansPage: React.FC = () => {
             Artisans
           </h1>
 
-          {/* Search Bar */}
           <div className="relative mb-6 w-[335px] h-[42px] max-w-md ml-auto">
             <FiSearch className="absolute left-3 top-3 text-gray-400" />
             <input
@@ -123,7 +121,6 @@ const ArtisansPage: React.FC = () => {
           List of available artisans
         </p>
 
-        {/* Artisans Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-6">
           {artisans.map((artisan) => (
             <div
@@ -135,11 +132,6 @@ const ArtisansPage: React.FC = () => {
                   src={artisan.imageUrl}
                   alt={artisan.name}
                   className="w-24 h-24 rounded-full object-cover"
-                  onError={(e) => {
-                    // Fallback if image fails to load
-                    (e.target as HTMLImageElement).src =
-                      'https://via.placeholder.com/100';
-                  }}
                 />
                 <div
                   className={`absolute top-1 right-1 w-4 h-4 border-2 border-white rounded-full ${

@@ -175,7 +175,6 @@ const WalletPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Empty placeholder for potential second card */}
         <div className="bg-[#E9E3E3] rounded-lg flex-1 max-w-md hidden md:block"></div>
       </div>
 

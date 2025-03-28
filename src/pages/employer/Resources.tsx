@@ -10,7 +10,6 @@ const ResourcesPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
-  // Sample resources data
   const resources = [
     {
       id: '1',
@@ -82,7 +81,6 @@ const ResourcesPage: React.FC = () => {
     setActiveMenuId(null);
   };
 
-  // Close menu when clicking outside
   React.useEffect(() => {
     const handleClickOutside = () => {
       setActiveMenuId(null);
@@ -97,13 +95,11 @@ const ResourcesPage: React.FC = () => {
   return (
     <div className=" min-h-screen">
       <div className="max-w-7xl mx-auto px-4 py-6">
-        {/* Share Modal */}
         <ShareModal
           isOpen={isShareModalOpen}
           onClose={() => setIsShareModalOpen(false)}
         />
 
-        {/* Header with search and user info */}
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-2xl font-semibold">Resources</h1>
           <div className="flex items-center">
@@ -120,14 +116,12 @@ const ResourcesPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Resources grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {resources.map((resource) => (
             <div
               key={resource.id}
               className="rounded-lg overflow-hidden bg-white p-2 shadow-sm border border-gray-50"
             >
-              {/* Resource image and more icon */}
               <div className="relative">
                 <img
                   src={resource.image}
@@ -140,7 +134,6 @@ const ResourcesPage: React.FC = () => {
                 />
               </div>
 
-              {/* Resource details */}
               <div className="p-4">
                 <div className="flex justify-between items-start relative">
                   <h3 className="font-medium text-gray-900">

@@ -1,4 +1,3 @@
-// Loan.tsx
 import React, { useState } from 'react';
 import NoLoanImg from '../../assets/images/noitem.png';
 import ReviewModal from './StaffReviewModal';
@@ -15,7 +14,6 @@ const Loan: React.FC = () => {
   };
 
   const handleSubmitReview = (rating: number, feedback: string) => {
-    // Handle the review submission here
     console.log('Review submitted:', { rating, feedback });
   };
 
@@ -39,7 +37,7 @@ const Loan: React.FC = () => {
         isOpen={isReviewModalOpen}
         onClose={handleCloseReviewModal}
         onSubmit={handleSubmitReview}
-        staffName="Staff Member" // You can replace this with actual staff name
+        staffName="Staff Member"
       />
     </div>
   );

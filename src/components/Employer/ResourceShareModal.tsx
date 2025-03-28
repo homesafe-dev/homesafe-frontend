@@ -16,7 +16,6 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose }) => {
       <div className="absolute inset-0 bg-black/30 backdrop-blur-sm"></div>
       <div className="bg-white rounded-lg w-full max-w-md relative z-10">
         <div className="p-6">
-          {/* Close button */}
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-[25px] font-semibold text-[#24292E]">Share</h2>
             <button
@@ -27,7 +26,6 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose }) => {
             </button>
           </div>
 
-          {/* Staff name input */}
           <div className="mb-5">
             <label className="block text-[13px] font-medium text-[#24292E] mb-2 mt-2">
               Staff Name
@@ -41,12 +39,10 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose }) => {
             />
           </div>
 
-          {/* Share Link button */}
           <button className="w-full bg-[#A5EA91] hover:bg-green-500 text-center py-4 rounded-md text-gray-800 font-medium mb-4">
             Share Link
           </button>
 
-          {/* Add Staff button */}
           <button className="w-full border border-gray-300 hover:bg-gray-50 rounded-md py-4 font-medium flex items-center justify-center">
             <IoAdd size={18} className="mr-2" />
             Add Staff

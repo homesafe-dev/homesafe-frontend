@@ -13,7 +13,6 @@ interface Transaction {
 
 const WalletHistory: React.FC = () => {
   const navigate = useNavigate();
-  // Add pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -109,7 +108,6 @@ const WalletHistory: React.FC = () => {
     },
   ];
 
-  // Calculate pagination
   const totalPages = Math.ceil(transactions.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -118,13 +116,12 @@ const WalletHistory: React.FC = () => {
     indexOfLastItem
   );
 
-  // Handle page changes
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
 
   const handleBack = () => {
-    navigate(-1); // Goes back one step in history
+    navigate(-1);
   };
 
   return (
@@ -175,7 +172,6 @@ const WalletHistory: React.FC = () => {
         </table>
       </div>
 
-      {/* Add pagination controls */}
       <div className="flex justify-end items-center gap-2 mt-4 pb-4 pr-4">
         <button
           onClick={() => handlePageChange(currentPage - 1)}

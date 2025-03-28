@@ -68,7 +68,6 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
                         className="text-gray-500"
                       />
                     </div>
-                    {/* Unread indicator */}
                     {!notification.read && (
                       <div className="absolute -left-1 top-0 w-2 h-2 bg-blue-600 rounded-full"></div>
                     )}
@@ -96,7 +95,6 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
             </div>
           ))}
 
-          {/* View all link */}
           <div className="px-6 mt-8 mb-4 flex justify-end">
             <Link to="/employer/notifications">
               <button

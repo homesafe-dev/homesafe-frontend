@@ -21,7 +21,6 @@ const KYCPage: React.FC = () => {
 
   return (
     <div className=" w-[85%]">
-      {/* KYC header with back button */}
       <div className="mb-6">
         <button className="flex items-center text-gray-600 hover:text-gray-800">
           <FaArrowLeft className="mr-2" />
@@ -32,7 +31,6 @@ const KYCPage: React.FC = () => {
       {/* Form */}
       <form className="mt-6 bg-white p-8">
         <div className="grid grid-cols-2 gap-x-6 gap-y-4">
-          {/* Title */}
           <div>
             <label
               htmlFor="title"
@@ -57,7 +55,6 @@ const KYCPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Bank Verification Number */}
           <div>
             <label
               htmlFor="bvn"
@@ -74,8 +71,6 @@ const KYCPage: React.FC = () => {
               />
             </div>
           </div>
-
-          {/* First Name */}
           <div>
             <label
               htmlFor="firstName"
@@ -90,8 +85,6 @@ const KYCPage: React.FC = () => {
               value={formData.firstName}
             />
           </div>
-
-          {/* Photo of you */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Photo of you
@@ -118,7 +111,6 @@ const KYCPage: React.FC = () => {
             />
           </div>
 
-          {/* Occupation */}
           <div>
             <label
               htmlFor="occupation"
@@ -139,7 +131,6 @@ const KYCPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Email */}
           <div>
             <label
               htmlFor="email"
@@ -155,7 +146,6 @@ const KYCPage: React.FC = () => {
             />
           </div>
 
-          {/* Means of Identification 1 */}
           <div>
             <label
               htmlFor="id1"
@@ -176,7 +166,6 @@ const KYCPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Phone Number */}
           <div>
             <label
               htmlFor="phoneNumber"
@@ -192,7 +181,6 @@ const KYCPage: React.FC = () => {
             />
           </div>
 
-          {/* Means of Identification 2 */}
           <div>
             <label
               htmlFor="id2"
@@ -206,7 +194,6 @@ const KYCPage: React.FC = () => {
             </button>
           </div>
 
-          {/* Home Address */}
           <div>
             <label
               htmlFor="homeAddress"
@@ -222,7 +209,6 @@ const KYCPage: React.FC = () => {
             />
           </div>
 
-          {/* Proof of Address */}
           <div>
             <label
               htmlFor="proofAddress"
@@ -243,7 +229,6 @@ const KYCPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Date of Birth */}
           <div>
             <label
               htmlFor="dob"
@@ -264,7 +249,6 @@ const KYCPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Proof of Address (E.g Utility bill, Bank statement) */}
           <div>
             <label
               htmlFor="proofUtility"
@@ -278,7 +262,6 @@ const KYCPage: React.FC = () => {
             </button>
           </div>
 
-          {/* Gender */}
           <div>
             <label
               htmlFor="gender"
@@ -303,7 +286,6 @@ const KYCPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Save Button */}
         <div className="mt-8 flex justify-end">
           <button
             type="submit"

@@ -41,13 +41,11 @@ const ProfilePage: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission logic here
     console.log('Form submitted:', formData);
   };
 
   return (
     <div className="min-h-screen">
-      {/* Profile header with back button */}
       <div className="mb-6">
         <button className="flex items-center text-gray-600 hover:text-gray-800">
           <FaArrowLeft className="mr-2" />
@@ -55,10 +53,8 @@ const ProfilePage: React.FC = () => {
         </button>
       </div>
 
-      {/* Main content card */}
       <div className="bg-white rounded-lg shadow p-8 max-w-4xl mb-6">
         <form onSubmit={handleSubmit}>
-          {/* Profile Image Section */}
           <div className="flex flex-col items-center mb-8">
             <div className="relative mb-4">
               <div className="w-32 h-32 rounded-full bg-[#D9D9D9] flex items-center justify-center overflow-hidden">
@@ -98,7 +94,6 @@ const ProfilePage: React.FC = () => {
             </div>
           </div>
 
-          {/* Form Fields */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
             <div>
               <label
@@ -175,7 +170,6 @@ const ProfilePage: React.FC = () => {
         </form>
       </div>
 
-      {/* Save Button - moved outside and below the form card */}
       <div className="flex justify-end max-w-4xl">
         <button
           onClick={handleSubmit}

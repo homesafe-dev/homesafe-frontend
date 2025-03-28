@@ -1,4 +1,3 @@
-// ReviewModal.tsx
 import React, { useState } from 'react';
 import { FaRegStar, FaStar, FaTimes } from 'react-icons/fa';
 

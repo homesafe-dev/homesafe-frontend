@@ -23,7 +23,7 @@ const AllPayrollPage: React.FC = () => {
     status: 'Active',
   });
   const handleBack = () => {
-    navigate(-1); // Goes back one step in history
+    navigate(-1);
   };
 
   return (

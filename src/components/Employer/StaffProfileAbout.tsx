@@ -1,4 +1,3 @@
-// StaffProfileAbout.tsx
 import React, { useState } from 'react';
 import TerminateStaffModal from './TerminateStaffModal';
 import TerminateContractConfirmation from './TerminateConfirmation';
