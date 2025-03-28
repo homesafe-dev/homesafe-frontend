@@ -25,7 +25,7 @@ const WalletTopUp: React.FC = () => {
       </div>
 
       <div className="space-y-4 w-[470px]">
-        <div 
+        <div
           className="flex items-center justify-between border-b border-gray-100 pb-4 cursor-pointer hover:bg-gray-50"
           onClick={handleOpenModal}
         >
@@ -38,7 +38,7 @@ const WalletTopUp: React.FC = () => {
           <IoIosArrowForward className="text-gray-400" />
         </div>
 
-        <div 
+        <div
           className="flex items-center justify-between border-b border-gray-100 pb-4 cursor-pointer hover:bg-gray-50"
           onClick={handleOpenModal}
         >
@@ -52,10 +52,7 @@ const WalletTopUp: React.FC = () => {
         </div>
       </div>
 
-      <PaymentMethodModal 
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-      />
+      <PaymentMethodModal isOpen={isModalOpen} onClose={handleCloseModal} />
     </div>
   );
 };

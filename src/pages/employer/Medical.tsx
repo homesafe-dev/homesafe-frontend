@@ -1,6 +1,6 @@
 import React from 'react';
 import { FiSearch } from 'react-icons/fi';
-import MedicalImg from '../../assets/images/MedicalBig.png'
+import MedicalImg from '../../assets/images/MedicalBig.png';
 import { AiOutlineEye } from 'react-icons/ai';
 
 interface MedicalReportCardProps {

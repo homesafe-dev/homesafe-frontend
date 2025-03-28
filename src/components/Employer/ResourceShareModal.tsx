@@ -19,8 +19,8 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose }) => {
           {/* Close button */}
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-[25px] font-semibold text-[#24292E]">Share</h2>
-            <button 
-              onClick={onClose} 
+            <button
+              onClick={onClose}
               className="rounded-full p-1 hover:bg-gray-100"
             >
               <IoClose size={20} />
@@ -29,7 +29,9 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose }) => {
 
           {/* Staff name input */}
           <div className="mb-5">
-            <label className="block text-[13px] font-medium text-[#24292E] mb-2 mt-2">Staff Name</label>
+            <label className="block text-[13px] font-medium text-[#24292E] mb-2 mt-2">
+              Staff Name
+            </label>
             <input
               type="text"
               placeholder="Share this link with"

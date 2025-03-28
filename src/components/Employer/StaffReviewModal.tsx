@@ -9,9 +9,9 @@ interface ReviewModalProps {
   staffName: string;
 }
 
-const ReviewModal: React.FC<ReviewModalProps> = ({ 
-  isOpen, 
-  onClose, 
+const ReviewModal: React.FC<ReviewModalProps> = ({
+  isOpen,
+  onClose,
   onSubmit,
 }) => {
   const [rating, setRating] = useState(0);
@@ -31,11 +31,14 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
       <div className="bg-white rounded-lg p-6 w-full max-w-md relative z-10">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-medium">Review Cali</h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+          <button
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-700"
+          >
             <FaTimes />
           </button>
         </div>
-        
+
         <div className="flex justify-center mb-6">
           {[1, 2, 3, 4, 5].map((star) => (
             <button
@@ -53,7 +56,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
             </button>
           ))}
         </div>
-        
+
         <div className="mb-6">
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Additional Feedback
@@ -66,7 +69,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
             rows={4}
           />
         </div>
-        
+
         <button
           onClick={handleSubmit}
           className="w-full py-3 bg-[#A5EA91] text-[#24292E] rounded-md font-medium hover:bg-green-500 transition duration-200"

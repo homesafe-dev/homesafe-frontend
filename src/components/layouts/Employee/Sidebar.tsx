@@ -3,9 +3,6 @@ import { Link, useLocation } from 'react-router-dom';
 import HomesafeLogo from '../../../assets/images/HomesafeLogo2.svg';
 import DashboardIcon from '../../../assets/icons/dashboard.svg';
 import WalletIcon from '../../../assets/icons/wallet.svg';
-import ArtisansIcon from '../../../assets/icons/artisans.svg';
-import StaffsIcon from '../../../assets/icons/staffs.svg';
-import PayrollIcon from '../../../assets/icons/payroll.svg';
 import ResourcesIcon from '../../../assets/icons/resources.svg';
 import MedicalIcon from '../../../assets/icons/medical.svg';
 import ReviewIcon from '../../../assets/icons/review.svg';
@@ -61,21 +58,6 @@ const Sidebar: React.FC = () => {
       icon: <img src={WalletIcon} />,
       path: '/employee/salary',
     },
-    // {
-    //   name: 'Artisans',
-    //   icon: <img src={ArtisansIcon} />,
-    //   path: '/employer/artisans',
-    // },
-    // {
-    //   name: 'My Staff',
-    //   icon: <img src={StaffsIcon} />,
-    //   path: '/employer/staff',
-    // },
-    // {
-    //   name: 'Payroll',
-    //   icon: <img src={PayrollIcon} />,
-    //   path: '/employer/payroll',
-    // },
     {
       name: 'Resources',
       icon: <img src={ResourcesIcon} />,

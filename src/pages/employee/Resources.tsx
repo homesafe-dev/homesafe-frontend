@@ -1,74 +1,78 @@
 import React, { useState } from 'react';
 import { FiMoreVertical, FiShare2, FiDownload, FiSearch } from 'react-icons/fi';
-import ResourceImg1 from '../../assets/images/Resource1.png'
-import ResourceImg2 from '../../assets/images/Resource2.png'
-import ResourceImg3 from '../../assets/images/Resource3.png'
+import ResourceImg1 from '../../assets/images/Resource1.png';
+import ResourceImg2 from '../../assets/images/Resource2.png';
+import ResourceImg3 from '../../assets/images/Resource3.png';
 import ShareModal from '../../components/Employer/ResourceShareModal';
 
 const ResourcesPage: React.FC = () => {
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
-  const [selectedResourceId, setSelectedResourceId] = useState<string | null>(null);
 
   // Sample resources data
   const resources = [
     {
       id: '1',
       title: 'How to make Soup',
-      description: 'Meet Cali foster, a passionate chef from Lagos State, Nigeria. With a love for cooking that knows no bounds, Cali brings the flavors of Lagos to every dish.',
+      description:
+        'Meet Cali foster, a passionate chef from Lagos State, Nigeria. With a love for cooking that knows no bounds, Cali brings the flavors of Lagos to every dish.',
       image: ResourceImg1,
       type: 'Video',
-      url: 'www.makesoup.com'
+      url: 'www.makesoup.com',
     },
     {
       id: '2',
       title: 'How to make Soup',
-      description: 'Meet Cali foster, a passionate chef from Lagos State, Nigeria. With a love for cooking that knows no bounds, Cali brings the flavors of Lagos to every dish.',
+      description:
+        'Meet Cali foster, a passionate chef from Lagos State, Nigeria. With a love for cooking that knows no bounds, Cali brings the flavors of Lagos to every dish.',
       image: ResourceImg1,
       type: 'PDF',
-      url: 'www.makesoup.com'
+      url: 'www.makesoup.com',
     },
     {
       id: '3',
       title: 'How to make Soup',
-      description: 'Meet Cali foster, a passionate chef from Lagos State, Nigeria. With a love for cooking that knows no bounds, Cali brings the flavors of Lagos to every dish.',
+      description:
+        'Meet Cali foster, a passionate chef from Lagos State, Nigeria. With a love for cooking that knows no bounds, Cali brings the flavors of Lagos to every dish.',
       image: ResourceImg2,
       type: 'Video',
-      url: 'www.makesoup.com'
+      url: 'www.makesoup.com',
     },
     {
       id: '4',
       title: 'How to make Soup',
-      description: 'Meet Cali foster, a passionate chef from Lagos State, Nigeria. With a love for cooking that knows no bounds, Cali brings the flavors of Lagos to every dish.',
+      description:
+        'Meet Cali foster, a passionate chef from Lagos State, Nigeria. With a love for cooking that knows no bounds, Cali brings the flavors of Lagos to every dish.',
       image: ResourceImg1,
       type: 'Video',
-      url: 'www.makesoup.com'
+      url: 'www.makesoup.com',
     },
     {
       id: '5',
       title: 'How to make Soup',
-      description: 'Meet Cali foster, a passionate chef from Lagos State, Nigeria. With a love for cooking that knows no bounds, Cali brings the flavors of Lagos to every dish.',
+      description:
+        'Meet Cali foster, a passionate chef from Lagos State, Nigeria. With a love for cooking that knows no bounds, Cali brings the flavors of Lagos to every dish.',
       image: ResourceImg3,
       type: 'PDF',
-      url: 'www.makesoup.com'
+      url: 'www.makesoup.com',
     },
     {
       id: '6',
       title: 'How to make Soup',
-      description: 'Meet Cali foster, a passionate chef from Lagos State, Nigeria. With a love for cooking that knows no bounds, Cali brings the flavors of Lagos to every dish.',
+      description:
+        'Meet Cali foster, a passionate chef from Lagos State, Nigeria. With a love for cooking that knows no bounds, Cali brings the flavors of Lagos to every dish.',
       image: ResourceImg1,
       type: 'Video',
-      url: 'www.makesoup.com'
-    }
+      url: 'www.makesoup.com',
+    },
   ];
 
   const toggleMenu = (id: string) => {
     setActiveMenuId(activeMenuId === id ? null : id);
   };
 
-  const handleShare = (id: string) => {
-    setSelectedResourceId(id);
+  const handleShare = () => {
     setIsShareModalOpen(true);
     setActiveMenuId(null);
   };
@@ -83,7 +87,7 @@ const ResourcesPage: React.FC = () => {
     const handleClickOutside = () => {
       setActiveMenuId(null);
     };
-    
+
     document.addEventListener('click', handleClickOutside);
     return () => {
       document.removeEventListener('click', handleClickOutside);
@@ -94,9 +98,9 @@ const ResourcesPage: React.FC = () => {
     <div className=" min-h-screen">
       <div className="max-w-7xl mx-auto px-4 py-6">
         {/* Share Modal */}
-        <ShareModal 
-          isOpen={isShareModalOpen} 
-          onClose={() => setIsShareModalOpen(false)} 
+        <ShareModal
+          isOpen={isShareModalOpen}
+          onClose={() => setIsShareModalOpen(false)}
         />
 
         {/* Header with search and user info */}
@@ -113,31 +117,36 @@ const ResourcesPage: React.FC = () => {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-           </div>
+          </div>
         </div>
 
         {/* Resources grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {resources.map((resource) => (
-            <div key={resource.id} className="rounded-lg overflow-hidden bg-white p-2 shadow-sm border border-gray-50">
+            <div
+              key={resource.id}
+              className="rounded-lg overflow-hidden bg-white p-2 shadow-sm border border-gray-50"
+            >
               {/* Resource image and more icon */}
               <div className="relative">
-                <img 
-                  src={resource.image} 
-                  alt={resource.title} 
+                <img
+                  src={resource.image}
+                  alt={resource.title}
                   className="w-full h-48 object-cover"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
-                    target.src = "https://via.placeholder.com/400x200";
+                    target.src = 'https://via.placeholder.com/400x200';
                   }}
                 />
               </div>
-              
+
               {/* Resource details */}
               <div className="p-4">
                 <div className="flex justify-between items-start relative">
-                  <h3 className="font-medium text-gray-900">{resource.title}</h3>
-                  <button 
+                  <h3 className="font-medium text-gray-900">
+                    {resource.title}
+                  </h3>
+                  <button
                     className="text-gray-500 hover:text-gray-700"
                     onClick={(e) => {
                       e.stopPropagation();
@@ -147,18 +156,18 @@ const ResourcesPage: React.FC = () => {
                     <FiMoreVertical />
                   </button>
                   {activeMenuId === resource.id && (
-                    <div 
+                    <div
                       className="absolute top-8 right-0 bg-white rounded-md shadow-lg overflow-hidden z-10 w-36"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      <div 
+                      <div
                         className="px-4 py-2 hover:bg-gray-100 flex items-center cursor-pointer"
-                        onClick={() => handleShare(resource.id)}
+                        onClick={handleShare}
                       >
                         <FiShare2 className="mr-2" />
                         Share
                       </div>
-                      <div 
+                      <div
                         className="px-4 py-2 hover:bg-gray-100 flex items-center cursor-pointer"
                         onClick={() => handleDownload(resource.id)}
                       >
@@ -168,23 +177,27 @@ const ResourcesPage: React.FC = () => {
                     </div>
                   )}
                 </div>
-                
-                <p className="mt-2 text-sm text-gray-600">{resource.description}</p>
-                
+
+                <p className="mt-2 text-sm text-gray-600">
+                  {resource.description}
+                </p>
+
                 <div className="mt-4 flex justify-between items-center">
-                  <a 
-                    href={resource.url} 
-                    target="_blank" 
+                  <a
+                    href={resource.url}
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-500 text-sm hover:underline"
                   >
                     {resource.url}
                   </a>
-                  <div className={`px-2 py-1 text-xs rounded-md ${
-                    resource.type === 'Video' 
-                      ? 'bg-orange-100 text-orange-800' 
-                      : 'bg-green-100 text-green-800'
-                  }`}>
+                  <div
+                    className={`px-2 py-1 text-xs rounded-md ${
+                      resource.type === 'Video'
+                        ? 'bg-orange-100 text-orange-800'
+                        : 'bg-green-100 text-green-800'
+                    }`}
+                  >
                     {resource.type}
                   </div>
                 </div>

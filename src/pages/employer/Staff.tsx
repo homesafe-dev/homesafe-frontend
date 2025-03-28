@@ -17,21 +17,21 @@ const StaffPage: React.FC = () => {
       location: 'Oregon, Lagos',
       position: 'Chef/Cleaner',
       age: '23 yrs old',
-      rating: 4
+      rating: 4,
     },
     {
       name: 'Cali Foster Jenkins',
       location: 'Oregon, Lagos',
       position: 'Chef/Cleaner',
       age: '23 yrs old',
-      rating: 4
+      rating: 4,
     },
     {
       name: 'Cali Foster Jenkins',
       location: 'Oregon, Lagos',
       position: 'Chef/Cleaner',
       age: '23 yrs old',
-      rating: 4
+      rating: 4,
     },
   ];
 
@@ -64,8 +64,8 @@ const StaffPage: React.FC = () => {
         </div>
 
         {staffMembers.map((member, index) => (
-          <div 
-            key={index} 
+          <div
+            key={index}
             className="grid grid-cols-5 items-center px-4 h-[56px] mb-2 last:mb-0 bg-white"
           >
             <div className="flex items-center gap-2 relative">
@@ -80,9 +80,12 @@ const StaffPage: React.FC = () => {
             <div>{member.age}</div>
             <div className="flex justify-between items-center">
               {renderRatingStars(member.rating)}
-              <Link to='/employer/staff/profile'> <button className="bg-green-200 text-green-800 px-3 py-1 rounded-md text-sm">
-                View Profile
-              </button></Link>
+              <Link to="/employer/staff/profile">
+                {' '}
+                <button className="bg-green-200 text-green-800 px-3 py-1 rounded-md text-sm">
+                  View Profile
+                </button>
+              </Link>
             </div>
           </div>
         ))}

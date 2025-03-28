@@ -165,7 +165,7 @@ const WalletPage: React.FC = () => {
                   <FaPlus className="mr-2" /> Top-up
                 </button>
               </Link>
-              <button 
+              <button
                 className="bg-white text-green-800 px-4 py-2 rounded-md flex items-center text-sm"
                 onClick={handleOpenWithdrawModal}
               >
@@ -222,7 +222,7 @@ const WalletPage: React.FC = () => {
           </table>
         </div>
       </div>
-      <WithdrawModal 
+      <WithdrawModal
         isOpen={isWithdrawModalOpen}
         onClose={handleCloseWithdrawModal}
       />
