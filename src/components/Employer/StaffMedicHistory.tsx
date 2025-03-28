@@ -1,4 +1,3 @@
-// MedicalHistory.tsx
 import React from 'react';
 import MedicalImg from '../../assets/images/medical.png';
 

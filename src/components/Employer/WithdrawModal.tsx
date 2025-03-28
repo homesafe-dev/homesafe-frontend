@@ -26,7 +26,6 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose }) => {
 
   const handleWithdraw = () => {
     console.log('Processing withdrawal', { bankName, accountNumber, amount });
-    // Handle withdrawal logic here
   };
 
   return (
@@ -86,7 +85,6 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose }) => {
             </div>
           </div>
 
-          {/* Account Number */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Account Number
@@ -100,7 +98,6 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose }) => {
             />
           </div>
 
-          {/* Amount */}
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Amount
@@ -114,7 +111,6 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose }) => {
             />
           </div>
 
-          {/* Withdraw Button */}
           <button
             onClick={handleWithdraw}
             className="w-full bg-green-400 hover:bg-green-500 text-center py-4 rounded-md text-gray-800 font-medium"

@@ -59,7 +59,6 @@ const PayrollPage: React.FC = () => {
         </div>
 
         <div className="w-full mt-[1rem]">
-          {/* Table Header */}
           <div className="grid grid-cols-6 bg-[#C8EDDF80] rounded-t-lg">
             <div className="p-3 text-sm font-medium text-gray-600">Staff</div>
             <div className="p-3 text-sm font-medium text-gray-600">
@@ -75,7 +74,6 @@ const PayrollPage: React.FC = () => {
             <div className="p-3 text-sm font-medium text-gray-600">Status</div>
           </div>
 
-          {/* Table Body */}
           <div className="bg-white">
             {payrollEntries.map((entry, index) => (
               <div
@@ -102,7 +100,6 @@ const PayrollPage: React.FC = () => {
             ))}
           </div>
 
-          {/* Pagination */}
           <div className="flex justify-end items-center gap-4 mt-6">
             <button className="p-2">
               <FaChevronLeft size={14} className="text-gray-500" />

@@ -16,7 +16,6 @@ const EmployerReview: React.FC<EmployerReviewProps> = ({ isOpen, onClose }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle the review submission here
     console.log({ employerName, rating, feedback });
     onClose();
   };

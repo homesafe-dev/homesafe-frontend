@@ -11,7 +11,6 @@ const ArtisanProfileView: React.FC<ArtisanProfileProps> = ({ goBack }) => {
 
   return (
     <div className=" min-h-screen">
-      {/* Back button */}
       <div className="flex items-center mb-8">
         <button
           onClick={goBack}
@@ -25,7 +24,6 @@ const ArtisanProfileView: React.FC<ArtisanProfileProps> = ({ goBack }) => {
       <div className="flex flex-col lg:flex-row gap-8 bg-white shadow-sm p-8 rounded-[16px]">
         {/* Profile section */}
         <div className="w-full lg:w-1/2 border-r border-[#BDC2C7] p-6 flex flex-col items-center relative">
-          {/* Profile image with badge */}
           <div className="relative mb-4">
             <img
               src={ArtisanImg}
@@ -84,7 +82,6 @@ const ArtisanProfileView: React.FC<ArtisanProfileProps> = ({ goBack }) => {
           </h3>
 
           <div className="space-y-6 border border-gray-100 p-8 rounded-[16px]">
-            {/* Employment Start Date */}
             <div>
               <label className="block text-sm font-medium text-gray-600 mb-2">
                 Employment Start Date

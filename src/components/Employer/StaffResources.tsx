@@ -1,4 +1,3 @@
-// EducationalResources.tsx
 import React from 'react';
 import Resources from '../../assets/images/Er1.png';
 interface ResourceProps {

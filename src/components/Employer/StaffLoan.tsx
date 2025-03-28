@@ -1,4 +1,3 @@
-// Loan.tsx
 import React from 'react';
 import NoLoanImg from '../../assets/images/noitem.png';
 

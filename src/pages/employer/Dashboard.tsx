@@ -5,17 +5,13 @@ import { BsCreditCard, BsPeople } from 'react-icons/bs';
 const DashboardContent: React.FC = () => {
   return (
     <div className="bg-white p-6">
-      {/* Greeting and Subscription */}
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-[16px] font-normal text-[#24292E">Hello John</h1>
         <div className="bg-[#EFAE73] text-[#24292E] h-[42px] w-[165px] flex justify-center items-center px-4 py-1 rounded-full text-sm">
           Ruby Subscription
         </div>
       </div>
-
-      {/* Cards Row */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 h-auto">
-        {/* Balance Card */}
         <div className="bg-[#174B35] text-white p-6 rounded-lg shadow relative overflow-hidden">
           <div className="absolute top-0 right-0 w-[180px] h-[180px] opacity-10">
             <svg width="100%" height="100%" viewBox="0 0 100 100">
@@ -79,8 +75,6 @@ const DashboardContent: React.FC = () => {
             </button>
           </div>
         </div>
-
-        {/* Staff Count Card - First */}
         <div className="bg-gray-100 p-4 rounded-lg shadow flex flex-row-reverse gap-[1rem] items-center">
           <div className="mr-auto">
             <h3 className="text-[20px] font-normal text-[#24292E]">00</h3>
@@ -93,7 +87,6 @@ const DashboardContent: React.FC = () => {
           </div>
         </div>
 
-        {/* Staff Count Card - Second */}
         <div className="bg-gray-100 p-6 rounded-lg shadow flex flex-row-reverse gap-[1rem] items-center">
           <div className="mr-auto">
             <h3 className="text-[20px] font-normal text-[#24292E]">00</h3>
@@ -107,11 +100,9 @@ const DashboardContent: React.FC = () => {
         </div>
       </div>
 
-      {/* Activities Section */}
       <div className="mb-8">
         <h2 className="text-lg font-medium text-gray-700 mb-4">Activities</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Educational Resources Card */}
           <div className="bg-[#E7E3F6] p-6 h-[282px] rounded-lg shadow">
             <div className="flex justify-between mb-4 ">
               <div className="mt-[3rem]">
@@ -128,8 +119,6 @@ const DashboardContent: React.FC = () => {
               <div className="bg-white w-[100px] h-[100px] p-4 rounded-full"></div>
             </div>
           </div>
-
-          {/* Payroll Card */}
           <div className="bg-[#E9E3E3] p-6 rounded-lg shadow">
             <div className="flex justify-between mb-4 ">
               <div className="mt-[3rem]">
@@ -148,7 +137,6 @@ const DashboardContent: React.FC = () => {
         </div>
       </div>
 
-      {/* History Section */}
       <div>
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-medium text-gray-700">History</h2>
@@ -157,7 +145,6 @@ const DashboardContent: React.FC = () => {
           </button>
         </div>
 
-        {/* Table */}
         <div className="overflow-x-auto">
           <table className="min-w-full bg-green-50 rounded-lg overflow-hidden">
             <thead className="text-left text-gray-600 text-sm">

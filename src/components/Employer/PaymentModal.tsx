@@ -26,7 +26,6 @@ const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
     if (selectedMethod === 'transfer') {
       setPaymentMade(true);
     } else {
-      // Process debit card payment
       console.log('Processing debit payment');
     }
   };

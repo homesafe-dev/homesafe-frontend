@@ -4,14 +4,11 @@ import { FaPlus } from 'react-icons/fa';
 const DashboardContent: React.FC = () => {
   return (
     <div className="p-6">
-      {/* Greeting */}
       <h1 className="text-[16px] font-normal text-[#24292E] mb-6">
         Hello John
       </h1>
 
-      {/* Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Salary Card */}
         <div className="bg-[#E7F6F0] p-6 rounded-lg h-[282px] relative">
           <div className="absolute top-6 right-6 w-[100px] h-[100px] bg-white rounded-full"></div>
           <div className="max-w-[65%] h-full flex flex-col justify-center">
@@ -38,7 +35,6 @@ const DashboardContent: React.FC = () => {
           </div>
         </div>
 
-        {/* First Salary Advance Card */}
         <div className="bg-[#FFF1F1] p-6 rounded-lg h-[282px] relative">
           <div className="absolute top-6 right-6 w-[100px] h-[100px] bg-white rounded-full"></div>
           <div className="max-w-[65%] h-full flex flex-col justify-center">
@@ -52,7 +48,6 @@ const DashboardContent: React.FC = () => {
           </div>
         </div>
 
-        {/* Educational Resources Card */}
         <div className="bg-[#F1F0F9] p-6 rounded-lg h-[282px] relative">
           <div className="absolute top-6 right-6 w-[100px] h-[100px] bg-white rounded-full"></div>
           <div className="max-w-[65%] h-full flex flex-col justify-center">
@@ -63,7 +58,6 @@ const DashboardContent: React.FC = () => {
           </div>
         </div>
 
-        {/* Second Salary Advance Card */}
         <div className="bg-[#F1F1F1] p-6 rounded-lg h-[282px] relative">
           <div className="absolute top-6 right-6 w-[100px] h-[100px] bg-white rounded-full"></div>
           <div className="max-w-[65%] h-full flex flex-col justify-center">

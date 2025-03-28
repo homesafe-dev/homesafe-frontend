@@ -1,4 +1,3 @@
-// StaffProfile.tsx
 import React, { useState } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 import StaffProfileAbout from '../../components/Employer/StaffProfileAbout';
@@ -31,7 +30,7 @@ const StaffProfile: React.FC = () => {
         'A book on how well to improve in pasta making, this helps you to be an expert in the kitchen.',
       chapterCount: 34,
       recipeCount: 28,
-      thumbnail: '/path-to-thumbnail.jpg', // Replace with actual path
+      thumbnail: '/path-to-thumbnail.jpg',
     },
     {
       title: 'Culinary Skills',
@@ -40,7 +39,7 @@ const StaffProfile: React.FC = () => {
         'A book on how well to improve in pasta making, this helps you to be an expert in the kitchen.',
       chapterCount: 34,
       recipeCount: 28,
-      thumbnail: '/path-to-thumbnail.jpg', // Replace with actual path
+      thumbnail: '/path-to-thumbnail.jpg',
     },
   ];
 
@@ -108,7 +107,6 @@ const StaffProfile: React.FC = () => {
         redeemSalary: '-',
         status: 'Paid',
       },
-      // Add more history items as needed
     ],
   };
 

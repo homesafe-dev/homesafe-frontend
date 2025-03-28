@@ -6,14 +6,13 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import HomesafeLogo from '../../../assets/images/HomesafeLogo.png';
 import HomesafeLogo2 from '../../../assets/images/HomesafeLogo2.svg';
 
-const HomesafeSigninPasswordPage: React.FC = () => {
+const SigninPasswordPage: React.FC = () => {
   const [password, setPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Password submitted:', password);
-    // Add your signup logic here
   };
 
   const togglePasswordVisibility = () => {
@@ -22,9 +21,7 @@ const HomesafeSigninPasswordPage: React.FC = () => {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      {/* Left side with images, overlay, and mission statement */}
       <div className="hidden md:flex md:w-1/2 bg-white relative overflow-hidden">
-        {/* Top image */}
         <div className="absolute top-0 left-0 w-full h-1/2">
           <div className="relative w-full h-full">
             <img
@@ -36,7 +33,6 @@ const HomesafeSigninPasswordPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Bottom image */}
         <div className="absolute bottom-0 left-0 w-full h-1/2">
           <div className="relative w-full h-full">
             <img
@@ -48,14 +44,11 @@ const HomesafeSigninPasswordPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Logo and mission statement overlay */}
         <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
-          {/* Logo */}
           <div className="mb-8">
             <img src={HomesafeLogo} alt="Homesafe Logo" className="" />
           </div>
 
-          {/* Mission statement */}
           <div className="max-w-md">
             <p className="text-center text-[#F4F4F4] text-[24px] font-normal">
               "Our Mission at Homesafe is to make hiring safe, simple, and
@@ -66,7 +59,6 @@ const HomesafeSigninPasswordPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Right side with sign up form */}
       <div className="w-full md:w-1/2 flex items-center justify-center p-6">
         <div className="flex flex-col items-center space-y-4">
           <div className="w-[545px] bg-white rounded-lg shadow-lg p-8">
@@ -171,4 +163,4 @@ const HomesafeSigninPasswordPage: React.FC = () => {
   );
 };
 
-export default HomesafeSigninPasswordPage;
+export default SigninPasswordPage;

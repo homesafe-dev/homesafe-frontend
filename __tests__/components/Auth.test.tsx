@@ -5,9 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import React from 'react';
 import HomesafeSigninCreatePasswordPage from '../../src/components/auth/employee/CreatePassword';
 
-// Test suite for auth components
 describe('CreatePassword Component', () => {
-  // Helper function to wrap components with router
   const renderWithRouter = (ui: React.ReactElement) => {
     return render(
       <BrowserRouter>
@@ -19,17 +17,13 @@ describe('CreatePassword Component', () => {
   it('should render create password form with all required elements', () => {
     renderWithRouter(<HomesafeSigninCreatePasswordPage />);
     
-    // Check for heading
     expect(screen.getByText('Create Password')).toBeInTheDocument();
     
-    // Check for password input
     const passwordInput = screen.getByPlaceholderText('*******');
     expect(passwordInput).toBeInTheDocument();
     
-    // Check for password requirements text
     expect(screen.getByText(/Password must be 8 letters long/)).toBeInTheDocument();
     
-    // Check for continue button
     expect(screen.getByRole('button', { name: /continue/i })).toBeInTheDocument();
   });
 
@@ -39,14 +33,11 @@ describe('CreatePassword Component', () => {
     const passwordInput = screen.getByPlaceholderText('*******') as HTMLInputElement;
     const toggleButton = screen.getByRole('button', { name: '' }); // Eye icon button
     
-    // Initially password should be hidden
     expect(passwordInput.type).toBe('password');
     
-    // Click toggle button
     fireEvent.click(toggleButton);
     expect(passwordInput.type).toBe('text');
     
-    // Click toggle button again
     fireEvent.click(toggleButton);
     expect(passwordInput.type).toBe('password');
   });
@@ -71,16 +62,13 @@ describe('CreatePassword Component', () => {
   it('should show mission statement and logo in the left panel', () => {
     renderWithRouter(<HomesafeSigninCreatePasswordPage />);
     
-    // Check for mission statement
     const missionText = screen.getByText(/Our Mission at Homesafe is to make hiring safe/);
     expect(missionText).toBeInTheDocument();
     
-    // Check for logo
     const logo = screen.getByAltText('Homesafe Logo');
     expect(logo).toBeInTheDocument();
   });
 
-  // Updated form submission test
   it('should handle form submission', () => {
     const consoleSpy = vi.spyOn(console, 'log');
     renderWithRouter(<HomesafeSigninCreatePasswordPage />);
@@ -88,13 +76,10 @@ describe('CreatePassword Component', () => {
     const form = screen.getByRole('form');
     const passwordInput = screen.getByPlaceholderText('*******');
     
-    // Type password
     fireEvent.change(passwordInput, { target: { value: 'SecurePass123!' } });
     
-    // Submit the form directly instead of clicking the button
     fireEvent.submit(form);
     
-    // Verify console.log was called
     expect(consoleSpy).toHaveBeenCalledWith('Password submitted:', 'SecurePass123!');
     
     consoleSpy.mockRestore();

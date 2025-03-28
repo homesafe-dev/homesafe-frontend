@@ -31,9 +31,7 @@ const FacialCapturePage: React.FC = () => {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      {/* Left side with images, overlay, and mission statement */}
       <div className="hidden md:flex md:w-1/2 bg-white relative overflow-hidden">
-        {/* Top image */}
         <div className="absolute top-0 left-0 w-full h-1/2">
           <div className="relative w-full h-full">
             <img
@@ -45,7 +43,6 @@ const FacialCapturePage: React.FC = () => {
           </div>
         </div>
 
-        {/* Bottom image */}
         <div className="absolute bottom-0 left-0 w-full h-1/2">
           <div className="relative w-full h-full">
             <img
@@ -57,14 +54,12 @@ const FacialCapturePage: React.FC = () => {
           </div>
         </div>
 
-        {/* Logo and mission statement overlay */}
         <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
           {/* Logo */}
           <div className="mb-8">
             <img src={HomesafeLogo} alt="Homesafe Logo" className="" />
           </div>
 
-          {/* Mission statement */}
           <div className="max-w-md">
             <p className="text-center text-[#F4F4F4] text-[24px] font-normal">
               "Our Mission at Homesafe is to make hiring safe, simple, and
@@ -75,7 +70,6 @@ const FacialCapturePage: React.FC = () => {
         </div>
       </div>
 
-      {/* Right side with facial capture form */}
       <div className="w-full md:w-1/2 flex items-center justify-center p-6">
         <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
           <div className="text-center mb-6">
@@ -88,7 +82,6 @@ const FacialCapturePage: React.FC = () => {
           </div>
 
           <div className="flex flex-col items-center justify-center ">
-            {/* Hidden file input */}
             <input
               type="file"
               accept="image/*"
@@ -98,9 +91,7 @@ const FacialCapturePage: React.FC = () => {
               capture="user"
             />
 
-            {/* Wrapper div with white background and shadow */}
             <div className="bg-white p-6 rounded-lg drop-shadow-[0_0_10px_rgba(0,0,0,0.15)] w-[344px] flex flex-col justify-center items-center">
-              {/* Image preview area */}
               <div
                 className="w-full flex justify-center mb-4"
                 onClick={capturedImage ? undefined : triggerFileInput}
@@ -120,7 +111,6 @@ const FacialCapturePage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Buttons */}
               {capturedImage ? (
                 <div className="flex items-center space-x-2 mb-8">
                   <button

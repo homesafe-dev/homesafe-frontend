@@ -15,7 +15,6 @@ const ForgotPasswordOTPPage: React.FC = () => {
     newOtp[index] = element.value;
     setOtp(newOtp);
 
-    // Move to next input if current field is filled
     if (element.value && index < 5) {
       inputRefs.current[index + 1]?.focus();
     }
@@ -25,7 +24,6 @@ const ForgotPasswordOTPPage: React.FC = () => {
     e: React.KeyboardEvent<HTMLInputElement>,
     index: number
   ) => {
-    // Move to previous input if backspace is pressed and current field is empty
     if (e.key === 'Backspace' && !otp[index] && index > 0) {
       inputRefs.current[index - 1]?.focus();
     }
@@ -35,19 +33,15 @@ const ForgotPasswordOTPPage: React.FC = () => {
     e.preventDefault();
     const otpString = otp.join('');
     console.log('OTP submitted:', otpString);
-    // Add your OTP verification logic here
   };
 
   const handleResetCode = () => {
-    // Add your reset code logic here
     console.log('Resetting code...');
   };
 
   return (
     <div className="flex h-screen bg-gray-100">
-      {/* Left side with images, overlay, and mission statement */}
       <div className="hidden md:flex md:w-1/2 bg-white relative overflow-hidden">
-        {/* Top image */}
         <div className="absolute top-0 left-0 w-full h-1/2">
           <div className="relative w-full h-full">
             <img
@@ -59,7 +53,6 @@ const ForgotPasswordOTPPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Bottom image */}
         <div className="absolute bottom-0 left-0 w-full h-1/2">
           <div className="relative w-full h-full">
             <img
@@ -71,14 +64,12 @@ const ForgotPasswordOTPPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Logo and mission statement overlay */}
         <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
           {/* Logo */}
           <div className="mb-8">
             <img src={HomesafeLogo} alt="Homesafe Logo" className="" />
           </div>
 
-          {/* Mission statement */}
           <div className="max-w-md">
             <p className="text-center text-[#F4F4F4] text-[24px] font-normal">
               "Our Mission at Homesafe is to make hiring safe, simple, and
@@ -93,12 +84,6 @@ const ForgotPasswordOTPPage: React.FC = () => {
       <div className="w-full md:w-1/2 flex items-center justify-center p-6">
         <div className="flex flex-col items-center space-y-4">
           <div className="w-[545px] bg-white rounded-lg shadow-lg p-8">
-            {/* <div className="text-center mb-6 flex flex-row">
-              <h1 className="text-2xl font-semibold text-gray-800">
-                Sign up on
-              </h1>
-              <img src={HomesafeLogo2} className='w-[178px] max-h-[30px] mt-[mt-[10rem]'/>
-            </div> */}
             <h1 className="text-[#24292E] font-semibold text-[36px]">0TP</h1>
 
             <form onSubmit={handleSubmit}>

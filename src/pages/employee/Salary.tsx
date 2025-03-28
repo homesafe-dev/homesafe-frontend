@@ -10,8 +10,6 @@ interface Transaction {
 }
 
 const Salary: React.FC = () => {
-  // Add pagination state
-
   // Sample transactions data
   const transactions: Transaction[] = [
     {
@@ -104,10 +102,6 @@ const Salary: React.FC = () => {
     },
   ];
 
-  // Calculate pagination
-
-  // Handle page changes
-
   return (
     <div className="rounded-lg border-gray-200">
       <div className="flex items-center mb-1">
@@ -150,37 +144,6 @@ const Salary: React.FC = () => {
           </tbody>
         </table>
       </div>
-
-      {/* Add pagination controls */}
-      {/* <div className="flex justify-end items-center gap-2 mt-4 pb-4 pr-4">
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          className="p-2 rounded-full hover:bg-gray-100 disabled:opacity-50"
-        >
-          &lt;
-        </button>
-
-        {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
-          <button
-            key={pageNum}
-            onClick={() => handlePageChange(pageNum)}
-            className={`w-8 h-8 rounded-full flex items-center justify-center ${
-              currentPage === pageNum ? 'bg-gray-200' : 'hover:bg-gray-100'
-            }`}
-          >
-            {pageNum}
-          </button>
-        ))}
-
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className="p-2 rounded-full hover:bg-gray-100 disabled:opacity-50"
-        >
-          &gt;
-        </button>
-      </div> */}
     </div>
   );
 };
