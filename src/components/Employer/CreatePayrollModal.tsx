@@ -6,7 +6,10 @@ interface CreatePayrollModalProps {
   onClose: () => void;
 }
 
-const CreatePayrollModal: React.FC<CreatePayrollModalProps> = ({ isOpen, onClose }) => {
+const CreatePayrollModal: React.FC<CreatePayrollModalProps> = ({
+  isOpen,
+  onClose,
+}) => {
   const [enableAutoPayment, setEnableAutoPayment] = useState(true);
 
   if (!isOpen) return null;
@@ -18,8 +21,10 @@ const CreatePayrollModal: React.FC<CreatePayrollModalProps> = ({ isOpen, onClose
         <div className="p-6">
           {/* Header with close button */}
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-medium text-gray-800">Create Payroll</h2>
-            <button 
+            <h2 className="text-xl font-medium text-gray-800">
+              Create Payroll
+            </h2>
+            <button
               onClick={onClose}
               className="text-gray-500 hover:text-gray-700"
             >
@@ -31,7 +36,9 @@ const CreatePayrollModal: React.FC<CreatePayrollModalProps> = ({ isOpen, onClose
           <form>
             {/* Staff */}
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Staff</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Staff
+              </label>
               <div className="relative">
                 <input
                   type="text"
@@ -42,12 +49,16 @@ const CreatePayrollModal: React.FC<CreatePayrollModalProps> = ({ isOpen, onClose
                   <FaChevronDown className="text-gray-400" size={14} />
                 </div>
               </div>
-              <p className="text-xs text-gray-500 mt-1">Staff name is searchable</p>
+              <p className="text-xs text-gray-500 mt-1">
+                Staff name is searchable
+              </p>
             </div>
 
             {/* Position */}
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Position</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Position
+              </label>
               <div className="relative">
                 <input
                   type="text"
@@ -63,7 +74,9 @@ const CreatePayrollModal: React.FC<CreatePayrollModalProps> = ({ isOpen, onClose
 
             {/* Amount */}
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Amount</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Amount
+              </label>
               <input
                 type="text"
                 placeholder="N 0"
@@ -73,7 +86,9 @@ const CreatePayrollModal: React.FC<CreatePayrollModalProps> = ({ isOpen, onClose
 
             {/* Date to Pay */}
             <div className="mb-5">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Date to Pay</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Date to Pay
+              </label>
               <div className="relative">
                 <input
                   type="text"
@@ -96,7 +111,10 @@ const CreatePayrollModal: React.FC<CreatePayrollModalProps> = ({ isOpen, onClose
                 onChange={() => setEnableAutoPayment(!enableAutoPayment)}
                 className="h-4 w-4 text-green-500 border-gray-300 rounded focus:ring-0"
               />
-              <label htmlFor="enableAutoPayment" className="ml-2 text-sm text-gray-500">
+              <label
+                htmlFor="enableAutoPayment"
+                className="ml-2 text-sm text-gray-500"
+              >
                 Enable automate payment
               </label>
             </div>

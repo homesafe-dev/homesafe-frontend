@@ -29,7 +29,7 @@ const Salary: React.FC<SalaryProps> = ({
   advancedLoan,
   accountDetails,
   nextPaymentDate,
-  salaryHistory
+  salaryHistory,
 }) => {
   return (
     <div className="p-6">
@@ -39,9 +39,21 @@ const Salary: React.FC<SalaryProps> = ({
           {/* Curved stripes decoration */}
           <div className="absolute top-0 right-0">
             <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
-              <path d="M60 0C60 33.1371 86.8629 60 120 60" stroke="#F3F4F6" strokeWidth="2"/>
-              <path d="M40 0C40 44.1828 75.8172 80 120 80" stroke="#F3F4F6" strokeWidth="2"/>
-              <path d="M20 0C20 55.2285 64.7715 100 120 100" stroke="#F3F4F6" strokeWidth="2"/>
+              <path
+                d="M60 0C60 33.1371 86.8629 60 120 60"
+                stroke="#F3F4F6"
+                strokeWidth="2"
+              />
+              <path
+                d="M40 0C40 44.1828 75.8172 80 120 80"
+                stroke="#F3F4F6"
+                strokeWidth="2"
+              />
+              <path
+                d="M20 0C20 55.2285 64.7715 100 120 100"
+                stroke="#F3F4F6"
+                strokeWidth="2"
+              />
             </svg>
           </div>
 
@@ -67,10 +79,26 @@ const Salary: React.FC<SalaryProps> = ({
           {/* Smooth S-curves decoration */}
           <div className="absolute bottom-0 right-0">
             <svg width="280" height="200" viewBox="0 0 280 200" fill="none">
-              <path d="M280 200C280 200 280 160 260 130C240 100 240 70 280 40" stroke="#F3F4F6" strokeWidth="1"/>
-              <path d="M250 200C250 200 250 170 230 140C210 110 210 80 250 50" stroke="#F3F4F6" strokeWidth="1"/>
-              <path d="M220 200C220 200 220 180 200 150C180 120 180 90 220 60" stroke="#F3F4F6" strokeWidth="1"/>
-              <path d="M190 200C190 200 190 190 170 160C150 130 150 100 190 70" stroke="#F3F4F6" strokeWidth="1"/>
+              <path
+                d="M280 200C280 200 280 160 260 130C240 100 240 70 280 40"
+                stroke="#F3F4F6"
+                strokeWidth="1"
+              />
+              <path
+                d="M250 200C250 200 250 170 230 140C210 110 210 80 250 50"
+                stroke="#F3F4F6"
+                strokeWidth="1"
+              />
+              <path
+                d="M220 200C220 200 220 180 200 150C180 120 180 90 220 60"
+                stroke="#F3F4F6"
+                strokeWidth="1"
+              />
+              <path
+                d="M190 200C190 200 190 190 170 160C150 130 150 100 190 70"
+                stroke="#F3F4F6"
+                strokeWidth="1"
+              />
             </svg>
           </div>
 
@@ -85,17 +113,29 @@ const Salary: React.FC<SalaryProps> = ({
           <h3 className="font-medium">Salary History</h3>
           <button className="text-sm text-gray-600">View All</button>
         </div>
-        
+
         <div className="overflow-x-auto">
           <table className="min-w-full">
             <thead className="bg-[#C8EDDF80] h-[56px]">
               <tr>
-                <th className="text-left px-4 py-2 text-xs font-medium text-gray-600">Payment Date</th>
-                <th className="text-left px-4 py-2 text-xs font-medium text-gray-600">Account Details</th>
-                <th className="text-left px-4 py-2 text-xs font-medium text-gray-600">Amount</th>
-                <th className="text-left px-4 py-2 text-xs font-medium text-gray-600">Salary Advance</th>
-                <th className="text-left px-4 py-2 text-xs font-medium text-gray-600">Redeem Salary</th>
-                <th className="text-left px-4 py-2 text-xs font-medium text-gray-600">Status</th>
+                <th className="text-left px-4 py-2 text-xs font-medium text-gray-600">
+                  Payment Date
+                </th>
+                <th className="text-left px-4 py-2 text-xs font-medium text-gray-600">
+                  Account Details
+                </th>
+                <th className="text-left px-4 py-2 text-xs font-medium text-gray-600">
+                  Amount
+                </th>
+                <th className="text-left px-4 py-2 text-xs font-medium text-gray-600">
+                  Salary Advance
+                </th>
+                <th className="text-left px-4 py-2 text-xs font-medium text-gray-600">
+                  Redeem Salary
+                </th>
+                <th className="text-left px-4 py-2 text-xs font-medium text-gray-600">
+                  Status
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -104,7 +144,9 @@ const Salary: React.FC<SalaryProps> = ({
                   <td className="px-4 py-3 text-sm">{item.paymentDate}</td>
                   <td className="px-4 py-3">
                     <p className="text-xs">{item.accountDetails.bank}</p>
-                    <p className="text-xs">{item.accountDetails.accountNumber}</p>
+                    <p className="text-xs">
+                      {item.accountDetails.accountNumber}
+                    </p>
                   </td>
                   <td className="px-4 py-3 text-sm">{item.amount}</td>
                   <td className="px-4 py-3 text-sm">{item.salaryAdvance}</td>

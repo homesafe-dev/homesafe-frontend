@@ -107,13 +107,10 @@ const Salary: React.FC = () => {
   // Calculate pagination
 
   // Handle page changes
-  
-
 
   return (
     <div className="rounded-lg border-gray-200">
       <div className="flex items-center mb-1">
-       
         <h1 className="text-[20px] font-semibold text-[#24292E]">Salary</h1>
       </div>
       <div className="flex justify-between items-center mb-4">

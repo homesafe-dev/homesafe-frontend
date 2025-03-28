@@ -1,6 +1,6 @@
 import React from 'react';
 import { FiSearch, FiDownload } from 'react-icons/fi';
-import ContractImg from '../../assets/images/Contract.png'
+import ContractImg from '../../assets/images/Contract.png';
 
 interface ContractCardProps {
   name: string;
@@ -8,13 +8,17 @@ interface ContractCardProps {
   imageUrl: string;
 }
 
-const ContractCard: React.FC<ContractCardProps> = ({ name, description, imageUrl }) => {
+const ContractCard: React.FC<ContractCardProps> = ({
+  name,
+  description,
+  imageUrl,
+}) => {
   return (
     <div className="bg-white p-4 rounded-md border border-gray-100">
       <div className="mb-3">
-        <img 
-          src={imageUrl} 
-          alt="Contract document" 
+        <img
+          src={imageUrl}
+          alt="Contract document"
           className="w-full h-[174px] object-cover rounded-sm"
         />
       </div>
@@ -32,33 +36,34 @@ interface ContractsPageProps {
   title?: string;
 }
 
-const ContractsPage: React.FC<ContractsPageProps> = ({ title = "All Contracts" }) => {
-
+const ContractsPage: React.FC<ContractsPageProps> = ({
+  title = 'All Contracts',
+}) => {
   const contractsData = [
     {
       id: 1,
-      name: "Cali Foster Jenkins",
-      description: "Here is the contract with Cali Foster Jenkins.",
-      imageUrl: ContractImg 
+      name: 'Cali Foster Jenkins',
+      description: 'Here is the contract with Cali Foster Jenkins.',
+      imageUrl: ContractImg,
     },
     {
       id: 2,
-      name: "Cali Foster Jenkins",
-      description: "Here is the contract with Cali Foster Jenkins.",
-      imageUrl: ContractImg
+      name: 'Cali Foster Jenkins',
+      description: 'Here is the contract with Cali Foster Jenkins.',
+      imageUrl: ContractImg,
     },
     {
       id: 3,
-      name: "Cali Foster Jenkins",
-      description: "Here is the contract with Cali Foster Jenkins.",
-      imageUrl: ContractImg
+      name: 'Cali Foster Jenkins',
+      description: 'Here is the contract with Cali Foster Jenkins.',
+      imageUrl: ContractImg,
     },
     {
       id: 4,
-      name: "Cali Foster Jenkins",
-      description: "Here is the contract with Cali Foster Jenkins.",
-      imageUrl: ContractImg
-    }
+      name: 'Cali Foster Jenkins',
+      description: 'Here is the contract with Cali Foster Jenkins.',
+      imageUrl: ContractImg,
+    },
   ];
 
   return (
@@ -74,10 +79,10 @@ const ContractsPage: React.FC<ContractsPageProps> = ({ title = "All Contracts" }
           <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
         </div>
       </div>
-      
+
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {contractsData.map((contract) => (
-          <ContractCard 
+          <ContractCard
             key={contract.id}
             name={contract.name}
             description={contract.description}

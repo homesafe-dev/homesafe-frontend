@@ -17,7 +17,6 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({
   userEmail = 'Johnduke@gmail.com',
-  userName = 'John',
 }) => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);

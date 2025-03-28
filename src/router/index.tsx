@@ -226,7 +226,7 @@ export const router = createBrowserRouter([
         path: 'medical',
         element: (
           <EmployerLayout>
-          <Medical />
+            <Medical />
           </EmployerLayout>
         ),
       },
@@ -234,7 +234,7 @@ export const router = createBrowserRouter([
         path: 'review',
         element: (
           <EmployerLayout>
-          <ReviewsPage />
+            <ReviewsPage />
           </EmployerLayout>
         ),
       },
@@ -242,10 +242,10 @@ export const router = createBrowserRouter([
         path: 'contracts',
         element: (
           <EmployerLayout>
-          <Contracts />
+            <Contracts />
           </EmployerLayout>
         ),
-    },
+      },
     ],
   },
   // Employee Routes
@@ -288,7 +288,7 @@ export const router = createBrowserRouter([
         path: 'salary',
         element: (
           <EmployeeLayout>
-            <Salary/>
+            <Salary />
           </EmployeeLayout>
         ),
       },
@@ -296,7 +296,7 @@ export const router = createBrowserRouter([
         path: 'resources',
         element: (
           <EmployeeLayout>
-            <EmployeeResources/>
+            <EmployeeResources />
           </EmployeeLayout>
         ),
       },
@@ -304,7 +304,7 @@ export const router = createBrowserRouter([
         path: 'medical',
         element: (
           <EmployeeLayout>
-            <EmployeeMedical/>
+            <EmployeeMedical />
           </EmployeeLayout>
         ),
       },
@@ -312,7 +312,7 @@ export const router = createBrowserRouter([
         path: 'review',
         element: (
           <EmployeeLayout>
-            <EmployeeReview/>
+            <EmployeeReview />
           </EmployeeLayout>
         ),
       },
@@ -320,7 +320,7 @@ export const router = createBrowserRouter([
         path: 'contracts',
         element: (
           <EmployeeLayout>
-            <EmployeeContracts/>
+            <EmployeeContracts />
           </EmployeeLayout>
         ),
       },

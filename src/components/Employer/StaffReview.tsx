@@ -1,6 +1,6 @@
 // Loan.tsx
 import React, { useState } from 'react';
-import NoLoanImg from '../../assets/images/noitem.png'
+import NoLoanImg from '../../assets/images/noitem.png';
 import ReviewModal from './StaffReviewModal';
 
 const Loan: React.FC = () => {
@@ -22,19 +22,20 @@ const Loan: React.FC = () => {
   return (
     <div className="flex flex-col items-center justify-center p-4 h-64">
       <div className="bg-gray-100 p-4 rounded-lg mb-4 mt-[5rem]">
-        <img src={NoLoanImg} alt=''/>
+        <img src={NoLoanImg} alt="" />
       </div>
       <h3 className="font-medium text-gray-700 mb-1">Nothing Here</h3>
       <p className="text-sm text-gray-500">
-        <button 
+        <button
           className="font-semibold hover:text-gray-700 transition-colors"
           onClick={handleOpenReviewModal}
         >
           Click Here
-        </button> to review this user
+        </button>{' '}
+        to review this user
       </p>
 
-      <ReviewModal 
+      <ReviewModal
         isOpen={isReviewModalOpen}
         onClose={handleCloseReviewModal}
         onSubmit={handleSubmitReview}

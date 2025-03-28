@@ -19,7 +19,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose }) => {
     'Zenith Bank',
     'Wema Bank',
     'Fidelity Bank',
-    'Sterling Bank'
+    'Sterling Bank',
   ]);
 
   if (!isOpen) return null;
@@ -44,11 +44,15 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose }) => {
             </button>
           </div>
 
-          <p className="text-gray-600 mb-6">Provide an account details for withdrawal</p>
+          <p className="text-gray-600 mb-6">
+            Provide an account details for withdrawal
+          </p>
 
           {/* Bank Name Dropdown */}
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Bank Name</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Bank Name
+            </label>
             <div className="relative">
               <button
                 type="button"
@@ -60,7 +64,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose }) => {
                 </span>
                 <FiChevronDown size={16} className="text-gray-400" />
               </button>
-              
+
               {isDropdownOpen && (
                 <div className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md overflow-auto border border-gray-200">
                   <ul className="py-1">
@@ -84,7 +88,9 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose }) => {
 
           {/* Account Number */}
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Account Number</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Account Number
+            </label>
             <input
               type="text"
               placeholder="0123456789"
@@ -96,7 +102,9 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose }) => {
 
           {/* Amount */}
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Amount</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Amount
+            </label>
             <input
               type="text"
               placeholder="00.00"

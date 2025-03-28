@@ -73,7 +73,7 @@ const HomesafeSigninCreatePasswordPage: React.FC = () => {
               Create Password
             </h1>
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} role="form">
               <div className="mb-4 mt-[1rem]">
                 <label
                   htmlFor="password"
@@ -118,7 +118,6 @@ const HomesafeSigninCreatePasswordPage: React.FC = () => {
                 </button>
               </Link>
             </form>
-           
           </div>
         </div>
       </div>
