@@ -7,7 +7,8 @@ import EmployerSignupOTP from '../components/auth/employer/SignupOTP';
 import EmployerSignupPassword from '../components/auth/employer/SignupPassword';
 import EmployerSigninPassword from '../components/auth/employer/SigninPassword';
 import EmployerSigninCreatePassword from '../components/auth/employer/SigninCreatePassword';
-import EmployeeLoginForm from '../components/auth/employer/LoginForm';
+import EmployeeLoginForm from '../components/auth/employee/LoginForm';
+import EmployeeOTP from '../components/auth/employee/OTP';
 import EmployerForgotPassword from '../components/auth/employer/ForgotPassword';
 import EmployerForgotPasswordOTP from '../components/auth/employer/ForgotPasswordOTP';
 import AgentLoginForm from '../components/auth/agent/LoginForm';
@@ -19,6 +20,8 @@ import EmployerDashboard from '../pages/employer/Dashboard';
 import EmployeeDashboard from '../pages/employee/Dashboard';
 import AgentDashboard from '../pages/agent/Dashboard';
 import FacialCapturePage from '../components/auth/employer/FacialCapture';
+import EmployeeFacialCapturePage from '../components/auth/employee/FacialCapture';
+import CreatePassword from '../components/auth/employee/CreatePassword';
 
 // Layouts
 import EmployerLayout from '../components/layouts/Employer/Layout';
@@ -36,9 +39,15 @@ import Payroll from '../pages/employer/Payroll';
 import AllPayroll from '../pages/employer/AllPayroll';
 import StaffProfile from '../pages/employer/StaffProfile';
 import Resources from '../pages/employer/Resources';
+import EmployeeResources from '../pages/employee/Resources';
 import Medical from '../pages/employer/Medical';
 import ReviewsPage from '../pages/employer/Reviews';
 import Contracts from '../pages/employer/Contracts';
+import HomesafeForgotPasswordPage from '../components/auth/employee/ForgotPassword';
+import Salary from '../pages/employee/Salary';
+import EmployeeMedical from '../pages/employee/Medical';
+import EmployeeReview from '../pages/employee/Review';
+import EmployeeContracts from '../pages/employee/Contracts';
 
 export const router = createBrowserRouter([
   {
@@ -252,10 +261,66 @@ export const router = createBrowserRouter([
         element: <EmployeeLoginForm />,
       },
       {
+        path: 'login/facial-capture',
+        element: <EmployeeFacialCapturePage />,
+      },
+      {
+        path: 'forgot-password',
+        element: <HomesafeForgotPasswordPage />,
+      },
+      {
+        path: 'forgot-password/otp',
+        element: <EmployeeOTP />,
+      },
+      {
+        path: 'create-password',
+        element: <CreatePassword />,
+      },
+      {
         path: 'dashboard',
         element: (
           <EmployeeLayout>
             <EmployeeDashboard />
+          </EmployeeLayout>
+        ),
+      },
+      {
+        path: 'salary',
+        element: (
+          <EmployeeLayout>
+            <Salary/>
+          </EmployeeLayout>
+        ),
+      },
+      {
+        path: 'resources',
+        element: (
+          <EmployeeLayout>
+            <EmployeeResources/>
+          </EmployeeLayout>
+        ),
+      },
+      {
+        path: 'medical',
+        element: (
+          <EmployeeLayout>
+            <EmployeeMedical/>
+          </EmployeeLayout>
+        ),
+      },
+      {
+        path: 'review',
+        element: (
+          <EmployeeLayout>
+            <EmployeeReview/>
+          </EmployeeLayout>
+        ),
+      },
+      {
+        path: 'contracts',
+        element: (
+          <EmployeeLayout>
+            <EmployeeContracts/>
           </EmployeeLayout>
         ),
       },
