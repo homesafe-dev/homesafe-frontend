@@ -40,7 +40,7 @@ const ForgotPasswordOTPPage: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-gray-100">
       <div className="hidden md:flex md:w-1/2 bg-white relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-1/2">
           <div className="relative w-full h-full">
@@ -80,18 +80,19 @@ const ForgotPasswordOTPPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Right side with sign up form */}
-      <div className="w-full md:w-1/2 flex items-center justify-center p-6">
-        <div className="flex flex-col items-center space-y-4">
-          <div className="w-[545px] bg-white rounded-lg shadow-lg p-8">
-            <h1 className="text-[#24292E] font-semibold text-[36px]">0TP</h1>
+      <div className="w-full md:w-1/2 flex items-center justify-center px-4 py-6 md:p-6">
+        <div className="flex flex-col items-center w-full max-w-[545px] space-y-4">
+          <div className="w-full bg-white rounded-lg shadow-lg p-4 md:p-8">
+            <h1 className="text-2xl md:text-[36px] text-[#24292E] font-semibold">
+              OTP
+            </h1>
 
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
-                <p className="block text-sm font-medium text-gray-700 mb-4">
+                <p className="block text-sm font-medium text-gray-700 mb-4 text-center">
                   Enter the OTP code sent to your email address
                 </p>
-                <div className="flex justify-between mb-4">
+                <div className="flex justify-between gap-2 md:gap-4 mb-4">
                   {otp.map((digit, index) => (
                     <input
                       key={index}
@@ -103,7 +104,7 @@ const ForgotPasswordOTPPage: React.FC = () => {
                       }}
                       onChange={(e) => handleChange(e.target, index)}
                       onKeyDown={(e) => handleKeyDown(e, index)}
-                      className="w-12 h-12 text-center border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-lg font-semibold"
+                      className="w-8 h-8 md:w-12 md:h-12 text-center border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-base md:text-lg font-semibold"
                     />
                   ))}
                 </div>
@@ -118,7 +119,7 @@ const ForgotPasswordOTPPage: React.FC = () => {
                 </div>
               </div>
 
-              <Link to="/employer/signin/create-password">
+              <Link to="/employer/signin/create-password" className="block w-full">
                 <button
                   type="submit"
                   className="w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors"
