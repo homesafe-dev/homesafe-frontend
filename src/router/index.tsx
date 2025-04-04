@@ -51,6 +51,8 @@ import EmployeeReview from '../pages/employee/Review';
 import EmployeeContracts from '../pages/employee/Contracts';
 import CandidatesPage from '../pages/agent/Candidates';
 import AllCandidatesPage from '../pages/agent/AllCandidatesPage';
+import Track from '../pages/agent/Track';
+import Review from '../pages/agent/Review';
 
 export const router = createBrowserRouter([
   {
@@ -361,7 +363,15 @@ export const router = createBrowserRouter([
         path: 'track',
         element: (
           <AgentLayout>
-            <CandidatesPage />
+            <Track />
+          </AgentLayout>
+        ),
+      },
+      {
+        path: 'review',
+        element: (
+          <AgentLayout>
+            <Review />
           </AgentLayout>
         ),
       },
