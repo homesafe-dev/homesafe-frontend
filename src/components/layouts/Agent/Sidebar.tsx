@@ -51,11 +51,11 @@ const Sidebar: React.FC = () => {
       icon: <img src={TrackIcon} />,
       path: '/agent/track',
     },
-    {
-      name: 'Compliance',
-      icon: <img src={ComplianceIcon} />,
-      path: '/agent/compliance',
-    },
+    // {
+    //   name: 'Compliance',
+    //   icon: <img src={ComplianceIcon} />,
+    //   path: '/agent/compliance',
+    // },
     {
       name: 'Review',
       icon: <img src={ReviewIcon} />,
