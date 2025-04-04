@@ -7,7 +7,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
 
   const login = (email: string, password: string, type: UserType) => {
-    // Mock login - in real app, this would make an API call
     setUser({
       id: '1',
       email,

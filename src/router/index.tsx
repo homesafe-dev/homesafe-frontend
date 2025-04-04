@@ -26,6 +26,7 @@ import CreatePassword from '../components/auth/employee/CreatePassword';
 // Layouts
 import EmployerLayout from '../components/layouts/Employer/Layout';
 import EmployeeLayout from '../components/layouts/Employee/Layout';
+import AgentLayout from '../components/layouts/Agent/Layout'
 import WalletPage from '../pages/employer/WalletPage';
 import WalletHistory from '../pages/employer/WalletHistory';
 import WalletTopUp from '../pages/employer/WalletTopUp';
@@ -48,6 +49,8 @@ import Salary from '../pages/employee/Salary';
 import EmployeeMedical from '../pages/employee/Medical';
 import EmployeeReview from '../pages/employee/Review';
 import EmployeeContracts from '../pages/employee/Contracts';
+import CandidatesPage from '../pages/agent/Candidates';
+import AllCandidatesPage from '../pages/agent/AllCandidatesPage';
 
 export const router = createBrowserRouter([
   {
@@ -340,7 +343,35 @@ export const router = createBrowserRouter([
       },
       {
         path: 'dashboard',
-        element: <AgentDashboard />,
+        element: (
+          <AgentLayout>
+        <AgentDashboard />,
+        </AgentLayout>
+        )
+      },
+      {
+        path: 'candidates',
+        element: (
+          <AgentLayout>
+            <CandidatesPage />
+          </AgentLayout>
+        ),
+      },
+      {
+        path: 'track',
+        element: (
+          <AgentLayout>
+            <CandidatesPage />
+          </AgentLayout>
+        ),
+      },
+      {
+        path: 'all-candidates',
+        element: (
+          <AgentLayout>
+            <AllCandidatesPage />
+          </AgentLayout>
+        ),
       },
     ],
   },
