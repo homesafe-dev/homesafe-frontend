@@ -38,7 +38,7 @@ const OnboardingForm: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-gray-100">
       <div className="hidden md:flex md:w-1/2 bg-white relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-1/2">
           <div className="relative w-full h-full">
@@ -78,10 +78,10 @@ const OnboardingForm: React.FC = () => {
       </div>
 
       {/* Right side with onboarding form */}
-      <div className="w-full md:w-1/2 flex items-center justify-center p-6">
-        <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
+      <div className="w-full md:w-1/2 flex items-center justify-center px-4 py-6 md:p-6">
+        <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-4 md:p-8">
           <div className="text-center mb-6">
-            <h1 className="text-[36px] font-semibold text-[#24292E]">
+            <h1 className="text-2xl md:text-[36px] font-semibold text-[#24292E]">
               Welcome Onboard
             </h1>
             <p className="text-[13px] text-[#24292E] mt-2">
@@ -100,7 +100,7 @@ const OnboardingForm: React.FC = () => {
               <select
                 id="title"
                 name="title"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-sm md:text-base"
                 value={formData.title}
                 onChange={handleChange}
               >
@@ -125,7 +125,7 @@ const OnboardingForm: React.FC = () => {
                 id="firstName"
                 name="firstName"
                 placeholder="Doe"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-sm md:text-base"
                 value={formData.firstName}
                 onChange={handleChange}
                 required
@@ -144,7 +144,7 @@ const OnboardingForm: React.FC = () => {
                 id="lastName"
                 name="lastName"
                 placeholder="Doe"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-sm md:text-base"
                 value={formData.lastName}
                 onChange={handleChange}
                 required
@@ -163,7 +163,7 @@ const OnboardingForm: React.FC = () => {
                 id="email"
                 name="email"
                 placeholder="name@email.com"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-sm md:text-base"
                 value={formData.email}
                 onChange={handleChange}
                 required
@@ -182,7 +182,7 @@ const OnboardingForm: React.FC = () => {
                 id="phoneNumber"
                 name="phoneNumber"
                 placeholder="07012345678"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-sm md:text-base"
                 value={formData.phoneNumber}
                 onChange={handleChange}
                 required
@@ -200,8 +200,8 @@ const OnboardingForm: React.FC = () => {
                 type="text"
                 id="homeAddress"
                 name="homeAddress"
-                placeholder="home@email.com"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                placeholder="Enter your address"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-sm md:text-base"
                 value={formData.homeAddress}
                 onChange={handleChange}
                 required
@@ -209,10 +209,10 @@ const OnboardingForm: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 What are you?
               </label>
-              <div className="flex items-center gap-4 mt-2">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-2">
                 <div className="flex items-center">
                   <input
                     type="radio"
@@ -245,10 +245,10 @@ const OnboardingForm: React.FC = () => {
               </div>
             </div>
 
-            <Link to="/employer/signup/facial-capture">
+            <Link to="/employer/signup/facial-capture" className="block w-full">
               <button
                 type="submit"
-                className="w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors mt-4"
+                className="w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors mt-6"
               >
                 Save & Continue
               </button>
