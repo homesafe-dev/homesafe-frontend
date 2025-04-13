@@ -6,7 +6,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
 
-  const login = (email: string, password: string, type: UserType) => {
+  const login = (email: string, _password: string, type: UserType) => {
     // Mock login - in real app, this would make an API call
     setUser({
       id: '1',
@@ -34,6 +34,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
@@ -41,3 +42,5 @@ export function useAuth() {
   }
   return context;
 }
+
+export { AuthContext };
