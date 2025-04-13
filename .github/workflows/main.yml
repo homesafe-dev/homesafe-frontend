@@ -11,13 +11,13 @@ on:
 
 jobs:
   linting:
-    name :  Run static code analysis
-    uses : ./.github/workflows/lint.yml
+    name: Run static code analysis
+    uses: ./.github/workflows/lint.yml
 
   testing:
-    name : Run test
-    needs : linting
-    uses : ./.github/workflows/test.yml
+    name: Run test
+    needs: linting
+    uses: ./.github/workflows/test.yml
 
   notify-slack:
     name: Notify Slack - Frontend Workflow
