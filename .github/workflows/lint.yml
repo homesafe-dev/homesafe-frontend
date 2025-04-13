@@ -22,5 +22,3 @@ jobs:
 
       - name: Run ESLint
         run: npm run lint
-        with:
-          commit-message: "Linting code"
