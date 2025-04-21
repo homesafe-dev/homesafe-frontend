@@ -8,7 +8,7 @@ const Footer: React.FC = () => {
     <footer className="bg-[#123628] text-white py-12">
       <div className="max-w-6xl mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Logo and Description */}
+         
           <div className="md:col-span-1">
             <div className="flex items-center mb-4">
             <img src={HomesafeLogo} alt='Homesafe logo'/>
@@ -17,7 +17,6 @@ const Footer: React.FC = () => {
               A service & transaction in which no physical goods are transferred from the seller to the buyer; the benefits of such a service are.
             </p>
             
-            {/* Social Media Icons */}
             <div className="flex space-x-4">
               <a href="#" className="text-white hover:text-gray-300">
                 <FaFacebook />
@@ -31,18 +30,18 @@ const Footer: React.FC = () => {
             </div>
           </div>
           
-          {/* Company Links */}
+          
           <div className="md:col-span-1">
             <h3 className="font-medium mb-4">Company</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="text-gray-300 hover:text-white text-sm">Homepage</a></li>
+              <li><a href="#" className="text-gray-300 hover:text-white text-sm">Home</a></li>
               <li><a href="#" className="text-gray-300 hover:text-white text-sm">About Us</a></li>
               <li><a href="#" className="text-gray-300 hover:text-white text-sm">Hire Artisans</a></li>
               <li><a href="#" className="text-gray-300 hover:text-white text-sm">Support</a></li>
             </ul>
           </div>
           
-          {/* Legal Links */}
+         
           <div className="md:col-span-1">
             <h3 className="font-medium mb-4">Legal</h3>
             <ul className="space-y-2">
@@ -52,7 +51,7 @@ const Footer: React.FC = () => {
             </ul>
           </div>
           
-          {/* Newsletter */}
+        
           <div className="md:col-span-1">
             <h3 className="font-medium mb-4">Get Update Newsletter</h3>
             <p className="text-sm text-gray-300 mb-4">

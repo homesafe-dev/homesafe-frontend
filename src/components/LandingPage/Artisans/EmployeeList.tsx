@@ -16,7 +16,6 @@ interface Employee {
 
 const EmployeeList = () => {
     const [searchQuery, setSearchQuery] = useState('');
-  // Sample data for employees
   const employees: Employee[] = [
     {
       id: 1,
@@ -159,7 +158,6 @@ const EmployeeList = () => {
         List of <span className="text-[#246D51]">Employees</span>
       </h1>
 
-      {/* Search Bar */}
       <div className="relative mb-6 w-[562px] h-[42px] max-w-md mx-auto">
             <FiSearch className="absolute left-3 top-3 text-gray-400" />
             <input
@@ -171,7 +169,7 @@ const EmployeeList = () => {
             />
           </div>
 
-      {/* Employee Grid */}
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
         {employees.map((employee) => (
           <div

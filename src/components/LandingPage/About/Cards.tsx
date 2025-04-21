@@ -6,7 +6,7 @@ export default function Cards() {
     <div className="w-full bg-white py-8">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex flex-col md:flex-row gap-12 justify-between mt-[2rem]">
-          {/* Vision Card */}
+      
           <div className="flex-1 flex flex-col items-start shadow-sm p-8">
             <img src={Vision } alt='vision image'/>
             <h2 className="text-[40px] font-semibold text-gray-700 mb-4">Vision</h2>
@@ -15,7 +15,6 @@ export default function Cards() {
             </p>
           </div>
 
-          {/* Mission Card */}
           <div className="flex-1 flex flex-col items-start shadow-md p-8">
             <img src={Target} alt='misson image'/>
             <h2 className="text-[40px] font-semibold text-gray-700 mb-4">Mission</h2>
