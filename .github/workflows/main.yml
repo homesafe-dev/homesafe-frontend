@@ -11,11 +11,11 @@ on:
 
 jobs:
   linting:
-    name: Run Static Code Analysis
+    name: Run static code analysis
     uses: ./.github/workflows/lint.yml
 
   testing:
-    name: Run Tests
+    name: Run test
     needs: linting
     uses: ./.github/workflows/test.yml
 
