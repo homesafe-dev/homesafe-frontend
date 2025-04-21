@@ -47,9 +47,9 @@ const Hero: React.FC = () => {
             Support
           </a>
         </nav>
-        <button className="bg-[#A5EA91] hover:bg-green-500 text-[#24292E] font-medium py-2 px-4 rounded-md transition-colors">
+        <a href='/employer/login'> <button className="bg-[#A5EA91] hover:bg-green-500 text-[#24292E] font-medium py-2 px-4 rounded-md transition-colors">
             Sign-in
-        </button>
+        </button></a>
       </header>
 
       {/* Hero Content */}
