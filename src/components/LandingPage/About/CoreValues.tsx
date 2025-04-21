@@ -9,7 +9,7 @@ export default function CoreValues() {
         <h2 className="text-3xl font-medium text-center text-gray-800 mb-10">Our Core Values</h2>
         
         <div className="flex flex-row justify-center gap-6">
-          {/* Trust Card */}
+         
           <div className="w-72 bg-white rounded-lg shadow-sm border border-gray-100 p-6">
             <div className="flex mb-4">
               <div className="w-16 h-16 flex items-center justify-center">
@@ -24,7 +24,7 @@ export default function CoreValues() {
             </p>
           </div>
           
-          {/* Quality Card */}
+        
           <div className="w-72 bg-white rounded-lg shadow-sm border border-gray-100 p-6">
             <div className="flex mb-4">
               <div className="w-16 h-16 flex items-center justify-center">
@@ -39,7 +39,7 @@ export default function CoreValues() {
             </p>
           </div>
           
-          {/* Safety Card */}
+          
           <div className="w-72 bg-white rounded-lg shadow-sm border border-gray-100 p-6">
             <div className="flex mb-4">
               <div className="w-16 h-16 flex items-center justify-start">

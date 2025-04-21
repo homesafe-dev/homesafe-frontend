@@ -13,7 +13,6 @@ interface Artisan {
 }
 
 const Artisans = () => {
-  // Sample data based on the screenshot
   const recentArtisans: Artisan[] = [
     {
       id: 1,

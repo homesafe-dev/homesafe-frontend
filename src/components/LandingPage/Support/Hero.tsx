@@ -3,9 +3,10 @@ import HeroImage from '../../../assets/images/Support.jpeg';
 import HomesafeLogo from '../../../assets/images/HomesafeLogo2.svg';
 
 const Hero: React.FC = () => {
+  const pathname = window.location.pathname;
+
   return (
     <div className="relative w-full">
-      {/* Hero Background Image */}
       <div className="absolute inset-0 z-0">
         <img 
           src={HeroImage} 
@@ -15,22 +16,40 @@ const Hero: React.FC = () => {
         <div className="absolute inset-0 bg-[#1D2125CC] opacity-80"></div>
       </div>
 
-      {/* Navigation Bar */}
       <header className="relative z-10 px-[5%] py-4 flex justify-between items-center pt-8 bg-white">
         <div className="flex items-center">
           <img src={HomesafeLogo} alt='Homesafe logo'/>
         </div>
         
         <nav className="hidden md:flex items-center space-x-8 text-[20px]">
-          <a href="/home" className="text-[#24292E] hover:text-gray-900 transition-colors">Homepage</a>
-          <a href="/about" className="text-[#24292E] hover:text-gray-900 transition-colors">About Us</a>
-          <a href="/artisans" className="text-[#24292E] hover:text-gray-900 transition-colors">Hire Artisans</a>
-          <a href="/support" className="text-[#24292E] hover:text-gray-900 transition-colors">Support</a>
-         
+          <a 
+            href="/home" 
+            className={`transition-colors ${pathname === '/home' ? 'text-[#A5EA91]' : 'text-[#24292E] hover:text-gray-900'}`}
+          >
+            Home
+          </a>
+          <a 
+            href="/about" 
+            className={`transition-colors ${pathname === '/about' ? 'text-[#A5EA91]' : 'text-[#24292E] hover:text-gray-900'}`}
+          >
+            About Us
+          </a>
+          <a 
+            href="/artisans" 
+            className={`transition-colors ${pathname === '/artisans' ? 'text-[#A5EA91]' : 'text-[#24292E] hover:text-gray-900'}`}
+          >
+            Hire Artisans
+          </a>
+          <a 
+            href="/support" 
+            className={`transition-colors ${pathname === '/support' ? 'text-[#174B35]' : 'text-[#24292E] hover:text-gray-900'}`}
+          >
+            Support
+          </a>
         </nav>
         <button className="bg-[#A5EA91] hover:bg-green-500 text-[#24292E] font-medium py-2 px-4 rounded-md transition-colors">
             Sign-in
-          </button>
+        </button>
       </header>
 
       {/* Hero Content */}

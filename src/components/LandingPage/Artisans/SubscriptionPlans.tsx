@@ -57,13 +57,11 @@ const SubscriptionPlans = () => {
         </button>
       </div> */}
 
-      {/* Title */}
       <div className="w-full max-w-6xl text-center mb-2 mt-[2rem]">
         <h1 className="text-[32px] font-semibold text-gray-800">Subscription Plans</h1>
         <p className="text-gray-700 text-sm mt-1">Choose from flexible subscription plans to suit your needs.</p>
       </div>
 
-      {/* Billing Toggle */}
       <div className="flex bg-white rounded-full mb-12 border border-[#DEE0E3]">
         {(['Monthly', 'Quarterly', 'Annually'] as const).map((cycle) => (
           <button

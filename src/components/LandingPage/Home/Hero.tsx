@@ -1,9 +1,10 @@
 import React from 'react';
-import { FiHome } from 'react-icons/fi';
 import HeroImage from '../../../assets/images/Hero.jpeg';
 import HomesafeLogo from '../../../assets/images/Homesafe2.svg';
 
 const Hero: React.FC = () => {
+  const pathname = window.location.pathname;
+
   return (
     <div className="relative w-full">
       {/* Hero Background Image */}
@@ -23,15 +24,34 @@ const Hero: React.FC = () => {
         </div>
         
         <nav className="hidden md:flex items-center space-x-8 text-[20px]">
-          <a href="/home" className="text-white hover:text-gray-200 transition-colors">Home</a>
-          <a href="/about" className="text-white hover:text-gray-200 transition-colors">About Us</a>
-          <a href="/artisans" className="text-white hover:text-gray-200 transition-colors">Hire Artisans</a>
-          <a href="/support" className="text-white hover:text-gray-200 transition-colors">Support</a>
-         
+          <a 
+            href="/home" 
+            className={`transition-colors ${pathname === '/home' ? 'text-[#A5EA91]' : 'text-white hover:text-gray-200'}`}
+          >
+            Home
+          </a>
+          <a 
+            href="/about" 
+            className={`transition-colors ${pathname === '/about' ? 'text-[#A5EA91]' : 'text-white hover:text-gray-200'}`}
+          >
+            About Us
+          </a>
+          <a 
+            href="/artisans" 
+            className={`transition-colors ${pathname === '/artisans' ? 'text-[#A5EA91]' : 'text-white hover:text-gray-200'}`}
+          >
+            Hire Artisans
+          </a>
+          <a 
+            href="/support" 
+            className={`transition-colors ${pathname === '/support' ? 'text-[#174B35]' : 'text-white hover:text-gray-200'}`}
+          >
+            Support
+          </a>
         </nav>
         <button className="bg-[#A5EA91] hover:bg-green-500 text-[#24292E] font-medium py-2 px-4 rounded-md transition-colors">
             Sign-in
-          </button>
+        </button>
       </header>
 
       {/* Hero Content */}

@@ -1,5 +1,4 @@
 import React from 'react';
-import { FiArrowRight } from 'react-icons/fi';
 import Homes from '../../../assets/images/Homes.png';
 import Office from '../../../assets/images/Office.png';
 import LivingSpace from '../../../assets/images/LivingSpace.png';
