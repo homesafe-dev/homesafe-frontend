@@ -54,10 +54,32 @@ import AllCandidatesPage from '../pages/agent/AllCandidatesPage';
 import Track from '../pages/agent/Track';
 import Review from '../pages/agent/Review';
 
+// Landing Page Compoents
+import Home from '../pages/Landing Page/Home'
+import About from '../pages/Landing Page/About'
+import Artisans from '../pages/Landing Page/Artisans';
+import Support from '../pages/Landing Page/Support';
+
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: <Navigate to="/employer/login" replace />,
+    element: <Navigate to="/home" replace />,
+  },
+  {
+    path: 'home',
+    element: <Home />,
+  },
+  {
+    path: 'about',
+    element: <About />,
+  },
+  {
+    path: 'artisans',
+    element: <Artisans />,
+  },
+  {
+    path: 'support',
+    element: <Support />,
   },
   // Employer Routes
   {
