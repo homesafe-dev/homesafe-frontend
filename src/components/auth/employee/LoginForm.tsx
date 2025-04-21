@@ -86,7 +86,10 @@ const HomesafeSignupPage: React.FC = () => {
                 />
               </div>
 
-              <Link to="/employee/login/facial-capture" className="block w-full">
+              <Link
+                to="/employee/login/facial-capture"
+                className="block w-full"
+              >
                 <button
                   type="submit"
                   className="w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors"

@@ -281,13 +281,13 @@ const CandidatesPage: React.FC = () => {
         </div>
 
         <div className="mt-8 flex justify-end">
-            <Link to="/agent/all-candidates">
-          <button
-            type="submit"
-            className="px-6 py-2 bg-[#A5EA91] text-[#24292E] rounded-md hover:bg-green-300 focus:outline-none focus:ring-2 focus:ring-green-500"
-          >
-            Save Information
-          </button>
+          <Link to="/agent/all-candidates">
+            <button
+              type="submit"
+              className="px-6 py-2 bg-[#A5EA91] text-[#24292E] rounded-md hover:bg-green-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+            >
+              Save Information
+            </button>
           </Link>
         </div>
       </form>

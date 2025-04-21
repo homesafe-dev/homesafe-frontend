@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import ArtisanImg from '../../../assets/images/artisans.png';
 
 interface Artisan {
@@ -76,7 +76,7 @@ const Artisans = () => {
       <h2 className="text-center text-[40px] font-medium mb-12 text-[#39302A]">
         Recently Hired <span className="text-[#246D51]">Artisans</span>
       </h2>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
         {recentArtisans.map((artisan) => (
           <div
@@ -112,7 +112,7 @@ const Artisans = () => {
         ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Artisans
+export default Artisans;

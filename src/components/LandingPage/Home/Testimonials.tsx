@@ -29,7 +29,11 @@ const StarRating: React.FC<{ rating: number }> = ({ rating }) => {
   return <div className="flex space-x-1">{stars}</div>;
 };
 
-const TestimonialCard: React.FC<TestimonialProps> = ({ rating, quote, author }) => {
+const TestimonialCard: React.FC<TestimonialProps> = ({
+  rating,
+  quote,
+  author,
+}) => {
   return (
     <div className="bg-gray-50 p-6 rounded-lg h-full flex flex-col">
       <div>
@@ -37,9 +41,9 @@ const TestimonialCard: React.FC<TestimonialProps> = ({ rating, quote, author }) 
         <p className="mt-4 mb-8 text-[#24292E] text-[16px]">{quote}</p>
       </div>
       <div className="flex items-center mt-auto">
-        <img 
-          src={TestimonialImg} 
-          alt={author} 
+        <img
+          src={TestimonialImg}
+          alt={author}
           className="w-10 h-10 rounded-full mr-3"
         />
         <span className="text-[#24292E] text-[15px]">{author}</span>
@@ -52,26 +56,31 @@ const Testimonials: React.FC = () => {
   const testimonials = [
     {
       rating: 5,
-      quote: "Working with Seyi from Homesafe has been one of the best decisions I took this year, sheis so perfect for me, much so that I keep calm while at work, knowing my daughter is well taken care of.",
-      author: "Biola Animashaun"
+      quote:
+        'Working with Seyi from Homesafe has been one of the best decisions I took this year, sheis so perfect for me, much so that I keep calm while at work, knowing my daughter is well taken care of.',
+      author: 'Biola Animashaun',
     },
     {
       rating: 4.5,
-      quote: "Homesafe is an app I wish had existed way before now, it would have saved me a lot of trauma, as regards household thefts and other bad experiences.",
-      author: "Goodness Okolugbo"
+      quote:
+        'Homesafe is an app I wish had existed way before now, it would have saved me a lot of trauma, as regards household thefts and other bad experiences.',
+      author: 'Goodness Okolugbo',
     },
     {
       rating: 4.5,
-      quote: "At Least I would not have to go through the stress of screening, shortlisting and hiring before I get the perfect person for the job, neither am I worried of my privacy and confidentiality being violated, thank you Homesafe!",
-      author: "Hammed Sanmi"
-    }
+      quote:
+        'At Least I would not have to go through the stress of screening, shortlisting and hiring before I get the perfect person for the job, neither am I worried of my privacy and confidentiality being violated, thank you Homesafe!',
+      author: 'Hammed Sanmi',
+    },
   ];
 
   return (
     <section className="py-16 bg-white">
       <div className="max-w-6xl mx-auto px-4">
-        <h2 className="text-[40px] font-bold text-center mb-12 text-[#39302A]">Testimonials</h2>
-        
+        <h2 className="text-[40px] font-bold text-center mb-12 text-[#39302A]">
+          Testimonials
+        </h2>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {testimonials.map((testimonial, index) => (
             <TestimonialCard
