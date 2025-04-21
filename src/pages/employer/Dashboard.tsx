@@ -19,11 +19,46 @@ const DashboardContent: React.FC = () => {
         <div className="bg-[#174B35] text-white p-6 rounded-lg shadow relative overflow-hidden">
           <div className="absolute top-0 right-0 w-[180px] h-[180px] opacity-10">
             <svg width="100%" height="100%" viewBox="0 0 100 100">
-              <line x1="40" y1="0" x2="90" y2="100" stroke="white" strokeWidth="1" />
-              <line x1="45" y1="0" x2="95" y2="100" stroke="white" strokeWidth="1" />
-              <line x1="50" y1="0" x2="100" y2="100" stroke="white" strokeWidth="1" />
-              <line x1="55" y1="0" x2="105" y2="100" stroke="white" strokeWidth="1" />
-              <line x1="60" y1="0" x2="110" y2="100" stroke="white" strokeWidth="1" />
+              <line
+                x1="40"
+                y1="0"
+                x2="90"
+                y2="100"
+                stroke="white"
+                strokeWidth="1"
+              />
+              <line
+                x1="45"
+                y1="0"
+                x2="95"
+                y2="100"
+                stroke="white"
+                strokeWidth="1"
+              />
+              <line
+                x1="50"
+                y1="0"
+                x2="100"
+                y2="100"
+                stroke="white"
+                strokeWidth="1"
+              />
+              <line
+                x1="55"
+                y1="0"
+                x2="105"
+                y2="100"
+                stroke="white"
+                strokeWidth="1"
+              />
+              <line
+                x1="60"
+                y1="0"
+                x2="110"
+                y2="100"
+                stroke="white"
+                strokeWidth="1"
+              />
             </svg>
           </div>
           <button className="absolute right-4 top-4 text-white/80 hover:text-white">

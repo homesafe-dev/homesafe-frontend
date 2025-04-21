@@ -119,7 +119,10 @@ const ForgotPasswordOTPPage: React.FC = () => {
                 </div>
               </div>
 
-              <Link to="/employer/signin/create-password" className="block w-full">
+              <Link
+                to="/employer/signin/create-password"
+                className="block w-full"
+              >
                 <button
                   type="submit"
                   className="w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors"

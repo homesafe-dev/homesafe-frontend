@@ -133,7 +133,10 @@ const FacialCapturePage: React.FC = () => {
               )}
             </div>
 
-            <Link to="/employee/forgot-password" className="block w-full mt-6 md:mt-8">
+            <Link
+              to="/employee/forgot-password"
+              className="block w-full mt-6 md:mt-8"
+            >
               <button className="w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors">
                 Continue
               </button>

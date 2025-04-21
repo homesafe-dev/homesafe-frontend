@@ -10,11 +10,15 @@ interface WorkCategoryProps {
   description: string;
 }
 
-const WorkCategory: React.FC<WorkCategoryProps> = ({ title, imageSrc, description }) => {
+const WorkCategory: React.FC<WorkCategoryProps> = ({
+  title,
+  imageSrc,
+  description,
+}) => {
   return (
     <div className="flex flex-col">
       <div className="rounded-lg overflow-hidden mb-3">
-        <img 
+        <img
           src={imageSrc}
           alt={title}
           className="w-full h-[239px] object-cover"
@@ -29,32 +33,34 @@ const WorkCategory: React.FC<WorkCategoryProps> = ({ title, imageSrc, descriptio
 const WhereWeCanWork: React.FC = () => {
   const categories = [
     {
-      title: "Office",
+      title: 'Office',
       imageSrc: Office,
-      description: "Providing outstanding services for your homes and offices."
+      description: 'Providing outstanding services for your homes and offices.',
     },
     {
-      title: "Homes",
+      title: 'Homes',
       imageSrc: Homes,
-      description: "Providing outstanding services for your homes and offices."
+      description: 'Providing outstanding services for your homes and offices.',
     },
     {
-      title: "Hotel",
+      title: 'Hotel',
       imageSrc: Hotel,
-      description: "Providing outstanding services for your homes and offices."
+      description: 'Providing outstanding services for your homes and offices.',
     },
     {
-      title: "Living Spaces",
+      title: 'Living Spaces',
       imageSrc: LivingSpace,
-      description: "Providing outstanding services for your homes and offices."
-    }
+      description: 'Providing outstanding services for your homes and offices.',
+    },
   ];
 
   return (
     <section className="bg-[#123628] py-16 px-6">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-3xl font-bold text-white text-center mb-12">Where we can work</h2>
-        
+        <h2 className="text-3xl font-bold text-white text-center mb-12">
+          Where we can work
+        </h2>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {categories.map((category, index) => (
             <WorkCategory
@@ -65,8 +71,6 @@ const WhereWeCanWork: React.FC = () => {
             />
           ))}
         </div>
-
-      
       </div>
     </section>
   );

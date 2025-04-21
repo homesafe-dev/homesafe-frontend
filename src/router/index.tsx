@@ -26,7 +26,7 @@ import CreatePassword from '../components/auth/employee/CreatePassword';
 // Layouts
 import EmployerLayout from '../components/layouts/Employer/Layout';
 import EmployeeLayout from '../components/layouts/Employee/Layout';
-import AgentLayout from '../components/layouts/Agent/Layout'
+import AgentLayout from '../components/layouts/Agent/Layout';
 import WalletPage from '../pages/employer/WalletPage';
 import WalletHistory from '../pages/employer/WalletHistory';
 import WalletTopUp from '../pages/employer/WalletTopUp';
@@ -55,8 +55,8 @@ import Track from '../pages/agent/Track';
 import Review from '../pages/agent/Review';
 
 // Landing Page Compoents
-import Home from '../pages/Landing Page/Home'
-import About from '../pages/Landing Page/About'
+import Home from '../pages/Landing Page/Home';
+import About from '../pages/Landing Page/About';
 import Artisans from '../pages/Landing Page/Artisans';
 import Support from '../pages/Landing Page/Support';
 
@@ -369,9 +369,9 @@ export const router = createBrowserRouter([
         path: 'dashboard',
         element: (
           <AgentLayout>
-        <AgentDashboard />,
-        </AgentLayout>
-        )
+            <AgentDashboard />,
+          </AgentLayout>
+        ),
       },
       {
         path: 'candidates',

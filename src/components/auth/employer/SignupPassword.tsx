@@ -109,7 +109,10 @@ const SignupPasswordPage: React.FC = () => {
                 </p>
               </div>
 
-              <Link to="/employer/signup/onboarding-form" className="block w-full">
+              <Link
+                to="/employer/signup/onboarding-form"
+                className="block w-full"
+              >
                 <button
                   type="submit"
                   className="w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors"

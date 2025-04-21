@@ -9,28 +9,26 @@ const defaultIcon = L.icon({
   iconUrl: icon,
   shadowUrl: iconShadow,
   iconSize: [25, 41],
-  iconAnchor: [12, 41]
+  iconAnchor: [12, 41],
 });
 
 const Map: React.FC = () => {
-  const position: L.LatLngExpression = [9.0820, 8.6753];
+  const position: L.LatLngExpression = [9.082, 8.6753];
 
   return (
     <div className="w-full h-[400px] rounded-lg overflow-hidden shadow-lg">
-      <MapContainer 
-        center={position} 
-        zoom={6} 
+      <MapContainer
+        center={position}
+        zoom={6}
         scrollWheelZoom={false}
         style={{ height: '100%', width: '100%' }}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy;'
+          attribution="&copy;"
         />
         <Marker position={position} icon={defaultIcon}>
-          <Popup>
-            HomeSafe Nigeria
-          </Popup>
+          <Popup>HomeSafe Nigeria</Popup>
         </Marker>
       </MapContainer>
     </div>

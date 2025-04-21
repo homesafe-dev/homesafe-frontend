@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { BsDot } from "react-icons/bs";
+import { BsDot } from 'react-icons/bs';
 
 const SubscriptionPlans = () => {
-  const [billingCycle, setBillingCycle] = useState<'Monthly' | 'Quarterly' | 'Annually'>('Monthly');
+  const [billingCycle, setBillingCycle] = useState<
+    'Monthly' | 'Quarterly' | 'Annually'
+  >('Monthly');
 
   const plans = [
     {
@@ -58,8 +60,12 @@ const SubscriptionPlans = () => {
       </div> */}
 
       <div className="w-full max-w-6xl text-center mb-2 mt-[2rem]">
-        <h1 className="text-[32px] font-semibold text-gray-800">Subscription Plans</h1>
-        <p className="text-gray-700 text-sm mt-1">Choose from flexible subscription plans to suit your needs.</p>
+        <h1 className="text-[32px] font-semibold text-gray-800">
+          Subscription Plans
+        </h1>
+        <p className="text-gray-700 text-sm mt-1">
+          Choose from flexible subscription plans to suit your needs.
+        </p>
       </div>
 
       <div className="flex bg-white rounded-full mb-12 border border-[#DEE0E3]">
@@ -86,12 +92,16 @@ const SubscriptionPlans = () => {
             className="bg-white rounded-lg shadow-md flex flex-col items-center p-6"
           >
             <div className="text-center mb-6">
-              <h2 className="text-[20px] font-semibold text-green-800">{plan.name}</h2>
+              <h2 className="text-[20px] font-semibold text-green-800">
+                {plan.name}
+              </h2>
               <p className="text-sm text-gray-700">{plan.tagline}</p>
             </div>
 
             <div className="mb-8 text-center">
-              <h3 className="text-3xl font-semibold text-gray-700">{plan.price}</h3>
+              <h3 className="text-3xl font-semibold text-gray-700">
+                {plan.price}
+              </h3>
               {plan.isBestDeal && (
                 <span className="text-xs bg-[#EFAE734D] w-[68px] h-[27px] flex justify-center items-center rounded-full text-[#24292E] mt-1 mx-auto">
                   Best deal
@@ -107,14 +117,13 @@ const SubscriptionPlans = () => {
               {plan.features.map((feature, index) => (
                 <li key={index} className="flex items-start text-gray-700">
                   <BsDot className="h-5 w-5 text-gray-700 mr-2 flex-shrink-0 mt-0.5" />
-                  <span className='text-[16px]'>{feature}</span>
+                  <span className="text-[16px]">{feature}</span>
                 </li>
               ))}
             </ul>
           </div>
         ))}
       </div>
-
     </div>
   );
 };

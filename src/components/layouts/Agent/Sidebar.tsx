@@ -4,7 +4,6 @@ import HomesafeLogo from '../../../assets/images/HomesafeLogo2.svg';
 import DashboardIcon from '../../../assets/icons/dashboard.svg';
 import CandidatesIcon from '../../../assets/icons/candidates.svg';
 import TrackIcon from '../../../assets/icons/track.svg';
-import ComplianceIcon from '../../../assets/icons/compliace.svg';
 import ReviewIcon from '../../../assets/icons/review.svg';
 
 interface SidebarItemProps {
