@@ -20,7 +20,7 @@ const SignupPasswordPage: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-gray-100">
       <div className="hidden md:flex md:w-1/2 bg-white relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-1/2">
           <div className="relative w-full h-full">
@@ -59,16 +59,17 @@ const SignupPasswordPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="w-full md:w-1/2 flex items-center justify-center p-6">
-        <div className="flex flex-col items-center space-y-4">
-          <div className="w-[545px] bg-white rounded-lg shadow-lg p-8">
-            <div className="text-center mb-6 flex flex-row">
-              <h1 className="text-2xl font-semibold text-gray-800">
+      <div className="w-full md:w-1/2 flex items-center justify-center px-4 py-6 md:p-6">
+        <div className="flex flex-col items-center w-full max-w-[545px] space-y-4">
+          <div className="w-full bg-white rounded-lg shadow-lg p-4 md:p-8">
+            <div className="text-center mb-6 flex flex-row items-center justify-center space-x-2">
+              <h1 className="text-xl md:text-2xl font-semibold text-gray-800">
                 Sign up on
               </h1>
               <img
                 src={HomesafeLogo2}
-                className="w-[178px] max-h-[30px] mt-[mt-[10rem]"
+                className="w-[120px] md:w-[178px] max-h-[30px]"
+                alt="Homesafe Logo"
               />
             </div>
 
@@ -108,7 +109,10 @@ const SignupPasswordPage: React.FC = () => {
                 </p>
               </div>
 
-              <Link to="/employer/signup/onboarding-form">
+              <Link
+                to="/employer/signup/onboarding-form"
+                className="block w-full"
+              >
                 <button
                   type="submit"
                   className="w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors"
@@ -152,7 +156,7 @@ const SignupPasswordPage: React.FC = () => {
             </button>
           </div>
 
-          <div className="w-[416px] text-[13px] text-[#24292E] text-center mt-[3rem]">
+          <div className="w-full max-w-[416px] text-[13px] text-[#24292E] text-center mt-4 md:mt-[3rem] px-4">
             By clicking "Continue" you have read and understand the Terms &
             Conditions of Homesafe and agreed to it.
           </div>

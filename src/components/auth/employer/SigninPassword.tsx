@@ -20,7 +20,7 @@ const SigninPasswordPage: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-gray-100">
       <div className="hidden md:flex md:w-1/2 bg-white relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-1/2">
           <div className="relative w-full h-full">
@@ -59,16 +59,17 @@ const SigninPasswordPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="w-full md:w-1/2 flex items-center justify-center p-6">
-        <div className="flex flex-col items-center space-y-4">
-          <div className="w-[545px] bg-white rounded-lg shadow-lg p-8">
-            <div className="text-center mb-6 flex flex-row">
-              <h1 className="text-2xl font-semibold text-gray-800">
+      <div className="w-full md:w-1/2 flex items-center justify-center px-4 py-6 md:p-6">
+        <div className="flex flex-col items-center w-full max-w-[545px] space-y-4">
+          <div className="w-full bg-white rounded-lg shadow-lg p-4 md:p-8">
+            <div className="text-center mb-6 flex flex-row items-center justify-center space-x-2">
+              <h1 className="text-xl md:text-2xl font-semibold text-gray-800">
                 Sign in on
               </h1>
               <img
                 src={HomesafeLogo2}
-                className="w-[178px] max-h-[30px] mt-[mt-[10rem]"
+                className="w-[120px] md:w-[178px] max-h-[30px]"
+                alt="Homesafe Logo"
               />
             </div>
 
@@ -85,7 +86,7 @@ const SigninPasswordPage: React.FC = () => {
                     type={showPassword ? 'text' : 'password'}
                     id="password"
                     placeholder="*******"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-sm md:text-base"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -107,7 +108,10 @@ const SigninPasswordPage: React.FC = () => {
                 </p>
               </div>
 
-              <Link to="/employer/signin/forgot-password">
+              <Link
+                to="/employer/signin/forgot-password"
+                className="block w-full"
+              >
                 <button
                   type="submit"
                   className="w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors"
@@ -116,7 +120,7 @@ const SigninPasswordPage: React.FC = () => {
                 </button>
               </Link>
             </form>
-            <p className="text-right text-[#24292E] text-[13px] font-medium mt-[1rem]">
+            <p className="text-right text-[#24292E] text-[13px] font-medium mt-4 md:mt-[1rem]">
               Forgot Password?
             </p>
 
