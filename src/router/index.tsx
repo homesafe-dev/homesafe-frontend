@@ -26,6 +26,7 @@ import CreatePassword from '../components/auth/employee/CreatePassword';
 // Layouts
 import EmployerLayout from '../components/layouts/Employer/Layout';
 import EmployeeLayout from '../components/layouts/Employee/Layout';
+import AgentLayout from '../components/layouts/Agent/Layout';
 import WalletPage from '../pages/employer/WalletPage';
 import WalletHistory from '../pages/employer/WalletHistory';
 import WalletTopUp from '../pages/employer/WalletTopUp';
@@ -48,11 +49,37 @@ import Salary from '../pages/employee/Salary';
 import EmployeeMedical from '../pages/employee/Medical';
 import EmployeeReview from '../pages/employee/Review';
 import EmployeeContracts from '../pages/employee/Contracts';
+import CandidatesPage from '../pages/agent/Candidates';
+import AllCandidatesPage from '../pages/agent/AllCandidatesPage';
+import Track from '../pages/agent/Track';
+import Review from '../pages/agent/Review';
+
+// Landing Page Compoents
+import Home from '../pages/Landing Page/Home';
+import About from '../pages/Landing Page/About';
+import Artisans from '../pages/Landing Page/Artisans';
+import Support from '../pages/Landing Page/Support';
 
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: <Navigate to="/employer/login" replace />,
+    element: <Navigate to="/home" replace />,
+  },
+  {
+    path: 'home',
+    element: <Home />,
+  },
+  {
+    path: 'about',
+    element: <About />,
+  },
+  {
+    path: 'artisans',
+    element: <Artisans />,
+  },
+  {
+    path: 'support',
+    element: <Support />,
   },
   // Employer Routes
   {
@@ -340,7 +367,43 @@ export const router = createBrowserRouter([
       },
       {
         path: 'dashboard',
-        element: <AgentDashboard />,
+        element: (
+          <AgentLayout>
+            <AgentDashboard />,
+          </AgentLayout>
+        ),
+      },
+      {
+        path: 'candidates',
+        element: (
+          <AgentLayout>
+            <CandidatesPage />
+          </AgentLayout>
+        ),
+      },
+      {
+        path: 'track',
+        element: (
+          <AgentLayout>
+            <Track />
+          </AgentLayout>
+        ),
+      },
+      {
+        path: 'review',
+        element: (
+          <AgentLayout>
+            <Review />
+          </AgentLayout>
+        ),
+      },
+      {
+        path: 'all-candidates',
+        element: (
+          <AgentLayout>
+            <AllCandidatesPage />
+          </AgentLayout>
+        ),
       },
     ],
   },
