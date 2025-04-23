@@ -15,4 +15,4 @@ jobs:
 
       - name: Trigger Deployment via GET Request
         run: |
-          curl -X GET render-webhook-url-here
+          curl -X GET https://api.render.com/deploy/srv-d04d12i4d50c73a2eo9g?key=RSJI51Z3U3s
