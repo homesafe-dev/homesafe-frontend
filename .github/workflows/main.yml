@@ -19,9 +19,14 @@ jobs:
     needs: linting
     uses: ./.github/workflows/test.yml
 
+  deploy-staging:
+    if: github.ref == 'refs/heads/staging'
+    needs: testing
+    uses: ./.github/workflows/deploy-staging.yml
+
   notify-slack:
     name: Notify Slack - Frontend Workflow
-    needs: [linting, testing] # Later, add deploy-staging and deploy-production
+    needs: [linting, testing, deploy-staging] # Later, add deploy-staging and deploy-production
     runs-on: ubuntu-latest
     env:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -34,10 +39,6 @@ jobs:
           steps: ${{ toJson(steps) }}
         if: always()
 
-  # deploy-staging:
-  #   if: github.ref == 'refs/heads/staging'
-  #   needs: testing
-  #   uses: ./.github/workflows/deploy-staging.yml
 
   # deploy-production:
   #   if: github.ref == 'refs/heads/main'
