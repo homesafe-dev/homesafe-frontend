@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import signupImg1 from '../../../assets/images/signupimg1.png';
-import signupImg2 from '../../../assets/images/signupimg2.png';
+import signupImg1 from '../../../assets/images/signupImg1.png';
+import signupImg2 from '../../../assets/images/signupImg2.png';
 import { Link } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import HomesafeLogo from '../../../assets/images/HomesafeLogo.png';
