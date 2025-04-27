@@ -24,7 +24,11 @@ const Hero: React.FC = () => {
       {/* Navigation Bar */}
       <header className="relative z-20 px-4 sm:px-[5%] py-4 flex justify-between items-center pt-4 sm:pt-8">
         <div className="flex items-center">
-          <img src={HomesafeLogo} alt="Homesafe logo" className="w-32 sm:w-auto" />
+          <img
+            src={HomesafeLogo}
+            alt="Homesafe logo"
+            className="w-32 sm:w-auto"
+          />
         </div>
 
         {/* Desktop Navigation */}
@@ -92,13 +96,13 @@ const Hero: React.FC = () => {
       </header>
 
       {/* Mobile Navigation Overlay */}
-      <div 
+      <div
         className={`fixed inset-0 backdrop-blur-sm bg-black/70 transition-opacity duration-300 ease-in-out md:hidden ${
           isMenuOpen ? 'opacity-100 z-50' : 'opacity-0 pointer-events-none'
         }`}
         onClick={toggleMenu}
       >
-        <div 
+        <div
           className={`fixed top-0 left-0 w-full bg-[#1D2125] transform transition-transform duration-300 ease-in-out ${
             isMenuOpen ? 'translate-y-0' : '-translate-y-full'
           }`}
@@ -127,7 +131,7 @@ const Hero: React.FC = () => {
               </svg>
             </button>
           </div>
-          
+
           <nav className="flex flex-col space-y-5 px-6 py-6">
             <a
               href="/"
@@ -166,7 +170,11 @@ const Hero: React.FC = () => {
               Support
             </a>
             <div className="pt-2">
-              <a href="/employer/login" className="sm:hidden block" onClick={toggleMenu}>
+              <a
+                href="/employer/login"
+                className="sm:hidden block"
+                onClick={toggleMenu}
+              >
                 <button className="bg-[#A5EA91] hover:bg-green-500 text-[#24292E] font-medium py-2.5 px-4 rounded-md transition-colors w-full">
                   Sign-in
                 </button>

@@ -9,11 +9,7 @@ export default function Cards() {
           {/* Vision Card */}
           <div className="flex flex-col bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6 sm:p-8">
             <div className="w-12 sm:w-16 h-12 sm:h-16 flex items-center justify-center mb-4">
-              <img 
-                src={Vision} 
-                alt="Vision icon" 
-                className="w-full h-full"
-              />
+              <img src={Vision} alt="Vision icon" className="w-full h-full" />
             </div>
             <h2 className="text-2xl sm:text-3xl lg:text-[40px] font-semibold text-gray-700 mb-3 sm:mb-4">
               Vision
@@ -29,11 +25,7 @@ export default function Cards() {
           {/* Mission Card */}
           <div className="flex flex-col bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6 sm:p-8">
             <div className="w-12 sm:w-16 h-12 sm:h-16 flex items-center justify-center mb-4">
-              <img 
-                src={Target} 
-                alt="Mission icon" 
-                className="w-full h-full"
-              />
+              <img src={Target} alt="Mission icon" className="w-full h-full" />
             </div>
             <h2 className="text-2xl sm:text-3xl lg:text-[40px] font-semibold text-gray-700 mb-3 sm:mb-4">
               Mission
