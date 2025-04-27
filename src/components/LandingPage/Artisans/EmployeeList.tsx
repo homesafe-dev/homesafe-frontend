@@ -139,10 +139,11 @@ const EmployeeList = () => {
     },
   ];
 
-  const filteredEmployees = employees.filter((employee) =>
-    employee.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    employee.profession.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    employee.location.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredEmployees = employees.filter(
+    (employee) =>
+      employee.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      employee.profession.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      employee.location.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const renderStars = (rating: number) => {
@@ -202,7 +203,9 @@ const EmployeeList = () => {
             <div className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs mb-3">
               {employee.profession}
             </div>
-            <div className="flex mb-4 gap-0.5">{renderStars(employee.rating)}</div>
+            <div className="flex mb-4 gap-0.5">
+              {renderStars(employee.rating)}
+            </div>
             <button className="w-full bg-[#A5EA91] hover:bg-green-300 text-[#24292E] px-4 py-2 rounded-md text-sm transition-all duration-200 hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
               View Profile
             </button>
@@ -212,7 +215,9 @@ const EmployeeList = () => {
 
       {filteredEmployees.length === 0 && (
         <div className="text-center py-8">
-          <p className="text-gray-600 text-lg">No employees found matching your search.</p>
+          <p className="text-gray-600 text-lg">
+            No employees found matching your search.
+          </p>
         </div>
       )}
     </div>

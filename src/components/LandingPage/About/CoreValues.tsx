@@ -14,7 +14,11 @@ export default function CoreValues() {
             <div className="flex mb-4">
               <div className="w-12 sm:w-16 h-12 sm:h-16 flex items-center justify-center">
                 <div className="relative">
-                  <img src={Vision} alt="Trust icon" className="w-full h-full" />
+                  <img
+                    src={Vision}
+                    alt="Trust icon"
+                    className="w-full h-full"
+                  />
                 </div>
               </div>
             </div>
@@ -32,7 +36,11 @@ export default function CoreValues() {
             <div className="flex mb-4">
               <div className="w-12 sm:w-16 h-12 sm:h-16 flex items-center justify-center">
                 <div className="relative">
-                  <img src={Vision} alt="Quality icon" className="w-full h-full" />
+                  <img
+                    src={Vision}
+                    alt="Quality icon"
+                    className="w-full h-full"
+                  />
                 </div>
               </div>
             </div>
@@ -50,7 +58,11 @@ export default function CoreValues() {
             <div className="flex mb-4">
               <div className="w-12 sm:w-16 h-12 sm:h-16 flex items-center justify-center">
                 <div className="relative">
-                  <img src={Vision} alt="Safety icon" className="w-full h-full" />
+                  <img
+                    src={Vision}
+                    alt="Safety icon"
+                    className="w-full h-full"
+                  />
                 </div>
               </div>
             </div>

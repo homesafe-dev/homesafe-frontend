@@ -88,7 +88,9 @@ const SubscriptionPlans = () => {
                 <h2 className="text-xl sm:text-2xl font-semibold text-green-800 mb-1">
                   {plan.name}
                 </h2>
-                <p className="text-sm sm:text-base text-gray-700">{plan.tagline}</p>
+                <p className="text-sm sm:text-base text-gray-700">
+                  {plan.tagline}
+                </p>
               </div>
 
               <div className="mb-6 sm:mb-8 text-center">

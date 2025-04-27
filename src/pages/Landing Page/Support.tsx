@@ -10,7 +10,7 @@ const Support = () => {
     <div>
       <Hero />
       <Help />
-      <MessageForm/>
+      <MessageForm />
       <Map />
       <Footer />
     </div>

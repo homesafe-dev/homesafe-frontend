@@ -23,7 +23,11 @@ const Hero: React.FC = () => {
 
       <header className="relative z-10 px-4 sm:px-[5%] py-4 flex justify-between items-center pt-6 sm:pt-8 bg-white">
         <div className="flex items-center">
-          <img src={HomesafeLogo} alt="Homesafe logo" className="w-32 sm:w-auto" />
+          <img
+            src={HomesafeLogo}
+            alt="Homesafe logo"
+            className="w-32 sm:w-auto"
+          />
         </div>
 
         {/* Desktop Navigation */}
@@ -136,8 +140,9 @@ const Hero: React.FC = () => {
             </h2>
 
             <p className="text-lg sm:text-xl md:text-2xl lg:text-[32px] text-white mb-8 sm:mb-12 leading-relaxed">
-              Providing outstanding services for your homes and offices. Ensuring quality,
-              reliability, and excellence in every aspect of our support.
+              Providing outstanding services for your homes and offices.
+              Ensuring quality, reliability, and excellence in every aspect of
+              our support.
             </p>
           </div>
         </div>
