@@ -61,12 +61,12 @@ import Artisans from '../pages/Landing Page/Artisans';
 import Support from '../pages/Landing Page/Support';
 
 export const router = createBrowserRouter([
+  // {
+  //   path: '/',
+  //   element: <Navigate to="/home" replace />,
+  // },
   {
     path: '/',
-    element: <Navigate to="/home" replace />,
-  },
-  {
-    path: 'home',
     element: <Home />,
   },
   {
