@@ -1,18 +1,57 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import signupImg1 from '../../../assets/images/signupImg1.png';
 import signupImg2 from '../../../assets/images/signupImg2.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import HomesafeLogo from '../../../assets/images/HomesafeLogo.png';
 import HomesafeLogo2 from '../../../assets/images/HomesafeLogo2.svg';
+import { useAuth } from '../../../contexts/AuthContext';
 
 const SigninPasswordPage: React.FC = () => {
   const [password, setPassword] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const { login, loading } = useAuth();
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    // Get email from session storage
+    const storedEmail = sessionStorage.getItem('signinEmail');
+    if (!storedEmail) {
+      // Redirect back to login page if email is not found
+      navigate('/employer/login');
+      return;
+    }
+    setEmail(storedEmail);
+  }, [navigate]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Password submitted:', password);
+
+    if (password.trim() === '') {
+      setErrorMessage('Please enter your password');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setErrorMessage(null);
+
+    try {
+      const response = await login(email, password, 'employer');
+
+      if (response.success) {
+        // Redirect to dashboard on successful login
+        navigate('/employer/dashboard');
+      } else {
+        setErrorMessage(response.message || 'Invalid email or password');
+      }
+    } catch (error) {
+      setErrorMessage('An error occurred during login. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const togglePasswordVisibility = () => {
@@ -79,7 +118,7 @@ const SigninPasswordPage: React.FC = () => {
                   htmlFor="password"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Create Password
+                  Password
                 </label>
                 <div className="relative">
                   <input
@@ -103,25 +142,27 @@ const SigninPasswordPage: React.FC = () => {
                     )}
                   </button>
                 </div>
-                <p className="mt-2 text-xs text-gray-500">
-                  Password don't match
-                </p>
+                {errorMessage && (
+                  <p className="mt-2 text-xs text-red-500">
+                    {errorMessage}
+                  </p>
+                )}
               </div>
 
-              <Link
-                to="/employer/signin/forgot-password"
-                className="block w-full"
+              <button
+                type="submit"
+                className={`w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors ${
+                  isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
+                }`}
+                disabled={isSubmitting}
               >
-                <button
-                  type="submit"
-                  className="w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors"
-                >
-                  Continue
-                </button>
-              </Link>
+                {isSubmitting || loading ? 'Signing in...' : 'Continue'}
+              </button>
             </form>
-            <p className="text-right text-[#24292E] text-[13px] font-medium mt-4 md:mt-[1rem]">
-              Forgot Password?
+            <p className="text-right mt-4 md:mt-[1rem]">
+              <Link to="/employer/signin/forgot-password" className="text-[#24292E] text-[13px] font-medium hover:text-green-600">
+                Forgot Password?
+              </Link>
             </p>
 
             <div className="my-4 text-center">
