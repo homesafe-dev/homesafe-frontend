@@ -4,28 +4,38 @@ import signupImg2 from '../../../assets/images/signupImg2.png';
 import { useNavigate } from 'react-router-dom';
 import HomesafeLogo from '../../../assets/images/HomesafeLogo.png';
 import { useAuth } from '../../../contexts/AuthContext';
+import { RegistrationData } from '../../../contexts/types';
 
 const FacialCapturePage: React.FC = () => {
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [deviceId, setDeviceId] = useState<string>('');
   const [isCameraActive, setIsCameraActive] = useState<boolean>(true); // Start with camera active
+  const [registrationData, setRegistrationData] = useState<RegistrationData | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { biometricLogin } = useAuth();
+  const { completeRegistration } = useAuth();
   const navigate = useNavigate();
 
-  // Generate device ID on mount
+  // Initialize component and start camera
   useEffect(() => {
-    // Generate or retrieve device ID
-    let storedDeviceId = localStorage.getItem('device_id');
-    if (!storedDeviceId) {
-      // Generate a simple random device ID
-      storedDeviceId = `device_${Math.random().toString(36).substring(2, 15)}`;
-      localStorage.setItem('device_id', storedDeviceId);
+    // Get registration data from session storage
+    const storedData = sessionStorage.getItem('registrationData');
+    if (!storedData) {
+      // Redirect back to onboarding form if data is not found
+      navigate('/employer/signup/onboarding-form');
+      return;
     }
-    setDeviceId(storedDeviceId);
+
+    try {
+      const parsedData = JSON.parse(storedData) as RegistrationData;
+      setRegistrationData(parsedData);
+    } catch (error) {
+      console.error('Error parsing registration data:', error);
+      setErrorMessage('There was an error with your registration data. Please try again.');
+      navigate('/employer/signup/onboarding-form');
+      return;
+    }
 
     // Start camera immediately
     startCamera();
@@ -34,7 +44,7 @@ const FacialCapturePage: React.FC = () => {
     return () => {
       stopCamera();
     };
-  }, []);
+  }, [navigate]);
 
   const startCamera = async () => {
     try {
@@ -127,37 +137,53 @@ const FacialCapturePage: React.FC = () => {
       return;
     }
 
+    if (!registrationData) {
+      setErrorMessage('Registration data is missing. Please go back and try again.');
+      return;
+    }
+
     setIsSubmitting(true);
     setErrorMessage(null);
 
     try {
-      // Generate a random challenge string
-      const challenge = `challenge_${Math.random().toString(36).substring(2, 15)}`;
+      // Add the captured image to the registration data
+      const completeData: RegistrationData = {
+        ...registrationData,
+        facial_image: capturedImage,
+        // Ensure is_employer is a boolean
+        is_employer: registrationData.is_employer === true
+      };
 
-      // For this implementation, we'll use an empty signature as shown in your example
-      const signature = "";
+      console.log("Sending registration data with facial image");
 
-      console.log("Sending biometric login data:", {
-        device_id: deviceId,
-        challenge: challenge,
-        signature: signature
-      });
-
-      const response = await biometricLogin({
-        device_id: deviceId,
-        challenge: challenge,
-        signature: signature
-      });
+      const response = await completeRegistration(completeData);
 
       if (response.success) {
-        // Navigate to dashboard on successful login
-        navigate('/employer/dashboard');
+        // Clear session storage
+        sessionStorage.removeItem('registrationData');
+        sessionStorage.removeItem('signupEmail');
+        sessionStorage.removeItem('signupPassword');
+
+        // Navigate to the appropriate dashboard based on the role
+        if (response.data && response.data.role) {
+          if (response.data.role === 'employer') {
+            navigate('/employer/dashboard');
+          } else if (response.data.role === 'agent') {
+            navigate('/agent/dashboard');
+          } else {
+            // Default to employer dashboard if role is not recognized
+            navigate('/employer/dashboard');
+          }
+        } else {
+          // Default to employer dashboard if role is not provided
+          navigate('/employer/dashboard');
+        }
       } else {
-        setErrorMessage(response.message);
+        setErrorMessage(response.message || 'Registration failed. Please try again.');
       }
     } catch (error) {
-      console.error("Biometric login error:", error);
-      setErrorMessage('Failed to authenticate. Please try again.');
+      console.error("Registration error:", error);
+      setErrorMessage('Failed to complete registration. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -207,10 +233,10 @@ const FacialCapturePage: React.FC = () => {
         <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
           <div className="text-center mb-6">
             <h1 className="text-2xl font-semibold text-gray-800">
-              Facial Capture
+              Profile Picture
             </h1>
             <p className="text-sm text-gray-600 mt-2">
-              Kindly look into your camera and take a picture
+              Kindly look into your camera and take a profile picture to complete your registration
             </p>
           </div>
 
@@ -268,10 +294,10 @@ const FacialCapturePage: React.FC = () => {
               className="w-full bg-green-500 text-white py-3 px-4 rounded-md hover:bg-green-600 transition-colors mt-8 font-medium text-lg"
               disabled={isSubmitting || !capturedImage}
             >
-              {isSubmitting ? 'Processing...' : 'Continue to Dashboard'}
+              {isSubmitting ? 'Processing...' : 'Complete Registration'}
             </button>
             <p className="text-xs text-gray-500 text-center mt-2">
-              Click to authenticate and proceed to your dashboard
+              Click to complete your registration and proceed to your dashboard
             </p>
           </div>
         </div>

@@ -3,7 +3,6 @@ import signupImg1 from '../../../assets/images/signupImg1.png';
 import signupImg2 from '../../../assets/images/signupImg2.png';
 import { useNavigate } from 'react-router-dom';
 import HomesafeLogo from '../../../assets/images/HomesafeLogo.png';
-import { useAuth } from '../../../contexts/AuthContext';
 
 const OnboardingForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -19,7 +18,7 @@ const OnboardingForm: React.FC = () => {
   const [password, setPassword] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const { completeRegistration, loading } = useAuth();
+  // We don't need the auth context for this component anymore
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -65,7 +64,7 @@ const OnboardingForm: React.FC = () => {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setErrorMessage(null);
@@ -79,20 +78,19 @@ const OnboardingForm: React.FC = () => {
         phone: formData.phoneNumber,
         address: formData.homeAddress,
         gender: formData.gender,
+        is_employer: formData.userType === 'employer' ? true : false
       };
 
-      const response = await completeRegistration(registrationData);
+      console.log('Storing registration data:', {
+        ...registrationData,
+        password: '********' // Hide password in logs
+      });
 
-      if (response.success) {
-        // Clear session storage
-        sessionStorage.removeItem('signupEmail');
-        sessionStorage.removeItem('signupPassword');
+      // Store registration data in sessionStorage for the facial capture page
+      sessionStorage.setItem('registrationData', JSON.stringify(registrationData));
 
-        // Navigate to facial capture page
-        navigate('/employer/signup/facial-capture');
-      } else {
-        setErrorMessage(response.message);
-      }
+      // Navigate to facial capture page
+      navigate('/employer/signup/facial-capture');
     } catch (error) {
       setErrorMessage('An unexpected error occurred. Please try again.');
     } finally {

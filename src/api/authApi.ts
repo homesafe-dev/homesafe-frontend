@@ -9,6 +9,7 @@ const AUTH_ENDPOINTS = {
   REGISTER: '/api/register',
   LOGIN: '/api/login',
   FORGOT_PASSWORD: '/api/forgot-password',
+  VERIFY_FORGOT_PASSWORD_OTP: '/api/verify-forgot-password-otp',
   RESET_PASSWORD: '/api/reset-password',
   LOGOUT: '/api/logout',
 };
@@ -50,7 +51,7 @@ const authApi = {
   },
 
   /**
-   * Complete user registration with personal details
+   * Complete user registration with personal details and facial image
    * @param registrationData - User registration data including email, password, name, etc.
    * @returns Promise with the API response
    */
@@ -62,11 +63,27 @@ const authApi = {
     phone: string;
     address: string;
     gender: string;
+    is_employer?: boolean;
+    facial_image?: string;
   }) => {
     try {
+      // Create a copy of the registration data
+      const payload = { ...registrationData };
+
+      // Ensure is_employer is a boolean
+      if (typeof payload.is_employer !== 'undefined') {
+        payload.is_employer = Boolean(payload.is_employer);
+      }
+
+      // Log the payload for debugging
+      console.log('Registration payload:', {
+        ...payload,
+        facial_image: payload.facial_image ? '[BASE64_IMAGE]' : undefined
+      });
+
       const response = await axiosInstance.post(
         AUTH_ENDPOINTS.COMPLETE_REGISTRATION,
-        registrationData
+        payload
       );
       return response.data;
     } catch (error) {
@@ -133,6 +150,58 @@ const authApi = {
   logout: async () => {
     try {
       const response = await axiosInstance.post(AUTH_ENDPOINTS.LOGOUT);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  /**
+   * Send forgot password request
+   * @param email - User's email address
+   * @returns Promise with the API response
+   */
+  forgotPassword: async (email: string) => {
+    try {
+      const response = await axiosInstance.post(AUTH_ENDPOINTS.FORGOT_PASSWORD, {
+        email,
+      });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  /**
+   * Verify forgot password OTP
+   * @param email - User's email address
+   * @param otp - OTP entered by user
+   * @returns Promise with the API response
+   */
+  verifyForgotPasswordOTP: async (email: string, otp: string) => {
+    try {
+      const response = await axiosInstance.post(AUTH_ENDPOINTS.VERIFY_FORGOT_PASSWORD_OTP, {
+        email,
+        otp_code: otp,
+      });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  /**
+   * Reset user password
+   * @param email - User's email address
+   * @param password - New password
+   * @returns Promise with the API response
+   */
+  resetPassword: async (email: string, password: string) => {
+    try {
+      const response = await axiosInstance.post(AUTH_ENDPOINTS.RESET_PASSWORD, {
+        email,
+        password,
+      });
       return response.data;
     } catch (error) {
       throw error;
