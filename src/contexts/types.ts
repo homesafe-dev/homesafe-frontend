@@ -21,6 +21,8 @@ export interface RegistrationData {
   phone: string;
   address: string;
   gender: string;
+  is_employer?: boolean;
+  facial_image?: string;
 }
 
 export interface BiometricLoginData {

@@ -11,6 +11,7 @@ import EmployeeLoginForm from '../components/auth/employee/LoginForm';
 import EmployeeOTP from '../components/auth/employee/OTP';
 import EmployerForgotPassword from '../components/auth/employer/ForgotPassword';
 import EmployerForgotPasswordOTP from '../components/auth/employer/ForgotPasswordOTP';
+import EmployerResetPassword from '../components/auth/employer/ResetPassword';
 import AgentLoginForm from '../components/auth/agent/LoginForm';
 import OnboardingForm from '../components/auth/employer/OnboardingForm';
 import NotificationsPage from '../components/Employer/NotificationsPage';
@@ -104,6 +105,10 @@ export const router = createBrowserRouter([
       {
         path: 'forgot-password/otp',
         element: <EmployerForgotPasswordOTP />,
+      },
+      {
+        path: 'reset-password',
+        element: <EmployerResetPassword />,
       },
       {
         path: 'signup/password',
