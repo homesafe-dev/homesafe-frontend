@@ -1,16 +1,26 @@
 import React, { useState } from 'react';
 import signupImg1 from '../../../assets/images/signupImg1.png';
 import signupImg2 from '../../../assets/images/signupImg2.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import HomesafeLogo from '../../../assets/images/HomesafeLogo.png';
 import HomesafeLogo2 from '../../../assets/images/HomesafeLogo2.svg';
 
 const HomesafeSignupPage: React.FC = () => {
   const [email, setEmail] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Email submitted:', email);
+
+    if (email.trim() === '') {
+      setErrorMessage('Please enter your email address');
+      return;
+    }
+
+    // Store email in sessionStorage to access it in the password page
+    sessionStorage.setItem('signinEmail', email);
+    navigate('/employer/signin/password');
   };
 
   return (
@@ -84,16 +94,17 @@ const HomesafeSignupPage: React.FC = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                 />
+                {errorMessage && (
+                  <p className="mt-1 text-sm text-red-600">{errorMessage}</p>
+                )}
               </div>
 
-              <Link to="/employer/signin/password" className="block w-full">
-                <button
-                  type="submit"
-                  className="w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors"
-                >
-                  Continue
-                </button>
-              </Link>
+              <button
+                type="submit"
+                className="w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors"
+              >
+                Continue
+              </button>
             </form>
 
             <div className="my-4 text-center">

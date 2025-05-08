@@ -1,16 +1,38 @@
 import React, { useState } from 'react';
 import signupImg1 from '../../../assets/images/signupImg1.png';
 import signupImg2 from '../../../assets/images/signupImg2.png';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import HomesafeLogo from '../../../assets/images/HomesafeLogo.png';
 import HomesafeLogo2 from '../../../assets/images/HomesafeLogo2.svg';
+import { useAuth } from '../../../contexts/AuthContext';
 
 const SignupPage: React.FC = () => {
   const [email, setEmail] = useState<string>('');
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { sendOTP, loading } = useAuth();
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Email submitted:', email);
+    setIsSubmitting(true);
+    setErrorMessage(null);
+
+    try {
+      const response = await sendOTP(email);
+
+      if (response.success) {
+        // Store email in sessionStorage to access it in the OTP verification page
+        sessionStorage.setItem('signupEmail', email);
+        navigate('/employer/signup/otp');
+      } else {
+        setErrorMessage(response.message);
+      }
+    } catch (error) {
+      setErrorMessage('An unexpected error occurred. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -83,17 +105,22 @@ const SignupPage: React.FC = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
+                  disabled={isSubmitting}
                 />
+                {errorMessage && (
+                  <p className="mt-1 text-sm text-red-600">{errorMessage}</p>
+                )}
               </div>
 
-              <Link to="/employer/signup/otp">
-                <button
-                  type="submit"
-                  className="w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors"
-                >
-                  Continue
-                </button>
-              </Link>
+              <button
+                type="submit"
+                className={`w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors ${
+                  isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
+                }`}
+                disabled={isSubmitting}
+              >
+                {isSubmitting || loading ? 'Sending OTP...' : 'Continue'}
+              </button>
             </form>
 
             <div className="my-4 text-center">
@@ -133,6 +160,15 @@ const SignupPage: React.FC = () => {
           <div className="w-full max-w-[416px] text-[13px] text-[#24292E] text-center mt-4 md:mt-[3rem] px-4">
             By clicking "Continue" you have read and understand the Terms &
             Conditions of Homesafe and agreed to it.
+          </div>
+
+          <div className="w-full text-center mt-4">
+            <p className="text-sm text-gray-600">
+              Already have an account?{" "}
+              <Link to="/employer/login" className="text-green-500 hover:text-green-600 font-medium">
+                Sign in
+              </Link>
+            </p>
           </div>
         </div>
       </div>
