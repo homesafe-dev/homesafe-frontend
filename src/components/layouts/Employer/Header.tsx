@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LuBellDot } from 'react-icons/lu';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
@@ -9,19 +9,32 @@ import ProfileIcon from '../../../assets/icons/profile.svg';
 import LogoutIcon from '../../../assets/icons/logout.svg';
 import KycIcon from '../../../assets/icons/kyc.svg';
 import SecurityIcon from '../../../assets/icons/security.svg';
+import userApi from '../../../api/userApi';
 
 interface HeaderProps {
   userEmail?: string;
   userName?: string;
 }
 
+interface UserProfile {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  avatar: string;
+  [key: string]: any;
+}
+
 const Header: React.FC<HeaderProps> = ({
-  userEmail = 'Johnduke@gmail.com',
-  userName = 'John',
+  userEmail: propUserEmail,
+  userName: propUserName,
 }) => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [notifications, setNotifications] = useState<NotificationItem[]>([
     {
       id: '1',
@@ -70,8 +83,37 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   const handleLogout = () => {
+    localStorage.removeItem('auth_token');
     navigate('/employer/login');
   };
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        setLoading(true);
+        const response = await userApi.getProfile();
+        if (response.status) {
+          setUserProfile(response.data);
+        } else {
+          setError('Failed to fetch user profile');
+        }
+      } catch (err) {
+        setError('Error fetching user profile');
+        console.error('Error fetching user profile:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
+
+  // Use profile data or fallback to props
+  const userName = userProfile?.first_name || propUserName || 'User';
+  const userEmail = userProfile?.email || propUserEmail || 'user@example.com';
+  const userInitials = userProfile ?
+    `${userProfile.first_name.charAt(0)}${userProfile.last_name.charAt(0)}` :
+    'U';
 
   return (
     <header className="bg-white shadow-sm">
@@ -99,8 +141,16 @@ const Header: React.FC<HeaderProps> = ({
                 className="flex items-center space-x-2"
                 onClick={() => setShowDropdown(!showDropdown)}
               >
-                <div className="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center text-white">
-                  <span>OP</span>
+                <div className="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center text-white overflow-hidden">
+                  {userProfile?.avatar ? (
+                    <img
+                      src={userProfile.avatar}
+                      alt={`${userName}'s avatar`}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <span>{userInitials}</span>
+                  )}
                 </div>
 
                 {/* User email with dropdown */}
