@@ -54,6 +54,10 @@ import CandidatesPage from '../pages/agent/Candidates';
 import AllCandidatesPage from '../pages/agent/AllCandidatesPage';
 import Track from '../pages/agent/Track';
 import Review from '../pages/agent/Review';
+import CandidateProfile from '../pages/agent/CandidateProfile';
+import AgentProfile from '../pages/agent/Profile';
+import AgentSecurity from '../pages/agent/Security';
+import AgentKYCPage from '../pages/agent/KYCPage';
 
 // Landing Page Compoents
 import Home from '../pages/Landing Page/Home';
@@ -415,6 +419,38 @@ export const router = createBrowserRouter([
         element: (
           <AgentLayout>
             <AllCandidatesPage />
+          </AgentLayout>
+        ),
+      },
+      {
+        path: 'candidate-profile/:id',
+        element: (
+          <AgentLayout>
+            <CandidateProfile />
+          </AgentLayout>
+        ),
+      },
+      {
+        path: 'profile',
+        element: (
+          <AgentLayout>
+            <AgentProfile />
+          </AgentLayout>
+        ),
+      },
+      {
+        path: 'security',
+        element: (
+          <AgentLayout>
+            <AgentSecurity />
+          </AgentLayout>
+        ),
+      },
+      {
+        path: 'kyc',
+        element: (
+          <AgentLayout>
+            <AgentKYCPage />
           </AgentLayout>
         ),
       },
