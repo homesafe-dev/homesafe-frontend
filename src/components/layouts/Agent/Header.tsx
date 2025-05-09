@@ -117,8 +117,8 @@ const Header: React.FC<HeaderProps> = () => {
   const handleLogout = () => {
     // Clear auth token from localStorage
     localStorage.removeItem('auth_token');
-    // Redirect to login page
-    navigate('/employer/login');
+    // Redirect to agent login page
+    navigate('/agent/login');
   };
 
   return (
@@ -197,7 +197,7 @@ const Header: React.FC<HeaderProps> = () => {
                   <button
                     onClick={() => {
                       setShowDropdown(false);
-                      navigate('/employer/profile');
+                      navigate('/agent/profile');
                     }}
                     className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
@@ -207,7 +207,7 @@ const Header: React.FC<HeaderProps> = () => {
                   <button
                     onClick={() => {
                       setShowDropdown(false);
-                      navigate('/employer/security');
+                      navigate('/agent/security');
                     }}
                     className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
@@ -217,7 +217,7 @@ const Header: React.FC<HeaderProps> = () => {
                   <button
                     onClick={() => {
                       setShowDropdown(false);
-                      navigate('/employer/kyc');
+                      navigate('/agent/kyc');
                     }}
                     className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
