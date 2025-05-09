@@ -1,40 +1,134 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FaArrowLeft, FaChevronDown } from 'react-icons/fa';
 import { IoCloudUploadOutline } from 'react-icons/io5';
 import { LuCalendarDays } from 'react-icons/lu';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import agentApi, { OCCUPATIONS } from '../../api/agentApi';
+
+interface CandidateFormData {
+  title: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string;
+  address: string;
+  dob: string;
+  gender: string;
+  occupation: number;
+  password: string;
+  salary: string;
+  photo: File | null;
+}
 
 const CandidatesPage: React.FC = () => {
-  const formData = {
-    title: '',
-    firstName: 'John',
-    lastName: 'Duke',
-    email: 'name@email.com',
-    phoneNumber: '07012345678',
-    homeAddress: 'name@email.com',
-    dateOfBirth: '',
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+
+  const [formData, setFormData] = useState<CandidateFormData>({
+    title: 'Mr',
+    first_name: '',
+    last_name: '',
+    email: '',
+    phone: '',
+    address: '',
+    dob: '',
     gender: '',
-    occupation: '',
-    photo: '',
-    meansOfIdentification: '',
-    proofOfMedicalRecord: '',
-    proofOfEmploymentHistory: '',
-    aboutYou: '',
+    occupation: 0,
+    password: 'passw0rd', // Default password
+    salary: '100000', // Default salary
+    photo: null,
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [id]: value
+    }));
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setFormData(prev => ({
+        ...prev,
+        photo: e.target.files![0]
+      }));
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
+
+    try {
+      // Prepare the data for API
+      const candidateData = {
+        email: formData.email,
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        password: formData.password,
+        dob: formData.dob,
+        address: formData.address,
+        salary: formData.salary,
+        occupations: [formData.occupation],
+        gender: formData.gender,
+        phone: formData.phone
+      };
+
+      // Call the API with the photo file
+      const response = await agentApi.registerCandidate(candidateData, formData.photo);
+
+      if (response.status) {
+        setSuccess(response.message || 'Candidate registered successfully');
+        console.log('Registration response:', response);
+        // Reset form or navigate
+        setTimeout(() => {
+          navigate('/agent/all-candidates');
+        }, 1500);
+      } else {
+        setError(response.message || 'Failed to register candidate');
+      }
+    } catch (err: any) {
+      setError(err.message || 'An error occurred while registering the candidate');
+      console.error('Error registering candidate:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="w-[85%]">
       <div className="mb-6">
-        <button className="flex items-center text-gray-600 hover:text-gray-800">
+        <button
+          className="flex items-center text-gray-600 hover:text-gray-800"
+          onClick={() => navigate('/agent/all-candidates')}
+        >
           <FaArrowLeft className="mr-2" />
-          <span className="text-gray-800">Candidate</span>
+          <span className="text-gray-800">Back to Candidates</span>
         </button>
       </div>
 
       <div className="text-2xl font-semibold mb-6">Add Candidate</div>
 
+      {/* Success and Error Messages */}
+      {success && (
+        <div className="mb-4 p-3 bg-green-100 text-green-700 rounded">
+          {success}
+        </div>
+      )}
+
+      {error && (
+        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
+          {error}
+        </div>
+      )}
+
       {/* Form */}
-      <form className="mt-6 bg-white p-8">
+      <form className="mt-6 bg-white p-8" onSubmit={handleSubmit}>
         <div className="grid grid-cols-2 gap-x-6 gap-y-4">
           {/* Title */}
           <div>
@@ -49,6 +143,7 @@ const CandidatesPage: React.FC = () => {
                 id="title"
                 className="appearance-none w-full h-[50px] px-3 py-2 border border-[#DEE0E3] rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 bg-white text-gray-700"
                 value={formData.title}
+                onChange={handleInputChange}
               >
                 <option value="">Select</option>
                 <option value="Mr">Mr</option>
@@ -74,6 +169,8 @@ const CandidatesPage: React.FC = () => {
               <select
                 id="gender"
                 className="appearance-none w-full h-[50px] px-3 py-2 border border-[#DEE0E3] rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 bg-white text-gray-700"
+                value={formData.gender}
+                onChange={handleInputChange}
               >
                 <option value="">Select</option>
                 <option value="male">Male</option>
@@ -89,16 +186,18 @@ const CandidatesPage: React.FC = () => {
           {/* First Name */}
           <div>
             <label
-              htmlFor="firstName"
+              htmlFor="first_name"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
               First Name
             </label>
             <input
               type="text"
-              id="firstName"
+              id="first_name"
               className="w-full h-[50px] px-3 py-2 border border-[#DEE0E3] rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-700"
-              value={formData.firstName}
+              value={formData.first_name}
+              onChange={handleInputChange}
+              required
             />
           </div>
 
@@ -114,8 +213,16 @@ const CandidatesPage: React.FC = () => {
               <select
                 id="occupation"
                 className="appearance-none w-full h-[50px] px-3 py-2 border border-[#DEE0E3] rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 bg-white text-gray-700"
+                value={formData.occupation}
+                onChange={handleInputChange}
+                required
               >
                 <option value="">Select</option>
+                {OCCUPATIONS.map(occupation => (
+                  <option key={occupation.id} value={occupation.id}>
+                    {occupation.name}
+                  </option>
+                ))}
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
                 <FaChevronDown />
@@ -126,16 +233,18 @@ const CandidatesPage: React.FC = () => {
           {/* Last Name */}
           <div>
             <label
-              htmlFor="lastName"
+              htmlFor="last_name"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
               Last Name
             </label>
             <input
               type="text"
-              id="lastName"
+              id="last_name"
               className="w-full h-[50px] px-3 py-2 border border-[#DEE0E3] rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-700"
-              value={formData.lastName}
+              value={formData.last_name}
+              onChange={handleInputChange}
+              required
             />
           </div>
 
@@ -149,10 +258,12 @@ const CandidatesPage: React.FC = () => {
             </label>
             <div className="relative">
               <input
-                type="text"
+                type="date"
                 id="dob"
-                placeholder="dd/mm/yyyy"
                 className="w-full h-[50px] px-3 py-2 border border-[#DEE0E3] rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-700"
+                value={formData.dob}
+                onChange={handleInputChange}
+                required
               />
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
                 <LuCalendarDays />
@@ -173,81 +284,80 @@ const CandidatesPage: React.FC = () => {
               id="email"
               className="w-full h-[50px] px-3 py-2 border border-[#DEE0E3] rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-700"
               value={formData.email}
+              onChange={handleInputChange}
+              required
             />
           </div>
 
-          {/* Means of Identification */}
+          {/* Salary */}
           <div>
             <label
-              htmlFor="identification"
+              htmlFor="salary"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Means of Identification
+              Salary
             </label>
-            <button className="w-full h-[50px] flex items-center px-3 py-2 border border-[#DEE0E3] rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 bg-white text-gray-400 text-sm">
-              <IoCloudUploadOutline className="mr-2" />
-              Upload or drop an image
-            </button>
+            <input
+              type="text"
+              id="salary"
+              className="w-full h-[50px] px-3 py-2 border border-[#DEE0E3] rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-700"
+              value={formData.salary}
+              onChange={handleInputChange}
+              required
+            />
           </div>
 
           {/* Phone Number */}
           <div>
             <label
-              htmlFor="phoneNumber"
+              htmlFor="phone"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
               Phone Number
             </label>
             <input
               type="tel"
-              id="phoneNumber"
+              id="phone"
               className="w-full h-[50px] px-3 py-2 border border-[#DEE0E3] rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-700"
-              value={formData.phoneNumber}
+              value={formData.phone}
+              onChange={handleInputChange}
             />
           </div>
 
-          {/* Proof of Medical Record */}
+          {/* Password */}
           <div>
             <label
-              htmlFor="medicalRecord"
+              htmlFor="password"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Proof of Medical Record
+              Password
             </label>
-            <button className="w-full h-[50px] flex items-center px-3 py-2 border border-[#DEE0E3] rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 bg-white text-gray-400 text-sm">
-              <IoCloudUploadOutline className="mr-2" />
-              Upload or drop an image
-            </button>
+            <input
+              type="password"
+              id="password"
+              className="w-full h-[50px] px-3 py-2 border border-[#DEE0E3] rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-700"
+              value={formData.password}
+              onChange={handleInputChange}
+              required
+            />
           </div>
 
           {/* Home Address */}
           <div>
             <label
-              htmlFor="homeAddress"
+              htmlFor="address"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
               Home Address
             </label>
             <input
               type="text"
-              id="homeAddress"
+              id="address"
               className="w-full h-[50px] px-3 py-2 border border-[#DEE0E3] rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-700"
-              value={formData.homeAddress}
+              value={formData.address}
+              onChange={handleInputChange}
+              required
             />
-          </div>
-
-          {/* Proof of Employment History */}
-          <div>
-            <label
-              htmlFor="employmentHistory"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Proof of Employment History
-            </label>
-            <button className="w-full h-[50px] flex items-center px-3 py-2 border border-[#DEE0E3] rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 bg-white text-gray-400 text-sm">
-              <IoCloudUploadOutline className="mr-2" />
-              Upload or drop an image
-            </button>
           </div>
 
           {/* Photo of you */}
@@ -258,37 +368,28 @@ const CandidatesPage: React.FC = () => {
             >
               Photo of you
             </label>
-            <button className="w-full h-[50px] flex items-center px-3 py-2 border border-[#DEE0E3] rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 bg-white text-gray-400 text-sm">
+            <label className="w-full h-[50px] flex items-center px-3 py-2 border border-[#DEE0E3] rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 bg-white text-gray-400 text-sm cursor-pointer">
               <IoCloudUploadOutline className="mr-2" />
-              Upload or drop an image
-            </button>
-          </div>
-
-          {/* Tell Us About You */}
-          <div>
-            <label
-              htmlFor="aboutYou"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Tell Us About You
+              {formData.photo ? formData.photo.name : 'Upload or drop an image'}
+              <input
+                type="file"
+                id="photo"
+                className="hidden"
+                accept="image/*"
+                onChange={handleFileChange}
+              />
             </label>
-            <textarea
-              id="aboutYou"
-              placeholder="A brief info of you"
-              className="w-full h-[50px] px-3 py-2 border border-[#DEE0E3] rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-700"
-            />
           </div>
         </div>
 
         <div className="mt-8 flex justify-end">
-          <Link to="/agent/all-candidates">
-            <button
-              type="submit"
-              className="px-6 py-2 bg-[#A5EA91] text-[#24292E] rounded-md hover:bg-green-300 focus:outline-none focus:ring-2 focus:ring-green-500"
-            >
-              Save Information
-            </button>
-          </Link>
+          <button
+            type="submit"
+            className="px-6 py-2 bg-[#A5EA91] text-[#24292E] rounded-md hover:bg-green-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+            disabled={loading}
+          >
+            {loading ? 'Saving...' : 'Save Information'}
+          </button>
         </div>
       </form>
     </div>
