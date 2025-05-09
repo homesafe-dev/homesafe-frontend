@@ -118,7 +118,7 @@ const Header: React.FC<HeaderProps> = () => {
     // Clear auth token from localStorage
     localStorage.removeItem('auth_token');
     // Redirect to agent login page
-    navigate('/agent/login');
+    navigate('/login');
   };
 
   return (

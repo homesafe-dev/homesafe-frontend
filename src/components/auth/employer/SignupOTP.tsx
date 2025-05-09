@@ -97,7 +97,7 @@ const SignupOTPPage: React.FC = () => {
 
       if (response.success) {
         // Navigate to password creation page
-        navigate('/employer/signup/password');
+        navigate('/signup/password');
       } else {
         setErrorMessage(response.message);
       }

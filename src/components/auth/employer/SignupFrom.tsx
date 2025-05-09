@@ -24,7 +24,7 @@ const SignupPage: React.FC = () => {
       if (response.success) {
         // Store email in sessionStorage to access it in the OTP verification page
         sessionStorage.setItem('signupEmail', email);
-        navigate('/employer/signup/otp');
+        navigate('/signup/otp');
       } else {
         setErrorMessage(response.message);
       }

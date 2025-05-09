@@ -20,7 +20,7 @@ const HomesafeSignupPage: React.FC = () => {
 
     // Store email in sessionStorage to access it in the password page
     sessionStorage.setItem('signinEmail', email);
-    navigate('/employer/signin/password');
+    navigate('/signin/password');
   };
 
   return (

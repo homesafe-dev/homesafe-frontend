@@ -90,7 +90,7 @@ const OnboardingForm: React.FC = () => {
       sessionStorage.setItem('registrationData', JSON.stringify(registrationData));
 
       // Navigate to facial capture page
-      navigate('/employer/signup/facial-capture');
+      navigate('/signup/facial-capture');
     } catch (error) {
       setErrorMessage('An unexpected error occurred. Please try again.');
     } finally {
