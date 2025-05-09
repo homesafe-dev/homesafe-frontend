@@ -21,7 +21,7 @@ const SigninPasswordPage: React.FC = () => {
     const storedEmail = sessionStorage.getItem('signinEmail');
     if (!storedEmail) {
       // Redirect back to login page if email is not found
-      navigate('/employer/login');
+      navigate('/login');
       return;
     }
     setEmail(storedEmail);
@@ -39,11 +39,41 @@ const SigninPasswordPage: React.FC = () => {
     setErrorMessage(null);
 
     try {
+      // Use 'employer' as default type, but the actual role will come from the response
       const response = await login(email, password, 'employer');
 
-      if (response.success) {
-        // Redirect to dashboard on successful login
-        navigate('/employer/dashboard');
+      if (response.success && response.data) {
+        // Check if there's a redirect URL stored from a previous protected route access
+        const redirectUrl = sessionStorage.getItem('redirectAfterLogin');
+
+        // Determine which dashboard to navigate to based on user role
+        const userRole = response.data.role;
+
+        if (redirectUrl) {
+          // Clear the stored redirect URL
+          sessionStorage.removeItem('redirectAfterLogin');
+
+          // Check if the redirect URL is appropriate for the user's role
+          const rolePrefix = `/${userRole}`;
+          if (redirectUrl.startsWith(rolePrefix)) {
+            // Only redirect if the URL matches the user's role
+            navigate(redirectUrl);
+            return;
+          }
+        }
+
+        // If no valid redirect URL, go to the appropriate dashboard
+        if (userRole === 'employer') {
+          navigate('/employer/dashboard');
+        } else if (userRole === 'employee') {
+          navigate('/employee/dashboard');
+        } else if (userRole === 'agent') {
+          navigate('/agent/dashboard');
+        } else {
+          // Default fallback if role is not recognized
+          console.warn('Unknown user role:', userRole);
+          navigate('/employer/dashboard');
+        }
       } else {
         setErrorMessage(response.message || 'Invalid email or password');
       }
@@ -160,7 +190,7 @@ const SigninPasswordPage: React.FC = () => {
               </button>
             </form>
             <p className="text-right mt-4 md:mt-[1rem]">
-              <Link to="/employer/signin/forgot-password" className="text-[#24292E] text-[13px] font-medium hover:text-green-600">
+              <Link to="/signin/forgot-password" className="text-[#24292E] text-[13px] font-medium hover:text-green-600">
                 Forgot Password?
               </Link>
             </p>

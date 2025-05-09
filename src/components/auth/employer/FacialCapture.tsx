@@ -23,7 +23,7 @@ const FacialCapturePage: React.FC = () => {
     const storedData = sessionStorage.getItem('registrationData');
     if (!storedData) {
       // Redirect back to onboarding form if data is not found
-      navigate('/employer/signup/onboarding-form');
+      navigate('/signup/onboarding-form');
       return;
     }
 
@@ -33,7 +33,7 @@ const FacialCapturePage: React.FC = () => {
     } catch (error) {
       console.error('Error parsing registration data:', error);
       setErrorMessage('There was an error with your registration data. Please try again.');
-      navigate('/employer/signup/onboarding-form');
+      navigate('/signup/onboarding-form');
       return;
     }
 

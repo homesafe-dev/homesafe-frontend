@@ -46,7 +46,7 @@ const SignupPasswordPage: React.FC = () => {
     sessionStorage.setItem('signupPassword', password);
 
     // Navigate to onboarding form
-    navigate('/employer/signup/onboarding-form');
+    navigate('/signup/onboarding-form');
   };
 
   const togglePasswordVisibility = () => {

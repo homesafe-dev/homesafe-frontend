@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LuBellDot } from 'react-icons/lu';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
@@ -9,18 +9,29 @@ import ProfileIcon from '../../../assets/icons/profile.svg';
 import LogoutIcon from '../../../assets/icons/logout.svg';
 import KycIcon from '../../../assets/icons/kyc.svg';
 import SecurityIcon from '../../../assets/icons/security.svg';
+import userApi from '../../../api/userApi';
 
 interface HeaderProps {
   userEmail?: string;
   userName?: string;
 }
 
-const Header: React.FC<HeaderProps> = ({
-  userEmail = 'Johnduke@gmail.com',
-}) => {
+interface UserProfile {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  avatar: string;
+  [key: string]: any;
+}
+
+const Header: React.FC<HeaderProps> = () => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [notifications, setNotifications] = useState<NotificationItem[]>([
     {
       id: '1',
@@ -68,20 +79,48 @@ const Header: React.FC<HeaderProps> = ({
     );
   };
 
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        setLoading(true);
+        const response = await userApi.getProfile();
+        if (response.status) {
+          setUserProfile(response.data);
+        } else {
+          setError('Failed to fetch user profile');
+          console.error('Failed to fetch user profile:', response.message);
+        }
+      } catch (err) {
+        setError('Error fetching user profile');
+        console.error('Error fetching user profile:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
+
   const handleLogout = () => {
-    navigate('/employer/login');
+    // Clear auth token from localStorage
+    localStorage.removeItem('auth_token');
+    navigate('/login');
+  };
+
+  // Get user initials for avatar
+  const getUserInitials = () => {
+    if (userProfile) {
+      const firstInitial = userProfile.first_name ? userProfile.first_name.charAt(0) : '';
+      const lastInitial = userProfile.last_name ? userProfile.last_name.charAt(0) : '';
+      return `${firstInitial}${lastInitial}`.toUpperCase();
+    }
+    return 'U';
   };
 
   return (
     <header className="bg-white shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex justify-end items-center">
-          {/* <div className="flex items-center">
-            <span className="text-xl font-semibold text-gray-800">
-              Welcome, {userName}
-            </span>
-          </div> */}
-
           {/* Right side - User info and controls */}
           <div className="flex items-center space-x-4">
             {/* Notification bell */}
@@ -98,13 +137,23 @@ const Header: React.FC<HeaderProps> = ({
                 className="flex items-center space-x-2"
                 onClick={() => setShowDropdown(!showDropdown)}
               >
-                <div className="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center text-white">
-                  <span>OP</span>
+                <div className="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center text-white overflow-hidden">
+                  {userProfile && userProfile.avatar ? (
+                    <img
+                      src={userProfile.avatar}
+                      alt="Profile"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <span>{getUserInitials()}</span>
+                  )}
                 </div>
 
                 {/* User email with dropdown */}
                 <div className="flex items-center text-gray-700">
-                  <span className="text-sm">{userEmail}</span>
+                  <span className="text-sm">
+                    {userProfile ? userProfile.email : 'Loading...'}
+                  </span>
                   <MdOutlineKeyboardArrowDown
                     size={20}
                     className="text-gray-500"
@@ -118,31 +167,31 @@ const Header: React.FC<HeaderProps> = ({
                   <button
                     onClick={() => {
                       setShowDropdown(false);
-                      navigate('/employer/profile');
+                      navigate('/employee/profile');
                     }}
                     className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
-                    <img src={ProfileIcon} className="mr-3" />
+                    <img src={ProfileIcon} className="mr-3" alt="Profile" />
                     Profile
                   </button>
                   <button
                     onClick={() => {
                       setShowDropdown(false);
-                      navigate('/employer/security');
+                      navigate('/employee/security');
                     }}
                     className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
-                    <img src={SecurityIcon} className="mr-3" />
+                    <img src={SecurityIcon} className="mr-3" alt="Security" />
                     Security
                   </button>
                   <button
                     onClick={() => {
                       setShowDropdown(false);
-                      navigate('/employer/kyc');
+                      navigate('/employee/kyc');
                     }}
                     className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
-                    <img src={KycIcon} className="mr-3" />
+                    <img src={KycIcon} className="mr-3" alt="KYC" />
                     KYC
                   </button>
                   <button
@@ -152,7 +201,7 @@ const Header: React.FC<HeaderProps> = ({
                     }}
                     className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
-                    <img src={LogoutIcon} className="mr-3" />
+                    <img src={LogoutIcon} className="mr-3" alt="Logout" />
                     Log Out
                   </button>
                 </div>
