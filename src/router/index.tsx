@@ -387,6 +387,14 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: 'add-candidate',
+        element: (
+          <AgentLayout>
+            <CandidatesPage />
+          </AgentLayout>
+        ),
+      },
+      {
         path: 'track',
         element: (
           <AgentLayout>
