@@ -29,7 +29,8 @@ const ResourceCard: React.FC<ResourceProps> = ({
         <p className="text-xs text-gray-500">Started: {startDate}</p>
         <p className="text-xs text-gray-700 mt-1">{description}</p>
         <p className="text-xs text-gray-700">
-          It has {chapterCount} chapters {recipeCount > 0 ? `and ${recipeCount} different recipes` : ''}.
+          It has {chapterCount} chapters{' '}
+          {recipeCount > 0 ? `and ${recipeCount} different recipes` : ''}.
         </p>
       </div>
     </div>

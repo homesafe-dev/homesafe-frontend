@@ -172,9 +172,9 @@ const Header: React.FC<HeaderProps> = () => {
                 ) : (
                   <div className="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center text-white">
                     <span>
-                      {userProfile ?
-                        `${userProfile.first_name.charAt(0)}${userProfile.last_name.charAt(0)}` :
-                        'OP'}
+                      {userProfile
+                        ? `${userProfile.first_name.charAt(0)}${userProfile.last_name.charAt(0)}`
+                        : 'OP'}
                     </span>
                   </div>
                 )}

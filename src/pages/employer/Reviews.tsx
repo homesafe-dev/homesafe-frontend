@@ -49,7 +49,10 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
         ) : (
           <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center mr-3">
             <span className="text-white font-medium">
-              {reviewerName.split(' ').map(name => name[0]).join('')}
+              {reviewerName
+                .split(' ')
+                .map((name) => name[0])
+                .join('')}
             </span>
           </div>
         )}
@@ -81,7 +84,7 @@ interface ReviewsPageProps {
 
 const ReviewsPage: React.FC<ReviewsPageProps> = ({
   title = 'Reviews',
-  userId = 7 // Default user ID, can be passed as prop
+  userId = 7, // Default user ID, can be passed as prop
 }) => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [averageRating, setAverageRating] = useState<string>('0');
@@ -100,9 +103,15 @@ const ReviewsPage: React.FC<ReviewsPageProps> = ({
 
           // Ensure average_rating is a valid number or default to '0'
           const avgRating = response.data.average_rating;
-          console.log('Average rating from API:', avgRating, 'Type:', typeof avgRating);
+          console.log(
+            'Average rating from API:',
+            avgRating,
+            'Type:',
+            typeof avgRating
+          );
 
-          const validRating = avgRating && !isNaN(parseFloat(avgRating)) ? avgRating : '0';
+          const validRating =
+            avgRating && !isNaN(parseFloat(avgRating)) ? avgRating : '0';
           console.log('Processed rating:', validRating);
 
           setAverageRating(validRating);
@@ -124,7 +133,8 @@ const ReviewsPage: React.FC<ReviewsPageProps> = ({
   const formatDate = (dateString: string) => {
     try {
       return format(new Date(dateString), 'MMM dd, yyyy');
-    } catch (error) {
+    } catch (err) {
+      console.error('Error formatting date:', err);
       return 'Invalid date';
     }
   };
@@ -136,22 +146,30 @@ const ReviewsPage: React.FC<ReviewsPageProps> = ({
         {!loading && !error && (
           <div className="flex items-center">
             <span className="text-lg font-medium mr-2">
-              {!isNaN(parseFloat(averageRating)) ? parseFloat(averageRating).toFixed(1) : '0.0'}
+              {!isNaN(parseFloat(averageRating))
+                ? parseFloat(averageRating).toFixed(1)
+                : '0.0'}
             </span>
             <div className="flex">
               {[...Array(5)].map((_, index) => {
-                const ratingValue = !isNaN(parseFloat(averageRating)) ? parseFloat(averageRating) : 0;
+                const ratingValue = !isNaN(parseFloat(averageRating))
+                  ? parseFloat(averageRating)
+                  : 0;
                 return (
                   <AiFillStar
                     key={index}
-                    className={index < Math.round(ratingValue)
-                      ? "text-[#EFAE73]"
-                      : "text-gray-300"}
+                    className={
+                      index < Math.round(ratingValue)
+                        ? 'text-[#EFAE73]'
+                        : 'text-gray-300'
+                    }
                   />
                 );
               })}
             </div>
-            <span className="text-sm text-gray-500 ml-2">({reviews.length} reviews)</span>
+            <span className="text-sm text-gray-500 ml-2">
+              ({reviews.length} reviews)
+            </span>
           </div>
         )}
       </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 interface CandidateProfileAboutProps {
   name: string;
@@ -61,9 +61,7 @@ const CandidateProfileAbout: React.FC<CandidateProfileAboutProps> = ({
       </div>
 
       <div className="w-full">
-        <h3 className="text-[#246D51] font-semibold text-[16px] mb-2">
-          About
-        </h3>
+        <h3 className="text-[#246D51] font-semibold text-[16px] mb-2">About</h3>
         <p className="text-[13px] text-[#48525B] mb-6">{bio}</p>
 
         <h3 className="text-[#246D51] font-semibold text-[16px] mb-2">

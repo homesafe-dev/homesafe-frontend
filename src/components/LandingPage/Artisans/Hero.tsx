@@ -170,11 +170,7 @@ const Hero: React.FC = () => {
               Support
             </a>
             <div className="pt-2">
-              <a
-                href="/login"
-                className="sm:hidden block"
-                onClick={toggleMenu}
-              >
+              <a href="/login" className="sm:hidden block" onClick={toggleMenu}>
                 <button className="bg-[#A5EA91] hover:bg-green-500 text-[#24292E] font-medium py-2.5 px-4 rounded-md transition-colors w-full">
                   Sign-in
                 </button>

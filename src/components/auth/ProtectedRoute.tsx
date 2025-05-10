@@ -15,7 +15,7 @@ interface ProtectedRouteProps {
  */
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
-  allowedRoles = []
+  allowedRoles = [],
 }) => {
   const { isAuthenticated, user, authInitialized } = useAuth();
   const location = useLocation();
@@ -28,13 +28,17 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   // If auth is not yet initialized, show loading state
   if (!authInitialized) {
-    console.log('[ProtectedRoute] Auth not initialized yet, showing loading state');
+    console.log(
+      '[ProtectedRoute] Auth not initialized yet, showing loading state'
+    );
     return <LoadingIndicator />;
   }
 
   // If user is not authenticated, check if this is a page refresh
   if (!isAuthenticated) {
-    console.log('[ProtectedRoute] Not authenticated, checking for page refresh');
+    console.log(
+      '[ProtectedRoute] Not authenticated, checking for page refresh'
+    );
 
     // Store the attempted URL for redirecting after login
     sessionStorage.setItem('redirectAfterLogin', location.pathname);
@@ -53,7 +57,9 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     // Double-check: if we have token and user data but auth says we're not authenticated,
     // it might be a race condition. Show loading for a bit longer.
     if (token && storedUser && isPageRefresh) {
-      console.log('[ProtectedRoute] Page refresh with token detected, showing loading state');
+      console.log(
+        '[ProtectedRoute] Page refresh with token detected, showing loading state'
+      );
       // If this is a page refresh and we have a token, show loading or return null
       // This prevents immediate redirect to login during the auth state initialization
       return <LoadingIndicator />;
@@ -86,7 +92,9 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   }
 
   // If user is authenticated and has the required role, render the children
-  console.log('[ProtectedRoute] User authenticated and authorized, rendering children');
+  console.log(
+    '[ProtectedRoute] User authenticated and authorized, rendering children'
+  );
   return <>{children}</>;
 };
 

@@ -29,7 +29,7 @@ const agentApi = {
       const response = await axiosInstance.get(AGENT_ENDPOINTS.TRACK_EMPLOYEES);
       return response.data;
     } catch (error) {
-      console.error("Error fetching tracked employees:", error);
+      console.error('Error fetching tracked employees:', error);
       throw error;
     }
   },
@@ -40,18 +40,21 @@ const agentApi = {
    * @param photo - Optional photo file
    * @returns Promise with the API response
    */
-  registerCandidate: async (candidateData: {
-    email: string;
-    first_name: string;
-    last_name: string;
-    password: string;
-    dob: string;
-    address: string;
-    salary: string;
-    occupations: number[];
-    gender?: string;
-    phone?: string;
-  }, photo?: File | null) => {
+  registerCandidate: async (
+    candidateData: {
+      email: string;
+      first_name: string;
+      last_name: string;
+      password: string;
+      dob: string;
+      address: string;
+      salary: string;
+      occupations: number[];
+      gender?: string;
+      phone?: string;
+    },
+    photo?: File | null
+  ) => {
     try {
       // Create FormData to handle file upload
       const formData = new FormData();
@@ -60,7 +63,7 @@ const agentApi = {
       Object.entries(candidateData).forEach(([key, value]) => {
         if (key === 'occupations' && Array.isArray(value)) {
           // Handle occupations array
-          value.forEach((occupation, index) => {
+          value.forEach((occupation) => {
             formData.append(`occupations[]`, occupation.toString());
           });
         } else {
@@ -76,14 +79,18 @@ const agentApi = {
       // Set headers for multipart/form-data
       const config = {
         headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+          'Content-Type': 'multipart/form-data',
+        },
       };
 
-      const response = await axiosInstance.post(AGENT_ENDPOINTS.REGISTER_CANDIDATE, formData, config);
+      const response = await axiosInstance.post(
+        AGENT_ENDPOINTS.REGISTER_CANDIDATE,
+        formData,
+        config
+      );
       return response.data;
     } catch (error) {
-      console.error("Error registering candidate:", error);
+      console.error('Error registering candidate:', error);
       throw error;
     }
   },

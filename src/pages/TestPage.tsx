@@ -7,7 +7,7 @@ const TestPage: React.FC = () => {
   return (
     <div className="p-8">
       <h1 className="text-2xl font-bold mb-4">Authentication Test Page</h1>
-      
+
       <div className="mb-6 p-4 bg-gray-100 rounded-lg">
         <h2 className="text-xl font-semibold mb-2">Authentication Status</h2>
         <p>

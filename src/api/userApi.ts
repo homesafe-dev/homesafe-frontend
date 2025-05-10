@@ -18,7 +18,7 @@ const userApi = {
       const response = await axiosInstance.get(USER_ENDPOINTS.PROFILE);
       return response.data;
     } catch (error) {
-      console.error("Error fetching user profile:", error);
+      console.error('Error fetching user profile:', error);
       throw error;
     }
   },
@@ -30,10 +30,13 @@ const userApi = {
    */
   updateProfile: async (profileData: any) => {
     try {
-      const response = await axiosInstance.put(USER_ENDPOINTS.PROFILE, profileData);
+      const response = await axiosInstance.put(
+        USER_ENDPOINTS.PROFILE,
+        profileData
+      );
       return response.data;
     } catch (error) {
-      console.error("Error updating user profile:", error);
+      console.error('Error updating user profile:', error);
       throw error;
     }
   },
@@ -48,7 +51,7 @@ const userApi = {
       const response = await axiosInstance.post(USER_ENDPOINTS.KYC, kycData);
       return response.data;
     } catch (error) {
-      console.error("Error submitting KYC information:", error);
+      console.error('Error submitting KYC information:', error);
       throw error;
     }
   },
@@ -62,7 +65,7 @@ const userApi = {
       const response = await axiosInstance.get(USER_ENDPOINTS.KYC);
       return response.data;
     } catch (error) {
-      console.error("Error fetching KYC status:", error);
+      console.error('Error fetching KYC status:', error);
       throw error;
     }
   },
@@ -77,7 +80,7 @@ const userApi = {
       const response = await axiosInstance.get(USER_ENDPOINTS.REVIEWS(userId));
       return response.data;
     } catch (error) {
-      console.error("Error fetching user reviews:", error);
+      console.error('Error fetching user reviews:', error);
       throw error;
     }
   },

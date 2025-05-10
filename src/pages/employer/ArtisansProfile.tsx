@@ -101,8 +101,8 @@ const ArtisanProfileView: React.FC = () => {
           setError(response.message || 'Failed to load artisan details');
         }
       } catch (err: any) {
-        console.error("Error fetching artisan details:", err);
-        setError(err.message || "Failed to load artisan details");
+        console.error('Error fetching artisan details:', err);
+        setError(err.message || 'Failed to load artisan details');
       } finally {
         setLoading(false);
       }
@@ -115,7 +115,9 @@ const ArtisanProfileView: React.FC = () => {
     navigate(-1);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -139,9 +141,10 @@ const ArtisanProfileView: React.FC = () => {
         working_hours_schedule: formData.working_hours_schedule,
         start_date: formData.start_date,
         duration_months: formData.duration_months,
-        position: artisan.occupations && artisan.occupations.length > 0
-          ? artisan.occupations[0].name
-          : 'professional'
+        position:
+          artisan.occupations && artisan.occupations.length > 0
+            ? artisan.occupations[0].name
+            : 'professional',
       };
 
       const response = await contractApi.sendProposal(proposalData);
@@ -221,13 +224,15 @@ const ArtisanProfileView: React.FC = () => {
                 {artisan.first_name} {artisan.last_name}
               </h2>
               <p className="text-[13px] mt-[0.5rem] text-[#24292E] mb-2">
-                {extractLocation(artisan.address)} | {calculateAge(artisan.dob)} yrs old
+                {extractLocation(artisan.address)} | {calculateAge(artisan.dob)}{' '}
+                yrs old
               </p>
 
               <div className="bg-[#C8EDDF80] mt-[0.5rem] text-[#48525B] px-3 py-1 rounded-[8px] text-[13px] mb-2">
                 {artisan.occupations && artisan.occupations.length > 0
-                  ? artisan.occupations[0].name.charAt(0).toUpperCase() + artisan.occupations[0].name.slice(1)
-                  : "Professional"}
+                  ? artisan.occupations[0].name.charAt(0).toUpperCase() +
+                    artisan.occupations[0].name.slice(1)
+                  : 'Professional'}
               </div>
 
               <div className="flex mb-6">
@@ -235,7 +240,9 @@ const ArtisanProfileView: React.FC = () => {
                   <span
                     key={star}
                     className={`text-yellow-400 mt-[0.5rem] ${
-                      star <= (artisan.average_rating || 0) ? 'opacity-100' : 'opacity-30'
+                      star <= (artisan.average_rating || 0)
+                        ? 'opacity-100'
+                        : 'opacity-30'
                     }`}
                   >
                     ★
@@ -253,18 +260,18 @@ const ArtisanProfileView: React.FC = () => {
                   </p>
                 ) : (
                   <p className="text-[13px] text-[#48525B]">
-                    Meet {artisan.first_name} {artisan.last_name}, a passionate {
-                      artisan.occupations && artisan.occupations.length > 0
-                        ? artisan.occupations[0].name
-                        : "professional"
-                    } from {extractLocation(artisan.address)}.
-                    With a love for {
-                      artisan.occupations && artisan.occupations.length > 0
-                        ? artisan.occupations[0].name
-                        : "their profession"
-                    } that knows no bounds, {artisan.first_name} brings dedication and skill to every task.
-                    From traditional techniques to innovative approaches, this talented professional is dedicated to
-                    delivering exceptional quality and service.
+                    Meet {artisan.first_name} {artisan.last_name}, a passionate{' '}
+                    {artisan.occupations && artisan.occupations.length > 0
+                      ? artisan.occupations[0].name
+                      : 'professional'}{' '}
+                    from {extractLocation(artisan.address)}. With a love for{' '}
+                    {artisan.occupations && artisan.occupations.length > 0
+                      ? artisan.occupations[0].name
+                      : 'their profession'}{' '}
+                    that knows no bounds, {artisan.first_name} brings dedication
+                    and skill to every task. From traditional techniques to
+                    innovative approaches, this talented professional is
+                    dedicated to delivering exceptional quality and service.
                   </p>
                 )}
               </div>
@@ -386,11 +393,13 @@ const ArtisanProfileView: React.FC = () => {
 
           {/* Success or Error message */}
           {(successMessage || (error && !loading)) && (
-            <div className={`px-4 py-3 rounded mb-4 mt-4 ${
-              successMessage
-                ? "bg-green-100 border border-green-400 text-green-700"
-                : "bg-red-100 border border-red-400 text-red-700"
-            }`}>
+            <div
+              className={`px-4 py-3 rounded mb-4 mt-4 ${
+                successMessage
+                  ? 'bg-green-100 border border-green-400 text-green-700'
+                  : 'bg-red-100 border border-red-400 text-red-700'
+              }`}
+            >
               {successMessage || error}
             </div>
           )}

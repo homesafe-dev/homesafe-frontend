@@ -7,11 +7,11 @@ import userApi from '../../api/userApi';
 import { WalletTransaction } from '../../types/wallet';
 
 const DashboardContent: React.FC = () => {
-  const [walletBalance, setWalletBalance] = useState<string>("0.00");
+  const [walletBalance, setWalletBalance] = useState<string>('0.00');
   const [transactions, setTransactions] = useState<WalletTransaction[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [userName, setUserName] = useState<string>("User");
+  const [userName, setUserName] = useState<string>('User');
 
   useEffect(() => {
     // Fetch user profile data
@@ -20,15 +20,14 @@ const DashboardContent: React.FC = () => {
         const response = await userApi.getProfile();
         if (response.status) {
           const userData = response.data;
-          setUserName(userData.first_name || "User");
+          setUserName(userData.first_name || 'User');
         }
       } catch (err) {
-        console.error("Error fetching user profile:", err);
+        console.error('Error fetching user profile:', err);
       }
     };
 
     fetchUserProfile();
-
 
     // Fetch wallet balance
     const fetchWalletBalance = async () => {
@@ -38,7 +37,7 @@ const DashboardContent: React.FC = () => {
           setWalletBalance(response.data.current_balance);
         }
       } catch (err) {
-        console.error("Error fetching wallet balance:", err);
+        console.error('Error fetching wallet balance:', err);
       }
     };
 
@@ -52,8 +51,8 @@ const DashboardContent: React.FC = () => {
           setTransactions(response.data.data);
         }
       } catch (err: any) {
-        console.error("Error fetching transactions:", err);
-        setError(err.message || "Failed to load transactions");
+        console.error('Error fetching transactions:', err);
+        setError(err.message || 'Failed to load transactions');
       } finally {
         setLoading(false);
       }
@@ -67,7 +66,9 @@ const DashboardContent: React.FC = () => {
     <div className="bg-white min-h-screen p-6">
       {/* Header */}
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-[16px] font-normal text-[#24292E]">Hello {userName}</h1>
+        <h1 className="text-[16px] font-normal text-[#24292E]">
+          Hello {userName}
+        </h1>
         <div className="bg-[#EFAE73] text-[#24292E] h-[42px] w-[165px] flex justify-center items-center px-4 py-1 rounded-full text-sm">
           Ruby Subscription
         </div>
@@ -126,7 +127,13 @@ const DashboardContent: React.FC = () => {
           </button>
           <div className="mb-6">
             <p className="text-white/80 text-sm mb-2">Current Balance</p>
-            <h2 className="text-2xl font-semibold">₦ {parseFloat(walletBalance).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</h2>
+            <h2 className="text-2xl font-semibold">
+              ₦{' '}
+              {parseFloat(walletBalance).toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            </h2>
           </div>
           <div className="flex gap-4">
             <Link to="/employer/wallet/top-up">
@@ -217,7 +224,9 @@ const DashboardContent: React.FC = () => {
       {/* History Section - Wallet Transactions */}
       <div>
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-lg font-medium text-gray-700">Transaction History</h2>
+          <h2 className="text-lg font-medium text-gray-700">
+            Transaction History
+          </h2>
           <Link to="/employer/wallet-history">
             <button className="text-[#7B858E] text-sm hover:underline">
               View All
@@ -249,20 +258,44 @@ const DashboardContent: React.FC = () => {
               <tbody className="bg-white">
                 {transactions.length > 0 ? (
                   transactions.map((transaction) => (
-                    <tr key={transaction.id} className="border-b border-gray-100">
-                      <td className="py-4 px-6">{transaction.transaction.reference_code.substring(0, 10)}...</td>
-                      <td className="py-4 px-6 capitalize">{transaction.type}</td>
-                      <td className="py-4 px-6">{transaction.description}</td>
-                      <td className="py-4 px-6">₦ {parseFloat(transaction.transaction.amount).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                    <tr
+                      key={transaction.id}
+                      className="border-b border-gray-100"
+                    >
                       <td className="py-4 px-6">
-                        <span className={`px-3 py-1 rounded-full text-xs ${
-                          transaction.transaction.status === 'successful'
-                            ? 'bg-green-100 text-green-700'
-                            : transaction.transaction.status === 'pending'
-                            ? 'bg-yellow-100 text-yellow-700'
-                            : 'bg-red-100 text-red-700'
-                        }`}>
-                          {transaction.transaction.status.charAt(0).toUpperCase() + transaction.transaction.status.slice(1)}
+                        {transaction.transaction.reference_code.substring(
+                          0,
+                          10
+                        )}
+                        ...
+                      </td>
+                      <td className="py-4 px-6 capitalize">
+                        {transaction.type}
+                      </td>
+                      <td className="py-4 px-6">{transaction.description}</td>
+                      <td className="py-4 px-6">
+                        ₦{' '}
+                        {parseFloat(
+                          transaction.transaction.amount
+                        ).toLocaleString(undefined, {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}
+                      </td>
+                      <td className="py-4 px-6">
+                        <span
+                          className={`px-3 py-1 rounded-full text-xs ${
+                            transaction.transaction.status === 'successful'
+                              ? 'bg-green-100 text-green-700'
+                              : transaction.transaction.status === 'pending'
+                                ? 'bg-yellow-100 text-yellow-700'
+                                : 'bg-red-100 text-red-700'
+                          }`}
+                        >
+                          {transaction.transaction.status
+                            .charAt(0)
+                            .toUpperCase() +
+                            transaction.transaction.status.slice(1)}
                         </span>
                       </td>
                       <td className="py-4 px-6">
@@ -274,7 +307,10 @@ const DashboardContent: React.FC = () => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={6} className="py-8 px-6 text-center text-gray-500">
+                    <td
+                      colSpan={6}
+                      className="py-8 px-6 text-center text-gray-500"
+                    >
                       No transactions found
                     </td>
                   </tr>

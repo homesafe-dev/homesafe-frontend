@@ -11,7 +11,8 @@ const ResetPasswordPage: React.FC = () => {
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -52,13 +53,20 @@ const ResetPasswordPage: React.FC = () => {
         sessionStorage.removeItem('resetEmail');
         // Redirect to login page
         navigate('/login', {
-          state: { message: 'Password reset successfully. Please login with your new password.' }
+          state: {
+            message:
+              'Password reset successfully. Please login with your new password.',
+          },
         });
       } else {
-        setError(response.message || 'Failed to reset password. Please try again.');
+        setError(
+          response.message || 'Failed to reset password. Please try again.'
+        );
       }
     } catch (err: any) {
-      setError(err.response?.data?.message || 'An error occurred. Please try again.');
+      setError(
+        err.response?.data?.message || 'An error occurred. Please try again.'
+      );
     } finally {
       setLoading(false);
     }
@@ -201,7 +209,10 @@ const ResetPasswordPage: React.FC = () => {
               </button>
             </form>
             <div className="mt-4 text-center">
-              <Link to="/employer/signin" className="text-green-600 hover:text-green-800">
+              <Link
+                to="/employer/signin"
+                className="text-green-600 hover:text-green-800"
+              >
                 Back to Sign in
               </Link>
             </div>

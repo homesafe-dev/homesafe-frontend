@@ -28,7 +28,8 @@ const SignupPage: React.FC = () => {
       } else {
         setErrorMessage(response.message);
       }
-    } catch (error) {
+    } catch (err) {
+      console.error('Error sending OTP:', err);
       setErrorMessage('An unexpected error occurred. Please try again.');
     } finally {
       setIsSubmitting(false);
@@ -168,8 +169,11 @@ const SignupPage: React.FC = () => {
 
           <div className="w-full text-center mt-4">
             <p className="text-sm text-gray-600">
-              Already have an account?{" "}
-              <Link to="/login" className="text-green-500 hover:text-green-600 font-medium">
+              Already have an account?{' '}
+              <Link
+                to="/login"
+                className="text-green-500 hover:text-green-600 font-medium"
+              >
                 Sign in
               </Link>
             </p>

@@ -16,13 +16,16 @@ const AllPayrollPage: React.FC = () => {
 
   useEffect(() => {
     fetchPayrollHistory();
-  }, [currentPage]);
+  }, [currentPage, itemsPerPage, fetchPayrollHistory]);
 
-  const fetchPayrollHistory = async () => {
+  const fetchPayrollHistory = React.useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await payrollApi.getPayrollHistory(currentPage, itemsPerPage);
+      const response = await payrollApi.getPayrollHistory(
+        currentPage,
+        itemsPerPage
+      );
       console.log('Payroll history response:', response);
 
       if (response && response.status === true) {
@@ -47,13 +50,15 @@ const AllPayrollPage: React.FC = () => {
       } else {
         setError(response?.message || 'Failed to load payroll history');
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const errorMessage =
+        err instanceof Error ? err.message : 'Failed to load payroll history';
       console.error('Error fetching payroll history:', err);
-      setError(err.message || 'Failed to load payroll history');
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentPage, itemsPerPage]);
 
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
@@ -96,18 +101,24 @@ const AllPayrollPage: React.FC = () => {
             <>
               {/* Table Header */}
               <div className="grid grid-cols-6 bg-[#C8EDDF80] rounded-t-lg">
-                <div className="p-3 text-sm font-medium text-gray-600">Staff</div>
+                <div className="p-3 text-sm font-medium text-gray-600">
+                  Staff
+                </div>
                 <div className="p-3 text-sm font-medium text-gray-600">
                   Position
                 </div>
-                <div className="p-3 text-sm font-medium text-gray-600">Amount</div>
+                <div className="p-3 text-sm font-medium text-gray-600">
+                  Amount
+                </div>
                 <div className="p-3 text-sm font-medium text-gray-600">
                   Payment Date
                 </div>
                 <div className="p-3 text-sm font-medium text-gray-600">
                   Advance Salary
                 </div>
-                <div className="p-3 text-sm font-medium text-gray-600">Status</div>
+                <div className="p-3 text-sm font-medium text-gray-600">
+                  Status
+                </div>
               </div>
 
               {/* Table Body */}
@@ -125,7 +136,8 @@ const AllPayrollPage: React.FC = () => {
                         {entry.position || 'N/A'}
                       </div>
                       <div className="p-3 text-sm text-gray-800">
-                        ₦ {typeof entry.amount === 'number'
+                        ₦{' '}
+                        {typeof entry.amount === 'number'
                           ? entry.amount.toLocaleString()
                           : entry.amount}
                       </div>
@@ -134,19 +146,21 @@ const AllPayrollPage: React.FC = () => {
                       </div>
                       <div className="p-3 text-sm text-gray-800">
                         {entry.advanced_salary
-                          ? (typeof entry.advanced_salary === 'number'
+                          ? typeof entry.advanced_salary === 'number'
                             ? `₦ ${entry.advanced_salary.toLocaleString()}`
-                            : entry.advanced_salary)
+                            : entry.advanced_salary
                           : '-'}
                       </div>
                       <div className="p-3">
-                        <span className={`px-3 py-1 rounded-md text-sm ${
-                          entry.status?.toLowerCase() === 'active'
-                            ? 'bg-[#C8EDDF80] text-green-800'
-                            : entry.status?.toLowerCase() === 'pending'
-                            ? 'bg-yellow-100 text-yellow-800'
-                            : 'bg-gray-100 text-gray-800'
-                        }`}>
+                        <span
+                          className={`px-3 py-1 rounded-md text-sm ${
+                            entry.status?.toLowerCase() === 'active'
+                              ? 'bg-[#C8EDDF80] text-green-800'
+                              : entry.status?.toLowerCase() === 'pending'
+                                ? 'bg-yellow-100 text-yellow-800'
+                                : 'bg-gray-100 text-gray-800'
+                          }`}
+                        >
                           {entry.status || 'N/A'}
                         </span>
                       </div>
@@ -167,29 +181,43 @@ const AllPayrollPage: React.FC = () => {
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
                   >
-                    <FaChevronLeft size={14} className={currentPage === 1 ? "text-gray-300" : "text-gray-500"} />
+                    <FaChevronLeft
+                      size={14}
+                      className={
+                        currentPage === 1 ? 'text-gray-300' : 'text-gray-500'
+                      }
+                    />
                   </button>
 
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                    <button
-                      key={page}
-                      className={`w-8 h-8 flex items-center justify-center rounded-md ${
-                        currentPage === page
-                          ? 'bg-[#00000014] text-[#000000DE] font-medium'
-                          : 'text-[#000000DE]'
-                      }`}
-                      onClick={() => handlePageChange(page)}
-                    >
-                      {page}
-                    </button>
-                  ))}
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                    (page) => (
+                      <button
+                        key={page}
+                        className={`w-8 h-8 flex items-center justify-center rounded-md ${
+                          currentPage === page
+                            ? 'bg-[#00000014] text-[#000000DE] font-medium'
+                            : 'text-[#000000DE]'
+                        }`}
+                        onClick={() => handlePageChange(page)}
+                      >
+                        {page}
+                      </button>
+                    )
+                  )}
 
                   <button
                     className="p-2"
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
                   >
-                    <FaChevronRight size={14} className={currentPage === totalPages ? "text-gray-300" : "text-[#000000DE]"} />
+                    <FaChevronRight
+                      size={14}
+                      className={
+                        currentPage === totalPages
+                          ? 'text-gray-300'
+                          : 'text-[#000000DE]'
+                      }
+                    />
                   </button>
                 </div>
               )}

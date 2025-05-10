@@ -4,7 +4,7 @@ import signupImg2 from '../../../assets/images/signupImg2.png';
 import { useNavigate, Link } from 'react-router-dom';
 import HomesafeLogo from '../../../assets/images/HomesafeLogo.png';
 import { useAuth } from '../../../contexts/AuthContext';
-import { RegistrationData, UserType } from '../../../contexts/types';
+import { RegistrationData } from '../../../contexts/types';
 import { IoCloudUploadOutline } from 'react-icons/io5';
 
 const FacialCapturePage: React.FC = () => {
@@ -12,7 +12,8 @@ const FacialCapturePage: React.FC = () => {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [registrationData, setRegistrationData] = useState<RegistrationData | null>(null);
+  const [registrationData, setRegistrationData] =
+    useState<RegistrationData | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const auth = useAuth();
@@ -32,7 +33,9 @@ const FacialCapturePage: React.FC = () => {
       setRegistrationData(parsedData);
     } catch (error) {
       console.error('Error parsing registration data:', error);
-      setErrorMessage('There was an error with your registration data. Please try again.');
+      setErrorMessage(
+        'There was an error with your registration data. Please try again.'
+      );
       navigate('/signup/onboarding-form');
       return;
     }
@@ -94,7 +97,9 @@ const FacialCapturePage: React.FC = () => {
     }
 
     if (!registrationData) {
-      setErrorMessage('Registration data is missing. Please go back and try again.');
+      setErrorMessage(
+        'Registration data is missing. Please go back and try again.'
+      );
       return;
     }
 
@@ -122,7 +127,7 @@ const FacialCapturePage: React.FC = () => {
       // Add the image file as 'avatar'
       formData.append('avatar', selectedImage);
 
-      console.log("Sending registration data with profile image");
+      console.log('Sending registration data with profile image');
 
       // Log the form data for debugging
       for (const pair of formData.entries()) {
@@ -152,7 +157,7 @@ const FacialCapturePage: React.FC = () => {
         sessionStorage.setItem('is_page_refresh', 'true');
 
         // Add a small delay before navigation to allow auth state to update
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise((resolve) => setTimeout(resolve, 500));
 
         // Navigate to the appropriate dashboard based on the role
         if (response.data && response.data.role) {
@@ -179,10 +184,12 @@ const FacialCapturePage: React.FC = () => {
           navigate('/employer/dashboard');
         }
       } else {
-        setErrorMessage(response.message || 'Registration failed. Please try again.');
+        setErrorMessage(
+          response.message || 'Registration failed. Please try again.'
+        );
       }
     } catch (error) {
-      console.error("Registration error:", error);
+      console.error('Registration error:', error);
       setErrorMessage('Failed to complete registration. Please try again.');
     } finally {
       setIsSubmitting(false);
@@ -255,7 +262,9 @@ const FacialCapturePage: React.FC = () => {
                   ) : (
                     <div className="flex flex-col items-center justify-center text-gray-400">
                       <IoCloudUploadOutline size={32} />
-                      <span className="text-xs mt-2 text-center">No image selected</span>
+                      <span className="text-xs mt-2 text-center">
+                        No image selected
+                      </span>
                     </div>
                   )}
                 </div>
@@ -288,7 +297,9 @@ const FacialCapturePage: React.FC = () => {
                 </button>
               )}
               {errorMessage && (
-                <p className="mt-2 text-sm text-red-600 text-center">{errorMessage}</p>
+                <p className="mt-2 text-sm text-red-600 text-center">
+                  {errorMessage}
+                </p>
               )}
             </div>
 

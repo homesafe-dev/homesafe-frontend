@@ -13,7 +13,9 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('auth_token');
-    console.log(`[Request] ${config.method?.toUpperCase()} ${config.url} - Token exists: ${!!token}`);
+    console.log(
+      `[Request] ${config.method?.toUpperCase()} ${config.url} - Token exists: ${!!token}`
+    );
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -33,36 +35,43 @@ axiosInstance.interceptors.request.use(
 // Response interceptor for handling common errors
 axiosInstance.interceptors.response.use(
   (response) => {
-    console.log(`[Response] ${response.config.method?.toUpperCase()} ${response.config.url} - Status: ${response.status}`);
+    console.log(
+      `[Response] ${response.config.method?.toUpperCase()} ${response.config.url} - Status: ${response.status}`
+    );
     return response;
   },
   (error) => {
     // Handle common errors here (e.g., 401 Unauthorized, 403 Forbidden)
     if (error.response) {
       const { status, config } = error.response;
-      console.log(`[Response Error] ${config.method?.toUpperCase()} ${config.url} - Status: ${status}`);
+      console.log(
+        `[Response Error] ${config.method?.toUpperCase()} ${config.url} - Status: ${status}`
+      );
       console.log('[Response Error] Full error:', error);
 
       // Only handle 401 errors for non-auth endpoints
       // This prevents automatic logout during page refresh
       if (status === 401) {
         console.log('[401 Error] URL:', config.url);
-        console.log('[401 Error] Is auth endpoint:',
+        console.log(
+          '[401 Error] Is auth endpoint:',
           config.url.includes('/api/login') ||
-          config.url.includes('/api/verify-otp') ||
-          config.url.includes('/api/send-otp') ||
-          config.url.includes('/api/complete-registration')
+            config.url.includes('/api/verify-otp') ||
+            config.url.includes('/api/send-otp') ||
+            config.url.includes('/api/complete-registration')
         );
 
         // Skip auth endpoints
-        if (!config.url.includes('/api/login') &&
-            !config.url.includes('/api/verify-otp') &&
-            !config.url.includes('/api/send-otp') &&
-            !config.url.includes('/api/complete-registration')) {
-
+        if (
+          !config.url.includes('/api/login') &&
+          !config.url.includes('/api/verify-otp') &&
+          !config.url.includes('/api/send-otp') &&
+          !config.url.includes('/api/complete-registration')
+        ) {
           // Check if this is an API call after page refresh
-          const isPageRefresh = document.referrer === '' ||
-                               document.referrer.includes(window.location.host);
+          const isPageRefresh =
+            document.referrer === '' ||
+            document.referrer.includes(window.location.host);
 
           console.log('[401 Error] Is page refresh:', isPageRefresh);
           console.log('[401 Error] Current URL:', window.location.href);
@@ -73,13 +82,16 @@ axiosInstance.interceptors.response.use(
           console.log('[401 Error] Has token in localStorage:', hasToken);
 
           // Check if we're in the refresh grace period
-          const isInRefreshPeriod = sessionStorage.getItem('is_page_refresh') === 'true';
+          const isInRefreshPeriod =
+            sessionStorage.getItem('is_page_refresh') === 'true';
           console.log('[401 Error] Is in refresh period:', isInRefreshPeriod);
 
           // Only clear auth and redirect if it's not a page refresh
           // or if it's a specific API call that requires authentication
           if (!isPageRefresh || config.url.includes('/api/profile')) {
-            console.log('[401 Error] Logging out user due to unauthorized access');
+            console.log(
+              '[401 Error] Logging out user due to unauthorized access'
+            );
 
             // Handle unauthorized access
             localStorage.removeItem('auth_token');
@@ -89,7 +101,9 @@ axiosInstance.interceptors.response.use(
             // This ensures the app state is completely reset
             window.location.href = '/login';
           } else {
-            console.log('[401 Error] Skipping logout because this appears to be a page refresh');
+            console.log(
+              '[401 Error] Skipping logout because this appears to be a page refresh'
+            );
           }
         } else {
           console.log('[401 Error] Ignoring 401 for auth endpoint');

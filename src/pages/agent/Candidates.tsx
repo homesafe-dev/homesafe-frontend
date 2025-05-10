@@ -41,19 +41,23 @@ const CandidatesPage: React.FC = () => {
     photo: null,
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => {
     const { id, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [id]: value
+      [id]: value,
     }));
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        photo: e.target.files![0]
+        photo: e.target.files![0],
       }));
     }
   };
@@ -76,11 +80,14 @@ const CandidatesPage: React.FC = () => {
         salary: formData.salary,
         occupations: [formData.occupation],
         gender: formData.gender,
-        phone: formData.phone
+        phone: formData.phone,
       };
 
       // Call the API with the photo file
-      const response = await agentApi.registerCandidate(candidateData, formData.photo);
+      const response = await agentApi.registerCandidate(
+        candidateData,
+        formData.photo
+      );
 
       if (response.status) {
         setSuccess(response.message || 'Candidate registered successfully');
@@ -93,7 +100,9 @@ const CandidatesPage: React.FC = () => {
         setError(response.message || 'Failed to register candidate');
       }
     } catch (err: any) {
-      setError(err.message || 'An error occurred while registering the candidate');
+      setError(
+        err.message || 'An error occurred while registering the candidate'
+      );
       console.error('Error registering candidate:', err);
     } finally {
       setLoading(false);
@@ -122,9 +131,7 @@ const CandidatesPage: React.FC = () => {
       )}
 
       {error && (
-        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
-          {error}
-        </div>
+        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">{error}</div>
       )}
 
       {/* Form */}
@@ -218,7 +225,7 @@ const CandidatesPage: React.FC = () => {
                 required
               >
                 <option value="">Select</option>
-                {OCCUPATIONS.map(occupation => (
+                {OCCUPATIONS.map((occupation) => (
                   <option key={occupation.id} value={occupation.id}>
                     {occupation.name}
                   </option>

@@ -77,7 +77,8 @@ const SigninPasswordPage: React.FC = () => {
       } else {
         setErrorMessage(response.message || 'Invalid email or password');
       }
-    } catch (error) {
+    } catch (err) {
+      console.error('Login error:', err);
       setErrorMessage('An error occurred during login. Please try again.');
     } finally {
       setIsSubmitting(false);
@@ -177,9 +178,7 @@ const SigninPasswordPage: React.FC = () => {
                   </button>
                 </div>
                 {errorMessage && (
-                  <p className="mt-2 text-xs text-red-500">
-                    {errorMessage}
-                  </p>
+                  <p className="mt-2 text-xs text-red-500">{errorMessage}</p>
                 )}
               </div>
 
@@ -194,7 +193,10 @@ const SigninPasswordPage: React.FC = () => {
               </button>
             </form>
             <p className="text-right mt-4 md:mt-[1rem]">
-              <Link to="/signin/forgot-password" className="text-[#24292E] text-[13px] font-medium hover:text-green-600">
+              <Link
+                to="/signin/forgot-password"
+                className="text-[#24292E] text-[13px] font-medium hover:text-green-600"
+              >
                 Forgot Password?
               </Link>
             </p>

@@ -62,7 +62,7 @@ export default function AgentDashboard() {
             </div>
             <div>
               <h2 className="text-[20px] text-[#24292E] font-normal">
-                {isLoading ? "..." : employees.length}
+                {isLoading ? '...' : employees.length}
               </h2>
               <p className="text-[#24292E] text-[16px]">
                 Total Number of Candidates
@@ -78,7 +78,9 @@ export default function AgentDashboard() {
             </div>
             <div>
               <h2 className="text-[20px] text-[#24292E] font-normal">
-                {isLoading ? "..." : employees.filter(e => e.placement).length}
+                {isLoading
+                  ? '...'
+                  : employees.filter((e) => e.placement).length}
               </h2>
               <p className="text-[#24292E] text-[16px]">
                 Candidates on Placement
@@ -94,7 +96,11 @@ export default function AgentDashboard() {
             </div>
             <div>
               <h2 className="text-[20px] text-[#24292E] font-normal">
-                {isLoading ? "..." : employees.filter(e => e.status.toLowerCase() === 'terminated').length}
+                {isLoading
+                  ? '...'
+                  : employees.filter(
+                      (e) => e.status.toLowerCase() === 'terminated'
+                    ).length}
               </h2>
               <p className="text-[#24292E] text-[16px]">
                 Candidates terminated
@@ -170,14 +176,20 @@ export default function AgentDashboard() {
               ) : error ? (
                 // Error state
                 <tr>
-                  <td colSpan={6} className="px-6 py-4 text-center text-red-500">
+                  <td
+                    colSpan={6}
+                    className="px-6 py-4 text-center text-red-500"
+                  >
                     {error}
                   </td>
                 </tr>
               ) : employees.length === 0 ? (
                 // Empty state
                 <tr>
-                  <td colSpan={6} className="px-6 py-4 text-center text-gray-500">
+                  <td
+                    colSpan={6}
+                    className="px-6 py-4 text-center text-gray-500"
+                  >
                     No employees found
                   </td>
                 </tr>
@@ -209,14 +221,15 @@ export default function AgentDashboard() {
                       {new Date(employee.date).toLocaleDateString('en-US', {
                         day: 'numeric',
                         month: 'short',
-                        year: 'numeric'
+                        year: 'numeric',
                       })}
                     </td>
                     <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
                       {employee.placement}
                     </td>
                     <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
-                      {employee.gender.charAt(0).toUpperCase() + employee.gender.slice(1)}
+                      {employee.gender.charAt(0).toUpperCase() +
+                        employee.gender.slice(1)}
                     </td>
                     <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
                       {employee.phone}
@@ -224,12 +237,15 @@ export default function AgentDashboard() {
                     <td className="px-6 py-4">
                       <span
                         className={`px-3 py-1 rounded-full text-[13px] ${
-                          employee.status.toLowerCase().includes('not') || employee.status.toLowerCase() === 'unverified'
+                          employee.status.toLowerCase().includes('not') ||
+                          employee.status.toLowerCase() === 'unverified'
                             ? 'bg-red-100 text-red-800'
                             : 'bg-green-100 text-green-800'
                         }`}
                       >
-                        {employee.status.toLowerCase().includes('not') ? 'Unverified' : 'Verified'}
+                        {employee.status.toLowerCase().includes('not')
+                          ? 'Unverified'
+                          : 'Verified'}
                       </span>
                     </td>
                   </tr>

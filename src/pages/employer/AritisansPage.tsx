@@ -59,14 +59,17 @@ const ArtisansPage: React.FC = () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await artisanApi.getEmployeeList(currentPage, itemsPerPage);
+        const response = await artisanApi.getEmployeeList(
+          currentPage,
+          itemsPerPage
+        );
         if (response.status && response.data) {
           setArtisans(response.data.data);
           setTotalPages(response.data.last_page);
         }
       } catch (err: any) {
-        console.error("Error fetching artisans:", err);
-        setError(err.message || "Failed to load artisans");
+        console.error('Error fetching artisans:', err);
+        setError(err.message || 'Failed to load artisans');
       } finally {
         setLoading(false);
       }
@@ -115,7 +118,10 @@ const ArtisansPage: React.FC = () => {
     let age = today.getFullYear() - birthDate.getFullYear();
     const monthDifference = today.getMonth() - birthDate.getMonth();
 
-    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+    if (
+      monthDifference < 0 ||
+      (monthDifference === 0 && today.getDate() < birthDate.getDate())
+    ) {
       age--;
     }
 
@@ -125,9 +131,12 @@ const ArtisansPage: React.FC = () => {
   // Get occupation name or default to "Professional"
   const getOccupation = (artisan: Artisan): string => {
     if (artisan.occupations && artisan.occupations.length > 0) {
-      return artisan.occupations[0].name.charAt(0).toUpperCase() + artisan.occupations[0].name.slice(1);
+      return (
+        artisan.occupations[0].name.charAt(0).toUpperCase() +
+        artisan.occupations[0].name.slice(1)
+      );
     }
-    return "Professional";
+    return 'Professional';
   };
 
   // Get rating or default to 0
@@ -136,17 +145,20 @@ const ArtisansPage: React.FC = () => {
   };
 
   // Filter artisans based on search query
-  const filteredArtisans = artisans.filter(artisan => {
+  const filteredArtisans = artisans.filter((artisan) => {
     const fullName = `${artisan.first_name} ${artisan.last_name}`.toLowerCase();
-    const occupation = artisan.occupations && artisan.occupations.length > 0
-      ? artisan.occupations[0].name.toLowerCase()
-      : '';
+    const occupation =
+      artisan.occupations && artisan.occupations.length > 0
+        ? artisan.occupations[0].name.toLowerCase()
+        : '';
     const location = extractLocation(artisan.address).toLowerCase();
     const query = searchQuery.toLowerCase();
 
-    return fullName.includes(query) ||
-           occupation.includes(query) ||
-           location.includes(query);
+    return (
+      fullName.includes(query) ||
+      occupation.includes(query) ||
+      location.includes(query)
+    );
   });
 
   return (
@@ -209,13 +221,19 @@ const ArtisansPage: React.FC = () => {
                   {artisan.first_name} {artisan.last_name}
                 </h3>
                 <p className="text-sm text-gray-500 mb-1 mt-[0.5rem]">
-                  {extractLocation(artisan.address)} | {getAge(artisan.dob)} yrs old
+                  {extractLocation(artisan.address)} | {getAge(artisan.dob)} yrs
+                  old
                 </p>
                 <div className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs mb-2 mt-[0.5rem]">
                   {getOccupation(artisan)}
                 </div>
-                <div className="flex mb-3">{renderStars(getRating(artisan))}</div>
-                <Link to={`/employer/artisan/profile?id=${artisan.id}`} className="w-full">
+                <div className="flex mb-3">
+                  {renderStars(getRating(artisan))}
+                </div>
+                <Link
+                  to={`/employer/artisan/profile?id=${artisan.id}`}
+                  className="w-full"
+                >
                   <button className="bg-[#A5EA91] hover:bg-green-300 text-[#24292E] px-4 py-2 rounded-md text-sm transition-colors w-full text-center mt-[1rem] cursor-pointer">
                     View Profile
                   </button>
@@ -229,7 +247,7 @@ const ArtisansPage: React.FC = () => {
           <div className="flex justify-center mt-8">
             <div className="flex space-x-2">
               <button
-                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
                 className={`px-3 py-1 rounded ${
                   currentPage === 1
@@ -240,20 +258,24 @@ const ArtisansPage: React.FC = () => {
                 Previous
               </button>
 
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                <button
-                  key={page}
-                  onClick={() => setCurrentPage(page)}
-                  className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                    currentPage === page ? 'bg-gray-200' : 'hover:bg-gray-100'
-                  }`}
-                >
-                  {page}
-                </button>
-              ))}
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                (page) => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                      currentPage === page ? 'bg-gray-200' : 'hover:bg-gray-100'
+                    }`}
+                  >
+                    {page}
+                  </button>
+                )
+              )}
 
               <button
-                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
                 disabled={currentPage === totalPages}
                 className={`px-3 py-1 rounded ${
                   currentPage === totalPages

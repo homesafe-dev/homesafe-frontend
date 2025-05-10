@@ -83,7 +83,9 @@ const DashboardContent: React.FC = () => {
           <div className="max-w-[65%] h-full flex flex-col justify-center">
             <h2 className="text-[16px] text-[#24292E] mb-2">Salary</h2>
             <p className="text-[24px] font-semibold text-[#24292E] mb-6">
-              {userProfile?.salary ? formatCurrency(userProfile.salary) : '₦ 0.00'}
+              {userProfile?.salary
+                ? formatCurrency(userProfile.salary)
+                : '₦ 0.00'}
             </p>
 
             <div className="flex gap-20">

@@ -8,9 +8,12 @@ const protectRoute = (element: ReactNode, allowedRoles: UserType[]) => (
   <ProtectedRoute allowedRoles={allowedRoles}>{element}</ProtectedRoute>
 );
 
-const protectEmployerRoute = (element: ReactNode) => protectRoute(element, ['employer']);
-const protectEmployeeRoute = (element: ReactNode) => protectRoute(element, ['employee']);
-const protectAgentRoute = (element: ReactNode) => protectRoute(element, ['agent']);
+const protectEmployerRoute = (element: ReactNode) =>
+  protectRoute(element, ['employer']);
+const protectEmployeeRoute = (element: ReactNode) =>
+  protectRoute(element, ['employee']);
+const protectAgentRoute = (element: ReactNode) =>
+  protectRoute(element, ['agent']);
 
 // Auth Components
 import EmployerLoginForm from '../components/auth/employer/LoginForm';
@@ -19,12 +22,10 @@ import EmployerSignupOTP from '../components/auth/employer/SignupOTP';
 import EmployerSignupPassword from '../components/auth/employer/SignupPassword';
 import EmployerSigninPassword from '../components/auth/employer/SigninPassword';
 import EmployerSigninCreatePassword from '../components/auth/employer/SigninCreatePassword';
-import EmployeeLoginForm from '../components/auth/employee/LoginForm';
-import EmployeeOTP from '../components/auth/employee/OTP';
+// Removed unused imports: EmployeeLoginForm, EmployeeOTP, AgentLoginForm
 import EmployerForgotPassword from '../components/auth/employer/ForgotPassword';
 import EmployerForgotPasswordOTP from '../components/auth/employer/ForgotPasswordOTP';
 import EmployerResetPassword from '../components/auth/employer/ResetPassword';
-import AgentLoginForm from '../components/auth/agent/LoginForm';
 import OnboardingForm from '../components/auth/employer/OnboardingForm';
 import NotificationsPage from '../components/Employer/NotificationsPage';
 
@@ -57,7 +58,7 @@ import EmployeeResources from '../pages/employee/Resources';
 import Medical from '../pages/employer/Medical';
 import ReviewsPage from '../pages/employer/Reviews';
 import Contracts from '../pages/employer/Contracts';
-import HomesafeForgotPasswordPage from '../components/auth/employee/ForgotPassword';
+// Removed unused import: HomesafeForgotPasswordPage
 import Salary from '../pages/employee/Salary';
 import EmployeeMedical from '../pages/employee/Medical';
 import EmployeeReview from '../pages/employee/Review';
@@ -108,7 +109,11 @@ export const router = createBrowserRouter([
   },
   {
     path: 'protected-test',
-    element: <ProtectedRoute allowedRoles={['employer', 'employee', 'agent']}><TestPage /></ProtectedRoute>,
+    element: (
+      <ProtectedRoute allowedRoles={['employer', 'employee', 'agent']}>
+        <TestPage />
+      </ProtectedRoute>
+    ),
   },
   {
     path: 'employer-only',

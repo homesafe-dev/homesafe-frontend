@@ -22,18 +22,28 @@ const StaffPage: React.FC = () => {
         // { status: true, message: "...", data: { current_page: 1, data: [...employees], ... } }
         if (response && response.status === true) {
           // Check if data is an object with a data property (paginated response)
-          if (response.data && typeof response.data === 'object' && 'data' in response.data) {
+          if (
+            response.data &&
+            typeof response.data === 'object' &&
+            'data' in response.data
+          ) {
             const employeeData = response.data.data;
 
             if (Array.isArray(employeeData)) {
               console.log('Setting employees array:', employeeData);
               setEmployees(employeeData);
             } else {
-              console.error('Unexpected employee data format - not an array:', employeeData);
+              console.error(
+                'Unexpected employee data format - not an array:',
+                employeeData
+              );
               setError('Unexpected data format received from API');
             }
           } else {
-            console.error('Unexpected response format - missing pagination data:', response.data);
+            console.error(
+              'Unexpected response format - missing pagination data:',
+              response.data
+            );
             setError('Unexpected data format received from API');
           }
         } else {
@@ -52,12 +62,18 @@ const StaffPage: React.FC = () => {
   }, []);
 
   // Filter employees based on search term
-  const filteredEmployees = Array.isArray(employees) ? employees.filter(employee => {
-    const fullName = `${employee.first_name} ${employee.last_name}`.toLowerCase();
-    return fullName.includes(searchTerm.toLowerCase()) ||
-           employee.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-           (employee.address && employee.address.toLowerCase().includes(searchTerm.toLowerCase()));
-  }) : [];
+  const filteredEmployees = Array.isArray(employees)
+    ? employees.filter((employee) => {
+        const fullName =
+          `${employee.first_name} ${employee.last_name}`.toLowerCase();
+        return (
+          fullName.includes(searchTerm.toLowerCase()) ||
+          employee.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          (employee.address &&
+            employee.address.toLowerCase().includes(searchTerm.toLowerCase()))
+        );
+      })
+    : [];
 
   // Calculate age from date of birth
   const calculateAge = (dob: string | null): string => {
@@ -68,7 +84,10 @@ const StaffPage: React.FC = () => {
     let age = today.getFullYear() - birthDate.getFullYear();
     const monthDiff = today.getMonth() - birthDate.getMonth();
 
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birthDate.getDate())
+    ) {
       age--;
     }
 
@@ -144,19 +163,25 @@ const StaffPage: React.FC = () => {
                     ) : (
                       <FaUser className="text-white" />
                     )}
-                    <div className={`absolute w-3 h-3 ${employee.status === 1 ? 'bg-green-500' : 'bg-red-500'} rounded-full -top-1 -right-1 border-2 border-white`} />
+                    <div
+                      className={`absolute w-3 h-3 ${employee.status === 1 ? 'bg-green-500' : 'bg-red-500'} rounded-full -top-1 -right-1 border-2 border-white`}
+                    />
                   </div>
-                  <span>{employee.first_name} {employee.last_name}</span>
+                  <span>
+                    {employee.first_name} {employee.last_name}
+                  </span>
                 </div>
                 <div>{extractLocation(employee.address)}</div>
                 <div className="truncate">{employee.email}</div>
                 <div>{calculateAge(employee.dob)}</div>
                 <div className="flex justify-between items-center">
-                  <span className={`px-3 py-1 rounded-full text-xs ${
-                    employee.is_verified === 1
-                      ? 'bg-green-100 text-green-700'
-                      : 'bg-yellow-100 text-yellow-700'
-                  }`}>
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs ${
+                      employee.is_verified === 1
+                        ? 'bg-green-100 text-green-700'
+                        : 'bg-yellow-100 text-yellow-700'
+                    }`}
+                  >
                     {employee.is_verified === 1 ? 'Verified' : 'Unverified'}
                   </span>
                   <Link to={`/employer/staff/profile?id=${employee.id}`}>

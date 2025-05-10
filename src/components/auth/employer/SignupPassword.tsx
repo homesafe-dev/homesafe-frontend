@@ -9,7 +9,6 @@ import HomesafeLogo2 from '../../../assets/images/HomesafeLogo2.svg';
 const SignupPasswordPage: React.FC = () => {
   const [password, setPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [email, setEmail] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const navigate = useNavigate();
 
@@ -21,7 +20,7 @@ const SignupPasswordPage: React.FC = () => {
       navigate('/signup');
       return;
     }
-    setEmail(storedEmail);
+    // Email is stored in session storage and used in later steps
   }, [navigate]);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -38,7 +37,9 @@ const SignupPasswordPage: React.FC = () => {
     const hasNumber = /\d/.test(password);
 
     if (!hasSpecialChar || !hasNumber) {
-      setErrorMessage('Password must contain at least one special character and one number');
+      setErrorMessage(
+        'Password must contain at least one special character and one number'
+      );
       return;
     }
 
