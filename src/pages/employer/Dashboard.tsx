@@ -3,6 +3,7 @@ import { FaEye, FaPlus, FaEllipsisV } from 'react-icons/fa';
 import { BsCreditCard, BsPeople } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 import walletApi from '../../api/walletApi';
+import userApi from '../../api/userApi';
 import { WalletTransaction } from '../../types/wallet';
 
 const DashboardContent: React.FC = () => {
@@ -13,18 +14,21 @@ const DashboardContent: React.FC = () => {
   const [userName, setUserName] = useState<string>("User");
 
   useEffect(() => {
-    // Fetch user data from localStorage
-    const userData = localStorage.getItem('user_data');
-    if (userData) {
+    // Fetch user profile data
+    const fetchUserProfile = async () => {
       try {
-        const parsedData = JSON.parse(userData);
-        if (parsedData.first_name) {
-          setUserName(parsedData.first_name);
+        const response = await userApi.getProfile();
+        if (response.status) {
+          const userData = response.data;
+          setUserName(userData.first_name || "User");
         }
-      } catch (e) {
-        console.error("Error parsing user data:", e);
+      } catch (err) {
+        console.error("Error fetching user profile:", err);
       }
-    }
+    };
+
+    fetchUserProfile();
+
 
     // Fetch wallet balance
     const fetchWalletBalance = async () => {
