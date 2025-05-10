@@ -29,7 +29,7 @@ const ResetPasswordPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Validate passwords
     if (password !== confirmPassword) {
       setError('Passwords do not match');
@@ -43,16 +43,16 @@ const ResetPasswordPage: React.FC = () => {
 
     setLoading(true);
     setError(null);
-    
+
     try {
       const response = await authApi.resetPassword(email, password);
-      
+
       if (response.status) {
         // Clear session storage
         sessionStorage.removeItem('resetEmail');
         // Redirect to login page
-        navigate('/login', { 
-          state: { message: 'Password reset successfully. Please login with your new password.' } 
+        navigate('/login', {
+          state: { message: 'Password reset successfully. Please login with your new password.' }
         });
       } else {
         setError(response.message || 'Failed to reset password. Please try again.');
@@ -99,7 +99,9 @@ const ResetPasswordPage: React.FC = () => {
 
         <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
           <div className="mb-8">
-            <img src={HomesafeLogo} alt="Homesafe Logo" className="" />
+            <Link to="/">
+              <img src={HomesafeLogo} alt="Homesafe Logo" className="" />
+            </Link>
           </div>
 
           <div className="max-w-md">

@@ -50,7 +50,9 @@ const HomesafeSignupPage: React.FC = () => {
 
         <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
           <div className="mb-8">
-            <img src={HomesafeLogo} alt="Homesafe Logo" className="" />
+            <Link to="/">
+              <img src={HomesafeLogo} alt="Homesafe Logo" className="" />
+            </Link>
           </div>
 
           <div className="max-w-md">
@@ -70,11 +72,13 @@ const HomesafeSignupPage: React.FC = () => {
               <h1 className="text-[2px] md:text-[20px] font-semibold text-gray-800">
                 Sign in on
               </h1>
-              <img
-                src={HomesafeLogo2}
-                className="w-[150px] md:w-[210px] max-h-[50px]"
-                alt="Homesafe Logo"
-              />
+              <Link to="/">
+                <img
+                  src={HomesafeLogo2}
+                  className="w-[150px] md:w-[210px] max-h-[50px]"
+                  alt="Homesafe Logo"
+                />
+              </Link>
             </div>
 
             <form onSubmit={handleSubmit}>
