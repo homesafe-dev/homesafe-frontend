@@ -62,7 +62,9 @@ const SignupPage: React.FC = () => {
 
         <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
           <div className="mb-8">
-            <img src={HomesafeLogo} alt="Homesafe Logo" className="" />
+            <Link to="/">
+              <img src={HomesafeLogo} alt="Homesafe Logo" className="" />
+            </Link>
           </div>
 
           <div className="max-w-md">
@@ -82,11 +84,13 @@ const SignupPage: React.FC = () => {
               <h1 className="text-xl md:text-2xl font-semibold text-gray-800">
                 Sign up on
               </h1>
-              <img
-                src={HomesafeLogo2}
-                className="w-[120px] md:w-[178px] max-h-[30px]"
-                alt="Homesafe Logo"
-              />
+              <Link to="/">
+                <img
+                  src={HomesafeLogo2}
+                  className="w-[120px] md:w-[178px] max-h-[30px]"
+                  alt="Homesafe Logo"
+                />
+              </Link>
             </div>
 
             <form onSubmit={handleSubmit}>
