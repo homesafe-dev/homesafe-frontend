@@ -72,9 +72,7 @@ const CandidateTracker = () => {
 
       {/* Error Message */}
       {error && (
-        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
-          {error}
-        </div>
+        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">{error}</div>
       )}
 
       <div className="rounded-lg overflow-hidden">
@@ -84,9 +82,7 @@ const CandidateTracker = () => {
           <table className="w-full">
             <thead>
               <tr className="bg-[#C8EDDF80] text-[#174B35] text-sm">
-                <th className="px-4 py-3 text-left font-medium">
-                  Candidate
-                </th>
+                <th className="px-4 py-3 text-left font-medium">Candidate</th>
                 <th className="px-4 py-3 text-left font-medium">Date</th>
                 <th className="px-4 py-3 text-left font-medium">Placement</th>
                 <th className="px-4 py-3 text-left font-medium">Gender</th>
@@ -101,7 +97,10 @@ const CandidateTracker = () => {
               {isLoading ? (
                 // Loading state - show skeleton rows
                 [...Array(3)].map((_, index) => (
-                  <tr key={index} className="border-b border-gray-100 animate-pulse">
+                  <tr
+                    key={index}
+                    className="border-b border-gray-100 animate-pulse"
+                  >
                     <td className="px-4 py-3">
                       <div className="h-8 bg-gray-200 rounded"></div>
                     </td>
@@ -128,7 +127,10 @@ const CandidateTracker = () => {
               ) : employees.length === 0 ? (
                 // Empty state
                 <tr>
-                  <td colSpan={7} className="px-4 py-3 text-center text-gray-500">
+                  <td
+                    colSpan={7}
+                    className="px-4 py-3 text-center text-gray-500"
+                  >
                     No candidates found
                   </td>
                 </tr>
@@ -161,23 +163,31 @@ const CandidateTracker = () => {
                       {new Date(employee.date).toLocaleDateString('en-US', {
                         day: 'numeric',
                         month: 'short',
-                        year: 'numeric'
+                        year: 'numeric',
                       })}
                     </td>
                     <td className="px-4 py-3 text-gray-700">
                       {employee.placement}
                     </td>
                     <td className="px-4 py-3 text-gray-700">
-                      {employee.gender.charAt(0).toUpperCase() + employee.gender.slice(1)}
+                      {employee.gender.charAt(0).toUpperCase() +
+                        employee.gender.slice(1)}
                     </td>
-                    <td className="px-4 py-3 text-gray-700">{employee.phone}</td>
+                    <td className="px-4 py-3 text-gray-700">
+                      {employee.phone}
+                    </td>
                     <td className="px-4 py-3">
-                      <button className={`px-3 py-1 rounded-full text-[13px] ${
-                        employee.status.toLowerCase().includes('not') || employee.status.toLowerCase() === 'unverified'
-                          ? 'bg-red-100 text-red-800'
-                          : 'bg-green-100 text-green-800'
-                      }`}>
-                        {employee.status.toLowerCase().includes('not') ? 'Unverified' : 'Verified'}
+                      <button
+                        className={`px-3 py-1 rounded-full text-[13px] ${
+                          employee.status.toLowerCase().includes('not') ||
+                          employee.status.toLowerCase() === 'unverified'
+                            ? 'bg-red-100 text-red-800'
+                            : 'bg-green-100 text-green-800'
+                        }`}
+                      >
+                        {employee.status.toLowerCase().includes('not')
+                          ? 'Unverified'
+                          : 'Verified'}
                       </button>
                     </td>
                     <td className="px-4 py-3 relative">
@@ -192,7 +202,11 @@ const CandidateTracker = () => {
                         <div className="absolute right-8 top-10 bg-white shadow-lg rounded-md py-2 w-48 z-10">
                           <div
                             className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer"
-                            onClick={() => navigate(`/agent/candidate-profile/${employee.id}`)}
+                            onClick={() =>
+                              navigate(
+                                `/agent/candidate-profile/${employee.id}`
+                              )
+                            }
                           >
                             <FaRegUser className="text-gray-500" />
                             <span>View Profile</span>

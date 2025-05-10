@@ -7,12 +7,13 @@ interface CandidateWorkScheduleProps {
 }
 
 const CandidateWorkSchedule: React.FC<CandidateWorkScheduleProps> = ({
-  candidateName,
-  placement = "No employer assigned",
-  position = "Not specified"
+  // candidateName is not used in this component but kept in props for future use
+  placement = 'No employer assigned',
+  position = 'Not specified',
 }) => {
   // Check if placement is "No employer assigned" or similar
-  const hasPlacement = placement && !placement.toLowerCase().includes("no employer");
+  const hasPlacement =
+    placement && !placement.toLowerCase().includes('no employer');
 
   return (
     <div className="p-6">
@@ -22,7 +23,7 @@ const CandidateWorkSchedule: React.FC<CandidateWorkScheduleProps> = ({
           <div>
             <h3 className="text-gray-700 font-medium mb-2">Placement:</h3>
             <p className="text-gray-600">
-              {hasPlacement ? placement : "No placement assigned"}
+              {hasPlacement ? placement : 'No placement assigned'}
             </p>
             <div className="border-b border-gray-200 my-4"></div>
           </div>
@@ -38,7 +39,9 @@ const CandidateWorkSchedule: React.FC<CandidateWorkScheduleProps> = ({
           <div>
             <h3 className="text-gray-700 font-medium mb-2">Work Schedule:</h3>
             <p className="text-gray-600">
-              {hasPlacement ? "5 days in a week" : "Not applicable (no placement)"}
+              {hasPlacement
+                ? '5 days in a week'
+                : 'Not applicable (no placement)'}
             </p>
           </div>
         </div>

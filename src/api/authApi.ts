@@ -22,14 +22,10 @@ const authApi = {
    * @returns Promise with the API response
    */
   sendOTP: async (email: string) => {
-    try {
-      const response = await axiosInstance.post(AUTH_ENDPOINTS.SEND_OTP, {
-        email,
-      });
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await axiosInstance.post(AUTH_ENDPOINTS.SEND_OTP, {
+      email,
+    });
+    return response.data;
   },
 
   /**
@@ -39,15 +35,11 @@ const authApi = {
    * @returns Promise with the API response
    */
   verifyOTP: async (email: string, otp: string) => {
-    try {
-      const response = await axiosInstance.post(AUTH_ENDPOINTS.VERIFY_OTP, {
-        email,
-        otp_code: otp,
-      });
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await axiosInstance.post(AUTH_ENDPOINTS.VERIFY_OTP, {
+      email,
+      otp_code: otp,
+    });
+    return response.data;
   },
 
   /**
@@ -55,60 +47,60 @@ const authApi = {
    * @param registrationData - User registration data including email, password, name, etc. or FormData
    * @returns Promise with the API response
    */
-  completeRegistration: async (registrationData: {
-    email: string;
-    password: string;
-    first_name: string;
-    last_name: string;
-    phone: string;
-    address: string;
-    gender: string;
-    is_employer?: boolean;
-    facial_image?: string;
-  } | FormData) => {
-    try {
-      let payload;
-      let config = {};
-
-      // Check if registrationData is FormData
-      if (registrationData instanceof FormData) {
-        // Use FormData as is
-        payload = registrationData;
-
-        // Set headers for multipart/form-data
-        config = {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        };
-
-        // Log the payload for debugging
-        console.log('Registration payload: [FormData with image file]');
-      } else {
-        // Create a copy of the registration data
-        payload = { ...registrationData };
-
-        // Ensure is_employer is a boolean
-        if (typeof payload.is_employer !== 'undefined') {
-          payload.is_employer = Boolean(payload.is_employer);
+  completeRegistration: async (
+    registrationData:
+      | {
+          email: string;
+          password: string;
+          first_name: string;
+          last_name: string;
+          phone: string;
+          address: string;
+          gender: string;
+          is_employer?: boolean;
+          facial_image?: string;
         }
+      | FormData
+  ) => {
+    let payload;
+    let config = {};
 
-        // Log the payload for debugging
-        console.log('Registration payload:', {
-          ...payload,
-          facial_image: payload.facial_image ? '[BASE64_IMAGE]' : undefined
-        });
+    // Check if registrationData is FormData
+    if (registrationData instanceof FormData) {
+      // Use FormData as is
+      payload = registrationData;
+
+      // Set headers for multipart/form-data
+      config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      };
+
+      // Log the payload for debugging
+      console.log('Registration payload: [FormData with image file]');
+    } else {
+      // Create a copy of the registration data
+      payload = { ...registrationData };
+
+      // Ensure is_employer is a boolean
+      if (typeof payload.is_employer !== 'undefined') {
+        payload.is_employer = Boolean(payload.is_employer);
       }
 
-      const response = await axiosInstance.post(
-        AUTH_ENDPOINTS.COMPLETE_REGISTRATION,
-        payload,
-        config
-      );
-      return response.data;
-    } catch (error) {
-      throw error;
+      // Log the payload for debugging
+      console.log('Registration payload:', {
+        ...payload,
+        facial_image: payload.facial_image ? '[BASE64_IMAGE]' : undefined,
+      });
     }
+
+    const response = await axiosInstance.post(
+      AUTH_ENDPOINTS.COMPLETE_REGISTRATION,
+      payload,
+      config
+    );
+    return response.data;
   },
 
   /**
@@ -116,13 +108,12 @@ const authApi = {
    * @param userData - User registration data
    * @returns Promise with the API response
    */
-  register: async (userData: any) => {
-    try {
-      const response = await axiosInstance.post(AUTH_ENDPOINTS.REGISTER, userData);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+  register: async (userData: Record<string, unknown>) => {
+    const response = await axiosInstance.post(
+      AUTH_ENDPOINTS.REGISTER,
+      userData
+    );
+    return response.data;
   },
 
   /**
@@ -132,15 +123,11 @@ const authApi = {
    * @returns Promise with the API response
    */
   login: async (email: string, password: string) => {
-    try {
-      const response = await axiosInstance.post(AUTH_ENDPOINTS.LOGIN, {
-        email,
-        password,
-      });
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await axiosInstance.post(AUTH_ENDPOINTS.LOGIN, {
+      email,
+      password,
+    });
+    return response.data;
   },
 
   /**
@@ -150,17 +137,17 @@ const authApi = {
    * @param signature - Base64 encoded signature
    * @returns Promise with the API response
    */
-  biometricLogin: async (deviceId: string, challenge: string, signature: string) => {
-    try {
-      const response = await axiosInstance.post(AUTH_ENDPOINTS.BIOMETRIC_LOGIN, {
-        device_id: deviceId,
-        challenge: challenge,
-        signature: signature,
-      });
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+  biometricLogin: async (
+    deviceId: string,
+    challenge: string,
+    signature: string
+  ) => {
+    const response = await axiosInstance.post(AUTH_ENDPOINTS.BIOMETRIC_LOGIN, {
+      device_id: deviceId,
+      challenge: challenge,
+      signature: signature,
+    });
+    return response.data;
   },
 
   /**
@@ -168,12 +155,8 @@ const authApi = {
    * @returns Promise with the API response
    */
   logout: async () => {
-    try {
-      const response = await axiosInstance.post(AUTH_ENDPOINTS.LOGOUT);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await axiosInstance.post(AUTH_ENDPOINTS.LOGOUT);
+    return response.data;
   },
 
   /**
@@ -182,14 +165,10 @@ const authApi = {
    * @returns Promise with the API response
    */
   forgotPassword: async (email: string) => {
-    try {
-      const response = await axiosInstance.post(AUTH_ENDPOINTS.FORGOT_PASSWORD, {
-        email,
-      });
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await axiosInstance.post(AUTH_ENDPOINTS.FORGOT_PASSWORD, {
+      email,
+    });
+    return response.data;
   },
 
   /**
@@ -199,15 +178,14 @@ const authApi = {
    * @returns Promise with the API response
    */
   verifyForgotPasswordOTP: async (email: string, otp: string) => {
-    try {
-      const response = await axiosInstance.post(AUTH_ENDPOINTS.VERIFY_FORGOT_PASSWORD_OTP, {
+    const response = await axiosInstance.post(
+      AUTH_ENDPOINTS.VERIFY_FORGOT_PASSWORD_OTP,
+      {
         email,
         otp_code: otp,
-      });
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+      }
+    );
+    return response.data;
   },
 
   /**
@@ -217,15 +195,11 @@ const authApi = {
    * @returns Promise with the API response
    */
   resetPassword: async (email: string, password: string) => {
-    try {
-      const response = await axiosInstance.post(AUTH_ENDPOINTS.RESET_PASSWORD, {
-        email,
-        password,
-      });
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await axiosInstance.post(AUTH_ENDPOINTS.RESET_PASSWORD, {
+      email,
+      password,
+    });
+    return response.data;
   },
 };
 

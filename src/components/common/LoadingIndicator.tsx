@@ -10,7 +10,7 @@ interface LoadingIndicatorProps {
  */
 const LoadingIndicator: React.FC<LoadingIndicatorProps> = ({
   message = 'Loading...',
-  showMessage = false
+  showMessage = false,
 }) => {
   return (
     <div className="flex flex-col items-center justify-center min-h-[150px]">

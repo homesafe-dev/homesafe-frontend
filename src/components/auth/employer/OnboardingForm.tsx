@@ -32,9 +32,9 @@ const OnboardingForm: React.FC = () => {
       return;
     }
 
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      email: storedEmail
+      email: storedEmail,
     }));
 
     setPassword(storedPassword);
@@ -78,20 +78,24 @@ const OnboardingForm: React.FC = () => {
         phone: formData.phoneNumber,
         address: formData.homeAddress,
         gender: formData.gender,
-        is_employer: formData.userType === 'employer' ? true : false
+        is_employer: formData.userType === 'employer' ? true : false,
       };
 
       console.log('Storing registration data:', {
         ...registrationData,
-        password: '********' // Hide password in logs
+        password: '********', // Hide password in logs
       });
 
       // Store registration data in sessionStorage for the facial capture page
-      sessionStorage.setItem('registrationData', JSON.stringify(registrationData));
+      sessionStorage.setItem(
+        'registrationData',
+        JSON.stringify(registrationData)
+      );
 
       // Navigate to facial capture page
       navigate('/signup/facial-capture');
-    } catch (error) {
+    } catch (err) {
+      console.error('Error in onboarding form submission:', err);
       setErrorMessage('An unexpected error occurred. Please try again.');
     } finally {
       setIsSubmitting(false);
@@ -322,10 +326,7 @@ const OnboardingForm: React.FC = () => {
                     checked={formData.gender === 'male'}
                     onChange={() => handleGenderChange('male')}
                   />
-                  <label
-                    htmlFor="male"
-                    className="ml-2 text-sm text-gray-700"
-                  >
+                  <label htmlFor="male" className="ml-2 text-sm text-gray-700">
                     Male
                   </label>
                 </div>
@@ -338,7 +339,10 @@ const OnboardingForm: React.FC = () => {
                     checked={formData.gender === 'female'}
                     onChange={() => handleGenderChange('female')}
                   />
-                  <label htmlFor="female" className="ml-2 text-sm text-gray-700">
+                  <label
+                    htmlFor="female"
+                    className="ml-2 text-sm text-gray-700"
+                  >
                     Female
                   </label>
                 </div>
@@ -368,7 +372,9 @@ const OnboardingForm: React.FC = () => {
               {isSubmitting ? 'Submitting...' : 'Save & Continue'}
             </button>
             {errorMessage && (
-              <p className="mt-2 text-sm text-red-600 text-center">{errorMessage}</p>
+              <p className="mt-2 text-sm text-red-600 text-center">
+                {errorMessage}
+              </p>
             )}
           </form>
         </div>

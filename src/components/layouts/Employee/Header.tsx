@@ -30,8 +30,10 @@ const Header: React.FC<HeaderProps> = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  // Loading state is used in the fetchUserProfile function
+  const [, setLoading] = useState(true);
+  // Error state is used in the fetchUserProfile function
+  const [, setError] = useState<string | null>(null);
   const [notifications, setNotifications] = useState<NotificationItem[]>([
     {
       id: '1',
@@ -110,8 +112,12 @@ const Header: React.FC<HeaderProps> = () => {
   // Get user initials for avatar
   const getUserInitials = () => {
     if (userProfile) {
-      const firstInitial = userProfile.first_name ? userProfile.first_name.charAt(0) : '';
-      const lastInitial = userProfile.last_name ? userProfile.last_name.charAt(0) : '';
+      const firstInitial = userProfile.first_name
+        ? userProfile.first_name.charAt(0)
+        : '';
+      const lastInitial = userProfile.last_name
+        ? userProfile.last_name.charAt(0)
+        : '';
       return `${firstInitial}${lastInitial}`.toUpperCase();
     }
     return 'U';

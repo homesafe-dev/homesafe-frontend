@@ -18,14 +18,10 @@ const walletApi = {
    * @returns Promise with the API response
    */
   getTransactions: async (page = 1, limit = 15) => {
-    try {
-      const response = await axiosInstance.get(WALLET_ENDPOINTS.TRANSACTIONS, {
-        params: { page, limit },
-      });
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await axiosInstance.get(WALLET_ENDPOINTS.TRANSACTIONS, {
+      params: { page, limit },
+    });
+    return response.data;
   },
 
   /**
@@ -37,7 +33,7 @@ const walletApi = {
       const response = await axiosInstance.get(WALLET_ENDPOINTS.BALANCE);
       return response.data;
     } catch (error) {
-      console.error("Error fetching wallet balance:", error);
+      console.error('Error fetching wallet balance:', error);
       throw error;
     }
   },
@@ -49,17 +45,17 @@ const walletApi = {
    * @param paymentDetails - Additional payment details
    * @returns Promise with the API response
    */
-  topUp: async (amount: number, paymentMethod: string, paymentDetails: any) => {
-    try {
-      const response = await axiosInstance.post(WALLET_ENDPOINTS.TOP_UP, {
-        amount,
-        payment_method: paymentMethod,
-        payment_details: paymentDetails,
-      });
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+  topUp: async (
+    amount: number,
+    paymentMethod: string,
+    paymentDetails: Record<string, unknown>
+  ) => {
+    const response = await axiosInstance.post(WALLET_ENDPOINTS.TOP_UP, {
+      amount,
+      payment_method: paymentMethod,
+      payment_details: paymentDetails,
+    });
+    return response.data;
   },
 
   /**
@@ -68,16 +64,12 @@ const walletApi = {
    * @param bankDetails - Bank details for withdrawal
    * @returns Promise with the API response
    */
-  withdraw: async (amount: number, bankDetails: any) => {
-    try {
-      const response = await axiosInstance.post(WALLET_ENDPOINTS.WITHDRAW, {
-        amount,
-        bank_details: bankDetails,
-      });
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+  withdraw: async (amount: number, bankDetails: Record<string, unknown>) => {
+    const response = await axiosInstance.post(WALLET_ENDPOINTS.WITHDRAW, {
+      amount,
+      bank_details: bankDetails,
+    });
+    return response.data;
   },
 
   /**
@@ -87,17 +79,17 @@ const walletApi = {
    * @param description - Description of the transfer
    * @returns Promise with the API response
    */
-  transfer: async (amount: number, recipientEmail: string, description: string) => {
-    try {
-      const response = await axiosInstance.post(WALLET_ENDPOINTS.TRANSFER, {
-        amount,
-        recipient_email: recipientEmail,
-        description,
-      });
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+  transfer: async (
+    amount: number,
+    recipientEmail: string,
+    description: string
+  ) => {
+    const response = await axiosInstance.post(WALLET_ENDPOINTS.TRANSFER, {
+      amount,
+      recipient_email: recipientEmail,
+      description,
+    });
+    return response.data;
   },
 };
 

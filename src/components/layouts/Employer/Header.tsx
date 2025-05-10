@@ -33,8 +33,10 @@ const Header: React.FC<HeaderProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  // Loading state is used in the fetchUserProfile function
+  const [, setLoading] = useState(true);
+  // Error state is used in the fetchUserProfile function
+  const [, setError] = useState<string | null>(null);
   const [notifications, setNotifications] = useState<NotificationItem[]>([
     {
       id: '1',
@@ -111,9 +113,9 @@ const Header: React.FC<HeaderProps> = ({
   // Use profile data or fallback to props
   const userName = userProfile?.first_name || propUserName || 'User';
   const userEmail = userProfile?.email || propUserEmail || 'user@example.com';
-  const userInitials = userProfile ?
-    `${userProfile.first_name.charAt(0)}${userProfile.last_name.charAt(0)}` :
-    'U';
+  const userInitials = userProfile
+    ? `${userProfile.first_name.charAt(0)}${userProfile.last_name.charAt(0)}`
+    : 'U';
 
   return (
     <header className="bg-white shadow-sm">

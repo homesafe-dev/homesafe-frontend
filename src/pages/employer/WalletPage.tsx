@@ -8,7 +8,7 @@ import { WalletTransaction } from '../../types/wallet';
 const WalletPage: React.FC = () => {
   const [showBalance, setShowBalance] = useState(true);
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
-  const [walletBalance, setWalletBalance] = useState<string>("0.00");
+  const [walletBalance, setWalletBalance] = useState<string>('0.00');
   const [transactions, setTransactions] = useState<WalletTransaction[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -33,7 +33,7 @@ const WalletPage: React.FC = () => {
           setWalletBalance(response.data.current_balance);
         }
       } catch (err) {
-        console.error("Error fetching wallet balance:", err);
+        console.error('Error fetching wallet balance:', err);
       }
     };
 
@@ -42,14 +42,17 @@ const WalletPage: React.FC = () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await walletApi.getTransactions(currentPage, itemsPerPage);
+        const response = await walletApi.getTransactions(
+          currentPage,
+          itemsPerPage
+        );
         if (response.status && response.data && response.data.data) {
           setTransactions(response.data.data);
           setTotalPages(response.data.meta.last_page);
         }
       } catch (err: any) {
-        console.error("Error fetching transactions:", err);
-        setError(err.message || "Failed to load transactions");
+        console.error('Error fetching transactions:', err);
+        setError(err.message || 'Failed to load transactions');
       } finally {
         setLoading(false);
       }
@@ -123,7 +126,9 @@ const WalletPage: React.FC = () => {
               </button>
             </div>
             <h2 className="text-2xl font-bold mb-6">
-              {showBalance ? `₦ ${parseFloat(walletBalance).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}` : '••••••••'}
+              {showBalance
+                ? `₦ ${parseFloat(walletBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                : '••••••••'}
             </h2>
             <div className="flex gap-2">
               <Link to="/employer/wallet/top-up">
@@ -184,21 +189,40 @@ const WalletPage: React.FC = () => {
                       key={transaction.id}
                       className="border-b border-gray-200 hover:bg-gray-50"
                     >
-                      <td className="py-3 px-2 capitalize">{transaction.type}</td>
-                      <td className="py-3 px-2">{transaction.transaction.reference_code.substring(0, 10)}...</td>
+                      <td className="py-3 px-2 capitalize">
+                        {transaction.type}
+                      </td>
                       <td className="py-3 px-2">
-                        <span className={`px-3 py-1 rounded-full text-xs ${
-                          transaction.transaction.status === 'successful'
-                            ? 'bg-green-100 text-green-700'
-                            : transaction.transaction.status === 'pending'
-                            ? 'bg-yellow-100 text-yellow-700'
-                            : 'bg-red-100 text-red-700'
-                        }`}>
-                          {transaction.transaction.status.charAt(0).toUpperCase() + transaction.transaction.status.slice(1)}
+                        {transaction.transaction.reference_code.substring(
+                          0,
+                          10
+                        )}
+                        ...
+                      </td>
+                      <td className="py-3 px-2">
+                        <span
+                          className={`px-3 py-1 rounded-full text-xs ${
+                            transaction.transaction.status === 'successful'
+                              ? 'bg-green-100 text-green-700'
+                              : transaction.transaction.status === 'pending'
+                                ? 'bg-yellow-100 text-yellow-700'
+                                : 'bg-red-100 text-red-700'
+                          }`}
+                        >
+                          {transaction.transaction.status
+                            .charAt(0)
+                            .toUpperCase() +
+                            transaction.transaction.status.slice(1)}
                         </span>
                       </td>
                       <td className="py-3 px-2">
-                        ₦ {parseFloat(transaction.transaction.amount).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                        ₦{' '}
+                        {parseFloat(
+                          transaction.transaction.amount
+                        ).toLocaleString(undefined, {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}
                       </td>
                       <td className="py-3 px-2">{transaction.description}</td>
                       <td className="py-3 px-2">{transaction.source}</td>
@@ -206,7 +230,10 @@ const WalletPage: React.FC = () => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={6} className="py-8 px-6 text-center text-gray-500">
+                    <td
+                      colSpan={6}
+                      className="py-8 px-6 text-center text-gray-500"
+                    >
                       No transactions found
                     </td>
                   </tr>
@@ -221,7 +248,7 @@ const WalletPage: React.FC = () => {
           <div className="flex justify-center mt-4">
             <div className="flex space-x-2">
               <button
-                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
                 className={`px-3 py-1 rounded ${
                   currentPage === 1
@@ -234,10 +261,11 @@ const WalletPage: React.FC = () => {
 
               {/* Page numbers */}
               {Array.from({ length: totalPages }, (_, i) => i + 1)
-                .filter(page =>
-                  page === 1 ||
-                  page === totalPages ||
-                  (page >= currentPage - 1 && page <= currentPage + 1)
+                .filter(
+                  (page) =>
+                    page === 1 ||
+                    page === totalPages ||
+                    (page >= currentPage - 1 && page <= currentPage + 1)
                 )
                 .map((page, index, array) => (
                   <React.Fragment key={page}>
@@ -258,7 +286,9 @@ const WalletPage: React.FC = () => {
                 ))}
 
               <button
-                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
                 disabled={currentPage === totalPages}
                 className={`px-3 py-1 rounded ${
                   currentPage === totalPages

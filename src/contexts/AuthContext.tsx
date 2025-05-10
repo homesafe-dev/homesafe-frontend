@@ -1,5 +1,18 @@
-import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { AuthContextType, AuthUser, UserType, OtpResponse, RegistrationData, BiometricLoginData } from './types';
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from 'react';
+import {
+  AuthContextType,
+  AuthUser,
+  UserType,
+  OtpResponse,
+  RegistrationData,
+  BiometricLoginData,
+} from './types';
 import authApi from '../api/authApi';
 import axiosInstance from '../api/axiosConfig';
 
@@ -46,8 +59,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Make a test request to a protected endpoint
       const response = await axiosInstance.get('/api/profile', {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
       console.log('[AuthContext] Token validation response:', response.status);
       return response.status === 200;
@@ -88,7 +101,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }, 10000); // Increased timeout to 10 seconds
 
         // Validate token in background (don't wait for it)
-        checkTokenValidity(token).then(isValid => {
+        checkTokenValidity(token).then((isValid) => {
           console.log('[AuthContext] Token validation result:', isValid);
           if (!isValid) {
             console.warn('[AuthContext] Token is invalid, logging out');
@@ -98,13 +111,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setAuthInitialized(true);
           console.log('[AuthContext] Auth initialization complete');
         });
-
       } catch (error) {
         console.error('[AuthContext] Error parsing stored user data:', error);
         // Clear invalid data
         localStorage.removeItem('auth_token');
         localStorage.removeItem('auth_user');
-        console.log('[AuthContext] Cleared invalid auth data from localStorage');
+        console.log(
+          '[AuthContext] Cleared invalid auth data from localStorage'
+        );
         // Mark auth as initialized even if there was an error
         setAuthInitialized(true);
         console.log('[AuthContext] Auth initialization complete (with error)');
@@ -117,7 +131,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const login = async (email: string, password: string, type: UserType): Promise<OtpResponse> => {
+  const login = async (
+    email: string,
+    password: string,
+    type: UserType
+  ): Promise<OtpResponse> => {
     console.log('[AuthContext] Login attempt:', { email, type });
     setLoading(true);
     setError(null);
@@ -137,7 +155,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           id: response.data.id || '1', // Use ID from response if available
           email: email,
           name: `${response.data.first_name || ''}`,
-          type: response.data.role as UserType || type, // Use provided type as fallback
+          type: (response.data.role as UserType) || type, // Use provided type as fallback
         };
 
         console.log('[AuthContext] Created user object:', userObj);
@@ -156,8 +174,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           // Verify the data was stored correctly
           const storedToken = localStorage.getItem('auth_token');
           const storedUser = localStorage.getItem('auth_user');
-          console.log('[AuthContext] Verification - Token stored:', !!storedToken);
-          console.log('[AuthContext] Verification - User stored:', !!storedUser);
+          console.log(
+            '[AuthContext] Verification - Token stored:',
+            !!storedToken
+          );
+          console.log(
+            '[AuthContext] Verification - User stored:',
+            !!storedUser
+          );
         } else {
           console.warn('[AuthContext] No token in response data');
         }
@@ -168,14 +192,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return {
           success: true,
           message: response.message,
-          data: response.data
+          data: response.data,
         };
       } else {
-        console.warn('[AuthContext] Login response indicates failure:', response.message);
+        console.warn(
+          '[AuthContext] Login response indicates failure:',
+          response.message
+        );
         return {
           success: false,
           message: response.message || 'Login failed',
-          data: response.data
+          data: response.data,
         };
       }
     } catch (err: any) {
@@ -185,12 +212,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setError(errorMessage);
       return {
         success: false,
-        message: errorMessage
+        message: errorMessage,
       };
     }
   };
-
-
 
   /**
    * Check if the current user has the specified role(s)
@@ -217,7 +242,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return {
         success: true,
         message: 'OTP sent successfully',
-        data: response
+        data: response,
       };
     } catch (err: any) {
       setLoading(false);
@@ -225,12 +250,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setError(errorMessage);
       return {
         success: false,
-        message: errorMessage
+        message: errorMessage,
       };
     }
   };
 
-  const verifyOTP = async (email: string, otp: string): Promise<OtpResponse> => {
+  const verifyOTP = async (
+    email: string,
+    otp: string
+  ): Promise<OtpResponse> => {
     setLoading(true);
     setError(null);
 
@@ -240,20 +268,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return {
         success: true,
         message: 'OTP verified successfully',
-        data: response
+        data: response,
       };
     } catch (err: any) {
       setLoading(false);
-      const errorMessage = err.response?.data?.message || 'Failed to verify OTP';
+      const errorMessage =
+        err.response?.data?.message || 'Failed to verify OTP';
       setError(errorMessage);
       return {
         success: false,
-        message: errorMessage
+        message: errorMessage,
       };
     }
   };
 
-  const completeRegistration = async (data: RegistrationData): Promise<OtpResponse> => {
+  const completeRegistration = async (
+    data: RegistrationData
+  ): Promise<OtpResponse> => {
     setLoading(true);
     setError(null);
 
@@ -284,20 +315,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return {
         success: response.status,
         message: response.message,
-        data: response.data
+        data: response.data,
       };
     } catch (err: any) {
       setLoading(false);
-      const errorMessage = err.response?.data?.message || 'Failed to complete registration';
+      const errorMessage =
+        err.response?.data?.message || 'Failed to complete registration';
       setError(errorMessage);
       return {
         success: false,
-        message: errorMessage
+        message: errorMessage,
       };
     }
   };
 
-  const biometricLogin = async (data: BiometricLoginData): Promise<OtpResponse> => {
+  const biometricLogin = async (
+    data: BiometricLoginData
+  ): Promise<OtpResponse> => {
     setLoading(true);
     setError(null);
 
@@ -332,15 +366,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return {
         success: response.status,
         message: response.message,
-        data: response.data
+        data: response.data,
       };
     } catch (err: any) {
       setLoading(false);
-      const errorMessage = err.response?.data?.message || 'Failed to authenticate with biometrics';
+      const errorMessage =
+        err.response?.data?.message || 'Failed to authenticate with biometrics';
       setError(errorMessage);
       return {
         success: false,
-        message: errorMessage
+        message: errorMessage,
       };
     }
   };
@@ -359,7 +394,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         biometricLogin,
         loading,
         error,
-        authInitialized
+        authInitialized,
       }}
     >
       {children}

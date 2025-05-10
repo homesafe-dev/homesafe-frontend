@@ -33,13 +33,19 @@ export interface BiometricLoginData {
 
 export interface AuthContextType {
   user: AuthUser | null;
-  login: (email: string, password: string, type: UserType) => Promise<OtpResponse>;
+  login: (
+    email: string,
+    password: string,
+    type: UserType
+  ) => Promise<OtpResponse>;
   logout: () => void;
   isAuthenticated: boolean;
   hasRole: (role: UserType | UserType[]) => boolean;
   sendOTP: (email: string) => Promise<OtpResponse>;
   verifyOTP: (email: string, otp: string) => Promise<OtpResponse>;
-  completeRegistration: (data: RegistrationData | FormData) => Promise<OtpResponse>;
+  completeRegistration: (
+    data: RegistrationData | FormData
+  ) => Promise<OtpResponse>;
   biometricLogin: (data: BiometricLoginData) => Promise<OtpResponse>;
   loading: boolean;
   error: string | null;

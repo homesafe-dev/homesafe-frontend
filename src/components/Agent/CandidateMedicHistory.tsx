@@ -6,9 +6,9 @@ interface CandidateMedicHistoryProps {
   candidateName: string;
 }
 
-const CandidateMedicHistory: React.FC<CandidateMedicHistoryProps> = ({ 
+const CandidateMedicHistory: React.FC<CandidateMedicHistoryProps> = ({
   reportDate,
-  candidateName 
+  candidateName,
 }) => {
   return (
     <div className="">

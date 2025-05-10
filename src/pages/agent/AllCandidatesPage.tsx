@@ -69,9 +69,7 @@ const AllCandidatesPage = () => {
 
       {/* Error Message */}
       {error && (
-        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
-          {error}
-        </div>
+        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">{error}</div>
       )}
 
       {/* Subheader */}
@@ -166,14 +164,15 @@ const AllCandidatesPage = () => {
                     {new Date(employee.date).toLocaleDateString('en-US', {
                       day: 'numeric',
                       month: 'short',
-                      year: 'numeric'
+                      year: 'numeric',
                     })}
                   </td>
                   <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
                     {employee.placement}
                   </td>
                   <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
-                    {employee.gender.charAt(0).toUpperCase() + employee.gender.slice(1)}
+                    {employee.gender.charAt(0).toUpperCase() +
+                      employee.gender.slice(1)}
                   </td>
                   <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
                     {employee.phone}
@@ -181,12 +180,15 @@ const AllCandidatesPage = () => {
                   <td className="px-6 py-4">
                     <span
                       className={`px-3 py-1 rounded-full text-[13px] ${
-                        employee.status.toLowerCase().includes('not') || employee.status.toLowerCase() === 'unverified'
+                        employee.status.toLowerCase().includes('not') ||
+                        employee.status.toLowerCase() === 'unverified'
                           ? 'bg-red-100 text-red-800'
                           : 'bg-green-100 text-green-800'
                       }`}
                     >
-                      {employee.status.toLowerCase().includes('not') ? 'Unverified' : 'Verified'}
+                      {employee.status.toLowerCase().includes('not')
+                        ? 'Unverified'
+                        : 'Verified'}
                     </span>
                   </td>
                 </tr>
@@ -213,7 +215,9 @@ const AllCandidatesPage = () => {
               <button
                 key={pageNumber}
                 className={`p-2 rounded-full w-[40px] h-[40px] ${
-                  pageNumber === currentPage ? 'bg-gray-200' : 'hover:bg-gray-100'
+                  pageNumber === currentPage
+                    ? 'bg-gray-200'
+                    : 'hover:bg-gray-100'
                 }`}
                 onClick={() => handlePageChange(pageNumber)}
               >
@@ -224,7 +228,9 @@ const AllCandidatesPage = () => {
 
           <button
             className="p-2 rounded-full w-[40px] h-[40px] hover:bg-gray-100"
-            onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
+            onClick={() =>
+              handlePageChange(Math.min(totalPages, currentPage + 1))
+            }
             disabled={currentPage === totalPages}
           >
             &gt;

@@ -18,9 +18,12 @@ const payrollApi = {
    */
   getPayrollHistory: async (page = 1, limit = 10) => {
     try {
-      const response = await axiosInstance.get(PAYROLL_ENDPOINTS.PAYROLL_HISTORY, {
-        params: { page, limit },
-      });
+      const response = await axiosInstance.get(
+        PAYROLL_ENDPOINTS.PAYROLL_HISTORY,
+        {
+          params: { page, limit },
+        }
+      );
       console.log('Payroll API response:', response);
       return response.data;
     } catch (error) {
@@ -34,13 +37,12 @@ const payrollApi = {
    * @param payrollData - Payroll data to create
    * @returns Promise with the API response
    */
-  createPayroll: async (payrollData: any) => {
-    try {
-      const response = await axiosInstance.post(PAYROLL_ENDPOINTS.CREATE_PAYROLL, payrollData);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+  createPayroll: async (payrollData: Record<string, unknown>) => {
+    const response = await axiosInstance.post(
+      PAYROLL_ENDPOINTS.CREATE_PAYROLL,
+      payrollData
+    );
+    return response.data;
   },
 
   /**
@@ -49,13 +51,15 @@ const payrollApi = {
    * @param payrollData - Updated payroll data
    * @returns Promise with the API response
    */
-  updatePayroll: async (payrollId: number, payrollData: any) => {
-    try {
-      const response = await axiosInstance.put(`${PAYROLL_ENDPOINTS.UPDATE_PAYROLL}/${payrollId}`, payrollData);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+  updatePayroll: async (
+    payrollId: number,
+    payrollData: Record<string, unknown>
+  ) => {
+    const response = await axiosInstance.put(
+      `${PAYROLL_ENDPOINTS.UPDATE_PAYROLL}/${payrollId}`,
+      payrollData
+    );
+    return response.data;
   },
 
   /**
@@ -64,12 +68,10 @@ const payrollApi = {
    * @returns Promise with the API response
    */
   deletePayroll: async (payrollId: number) => {
-    try {
-      const response = await axiosInstance.delete(`${PAYROLL_ENDPOINTS.DELETE_PAYROLL}/${payrollId}`);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await axiosInstance.delete(
+      `${PAYROLL_ENDPOINTS.DELETE_PAYROLL}/${payrollId}`
+    );
+    return response.data;
   },
 };
 

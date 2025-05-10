@@ -41,7 +41,8 @@ const EmployeeKYCPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  // userProfile state is used to store the full user data, but we extract specific fields to formData
+  const [, setUserProfile] = useState<UserProfile | null>(null);
   const [formData, setFormData] = useState<KYCFormData>({
     title: 'Mr',
     firstName: '',
@@ -71,8 +72,8 @@ const EmployeeKYCPage: React.FC = () => {
           setUserProfile(userData);
 
           // Update form data with user profile information
-          setFormData({
-            ...formData,
+          setFormData((prevFormData) => ({
+            ...prevFormData,
             firstName: userData.first_name || '',
             lastName: userData.last_name || '',
             phoneNumber: userData.phone || '',
@@ -80,7 +81,7 @@ const EmployeeKYCPage: React.FC = () => {
             homeAddress: userData.address || '',
             dateOfBirth: userData.dob || '',
             gender: userData.gender || '',
-          });
+          }));
         } else {
           setError('Failed to fetch user profile');
         }
@@ -95,7 +96,9 @@ const EmployeeKYCPage: React.FC = () => {
     fetchUserProfile();
   }, []);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -103,7 +106,10 @@ const EmployeeKYCPage: React.FC = () => {
     });
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, fieldName: string) => {
+  const handleFileChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    fieldName: string
+  ) => {
     if (e.target.files && e.target.files[0]) {
       setFormData({
         ...formData,
@@ -383,7 +389,9 @@ const EmployeeKYCPage: React.FC = () => {
             </label>
             <label className="w-full h-[50px] flex items-center px-3 py-2 border border-[#DEE0E3] rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 bg-white text-gray-400 text-sm cursor-pointer">
               <IoCloudUploadOutline className="mr-2" />
-              {formData.idDocument ? formData.idDocument.name : 'Upload or drag an image'}
+              {formData.idDocument
+                ? formData.idDocument.name
+                : 'Upload or drag an image'}
               <input
                 type="file"
                 id="idDocument"
@@ -470,7 +478,9 @@ const EmployeeKYCPage: React.FC = () => {
             </label>
             <label className="w-full h-[50px] flex items-center px-3 py-2 border border-[#DEE0E3] rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 bg-white text-gray-400 text-sm cursor-pointer">
               <IoCloudUploadOutline className="mr-2" />
-              {formData.addressDocument ? formData.addressDocument.name : 'Upload or drag a file here'}
+              {formData.addressDocument
+                ? formData.addressDocument.name
+                : 'Upload or drag a file here'}
               <input
                 type="file"
                 id="addressDocument"

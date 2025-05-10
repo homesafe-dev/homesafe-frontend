@@ -52,7 +52,7 @@ const Salary: React.FC = () => {
     current_page: 1,
     last_page: 1,
     total: 0,
-    per_page: 15
+    per_page: 15,
   });
 
   useEffect(() => {
@@ -66,26 +66,30 @@ const Salary: React.FC = () => {
 
       if (response.status) {
         // Transform API data to match our component's expected format
-        const formattedTransactions = response.data.data.map((item: ApiTransaction) => {
-          // Format date - assuming we need to create a date string
-          // In a real app, the API might provide a timestamp we'd format
-          const date = new Date().toLocaleDateString('en-GB', {
-            day: 'numeric',
-            month: 'short',
-            year: 'numeric'
-          });
+        const formattedTransactions = response.data.data.map(
+          (item: ApiTransaction) => {
+            // Format date - assuming we need to create a date string
+            // In a real app, the API might provide a timestamp we'd format
+            const date = new Date().toLocaleDateString('en-GB', {
+              day: 'numeric',
+              month: 'short',
+              year: 'numeric',
+            });
 
-          return {
-            id: item.transaction.reference_code,
-            type: item.type === 'credit' ? 'Credit' : 'Debit',
-            date: date,
-            amount: parseFloat(item.transaction.amount),
-            description: item.description,
-            from: item.recipient ?
-              `${item.recipient.first_name} ${item.recipient.last_name}` :
-              (item.source === 'salary' ? 'Employer' : item.source)
-          };
-        });
+            return {
+              id: item.transaction.reference_code,
+              type: item.type === 'credit' ? 'Credit' : 'Debit',
+              date: date,
+              amount: parseFloat(item.transaction.amount),
+              description: item.description,
+              from: item.recipient
+                ? `${item.recipient.first_name} ${item.recipient.last_name}`
+                : item.source === 'salary'
+                  ? 'Employer'
+                  : item.source,
+            };
+          }
+        );
 
         setTransactions(formattedTransactions);
 
@@ -95,7 +99,7 @@ const Salary: React.FC = () => {
             current_page: response.data.meta.current_page,
             last_page: response.data.meta.last_page,
             total: response.data.meta.total,
-            per_page: response.data.meta.per_page
+            per_page: response.data.meta.per_page,
           });
         }
       } else {
@@ -109,17 +113,7 @@ const Salary: React.FC = () => {
     }
   };
 
-  // Fallback data in case API fails or returns empty
-  const fallbackTransactions: Transaction[] = [
-    {
-      id: '12345HY54345U76',
-      type: 'Credit',
-      date: '24th Dec 2024',
-      amount: 50000,
-      description: 'November Salary',
-      from: 'Homesafe',
-    }
-  ];
+  // Removed fallback data as it's not being used
 
   return (
     <div className="rounded-lg border-gray-200">

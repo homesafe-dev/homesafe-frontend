@@ -54,7 +54,7 @@ const SignupOTPPage: React.FC = () => {
     }
     // If pasted data is shorter, fill as many inputs as possible
     else if (pastedData.length > 0) {
-      const currentIndex = otp.findIndex(val => val === '');
+      const currentIndex = otp.findIndex((val) => val === '');
       const availableSlots = 6 - currentIndex;
       const dataToUse = pastedData.slice(0, availableSlots);
 
@@ -101,7 +101,8 @@ const SignupOTPPage: React.FC = () => {
       } else {
         setErrorMessage(response.message);
       }
-    } catch (error) {
+    } catch (err) {
+      console.error('Error verifying OTP:', err);
       setErrorMessage('An unexpected error occurred. Please try again.');
     } finally {
       setIsSubmitting(false);
@@ -122,7 +123,8 @@ const SignupOTPPage: React.FC = () => {
       } else {
         setErrorMessage(response.message);
       }
-    } catch (error) {
+    } catch (err) {
+      console.error('Error resending OTP:', err);
       setErrorMessage('Failed to resend OTP. Please try again.');
     }
   };
@@ -213,7 +215,9 @@ const SignupOTPPage: React.FC = () => {
                   ))}
                 </div>
                 {errorMessage && (
-                  <p className="mb-2 text-sm text-red-600 text-center">{errorMessage}</p>
+                  <p className="mb-2 text-sm text-red-600 text-center">
+                    {errorMessage}
+                  </p>
                 )}
                 <div className="text-right">
                   <button

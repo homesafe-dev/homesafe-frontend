@@ -26,7 +26,10 @@ const contractApi = {
     position?: string;
   }) => {
     try {
-      const response = await axiosInstance.post(CONTRACT_ENDPOINTS.SEND_PROPOSAL, proposalData);
+      const response = await axiosInstance.post(
+        CONTRACT_ENDPOINTS.SEND_PROPOSAL,
+        proposalData
+      );
       return response.data;
     } catch (error) {
       console.error('Error sending contract proposal:', error);
@@ -42,9 +45,12 @@ const contractApi = {
    */
   getContracts: async (page = 1, limit = 10) => {
     try {
-      const response = await axiosInstance.get(CONTRACT_ENDPOINTS.GET_CONTRACTS, {
-        params: { page, limit },
-      });
+      const response = await axiosInstance.get(
+        CONTRACT_ENDPOINTS.GET_CONTRACTS,
+        {
+          params: { page, limit },
+        }
+      );
       return response.data;
     } catch (error) {
       console.error('Error fetching contracts:', error);
@@ -59,7 +65,9 @@ const contractApi = {
    */
   getContractDetails: async (contractId: number) => {
     try {
-      const response = await axiosInstance.get(`${CONTRACT_ENDPOINTS.GET_CONTRACT_DETAILS}/${contractId}`);
+      const response = await axiosInstance.get(
+        `${CONTRACT_ENDPOINTS.GET_CONTRACT_DETAILS}/${contractId}`
+      );
       return response.data;
     } catch (error) {
       console.error('Error fetching contract details:', error);
@@ -75,7 +83,10 @@ const contractApi = {
    */
   updateContract: async (contractId: number, contractData: any) => {
     try {
-      const response = await axiosInstance.put(`${CONTRACT_ENDPOINTS.UPDATE_CONTRACT}/${contractId}`, contractData);
+      const response = await axiosInstance.put(
+        `${CONTRACT_ENDPOINTS.UPDATE_CONTRACT}/${contractId}`,
+        contractData
+      );
       return response.data;
     } catch (error) {
       console.error('Error updating contract:', error);
@@ -89,9 +100,15 @@ const contractApi = {
    * @param terminationData - Termination data including reason and notice period
    * @returns Promise with the API response
    */
-  terminateContract: async (contractId: number, terminationData: { reason: string; notice_period: string }) => {
+  terminateContract: async (
+    contractId: number,
+    terminationData: { reason: string; notice_period: string }
+  ) => {
     try {
-      const response = await axiosInstance.post(`${CONTRACT_ENDPOINTS.TERMINATE_CONTRACT}/${contractId}`, terminationData);
+      const response = await axiosInstance.post(
+        `${CONTRACT_ENDPOINTS.TERMINATE_CONTRACT}/${contractId}`,
+        terminationData
+      );
       return response.data;
     } catch (error) {
       console.error('Error terminating contract:', error);

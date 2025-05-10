@@ -69,7 +69,7 @@ const ForgotPasswordOTPPage: React.FC = () => {
     }
     // If pasted data is shorter, fill as many inputs as possible
     else if (cleanedData.length > 0) {
-      const currentIndex = otp.findIndex(val => val === '');
+      const currentIndex = otp.findIndex((val) => val === '');
       const availableSlots = 6 - currentIndex;
       const dataToUse = cleanedData.slice(0, availableSlots);
 
@@ -108,7 +108,9 @@ const ForgotPasswordOTPPage: React.FC = () => {
         setError(response.message || 'Invalid OTP. Please try again.');
       }
     } catch (err: any) {
-      setError(err.response?.data?.message || 'An error occurred. Please try again.');
+      setError(
+        err.response?.data?.message || 'An error occurred. Please try again.'
+      );
     } finally {
       setLoading(false);
     }
@@ -130,7 +132,9 @@ const ForgotPasswordOTPPage: React.FC = () => {
         setError(response.message || 'Failed to resend OTP. Please try again.');
       }
     } catch (err: any) {
-      setError(err.response?.data?.message || 'An error occurred. Please try again.');
+      setError(
+        err.response?.data?.message || 'An error occurred. Please try again.'
+      );
     } finally {
       setResending(false);
     }

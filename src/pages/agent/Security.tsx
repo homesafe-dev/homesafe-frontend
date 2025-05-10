@@ -4,11 +4,11 @@ import { useNavigate } from 'react-router-dom';
 
 const AgentSecurityPage: React.FC = () => {
   const navigate = useNavigate();
-  
+
   return (
     <div className="w-[85%]">
       <div className="mb-8">
-        <button 
+        <button
           className="flex items-center text-gray-600 hover:text-gray-800"
           onClick={() => navigate(-1)}
         >

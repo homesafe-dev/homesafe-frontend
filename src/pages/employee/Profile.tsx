@@ -25,7 +25,8 @@ const EmployeeProfilePage: React.FC = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  // userProfile state is used to store the full user data, but we extract specific fields to formData
+  const [, setUserProfile] = useState<UserProfile | null>(null);
   const [formData, setFormData] = useState<ProfileFormData>({
     firstName: '',
     lastName: '',

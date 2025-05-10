@@ -44,7 +44,9 @@ const CandidateProfile: React.FC = () => {
         setIsLoading(true);
         const response = await agentApi.getTrackedEmployees();
         if (response.status) {
-          const foundEmployee = response.data.find((emp: Employee) => emp.id === Number(id));
+          const foundEmployee = response.data.find(
+            (emp: Employee) => emp.id === Number(id)
+          );
           if (foundEmployee) {
             setEmployee(foundEmployee);
           } else {
@@ -167,7 +169,10 @@ const CandidateProfile: React.FC = () => {
           {/* Tab content */}
           <div className="p-2">
             {activeTab === 'medical' && (
-              <CandidateMedicHistory reportDate="24th November" candidateName={employee.candidate} />
+              <CandidateMedicHistory
+                reportDate="24th November"
+                candidateName={employee.candidate}
+              />
             )}
             {activeTab === 'educational' && (
               <CandidateResources resources={educationalResources} />
@@ -176,7 +181,7 @@ const CandidateProfile: React.FC = () => {
               <CandidateWorkSchedule
                 candidateName={employee.candidate}
                 placement={employee.placement}
-                position={employee.title || "Not specified"}
+                position={employee.title || 'Not specified'}
               />
             )}
             {activeTab === 'reviews' && (
