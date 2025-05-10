@@ -67,12 +67,12 @@ const HomesafeSignupPage: React.FC = () => {
         <div className="flex flex-col items-center w-full max-w-[545px] space-y-4">
           <div className="w-full bg-white rounded-lg shadow-lg p-4 md:p-8">
             <div className="text-center mb-6 flex flex-row items-center justify-center space-x-2">
-              <h1 className="text-xl md:text-2xl font-semibold text-gray-800">
+              <h1 className="text-[2px] md:text-[20px] font-semibold text-gray-800">
                 Sign in on
               </h1>
               <img
                 src={HomesafeLogo2}
-                className="w-[120px] md:w-[178px] max-h-[30px]"
+                className="w-[150px] md:w-[210px] max-h-[50px]"
                 alt="Homesafe Logo"
               />
             </div>

@@ -4,20 +4,20 @@ import signupImg2 from '../../../assets/images/signupImg2.png';
 import { useNavigate } from 'react-router-dom';
 import HomesafeLogo from '../../../assets/images/HomesafeLogo.png';
 import { useAuth } from '../../../contexts/AuthContext';
-import { RegistrationData } from '../../../contexts/types';
+import { RegistrationData, UserType } from '../../../contexts/types';
+import { IoCloudUploadOutline } from 'react-icons/io5';
 
 const FacialCapturePage: React.FC = () => {
-  const [capturedImage, setCapturedImage] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [isCameraActive, setIsCameraActive] = useState<boolean>(true); // Start with camera active
   const [registrationData, setRegistrationData] = useState<RegistrationData | null>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { completeRegistration } = useAuth();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+  const auth = useAuth();
 
-  // Initialize component and start camera
+  // Initialize component and get registration data
   useEffect(() => {
     // Get registration data from session storage
     const storedData = sessionStorage.getItem('registrationData');
@@ -36,104 +36,60 @@ const FacialCapturePage: React.FC = () => {
       navigate('/signup/onboarding-form');
       return;
     }
-
-    // Start camera immediately
-    startCamera();
-
-    // Cleanup function to stop camera when component unmounts
-    return () => {
-      stopCamera();
-    };
   }, [navigate]);
 
-  const startCamera = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: {
-          facingMode: "user",
-          width: { ideal: 640 },
-          height: { ideal: 480 }
+  // Handle file selection
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+
+      // Check if file is an image
+      if (!file.type.match('image/(jpeg|jpg|png)')) {
+        setErrorMessage('Please select a valid image file (JPEG, JPG, or PNG)');
+        return;
+      }
+
+      // Check file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        setErrorMessage('Image size should be less than 5MB');
+        return;
+      }
+
+      setSelectedImage(file);
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target && event.target.result) {
+          setPreviewImage(event.target.result as string);
         }
-      });
+      };
+      reader.readAsDataURL(file);
 
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-      }
-    } catch (err) {
-      console.error("Error accessing camera:", err);
-      setErrorMessage("Could not access camera. Please ensure camera permissions are granted.");
-      setIsCameraActive(false);
+      // Clear any previous error
+      setErrorMessage(null);
     }
   };
 
-  const stopCamera = () => {
-    if (videoRef.current && videoRef.current.srcObject) {
-      const stream = videoRef.current.srcObject as MediaStream;
-      const tracks = stream.getTracks();
-
-      tracks.forEach(track => {
-        track.stop();
-      });
-
-      videoRef.current.srcObject = null;
+  // Trigger file input click
+  const triggerFileInput = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
     }
   };
 
-  const captureImage = () => {
-    if (videoRef.current && canvasRef.current) {
-      const video = videoRef.current;
-      const canvas = canvasRef.current;
-
-      // Make the canvas square with dimensions based on the smaller of video width/height
-      const size = Math.min(video.videoWidth, video.videoHeight);
-      canvas.width = size;
-      canvas.height = size;
-
-      // Calculate offset to center the video in the canvas
-      const xOffset = (video.videoWidth - size) / 2;
-      const yOffset = (video.videoHeight - size) / 2;
-
-      // Get the canvas context
-      const context = canvas.getContext('2d');
-      if (context) {
-        // Create a circular clipping path
-        context.beginPath();
-        context.arc(size/2, size/2, size/2, 0, Math.PI * 2, true);
-        context.closePath();
-        context.clip();
-
-        // Draw the current video frame on the canvas
-        context.drawImage(
-          video,
-          xOffset, yOffset, size, size, // Source rectangle
-          0, 0, size, size              // Destination rectangle
-        );
-
-        // Convert canvas to data URL (base64 image)
-        const imageDataUrl = canvas.toDataURL('image/jpeg', 0.9);
-        setCapturedImage(imageDataUrl);
-
-        // Stop the camera after capturing
-        setIsCameraActive(false);
-      }
+  // Remove selected image
+  const removeImage = () => {
+    setSelectedImage(null);
+    setPreviewImage(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
     }
-  };
-
-  const retakePhoto = () => {
-    setCapturedImage(null);
-    setIsCameraActive(true);
   };
 
   const handleSavePicture = async () => {
-    // If no image is captured yet, capture one from the video stream
-    if (!capturedImage && isCameraActive && videoRef.current) {
-      captureImage();
-      // Wait a bit for the image to be processed
-      await new Promise(resolve => setTimeout(resolve, 500));
-    }
-
-    if (!capturedImage) {
-      setErrorMessage('Please ensure your camera is on and your face is visible');
+    if (!selectedImage) {
+      setErrorMessage('Please upload a profile picture to continue');
       return;
     }
 
@@ -146,17 +102,44 @@ const FacialCapturePage: React.FC = () => {
     setErrorMessage(null);
 
     try {
-      // Add the captured image to the registration data
-      const completeData: RegistrationData = {
-        ...registrationData,
-        facial_image: capturedImage,
-        // Ensure is_employer is a boolean
-        is_employer: registrationData.is_employer === true
-      };
+      // Create FormData object for file upload
+      const formData = new FormData();
 
-      console.log("Sending registration data with facial image");
+      // Add all registration data fields individually
+      formData.append('email', registrationData.email);
+      formData.append('password', registrationData.password);
+      formData.append('first_name', registrationData.first_name);
+      formData.append('last_name', registrationData.last_name);
+      formData.append('phone', registrationData.phone);
+      formData.append('address', registrationData.address);
+      formData.append('gender', registrationData.gender);
 
-      const response = await completeRegistration(completeData);
+      // For is_employer, we need to send it as a boolean
+      // Let's try a different approach - send it as a numeric value
+      const isEmployer = registrationData.is_employer === true;
+      formData.append('is_employer', isEmployer ? '1' : '0');
+
+      // Add the image file as 'avatar'
+      formData.append('avatar', selectedImage);
+
+      console.log("Sending registration data with profile image");
+
+      // Log the form data for debugging
+      for (const pair of formData.entries()) {
+        if (pair[0] === 'avatar') {
+          console.log(pair[0], '[File object]');
+        } else {
+          console.log(pair[0], pair[1]);
+        }
+      }
+
+      // Use the AuthContext's completeRegistration function
+      // This ensures the auth state is properly updated
+      console.log('Using AuthContext to complete registration');
+      const response = await auth.completeRegistration(formData);
+
+      // Process the response
+      console.log('Registration response:', response);
 
       if (response.success) {
         // Clear session storage
@@ -164,18 +147,35 @@ const FacialCapturePage: React.FC = () => {
         sessionStorage.removeItem('signupEmail');
         sessionStorage.removeItem('signupPassword');
 
+        // Set a flag to indicate this is not a page refresh
+        // But we want the ProtectedRoute to treat it as a refresh to allow time for auth to initialize
+        sessionStorage.setItem('is_page_refresh', 'true');
+
+        // Add a small delay before navigation to allow auth state to update
+        await new Promise(resolve => setTimeout(resolve, 500));
+
         // Navigate to the appropriate dashboard based on the role
         if (response.data && response.data.role) {
-          if (response.data.role === 'employer') {
+          const role = response.data.role;
+          console.log('User role:', role);
+
+          if (role === 'employer') {
+            console.log('Navigating to employer dashboard');
             navigate('/employer/dashboard');
-          } else if (response.data.role === 'agent') {
+          } else if (role === 'agent') {
+            console.log('Navigating to agent dashboard');
             navigate('/agent/dashboard');
+          } else if (role === 'employee') {
+            console.log('Navigating to employee dashboard');
+            navigate('/employee/dashboard');
           } else {
             // Default to employer dashboard if role is not recognized
+            console.log('Unrecognized role, defaulting to employer dashboard');
             navigate('/employer/dashboard');
           }
         } else {
           // Default to employer dashboard if role is not provided
+          console.log('No role in response, defaulting to employer dashboard');
           navigate('/employer/dashboard');
         }
       } else {
@@ -236,52 +236,53 @@ const FacialCapturePage: React.FC = () => {
               Profile Picture
             </h1>
             <p className="text-sm text-gray-600 mt-2">
-              Kindly look into your camera and take a profile picture to complete your registration
+              Please upload a profile picture to complete your registration
             </p>
           </div>
 
           <div className="flex flex-col items-center justify-center">
-            {/* Hidden canvas for capturing images */}
-            <canvas ref={canvasRef} className="hidden"></canvas>
-
             <div className="bg-white p-6 rounded-lg drop-shadow-[0_0_10px_rgba(0,0,0,0.15)] w-[344px] flex flex-col justify-center items-center">
               <div className="w-full flex justify-center mb-4">
                 <div className="w-40 h-40 rounded-full overflow-hidden border border-gray-200 flex items-center justify-center bg-gray-100 relative">
-                  {capturedImage ? (
+                  {previewImage ? (
                     <img
-                      src={capturedImage}
-                      alt="Captured facial"
+                      src={previewImage}
+                      alt="Profile picture"
                       className="absolute inset-0 w-full h-full object-cover"
                     />
                   ) : (
-                    <video
-                      ref={videoRef}
-                      autoPlay
-                      playsInline
-                      muted
-                      className="absolute inset-0 min-w-full min-h-full object-cover"
-                      style={{ transform: 'scale(1.01)' }} /* Slight scale to avoid tiny borders */
-                    />
+                    <div className="flex flex-col items-center justify-center text-gray-400">
+                      <IoCloudUploadOutline size={32} />
+                      <span className="text-xs mt-2 text-center">No image selected</span>
+                    </div>
                   )}
                 </div>
               </div>
 
-              {capturedImage ? (
+              <input
+                type="file"
+                ref={fileInputRef}
+                className="hidden"
+                accept="image/jpeg,image/jpg,image/png"
+                onChange={handleFileChange}
+              />
+
+              {previewImage ? (
                 <div className="flex items-center space-x-2 mb-4 mt-4">
                   <button
-                    onClick={retakePhoto}
+                    onClick={removeImage}
                     className="px-4 py-2 border border-gray-300 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
                     disabled={isSubmitting}
                   >
-                    Retake Photo
+                    Remove Image
                   </button>
                 </div>
               ) : (
                 <button
-                  onClick={captureImage}
+                  onClick={triggerFileInput}
                   className="px-4 py-2 bg-green-300 text-black rounded-md hover:bg-green-400 transition-colors text-sm font-medium mb-4 mt-4"
                 >
-                  Take a Picture
+                  Upload Picture
                 </button>
               )}
               {errorMessage && (
@@ -292,7 +293,7 @@ const FacialCapturePage: React.FC = () => {
             <button
               onClick={handleSavePicture}
               className="w-full bg-green-500 text-white py-3 px-4 rounded-md hover:bg-green-600 transition-colors mt-8 font-medium text-lg"
-              disabled={isSubmitting || !capturedImage}
+              disabled={isSubmitting || !selectedImage}
             >
               {isSubmitting ? 'Processing...' : 'Complete Registration'}
             </button>

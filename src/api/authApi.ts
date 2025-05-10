@@ -51,8 +51,8 @@ const authApi = {
   },
 
   /**
-   * Complete user registration with personal details and facial image
-   * @param registrationData - User registration data including email, password, name, etc.
+   * Complete user registration with personal details and profile image
+   * @param registrationData - User registration data including email, password, name, etc. or FormData
    * @returns Promise with the API response
    */
   completeRegistration: async (registrationData: {
@@ -65,25 +65,45 @@ const authApi = {
     gender: string;
     is_employer?: boolean;
     facial_image?: string;
-  }) => {
+  } | FormData) => {
     try {
-      // Create a copy of the registration data
-      const payload = { ...registrationData };
+      let payload;
+      let config = {};
 
-      // Ensure is_employer is a boolean
-      if (typeof payload.is_employer !== 'undefined') {
-        payload.is_employer = Boolean(payload.is_employer);
+      // Check if registrationData is FormData
+      if (registrationData instanceof FormData) {
+        // Use FormData as is
+        payload = registrationData;
+
+        // Set headers for multipart/form-data
+        config = {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        };
+
+        // Log the payload for debugging
+        console.log('Registration payload: [FormData with image file]');
+      } else {
+        // Create a copy of the registration data
+        payload = { ...registrationData };
+
+        // Ensure is_employer is a boolean
+        if (typeof payload.is_employer !== 'undefined') {
+          payload.is_employer = Boolean(payload.is_employer);
+        }
+
+        // Log the payload for debugging
+        console.log('Registration payload:', {
+          ...payload,
+          facial_image: payload.facial_image ? '[BASE64_IMAGE]' : undefined
+        });
       }
-
-      // Log the payload for debugging
-      console.log('Registration payload:', {
-        ...payload,
-        facial_image: payload.facial_image ? '[BASE64_IMAGE]' : undefined
-      });
 
       const response = await axiosInstance.post(
         AUTH_ENDPOINTS.COMPLETE_REGISTRATION,
-        payload
+        payload,
+        config
       );
       return response.data;
     } catch (error) {

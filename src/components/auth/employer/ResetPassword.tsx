@@ -51,7 +51,7 @@ const ResetPasswordPage: React.FC = () => {
         // Clear session storage
         sessionStorage.removeItem('resetEmail');
         // Redirect to login page
-        navigate('/employer/login', { 
+        navigate('/login', { 
           state: { message: 'Password reset successfully. Please login with your new password.' } 
         });
       } else {

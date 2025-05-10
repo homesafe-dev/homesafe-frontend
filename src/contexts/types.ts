@@ -39,7 +39,7 @@ export interface AuthContextType {
   hasRole: (role: UserType | UserType[]) => boolean;
   sendOTP: (email: string) => Promise<OtpResponse>;
   verifyOTP: (email: string, otp: string) => Promise<OtpResponse>;
-  completeRegistration: (data: RegistrationData) => Promise<OtpResponse>;
+  completeRegistration: (data: RegistrationData | FormData) => Promise<OtpResponse>;
   biometricLogin: (data: BiometricLoginData) => Promise<OtpResponse>;
   loading: boolean;
   error: string | null;

@@ -244,7 +244,7 @@ const ForgotPasswordOTPPage: React.FC = () => {
               </button>
             </form>
             <div className="mt-4 text-center">
-              <Link to="/employer/login" className="text-green-600 hover:text-green-800">
+              <Link to="/login" className="text-green-600 hover:text-green-800">
                 Back to Sign in
               </Link>
             </div>

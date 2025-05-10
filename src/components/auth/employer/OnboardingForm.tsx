@@ -28,7 +28,7 @@ const OnboardingForm: React.FC = () => {
 
     if (!storedEmail || !storedPassword) {
       // Redirect back to signup page if email or password is not found
-      navigate('/employer/signup');
+      navigate('/signup');
       return;
     }
 
@@ -300,7 +300,7 @@ const OnboardingForm: React.FC = () => {
                     onChange={() => handleRadioChange('agent')}
                   />
                   <label htmlFor="agent" className="ml-2 text-sm text-gray-700">
-                    An Agent
+                    An Employee
                   </label>
                 </div>
               </div>
