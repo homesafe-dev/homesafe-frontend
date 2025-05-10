@@ -105,6 +105,15 @@ const HomesafeSignupPage: React.FC = () => {
               >
                 Continue
               </button>
+
+              <div className="mt-4 text-center">
+                <span className="text-sm text-gray-600">
+                  Don't have an account?{" "}
+                  <Link to="/signup" className="text-green-600 hover:underline">
+                    Sign up
+                  </Link>
+                </span>
+              </div>
             </form>
 
             <div className="my-4 text-center">
