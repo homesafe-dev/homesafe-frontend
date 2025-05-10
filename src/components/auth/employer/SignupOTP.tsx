@@ -20,7 +20,7 @@ const SignupOTPPage: React.FC = () => {
     const storedEmail = sessionStorage.getItem('signupEmail');
     if (!storedEmail) {
       // Redirect back to signup page if email is not found
-      navigate('/employer/signup');
+      navigate('/signup');
       return;
     }
     setEmail(storedEmail);

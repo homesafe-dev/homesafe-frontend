@@ -84,7 +84,7 @@ const Header: React.FC<HeaderProps> = ({
 
   const handleLogout = () => {
     localStorage.removeItem('auth_token');
-    navigate('/employer/login');
+    navigate('/login');
   };
 
   useEffect(() => {
