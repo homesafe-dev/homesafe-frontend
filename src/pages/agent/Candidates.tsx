@@ -254,7 +254,9 @@ const CandidatesPage: React.FC = () => {
               >
                 <option value="">Select</option>
                 {loadingOccupations ? (
-                  <option value="" disabled>Loading occupations...</option>
+                  <option value="" disabled>
+                    Loading occupations...
+                  </option>
                 ) : (
                   occupations.map((occupation: Occupation) => (
                     <option key={occupation.id} value={occupation.id}>
