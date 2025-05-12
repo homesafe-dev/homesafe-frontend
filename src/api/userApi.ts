@@ -2,9 +2,9 @@ import axiosInstance from './axiosConfig';
 
 // User API endpoints
 const USER_ENDPOINTS = {
-  PROFILE: '/api/profile',
-  KYC: '/api/user-kyc',
-  REVIEWS: (userId: number) => `/api/users/${userId}/reviews`,
+  PROFILE: '/profile',
+  KYC: '/user-kyc',
+  REVIEWS: (userId: number) => `/users/${userId}/reviews`,
 };
 
 // User API service

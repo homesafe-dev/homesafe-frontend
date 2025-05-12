@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaArrowLeft, FaChevronDown } from 'react-icons/fa';
 import { IoCloudUploadOutline } from 'react-icons/io5';
 import { LuCalendarDays } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
-import agentApi, { OCCUPATIONS } from '../../api/agentApi';
+import agentApi from '../../api/agentApi';
+
+interface Occupation {
+  id: number;
+  name: string;
+}
 
 interface CandidateFormData {
   title: string;
@@ -25,6 +30,29 @@ const CandidatesPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [occupations, setOccupations] = useState<Occupation[]>([]);
+  const [loadingOccupations, setLoadingOccupations] = useState(true);
+
+  // Fetch occupations from API
+  useEffect(() => {
+    const fetchOccupations = async () => {
+      try {
+        setLoadingOccupations(true);
+        const response = await agentApi.getOccupations();
+        if (response.status && response.data) {
+          setOccupations(response.data);
+        } else {
+          console.error('Failed to fetch occupations:', response.message);
+        }
+      } catch (err) {
+        console.error('Error fetching occupations:', err);
+      } finally {
+        setLoadingOccupations(false);
+      }
+    };
+
+    fetchOccupations();
+  }, []);
 
   const [formData, setFormData] = useState<CandidateFormData>({
     title: 'Mr',
@@ -225,11 +253,15 @@ const CandidatesPage: React.FC = () => {
                 required
               >
                 <option value="">Select</option>
-                {OCCUPATIONS.map((occupation) => (
-                  <option key={occupation.id} value={occupation.id}>
-                    {occupation.name}
-                  </option>
-                ))}
+                {loadingOccupations ? (
+                  <option value="" disabled>Loading occupations...</option>
+                ) : (
+                  occupations.map((occupation: Occupation) => (
+                    <option key={occupation.id} value={occupation.id}>
+                      {occupation.name}
+                    </option>
+                  ))
+                )}
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
                 <FaChevronDown />

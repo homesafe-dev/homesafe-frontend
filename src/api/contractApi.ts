@@ -2,11 +2,11 @@ import axiosInstance from './axiosConfig';
 
 // Contract API endpoints
 const CONTRACT_ENDPOINTS = {
-  SEND_PROPOSAL: '/api/contracts/send/proposal',
-  GET_CONTRACTS: '/api/contracts',
-  GET_CONTRACT_DETAILS: '/api/contracts',
-  UPDATE_CONTRACT: '/api/contracts',
-  TERMINATE_CONTRACT: '/api/contracts/terminate',
+  SEND_PROPOSAL: '/contracts/send/proposal',
+  GET_CONTRACTS: '/contracts',
+  GET_CONTRACT_DETAILS: '/contracts',
+  UPDATE_CONTRACT: '/contracts',
+  TERMINATE_CONTRACT: '/contracts/terminate',
 };
 
 // Contract API service

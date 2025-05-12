@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create an axios instance with default config
 const axiosInstance = axios.create({
-  baseURL: 'http://192.227.190.166',
+  baseURL: 'http://192.227.190.166/api',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -55,18 +55,18 @@ axiosInstance.interceptors.response.use(
         console.log('[401 Error] URL:', config.url);
         console.log(
           '[401 Error] Is auth endpoint:',
-          config.url.includes('/api/login') ||
-            config.url.includes('/api/verify-otp') ||
-            config.url.includes('/api/send-otp') ||
-            config.url.includes('/api/complete-registration')
+          config.url.includes('/login') ||
+            config.url.includes('/verify-otp') ||
+            config.url.includes('/send-otp') ||
+            config.url.includes('/complete-registration')
         );
 
         // Skip auth endpoints
         if (
-          !config.url.includes('/api/login') &&
-          !config.url.includes('/api/verify-otp') &&
-          !config.url.includes('/api/send-otp') &&
-          !config.url.includes('/api/complete-registration')
+          !config.url.includes('/login') &&
+          !config.url.includes('/verify-otp') &&
+          !config.url.includes('/send-otp') &&
+          !config.url.includes('/complete-registration')
         ) {
           // Check if this is an API call after page refresh
           const isPageRefresh =
@@ -88,7 +88,7 @@ axiosInstance.interceptors.response.use(
 
           // Only clear auth and redirect if it's not a page refresh
           // or if it's a specific API call that requires authentication
-          if (!isPageRefresh || config.url.includes('/api/profile')) {
+          if (!isPageRefresh || config.url.includes('/profile')) {
             console.log(
               '[401 Error] Logging out user due to unauthorized access'
             );

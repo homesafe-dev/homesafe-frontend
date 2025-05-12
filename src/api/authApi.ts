@@ -2,16 +2,16 @@ import axiosInstance from './axiosConfig';
 
 // Auth API endpoints
 const AUTH_ENDPOINTS = {
-  SEND_OTP: '/api/send-otp',
-  VERIFY_OTP: '/api/verify-otp',
-  COMPLETE_REGISTRATION: '/api/complete-registration',
-  BIOMETRIC_LOGIN: '/api/biometric-login',
-  REGISTER: '/api/register',
-  LOGIN: '/api/login',
-  FORGOT_PASSWORD: '/api/forgot-password',
-  VERIFY_FORGOT_PASSWORD_OTP: '/api/verify-forgot-password-otp',
-  RESET_PASSWORD: '/api/reset-password',
-  LOGOUT: '/api/logout',
+  SEND_OTP: '/send-otp',
+  VERIFY_OTP: '/verify-otp',
+  COMPLETE_REGISTRATION: '/complete-registration',
+  BIOMETRIC_LOGIN: '/biometric-login',
+  REGISTER: '/register',
+  LOGIN: '/login',
+  FORGOT_PASSWORD: '/forgot-password',
+  VERIFY_FORGOT_PASSWORD_OTP: '/verify-forgot-password-otp',
+  RESET_PASSWORD: '/reset-password',
+  LOGOUT: '/logout',
 };
 
 // Auth API service
