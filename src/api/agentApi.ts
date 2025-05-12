@@ -2,24 +2,27 @@ import axiosInstance from './axiosConfig';
 
 // Agent API endpoints
 const AGENT_ENDPOINTS = {
-  TRACK_EMPLOYEES: '/api/agent/track/employees',
-  REGISTER_CANDIDATE: '/api/register',
+  TRACK_EMPLOYEES: '/agent/track/employees',
+  REGISTER_CANDIDATE: '/register',
+  OCCUPATIONS: '/occupations',
 };
-
-// Mock occupations data (in a real app, this would come from an API)
-export const OCCUPATIONS = [
-  { id: 1, name: 'Housekeeper/Maid' },
-  { id: 2, name: 'Cook/Chef' },
-  { id: 3, name: 'Childcare Provider' },
-  { id: 4, name: 'Gardener/Groundskeeper' },
-  { id: 5, name: 'Driver' },
-  { id: 6, name: 'Security Guard' },
-  { id: 7, name: 'Personal Assistant' },
-  { id: 8, name: 'Nurse/Caregiver' },
-];
 
 // Agent API service
 const agentApi = {
+  /**
+   * Get occupations list from the API
+   * @returns Promise with the API response containing occupations data
+   */
+  getOccupations: async () => {
+    try {
+      const response = await axiosInstance.get(AGENT_ENDPOINTS.OCCUPATIONS);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching occupations:', error);
+      throw error;
+    }
+  },
+
   /**
    * Get tracked employees for agent dashboard
    * @returns Promise with the API response containing tracked employees data

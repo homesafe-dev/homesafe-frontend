@@ -2,7 +2,7 @@ import axiosInstance from './axiosConfig';
 
 // Artisan API endpoints
 const ARTISAN_ENDPOINTS = {
-  EMPLOYEE_LIST: '/api/employee-list',
+  EMPLOYEE_LIST: '/employee-list',
 };
 
 // Artisan API service

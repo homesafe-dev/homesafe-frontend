@@ -2,10 +2,10 @@ import axiosInstance from './axiosConfig';
 
 // Payroll API endpoints
 const PAYROLL_ENDPOINTS = {
-  PAYROLL_HISTORY: '/api/payroll-history',
-  CREATE_PAYROLL: '/api/create-payroll',
-  UPDATE_PAYROLL: '/api/update-payroll',
-  DELETE_PAYROLL: '/api/delete-payroll',
+  PAYROLL_HISTORY: '/payroll-history',
+  CREATE_PAYROLL: '/create-payroll',
+  UPDATE_PAYROLL: '/update-payroll',
+  DELETE_PAYROLL: '/delete-payroll',
 };
 
 // Payroll API service

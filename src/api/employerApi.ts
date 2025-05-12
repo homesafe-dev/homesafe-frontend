@@ -2,11 +2,11 @@ import axiosInstance from './axiosConfig';
 
 // Employer API endpoints
 const EMPLOYER_ENDPOINTS = {
-  EMPLOYEES: '/api/employer/employees',
-  EMPLOYEE_DETAILS: '/api/employer/employees', // Append /{id} for specific employee
-  ADD_EMPLOYEE: '/api/employer/employees',
-  REMOVE_EMPLOYEE: '/api/employer/employees', // Append /{id} for specific employee
-  UPDATE_EMPLOYEE: '/api/employer/employees', // Append /{id} for specific employee
+  EMPLOYEES: '/employer/employees',
+  EMPLOYEE_DETAILS: '/employer/employees', // Append /{id} for specific employee
+  ADD_EMPLOYEE: '/employer/employees',
+  REMOVE_EMPLOYEE: '/employer/employees', // Append /{id} for specific employee
+  UPDATE_EMPLOYEE: '/employer/employees', // Append /{id} for specific employee
 };
 
 // Employer API service

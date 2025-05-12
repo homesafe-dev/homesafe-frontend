@@ -57,7 +57,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     console.log('[AuthContext] Checking token validity');
     try {
       // Make a test request to a protected endpoint
-      const response = await axiosInstance.get('/api/profile', {
+      const response = await axiosInstance.get('/profile', {
         headers: {
           Authorization: `Bearer ${token}`,
         },

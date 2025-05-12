@@ -2,11 +2,11 @@ import axiosInstance from './axiosConfig';
 
 // Wallet API endpoints
 const WALLET_ENDPOINTS = {
-  TRANSACTIONS: '/api/wallet/transactions',
-  BALANCE: '/api/wallet',
-  TOP_UP: '/api/wallet/top-up',
-  WITHDRAW: '/api/wallet/withdraw',
-  TRANSFER: '/api/wallet/transfer',
+  TRANSACTIONS: '/wallet/transactions',
+  BALANCE: '/wallet',
+  TOP_UP: '/wallet/top-up',
+  WITHDRAW: '/wallet/withdraw',
+  TRANSFER: '/wallet/transfer',
 };
 
 // Wallet API service
