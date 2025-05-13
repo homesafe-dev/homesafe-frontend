@@ -1,15 +1,38 @@
 import React, { useState } from 'react';
 import signupImg1 from '../../../assets/images/signupImg1.png';
 import signupImg2 from '../../../assets/images/signupImg2.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import HomesafeLogo from '../../../assets/images/HomesafeLogo.png';
+import authApi from '../../../api/authApi';
 
 const ForgotPassword: React.FC = () => {
   const [email, setEmail] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Email submitted:', email);
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await authApi.forgotPassword(email);
+
+      if (response.status) {
+        // Store email in sessionStorage for use in OTP verification
+        sessionStorage.setItem('resetEmail', email);
+        navigate('/employer/forgot-password/otp');
+      } else {
+        setError(response.message || 'Failed to send OTP. Please try again.');
+      }
+    } catch (err: any) {
+      setError(
+        err.response?.data?.message || 'An error occurred. Please try again.'
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -39,7 +62,9 @@ const ForgotPassword: React.FC = () => {
 
         <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
           <div className="mb-8">
-            <img src={HomesafeLogo} alt="Homesafe Logo" className="" />
+            <Link to="/">
+              <img src={HomesafeLogo} alt="Homesafe Logo" className="" />
+            </Link>
           </div>
 
           <div className="max-w-md">
@@ -78,15 +103,23 @@ const ForgotPassword: React.FC = () => {
                 />
               </div>
 
-              <Link to="/employer/forgot-password/otp" className="block w-full">
-                <button
-                  type="submit"
-                  className="w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors"
-                >
-                  Continue
-                </button>
-              </Link>
+              {error && (
+                <div className="mb-4 text-red-500 text-sm">{error}</div>
+              )}
+
+              <button
+                type="submit"
+                className="w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+                disabled={loading}
+              >
+                {loading ? 'Sending...' : 'Continue'}
+              </button>
             </form>
+            <div className="mt-4 text-center">
+              <Link to="/login" className="text-green-600 hover:text-green-800">
+                Back to Sign in
+              </Link>
+            </div>
           </div>
         </div>
       </div>

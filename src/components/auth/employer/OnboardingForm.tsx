@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import signupImg1 from '../../../assets/images/signupImg1.png';
 import signupImg2 from '../../../assets/images/signupImg2.png';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import HomesafeLogo from '../../../assets/images/HomesafeLogo.png';
 
 const OnboardingForm: React.FC = () => {
@@ -13,7 +13,32 @@ const OnboardingForm: React.FC = () => {
     phoneNumber: '',
     homeAddress: '',
     userType: 'employer',
+    gender: 'male', // Default value
   });
+  const [password, setPassword] = useState<string>('');
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  // We don't need the auth context for this component anymore
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Get email and password from session storage
+    const storedEmail = sessionStorage.getItem('signupEmail');
+    const storedPassword = sessionStorage.getItem('signupPassword');
+
+    if (!storedEmail || !storedPassword) {
+      // Redirect back to signup page if email or password is not found
+      navigate('/signup');
+      return;
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      email: storedEmail,
+    }));
+
+    setPassword(storedPassword);
+  }, [navigate]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -32,9 +57,44 @@ const OnboardingForm: React.FC = () => {
     }));
   };
 
+  const handleGenderChange = (value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      gender: value,
+    }));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+    setIsSubmitting(true);
+    setErrorMessage(null);
+
+    try {
+      const registrationData = {
+        email: formData.email,
+        password: password,
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        phone: formData.phoneNumber,
+        address: formData.homeAddress,
+        gender: formData.gender,
+        is_employer: formData.userType === 'employer' ? true : false,
+      };
+
+      // Store registration data in sessionStorage for the facial capture page
+      sessionStorage.setItem(
+        'registrationData',
+        JSON.stringify(registrationData)
+      );
+
+      // Navigate to facial capture page
+      navigate('/signup/facial-capture');
+    } catch (err) {
+      console.error('Error in onboarding form submission:', err);
+      setErrorMessage('An unexpected error occurred. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -64,7 +124,9 @@ const OnboardingForm: React.FC = () => {
 
         <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
           <div className="mb-8">
-            <img src={HomesafeLogo} alt="Homesafe Logo" className="" />
+            <Link to="/">
+              <img src={HomesafeLogo} alt="Homesafe Logo" className="" />
+            </Link>
           </div>
 
           <div className="max-w-md">
@@ -239,20 +301,76 @@ const OnboardingForm: React.FC = () => {
                     onChange={() => handleRadioChange('agent')}
                   />
                   <label htmlFor="agent" className="ml-2 text-sm text-gray-700">
-                    An Agent
+                    An Employee
                   </label>
                 </div>
               </div>
             </div>
 
-            <Link to="/employer/signup/facial-capture" className="block w-full">
-              <button
-                type="submit"
-                className="w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors mt-6"
-              >
-                Save & Continue
-              </button>
-            </Link>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Gender
+              </label>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-2">
+                <div className="flex items-center">
+                  <input
+                    type="radio"
+                    id="male"
+                    name="gender"
+                    className="h-4 w-4 text-green-500 focus:ring-green-500"
+                    checked={formData.gender === 'male'}
+                    onChange={() => handleGenderChange('male')}
+                  />
+                  <label htmlFor="male" className="ml-2 text-sm text-gray-700">
+                    Male
+                  </label>
+                </div>
+                <div className="flex items-center">
+                  <input
+                    type="radio"
+                    id="female"
+                    name="gender"
+                    className="h-4 w-4 text-green-500 focus:ring-green-500"
+                    checked={formData.gender === 'female'}
+                    onChange={() => handleGenderChange('female')}
+                  />
+                  <label
+                    htmlFor="female"
+                    className="ml-2 text-sm text-gray-700"
+                  >
+                    Female
+                  </label>
+                </div>
+                <div className="flex items-center">
+                  <input
+                    type="radio"
+                    id="other"
+                    name="gender"
+                    className="h-4 w-4 text-green-500 focus:ring-green-500"
+                    checked={formData.gender === 'other'}
+                    onChange={() => handleGenderChange('other')}
+                  />
+                  <label htmlFor="other" className="ml-2 text-sm text-gray-700">
+                    Other
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className={`w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors mt-6 ${
+                isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
+              }`}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Submitting...' : 'Save & Continue'}
+            </button>
+            {errorMessage && (
+              <p className="mt-2 text-sm text-red-600 text-center">
+                {errorMessage}
+              </p>
+            )}
           </form>
         </div>
       </div>

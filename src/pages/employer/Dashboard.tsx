@@ -1,13 +1,74 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaEye, FaPlus, FaEllipsisV } from 'react-icons/fa';
 import { BsCreditCard, BsPeople } from 'react-icons/bs';
+import { Link } from 'react-router-dom';
+import walletApi from '../../api/walletApi';
+import userApi from '../../api/userApi';
+import { WalletTransaction } from '../../types/wallet';
 
 const DashboardContent: React.FC = () => {
+  const [walletBalance, setWalletBalance] = useState<string>('0.00');
+  const [transactions, setTransactions] = useState<WalletTransaction[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [userName, setUserName] = useState<string>('User');
+
+  useEffect(() => {
+    // Fetch user profile data
+    const fetchUserProfile = async () => {
+      try {
+        const response = await userApi.getProfile();
+        if (response.status) {
+          const userData = response.data;
+          setUserName(userData.first_name || 'User');
+        }
+      } catch (err) {
+        console.error('Error fetching user profile:', err);
+      }
+    };
+
+    fetchUserProfile();
+
+    // Fetch wallet balance
+    const fetchWalletBalance = async () => {
+      try {
+        const response = await walletApi.getBalance();
+        if (response.status && response.data) {
+          setWalletBalance(response.data.current_balance);
+        }
+      } catch (err) {
+        console.error('Error fetching wallet balance:', err);
+      }
+    };
+
+    // Fetch wallet transactions
+    const fetchTransactions = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await walletApi.getTransactions(1, 6);
+        if (response.status && response.data && response.data.data) {
+          setTransactions(response.data.data);
+        }
+      } catch (err: any) {
+        console.error('Error fetching transactions:', err);
+        setError(err.message || 'Failed to load transactions');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchWalletBalance();
+    fetchTransactions();
+  }, []);
+
   return (
     <div className="bg-white min-h-screen p-6">
       {/* Header */}
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-[16px] font-normal text-[#24292E]">Hello John</h1>
+        <h1 className="text-[16px] font-normal text-[#24292E]">
+          Hello {userName}
+        </h1>
         <div className="bg-[#EFAE73] text-[#24292E] h-[42px] w-[165px] flex justify-center items-center px-4 py-1 rounded-full text-sm">
           Ruby Subscription
         </div>
@@ -66,17 +127,27 @@ const DashboardContent: React.FC = () => {
           </button>
           <div className="mb-6">
             <p className="text-white/80 text-sm mb-2">Current Balance</p>
-            <h2 className="text-2xl font-semibold">₦ 100,000.00</h2>
+            <h2 className="text-2xl font-semibold">
+              ₦{' '}
+              {parseFloat(walletBalance).toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            </h2>
           </div>
           <div className="flex gap-4">
-            <button className="bg-white hover:bg-green-600 text-[#246D51] h-[42px] py-2 px-4 rounded flex items-center gap-2 text-sm">
-              <FaPlus size={12} />
-              Top-up
-            </button>
-            <button className="bg-white text-green-800 h-[42px] py-2 px-4 rounded flex items-center gap-2 text-sm">
-              <BsCreditCard size={12} />
-              Withdraw
-            </button>
+            <Link to="/employer/wallet/top-up">
+              <button className="bg-white hover:bg-green-600 text-[#246D51] h-[42px] py-2 px-4 rounded flex items-center gap-2 text-sm">
+                <FaPlus size={12} />
+                Top-up
+              </button>
+            </Link>
+            <Link to="/employer/wallet">
+              <button className="bg-white text-green-800 h-[42px] py-2 px-4 rounded flex items-center gap-2 text-sm">
+                <BsCreditCard size={12} />
+                Withdraw
+              </button>
+            </Link>
           </div>
         </div>
 
@@ -150,49 +221,104 @@ const DashboardContent: React.FC = () => {
         </div>
       </div>
 
-      {/* History Section */}
+      {/* History Section - Wallet Transactions */}
       <div>
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-lg font-medium text-gray-700">History</h2>
-          <button className="text-[#7B858E] text-sm hover:underline">
-            View All
-          </button>
+          <h2 className="text-lg font-medium text-gray-700">
+            Transaction History
+          </h2>
+          <Link to="/employer/wallet-history">
+            <button className="text-[#7B858E] text-sm hover:underline">
+              View All
+            </button>
+          </Link>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-green-50 rounded-lg overflow-hidden">
-            <thead className="text-left text-gray-600 text-sm">
-              <tr>
-                <th className="py-4 px-6 font-medium">Employee Name</th>
-                <th className="py-4 px-6 font-medium">Date Employed</th>
-                <th className="py-4 px-6 font-medium">Position</th>
-                <th className="py-4 px-6 font-medium">Salary</th>
-                <th className="py-4 px-6 font-medium">Status</th>
-                <th className="py-4 px-6 font-medium"></th>
-              </tr>
-            </thead>
-            <tbody className="bg-white">
-              {[1, 2, 3, 4, 5, 6].map((row) => (
-                <tr key={row} className="border-b border-gray-100">
-                  <td className="py-4 px-6">Cali Foster Jenkins</td>
-                  <td className="py-4 px-6">24th Dec 2024</td>
-                  <td className="py-4 px-6">Chef</td>
-                  <td className="py-4 px-6">₦ 50,000</td>
-                  <td className="py-4 px-6">
-                    <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs">
-                      Active
-                    </span>
-                  </td>
-                  <td className="py-4 px-6">
-                    <button className="text-gray-500 hover:text-gray-700">
-                      <FaEllipsisV size={16} />
-                    </button>
-                  </td>
+        {loading ? (
+          <div className="flex justify-center items-center h-40">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-500"></div>
+          </div>
+        ) : error ? (
+          <div className="bg-red-50 text-red-600 p-4 rounded-lg text-center">
+            {error}
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-green-50 rounded-lg overflow-hidden">
+              <thead className="text-left text-gray-600 text-sm">
+                <tr>
+                  <th className="py-4 px-6 font-medium">Transaction ID</th>
+                  <th className="py-4 px-6 font-medium">Type</th>
+                  <th className="py-4 px-6 font-medium">Description</th>
+                  <th className="py-4 px-6 font-medium">Amount</th>
+                  <th className="py-4 px-6 font-medium">Status</th>
+                  <th className="py-4 px-6 font-medium"></th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody className="bg-white">
+                {transactions.length > 0 ? (
+                  transactions.map((transaction) => (
+                    <tr
+                      key={transaction.id}
+                      className="border-b border-gray-100"
+                    >
+                      <td className="py-4 px-6">
+                        {transaction.transaction.reference_code.substring(
+                          0,
+                          10
+                        )}
+                        ...
+                      </td>
+                      <td className="py-4 px-6 capitalize">
+                        {transaction.type}
+                      </td>
+                      <td className="py-4 px-6">{transaction.description}</td>
+                      <td className="py-4 px-6">
+                        ₦{' '}
+                        {parseFloat(
+                          transaction.transaction.amount
+                        ).toLocaleString(undefined, {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}
+                      </td>
+                      <td className="py-4 px-6">
+                        <span
+                          className={`px-3 py-1 rounded-full text-xs ${
+                            transaction.transaction.status === 'successful'
+                              ? 'bg-green-100 text-green-700'
+                              : transaction.transaction.status === 'pending'
+                                ? 'bg-yellow-100 text-yellow-700'
+                                : 'bg-red-100 text-red-700'
+                          }`}
+                        >
+                          {transaction.transaction.status
+                            .charAt(0)
+                            .toUpperCase() +
+                            transaction.transaction.status.slice(1)}
+                        </span>
+                      </td>
+                      <td className="py-4 px-6">
+                        <button className="text-gray-500 hover:text-gray-700">
+                          <FaEllipsisV size={16} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan={6}
+                      className="py-8 px-6 text-center text-gray-500"
+                    >
+                      No transactions found
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );

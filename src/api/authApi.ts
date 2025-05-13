@@ -1,0 +1,197 @@
+import axiosInstance from './axiosConfig';
+
+// Auth API endpoints
+const AUTH_ENDPOINTS = {
+  SEND_OTP: '/send-otp',
+  VERIFY_OTP: '/verify-otp',
+  COMPLETE_REGISTRATION: '/complete-registration',
+  BIOMETRIC_LOGIN: '/biometric-login',
+  REGISTER: '/register',
+  LOGIN: '/login',
+  FORGOT_PASSWORD: '/forgot-password',
+  VERIFY_FORGOT_PASSWORD_OTP: '/verify-forgot-password-otp',
+  RESET_PASSWORD: '/reset-password',
+  LOGOUT: '/logout',
+};
+
+// Auth API service
+const authApi = {
+  /**
+   * Send OTP to user's email
+   * @param email - User's email address
+   * @returns Promise with the API response
+   */
+  sendOTP: async (email: string) => {
+    const response = await axiosInstance.post(AUTH_ENDPOINTS.SEND_OTP, {
+      email,
+    });
+    return response.data;
+  },
+
+  /**
+   * Verify OTP entered by user
+   * @param email - User's email address
+   * @param otp - OTP entered by user
+   * @returns Promise with the API response
+   */
+  verifyOTP: async (email: string, otp: string) => {
+    const response = await axiosInstance.post(AUTH_ENDPOINTS.VERIFY_OTP, {
+      email,
+      otp_code: otp,
+    });
+    return response.data;
+  },
+
+  /**
+   * Complete user registration with personal details and profile image
+   * @param registrationData - User registration data including email, password, name, etc. or FormData
+   * @returns Promise with the API response
+   */
+  completeRegistration: async (
+    registrationData:
+      | {
+          email: string;
+          password: string;
+          first_name: string;
+          last_name: string;
+          phone: string;
+          address: string;
+          gender: string;
+          is_employer?: boolean;
+          facial_image?: string;
+        }
+      | FormData
+  ) => {
+    let payload;
+    let config = {};
+
+    // Check if registrationData is FormData
+    if (registrationData instanceof FormData) {
+      // Use FormData as is
+      payload = registrationData;
+
+      // Set headers for multipart/form-data
+      config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      };
+    } else {
+      // Create a copy of the registration data
+      payload = { ...registrationData };
+
+      // Ensure is_employer is a boolean
+      if (typeof payload.is_employer !== 'undefined') {
+        payload.is_employer = Boolean(payload.is_employer);
+      }
+    }
+
+    const response = await axiosInstance.post(
+      AUTH_ENDPOINTS.COMPLETE_REGISTRATION,
+      payload,
+      config
+    );
+    return response.data;
+  },
+
+  /**
+   * Register a new user
+   * @param userData - User registration data
+   * @returns Promise with the API response
+   */
+  register: async (userData: Record<string, unknown>) => {
+    const response = await axiosInstance.post(
+      AUTH_ENDPOINTS.REGISTER,
+      userData
+    );
+    return response.data;
+  },
+
+  /**
+   * Login user
+   * @param email - User's email
+   * @param password - User's password
+   * @returns Promise with the API response
+   */
+  login: async (email: string, password: string) => {
+    const response = await axiosInstance.post(AUTH_ENDPOINTS.LOGIN, {
+      email,
+      password,
+    });
+    return response.data;
+  },
+
+  /**
+   * Biometric login
+   * @param deviceId - Device identifier
+   * @param challenge - Random challenge string
+   * @param signature - Base64 encoded signature
+   * @returns Promise with the API response
+   */
+  biometricLogin: async (
+    deviceId: string,
+    challenge: string,
+    signature: string
+  ) => {
+    const response = await axiosInstance.post(AUTH_ENDPOINTS.BIOMETRIC_LOGIN, {
+      device_id: deviceId,
+      challenge: challenge,
+      signature: signature,
+    });
+    return response.data;
+  },
+
+  /**
+   * Logout user
+   * @returns Promise with the API response
+   */
+  logout: async () => {
+    const response = await axiosInstance.post(AUTH_ENDPOINTS.LOGOUT);
+    return response.data;
+  },
+
+  /**
+   * Send forgot password request
+   * @param email - User's email address
+   * @returns Promise with the API response
+   */
+  forgotPassword: async (email: string) => {
+    const response = await axiosInstance.post(AUTH_ENDPOINTS.FORGOT_PASSWORD, {
+      email,
+    });
+    return response.data;
+  },
+
+  /**
+   * Verify forgot password OTP
+   * @param email - User's email address
+   * @param otp - OTP entered by user
+   * @returns Promise with the API response
+   */
+  verifyForgotPasswordOTP: async (email: string, otp: string) => {
+    const response = await axiosInstance.post(
+      AUTH_ENDPOINTS.VERIFY_FORGOT_PASSWORD_OTP,
+      {
+        email,
+        otp_code: otp,
+      }
+    );
+    return response.data;
+  },
+
+  /**
+   * Reset user password
+   * @param email - User's email address
+   * @param password - New password
+   * @returns Promise with the API response
+   */
+  resetPassword: async (email: string, password: string) => {
+    const response = await axiosInstance.post(AUTH_ENDPOINTS.RESET_PASSWORD, {
+      email,
+      password,
+    });
+    return response.data;
+  },
+};
+
+export default authApi;

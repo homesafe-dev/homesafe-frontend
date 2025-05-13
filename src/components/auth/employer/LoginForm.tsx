@@ -1,16 +1,26 @@
 import React, { useState } from 'react';
 import signupImg1 from '../../../assets/images/signupImg1.png';
 import signupImg2 from '../../../assets/images/signupImg2.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import HomesafeLogo from '../../../assets/images/HomesafeLogo.png';
 import HomesafeLogo2 from '../../../assets/images/HomesafeLogo2.svg';
 
 const HomesafeSignupPage: React.FC = () => {
   const [email, setEmail] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Email submitted:', email);
+
+    if (email.trim() === '') {
+      setErrorMessage('Please enter your email address');
+      return;
+    }
+
+    // Store email in sessionStorage to access it in the password page
+    sessionStorage.setItem('signinEmail', email);
+    navigate('/signin/password');
   };
 
   return (
@@ -40,7 +50,9 @@ const HomesafeSignupPage: React.FC = () => {
 
         <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
           <div className="mb-8">
-            <img src={HomesafeLogo} alt="Homesafe Logo" className="" />
+            <Link to="/">
+              <img src={HomesafeLogo} alt="Homesafe Logo" className="" />
+            </Link>
           </div>
 
           <div className="max-w-md">
@@ -57,14 +69,16 @@ const HomesafeSignupPage: React.FC = () => {
         <div className="flex flex-col items-center w-full max-w-[545px] space-y-4">
           <div className="w-full bg-white rounded-lg shadow-lg p-4 md:p-8">
             <div className="text-center mb-6 flex flex-row items-center justify-center space-x-2">
-              <h1 className="text-xl md:text-2xl font-semibold text-gray-800">
+              <h1 className="text-[2px] md:text-[20px] font-semibold text-gray-800">
                 Sign in on
               </h1>
-              <img
-                src={HomesafeLogo2}
-                className="w-[120px] md:w-[178px] max-h-[30px]"
-                alt="Homesafe Logo"
-              />
+              <Link to="/">
+                <img
+                  src={HomesafeLogo2}
+                  className="w-[150px] md:w-[210px] max-h-[50px]"
+                  alt="Homesafe Logo"
+                />
+              </Link>
             </div>
 
             <form onSubmit={handleSubmit}>
@@ -84,16 +98,26 @@ const HomesafeSignupPage: React.FC = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                 />
+                {errorMessage && (
+                  <p className="mt-1 text-sm text-red-600">{errorMessage}</p>
+                )}
               </div>
 
-              <Link to="/employer/signin/password" className="block w-full">
-                <button
-                  type="submit"
-                  className="w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors"
-                >
-                  Continue
-                </button>
-              </Link>
+              <button
+                type="submit"
+                className="w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors"
+              >
+                Continue
+              </button>
+
+              <div className="mt-4 text-center">
+                <span className="text-sm text-gray-600">
+                  Don't have an account?{' '}
+                  <Link to="/signup" className="text-green-600 hover:underline">
+                    Sign up
+                  </Link>
+                </span>
+              </div>
             </form>
 
             <div className="my-4 text-center">

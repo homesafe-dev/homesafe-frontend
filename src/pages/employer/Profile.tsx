@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
+import userApi from '../../api/userApi';
+import { useNavigate } from 'react-router-dom';
 
 interface ProfileFormData {
   firstName: string;
@@ -8,8 +10,23 @@ interface ProfileFormData {
   email: string;
 }
 
+interface UserProfile {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string;
+  avatar: string;
+  [key: string]: any;
+}
+
 const ProfilePage: React.FC = () => {
+  const navigate = useNavigate();
   const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  // userProfile state is used to store the full user data, but we extract specific fields to formData
+  const [, setUserProfile] = useState<UserProfile | null>(null);
   const [formData, setFormData] = useState<ProfileFormData>({
     firstName: '',
     lastName: '',
@@ -39,19 +56,92 @@ const ProfilePage: React.FC = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        setLoading(true);
+        const response = await userApi.getProfile();
+        if (response.status) {
+          const userData = response.data;
+          setUserProfile(userData);
+
+          // Set profile image if available
+          if (userData.avatar) {
+            setProfileImage(userData.avatar);
+          }
+
+          // Update form data with user profile information
+          setFormData({
+            firstName: userData.first_name || '',
+            lastName: userData.last_name || '',
+            phoneNumber: userData.phone || '',
+            email: userData.email || '',
+          });
+        } else {
+          setError('Failed to fetch user profile');
+        }
+      } catch (err) {
+        setError('Error fetching user profile');
+        console.error('Error fetching user profile:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+    try {
+      setLoading(true);
+
+      const profileData = {
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        phone: formData.phoneNumber,
+        email: formData.email,
+      };
+
+      const response = await userApi.updateProfile(profileData);
+
+      if (response.status) {
+        // Show success message or notification
+        alert('Profile updated successfully');
+      } else {
+        setError('Failed to update profile');
+      }
+    } catch (err) {
+      setError('Error updating profile');
+      console.error('Error updating profile:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="min-h-screen">
       <div className="mb-6">
-        <button className="flex items-center text-gray-600 hover:text-gray-800">
+        <button
+          className="flex items-center text-gray-600 hover:text-gray-800"
+          onClick={() => navigate(-1)}
+        >
           <FaArrowLeft className="mr-2" />
           <span className="text-lg font-medium">Profile</span>
         </button>
       </div>
+
+      {loading && (
+        <div className="flex justify-center items-center py-8">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
+        </div>
+      )}
+
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          {error}
+        </div>
+      )}
 
       <div className="bg-white rounded-lg shadow p-8 max-w-4xl mb-6">
         <form onSubmit={handleSubmit}>

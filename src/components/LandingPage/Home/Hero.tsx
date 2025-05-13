@@ -62,7 +62,7 @@ const Hero: React.FC = () => {
 
         {/* Mobile Menu Button */}
         <div className="md:hidden flex items-center gap-4">
-          <a href="/employer/login" className="hidden sm:block">
+          <a href="/login" className="hidden sm:block">
             <button className="bg-[#A5EA91] hover:bg-green-500 text-[#24292E] font-medium py-2 px-4 rounded-md transition-colors text-sm">
               Sign-in
             </button>
@@ -88,7 +88,7 @@ const Hero: React.FC = () => {
 
         {/* Desktop Sign-in Button */}
         <div className="hidden md:block">
-          <a href="/employer/login">
+          <a href="/login">
             <button className="bg-[#A5EA91] hover:bg-green-500 text-[#24292E] font-medium py-2 px-4 rounded-md transition-colors">
               Sign-in
             </button>
@@ -171,11 +171,7 @@ const Hero: React.FC = () => {
               Support
             </a>
             <div className="pt-2">
-              <a
-                href="/employer/login"
-                className="sm:hidden block"
-                onClick={toggleMenu}
-              >
+              <a href="/login" className="sm:hidden block" onClick={toggleMenu}>
                 <button className="bg-[#A5EA91] hover:bg-green-500 text-[#24292E] font-medium py-2.5 px-4 rounded-md transition-colors w-full">
                   Sign-in
                 </button>
