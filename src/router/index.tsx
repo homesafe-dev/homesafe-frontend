@@ -1,4 +1,19 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
+import ProtectedRoute from '../components/auth/ProtectedRoute';
+import { ReactNode } from 'react';
+import { UserType } from '../contexts/types';
+
+// Helper functions to protect routes by role
+const protectRoute = (element: ReactNode, allowedRoles: UserType[]) => (
+  <ProtectedRoute allowedRoles={allowedRoles}>{element}</ProtectedRoute>
+);
+
+const protectEmployerRoute = (element: ReactNode) =>
+  protectRoute(element, ['employer']);
+const protectEmployeeRoute = (element: ReactNode) =>
+  protectRoute(element, ['employee']);
+const protectAgentRoute = (element: ReactNode) =>
+  protectRoute(element, ['agent']);
 
 // Auth Components
 import EmployerLoginForm from '../components/auth/employer/LoginForm';
@@ -7,11 +22,10 @@ import EmployerSignupOTP from '../components/auth/employer/SignupOTP';
 import EmployerSignupPassword from '../components/auth/employer/SignupPassword';
 import EmployerSigninPassword from '../components/auth/employer/SigninPassword';
 import EmployerSigninCreatePassword from '../components/auth/employer/SigninCreatePassword';
-import EmployeeLoginForm from '../components/auth/employee/LoginForm';
-import EmployeeOTP from '../components/auth/employee/OTP';
+// Removed unused imports: EmployeeLoginForm, EmployeeOTP, AgentLoginForm
 import EmployerForgotPassword from '../components/auth/employer/ForgotPassword';
 import EmployerForgotPasswordOTP from '../components/auth/employer/ForgotPasswordOTP';
-import AgentLoginForm from '../components/auth/agent/LoginForm';
+import EmployerResetPassword from '../components/auth/employer/ResetPassword';
 import OnboardingForm from '../components/auth/employer/OnboardingForm';
 import NotificationsPage from '../components/Employer/NotificationsPage';
 
@@ -44,21 +58,29 @@ import EmployeeResources from '../pages/employee/Resources';
 import Medical from '../pages/employer/Medical';
 import ReviewsPage from '../pages/employer/Reviews';
 import Contracts from '../pages/employer/Contracts';
-import HomesafeForgotPasswordPage from '../components/auth/employee/ForgotPassword';
+// Removed unused import: HomesafeForgotPasswordPage
 import Salary from '../pages/employee/Salary';
 import EmployeeMedical from '../pages/employee/Medical';
 import EmployeeReview from '../pages/employee/Review';
 import EmployeeContracts from '../pages/employee/Contracts';
+import EmployeeProfilePage from '../pages/employee/Profile';
+import EmployeeSecurityPage from '../pages/employee/Security';
+import EmployeeKYCPage from '../pages/employee/KYCPage';
 import CandidatesPage from '../pages/agent/Candidates';
 import AllCandidatesPage from '../pages/agent/AllCandidatesPage';
 import Track from '../pages/agent/Track';
 import Review from '../pages/agent/Review';
+import CandidateProfile from '../pages/agent/CandidateProfile';
+import AgentProfile from '../pages/agent/Profile';
+import AgentSecurity from '../pages/agent/Security';
+import AgentKYCPage from '../pages/agent/KYCPage';
 
 // Landing Page Compoents
 import Home from '../pages/Landing Page/Home';
 import About from '../pages/Landing Page/About';
 import Artisans from '../pages/Landing Page/Artisans';
 import Support from '../pages/Landing Page/Support';
+import TestPage from '../pages/TestPage';
 
 export const router = createBrowserRouter([
   // {
@@ -81,57 +103,86 @@ export const router = createBrowserRouter([
     path: 'support',
     element: <Support />,
   },
+  {
+    path: 'test',
+    element: <TestPage />,
+  },
+  {
+    path: 'protected-test',
+    element: (
+      <ProtectedRoute allowedRoles={['employer', 'employee', 'agent']}>
+        <TestPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: 'employer-only',
+    element: protectEmployerRoute(<TestPage />),
+  },
+  {
+    path: 'employee-only',
+    element: protectEmployeeRoute(<TestPage />),
+  },
+  {
+    path: 'agent-only',
+    element: protectAgentRoute(<TestPage />),
+  },
+  // Auth Routes (shared across all user types at top level)
+  {
+    path: 'login',
+    element: <EmployerLoginForm />,
+  },
+  {
+    path: 'signup',
+    element: <EmployerSignupForm />,
+  },
+  {
+    path: 'signup/otp',
+    element: <EmployerSignupOTP />,
+  },
+  {
+    path: 'forgot-password/otp',
+    element: <EmployerForgotPasswordOTP />,
+  },
+  {
+    path: 'reset-password',
+    element: <EmployerResetPassword />,
+  },
+  {
+    path: 'signup/password',
+    element: <EmployerSignupPassword />,
+  },
+  {
+    path: 'signup/onboarding-form',
+    element: <OnboardingForm />,
+  },
+  {
+    path: 'signup/facial-capture',
+    element: <FacialCapturePage />,
+  },
+  {
+    path: 'signin/password',
+    element: <EmployerSigninPassword />,
+  },
+  {
+    path: 'signin/forgot-password',
+    element: <EmployerForgotPassword />,
+  },
+  {
+    path: 'signin/create-password',
+    element: <EmployerSigninCreatePassword />,
+  },
   // Employer Routes
   {
     path: '/employer',
     children: [
       {
         path: '',
-        element: <Navigate to="/employer/login" replace />,
-      },
-      {
-        path: 'login',
-        element: <EmployerLoginForm />,
-      },
-      {
-        path: 'signup',
-        element: <EmployerSignupForm />,
-      },
-      {
-        path: 'signup/otp',
-        element: <EmployerSignupOTP />,
-      },
-      {
-        path: 'forgot-password/otp',
-        element: <EmployerForgotPasswordOTP />,
-      },
-      {
-        path: 'signup/password',
-        element: <EmployerSignupPassword />,
-      },
-      {
-        path: 'signup/onboarding-form',
-        element: <OnboardingForm />,
-      },
-      {
-        path: 'signup/facial-capture',
-        element: <FacialCapturePage />,
-      },
-      {
-        path: 'signin/password',
-        element: <EmployerSigninPassword />,
-      },
-      {
-        path: 'signin/forgot-password',
-        element: <EmployerForgotPassword />,
-      },
-      {
-        path: 'signin/create-password',
-        element: <EmployerSigninCreatePassword />,
+        element: <Navigate to="/login" replace />,
       },
       {
         path: 'dashboard',
-        element: (
+        element: protectEmployerRoute(
           <EmployerLayout>
             <EmployerDashboard />
           </EmployerLayout>
@@ -139,7 +190,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'profile',
-        element: (
+        element: protectEmployerRoute(
           <EmployerLayout>
             <Profile />
           </EmployerLayout>
@@ -147,7 +198,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'security',
-        element: (
+        element: protectEmployerRoute(
           <EmployerLayout>
             <Security />
           </EmployerLayout>
@@ -155,7 +206,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'kyc',
-        element: (
+        element: protectEmployerRoute(
           <EmployerLayout>
             <KYCPage />
           </EmployerLayout>
@@ -163,7 +214,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'notifications',
-        element: (
+        element: protectEmployerRoute(
           <EmployerLayout>
             <NotificationsPage />
           </EmployerLayout>
@@ -171,7 +222,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'wallet',
-        element: (
+        element: protectEmployerRoute(
           <EmployerLayout>
             <WalletPage />
           </EmployerLayout>
@@ -179,7 +230,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'wallet-history',
-        element: (
+        element: protectEmployerRoute(
           <EmployerLayout>
             <WalletHistory />
           </EmployerLayout>
@@ -187,7 +238,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'wallet/top-up',
-        element: (
+        element: protectEmployerRoute(
           <EmployerLayout>
             <WalletTopUp />
           </EmployerLayout>
@@ -195,7 +246,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'artisans',
-        element: (
+        element: protectEmployerRoute(
           <EmployerLayout>
             <AritisansPage />
           </EmployerLayout>
@@ -203,15 +254,15 @@ export const router = createBrowserRouter([
       },
       {
         path: 'artisan/profile',
-        element: (
+        element: protectEmployerRoute(
           <EmployerLayout>
-            <ArtisanProfileView goBack={() => window.history.back()} />
+            <ArtisanProfileView />
           </EmployerLayout>
         ),
       },
       {
         path: 'staff',
-        element: (
+        element: protectEmployerRoute(
           <EmployerLayout>
             <Staff />
           </EmployerLayout>
@@ -219,7 +270,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'staff/profile',
-        element: (
+        element: protectEmployerRoute(
           <EmployerLayout>
             <StaffProfile />
           </EmployerLayout>
@@ -227,7 +278,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'payroll',
-        element: (
+        element: protectEmployerRoute(
           <EmployerLayout>
             <Payroll />
           </EmployerLayout>
@@ -235,7 +286,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'payroll/all',
-        element: (
+        element: protectEmployerRoute(
           <EmployerLayout>
             <AllPayroll />
           </EmployerLayout>
@@ -243,7 +294,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'resources',
-        element: (
+        element: protectEmployerRoute(
           <EmployerLayout>
             <Resources />
           </EmployerLayout>
@@ -251,7 +302,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'medical',
-        element: (
+        element: protectEmployerRoute(
           <EmployerLayout>
             <Medical />
           </EmployerLayout>
@@ -259,7 +310,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'review',
-        element: (
+        element: protectEmployerRoute(
           <EmployerLayout>
             <ReviewsPage />
           </EmployerLayout>
@@ -267,7 +318,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'contracts',
-        element: (
+        element: protectEmployerRoute(
           <EmployerLayout>
             <Contracts />
           </EmployerLayout>
@@ -281,23 +332,12 @@ export const router = createBrowserRouter([
     children: [
       {
         path: '',
-        element: <Navigate to="/employee/login" replace />,
+        element: <Navigate to="/login" replace />,
       },
-      {
-        path: 'login',
-        element: <EmployeeLoginForm />,
-      },
+      // Keep these specific employee auth routes
       {
         path: 'login/facial-capture',
         element: <EmployeeFacialCapturePage />,
-      },
-      {
-        path: 'forgot-password',
-        element: <HomesafeForgotPasswordPage />,
-      },
-      {
-        path: 'forgot-password/otp',
-        element: <EmployeeOTP />,
       },
       {
         path: 'create-password',
@@ -305,15 +345,39 @@ export const router = createBrowserRouter([
       },
       {
         path: 'dashboard',
-        element: (
+        element: protectEmployeeRoute(
           <EmployeeLayout>
             <EmployeeDashboard />
           </EmployeeLayout>
         ),
       },
       {
+        path: 'profile',
+        element: protectEmployeeRoute(
+          <EmployeeLayout>
+            <EmployeeProfilePage />
+          </EmployeeLayout>
+        ),
+      },
+      {
+        path: 'security',
+        element: protectEmployeeRoute(
+          <EmployeeLayout>
+            <EmployeeSecurityPage />
+          </EmployeeLayout>
+        ),
+      },
+      {
+        path: 'kyc',
+        element: protectEmployeeRoute(
+          <EmployeeLayout>
+            <EmployeeKYCPage />
+          </EmployeeLayout>
+        ),
+      },
+      {
         path: 'salary',
-        element: (
+        element: protectEmployeeRoute(
           <EmployeeLayout>
             <Salary />
           </EmployeeLayout>
@@ -321,7 +385,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'resources',
-        element: (
+        element: protectEmployeeRoute(
           <EmployeeLayout>
             <EmployeeResources />
           </EmployeeLayout>
@@ -329,7 +393,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'medical',
-        element: (
+        element: protectEmployeeRoute(
           <EmployeeLayout>
             <EmployeeMedical />
           </EmployeeLayout>
@@ -337,7 +401,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'review',
-        element: (
+        element: protectEmployeeRoute(
           <EmployeeLayout>
             <EmployeeReview />
           </EmployeeLayout>
@@ -345,7 +409,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'contracts',
-        element: (
+        element: protectEmployeeRoute(
           <EmployeeLayout>
             <EmployeeContracts />
           </EmployeeLayout>
@@ -359,23 +423,27 @@ export const router = createBrowserRouter([
     children: [
       {
         path: '',
-        element: <Navigate to="/agent/login" replace />,
-      },
-      {
-        path: 'login',
-        element: <AgentLoginForm />,
+        element: <Navigate to="/login" replace />,
       },
       {
         path: 'dashboard',
-        element: (
+        element: protectAgentRoute(
           <AgentLayout>
-            <AgentDashboard />,
+            <AgentDashboard />
           </AgentLayout>
         ),
       },
       {
         path: 'candidates',
-        element: (
+        element: protectAgentRoute(
+          <AgentLayout>
+            <CandidatesPage />
+          </AgentLayout>
+        ),
+      },
+      {
+        path: 'add-candidate',
+        element: protectAgentRoute(
           <AgentLayout>
             <CandidatesPage />
           </AgentLayout>
@@ -383,7 +451,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'track',
-        element: (
+        element: protectAgentRoute(
           <AgentLayout>
             <Track />
           </AgentLayout>
@@ -391,7 +459,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'review',
-        element: (
+        element: protectAgentRoute(
           <AgentLayout>
             <Review />
           </AgentLayout>
@@ -399,9 +467,41 @@ export const router = createBrowserRouter([
       },
       {
         path: 'all-candidates',
-        element: (
+        element: protectAgentRoute(
           <AgentLayout>
             <AllCandidatesPage />
+          </AgentLayout>
+        ),
+      },
+      {
+        path: 'candidate-profile/:id',
+        element: protectAgentRoute(
+          <AgentLayout>
+            <CandidateProfile />
+          </AgentLayout>
+        ),
+      },
+      {
+        path: 'profile',
+        element: protectAgentRoute(
+          <AgentLayout>
+            <AgentProfile />
+          </AgentLayout>
+        ),
+      },
+      {
+        path: 'security',
+        element: protectAgentRoute(
+          <AgentLayout>
+            <AgentSecurity />
+          </AgentLayout>
+        ),
+      },
+      {
+        path: 'kyc',
+        element: protectAgentRoute(
+          <AgentLayout>
+            <AgentKYCPage />
           </AgentLayout>
         ),
       },

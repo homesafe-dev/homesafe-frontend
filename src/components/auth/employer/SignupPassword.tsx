@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import signupImg1 from '../../../assets/images/signupImg1.png';
 import signupImg2 from '../../../assets/images/signupImg2.png';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import HomesafeLogo from '../../../assets/images/HomesafeLogo.png';
 import HomesafeLogo2 from '../../../assets/images/HomesafeLogo2.svg';
@@ -9,10 +9,45 @@ import HomesafeLogo2 from '../../../assets/images/HomesafeLogo2.svg';
 const SignupPasswordPage: React.FC = () => {
   const [password, setPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Get email from session storage
+    const storedEmail = sessionStorage.getItem('signupEmail');
+    if (!storedEmail) {
+      // Redirect back to signup page if email is not found
+      navigate('/signup');
+      return;
+    }
+    // Email is stored in session storage and used in later steps
+  }, [navigate]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Password submitted:', password);
+
+    // Validate password
+    if (password.length < 8) {
+      setErrorMessage('Password must be at least 8 characters long');
+      return;
+    }
+
+    // Check if password contains at least one special character and one number
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    const hasNumber = /\d/.test(password);
+
+    if (!hasSpecialChar || !hasNumber) {
+      setErrorMessage(
+        'Password must contain at least one special character and one number'
+      );
+      return;
+    }
+
+    // Store password in session storage for use in the onboarding form
+    sessionStorage.setItem('signupPassword', password);
+
+    // Navigate to onboarding form
+    navigate('/signup/onboarding-form');
   };
 
   const togglePasswordVisibility = () => {
@@ -46,7 +81,9 @@ const SignupPasswordPage: React.FC = () => {
 
         <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
           <div className="mb-8">
-            <img src={HomesafeLogo} alt="Homesafe Logo" className="" />
+            <Link to="/">
+              <img src={HomesafeLogo} alt="Homesafe Logo" className="" />
+            </Link>
           </div>
 
           <div className="max-w-md">
@@ -66,11 +103,13 @@ const SignupPasswordPage: React.FC = () => {
               <h1 className="text-xl md:text-2xl font-semibold text-gray-800">
                 Sign up on
               </h1>
-              <img
-                src={HomesafeLogo2}
-                className="w-[120px] md:w-[178px] max-h-[30px]"
-                alt="Homesafe Logo"
-              />
+              <Link to="/">
+                <img
+                  src={HomesafeLogo2}
+                  className="w-[120px] md:w-[178px] max-h-[30px]"
+                  alt="Homesafe Logo"
+                />
+              </Link>
             </div>
 
             <form onSubmit={handleSubmit}>
@@ -103,23 +142,21 @@ const SignupPasswordPage: React.FC = () => {
                     )}
                   </button>
                 </div>
+                {errorMessage && (
+                  <p className="mt-2 text-xs text-red-600">{errorMessage}</p>
+                )}
                 <p className="mt-2 text-xs text-gray-500">
                   Password must be 8 letters long and should contain special
                   characters & numbers (e.g @#23)
                 </p>
               </div>
 
-              <Link
-                to="/employer/signup/onboarding-form"
-                className="block w-full"
+              <button
+                type="submit"
+                className="w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors"
               >
-                <button
-                  type="submit"
-                  className="w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors"
-                >
-                  Continue
-                </button>
-              </Link>
+                Continue
+              </button>
             </form>
 
             <div className="my-4 text-center">

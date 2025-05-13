@@ -43,7 +43,7 @@ const Sidebar: React.FC = () => {
     {
       name: 'Candidates',
       icon: <img src={CandidatesIcon} />,
-      path: '/agent/candidates',
+      path: '/agent/all-candidates',
     },
     {
       name: 'Track',

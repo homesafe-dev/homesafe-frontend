@@ -13,9 +13,7 @@ const Loan: React.FC = () => {
     setIsReviewModalOpen(false);
   };
 
-  const handleSubmitReview = (rating: number, feedback: string) => {
-    console.log('Review submitted:', { rating, feedback });
-  };
+  const handleSubmitReview = () => {};
 
   return (
     <div className="flex flex-col items-center justify-center p-4 h-64">

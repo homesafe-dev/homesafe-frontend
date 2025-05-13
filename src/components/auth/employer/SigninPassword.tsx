@@ -1,18 +1,88 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import signupImg1 from '../../../assets/images/signupImg1.png';
 import signupImg2 from '../../../assets/images/signupImg2.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import HomesafeLogo from '../../../assets/images/HomesafeLogo.png';
 import HomesafeLogo2 from '../../../assets/images/HomesafeLogo2.svg';
+import { useAuth } from '../../../contexts/AuthContext';
 
 const SigninPasswordPage: React.FC = () => {
   const [password, setPassword] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const { login, loading } = useAuth();
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    // Get email from session storage
+    const storedEmail = sessionStorage.getItem('signinEmail');
+    if (!storedEmail) {
+      // Redirect back to login page if email is not found
+      navigate('/login');
+      return;
+    }
+    setEmail(storedEmail);
+  }, [navigate]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Password submitted:', password);
+
+    if (password.trim() === '') {
+      setErrorMessage('Please enter your password');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setErrorMessage(null);
+
+    try {
+      // Use 'employer' as default type, but the actual role will come from the response
+      const response = await login(email, password, 'employer');
+
+      if (response.success && response.data) {
+        // Check if there's a redirect URL stored from a previous protected route access
+        const redirectUrl = sessionStorage.getItem('redirectAfterLogin');
+
+        // Determine which dashboard to navigate to based on user role
+        const userRole = response.data.role;
+
+        if (redirectUrl) {
+          // Clear the stored redirect URL
+          sessionStorage.removeItem('redirectAfterLogin');
+
+          // Check if the redirect URL is appropriate for the user's role
+          const rolePrefix = `/${userRole}`;
+          if (redirectUrl.startsWith(rolePrefix)) {
+            // Only redirect if the URL matches the user's role
+            navigate(redirectUrl);
+            return;
+          }
+        }
+
+        // If no valid redirect URL, go to the appropriate dashboard
+        if (userRole === 'employer') {
+          navigate('/employer/dashboard');
+        } else if (userRole === 'employee') {
+          navigate('/employee/dashboard');
+        } else if (userRole === 'agent') {
+          navigate('/agent/dashboard');
+        } else {
+          // Default fallback if role is not recognized
+          console.warn('Unknown user role:', userRole);
+          navigate('/employer/dashboard');
+        }
+      } else {
+        setErrorMessage(response.message || 'Invalid email or password');
+      }
+    } catch (err) {
+      console.error('Login error:', err);
+      setErrorMessage('An error occurred during login. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const togglePasswordVisibility = () => {
@@ -46,7 +116,9 @@ const SigninPasswordPage: React.FC = () => {
 
         <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
           <div className="mb-8">
-            <img src={HomesafeLogo} alt="Homesafe Logo" className="" />
+            <Link to="/">
+              <img src={HomesafeLogo} alt="Homesafe Logo" className="" />
+            </Link>
           </div>
 
           <div className="max-w-md">
@@ -66,11 +138,13 @@ const SigninPasswordPage: React.FC = () => {
               <h1 className="text-xl md:text-2xl font-semibold text-gray-800">
                 Sign in on
               </h1>
-              <img
-                src={HomesafeLogo2}
-                className="w-[120px] md:w-[178px] max-h-[30px]"
-                alt="Homesafe Logo"
-              />
+              <Link to="/">
+                <img
+                  src={HomesafeLogo2}
+                  className="w-[120px] md:w-[178px] max-h-[30px]"
+                  alt="Homesafe Logo"
+                />
+              </Link>
             </div>
 
             <form onSubmit={handleSubmit}>
@@ -79,7 +153,7 @@ const SigninPasswordPage: React.FC = () => {
                   htmlFor="password"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Create Password
+                  Password
                 </label>
                 <div className="relative">
                   <input
@@ -103,25 +177,28 @@ const SigninPasswordPage: React.FC = () => {
                     )}
                   </button>
                 </div>
-                <p className="mt-2 text-xs text-gray-500">
-                  Password don't match
-                </p>
+                {errorMessage && (
+                  <p className="mt-2 text-xs text-red-500">{errorMessage}</p>
+                )}
               </div>
 
-              <Link
-                to="/employer/signin/forgot-password"
-                className="block w-full"
+              <button
+                type="submit"
+                className={`w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors ${
+                  isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
+                }`}
+                disabled={isSubmitting}
               >
-                <button
-                  type="submit"
-                  className="w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors"
-                >
-                  Continue
-                </button>
-              </Link>
+                {isSubmitting || loading ? 'Signing in...' : 'Continue'}
+              </button>
             </form>
-            <p className="text-right text-[#24292E] text-[13px] font-medium mt-4 md:mt-[1rem]">
-              Forgot Password?
+            <p className="text-right mt-4 md:mt-[1rem]">
+              <Link
+                to="/signin/forgot-password"
+                className="text-[#24292E] text-[13px] font-medium hover:text-green-600"
+              >
+                Forgot Password?
+              </Link>
             </p>
 
             <div className="my-4 text-center">

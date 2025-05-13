@@ -1,23 +1,73 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import signupImg1 from '../../../assets/images/signupImg1.png';
 import signupImg2 from '../../../assets/images/signupImg2.png';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import HomesafeLogo from '../../../assets/images/HomesafeLogo.png';
 import HomesafeLogo2 from '../../../assets/images/HomesafeLogo2.svg';
+import { useAuth } from '../../../contexts/AuthContext';
 
 const SignupOTPPage: React.FC = () => {
   const [otp, setOtp] = useState<string[]>(new Array(6).fill(''));
+  const [email, setEmail] = useState<string>('');
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const { sendOTP, verifyOTP, loading } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Get email from session storage
+    const storedEmail = sessionStorage.getItem('signupEmail');
+    if (!storedEmail) {
+      // Redirect back to signup page if email is not found
+      navigate('/signup');
+      return;
+    }
+    setEmail(storedEmail);
+  }, [navigate]);
 
   const handleChange = (element: HTMLInputElement, index: number) => {
-    if (isNaN(Number(element.value))) return false;
+    // Allow both numbers and alphabets
+    const value = element.value.toUpperCase(); // Convert to uppercase for consistency
 
     const newOtp = [...otp];
-    newOtp[index] = element.value;
+    newOtp[index] = value;
     setOtp(newOtp);
 
-    if (element.value && index < 5) {
+    if (value && index < 5) {
       inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  // Handle paste event for OTP
+  const handlePaste = (e: React.ClipboardEvent) => {
+    e.preventDefault();
+    const pastedData = e.clipboardData.getData('text').trim().toUpperCase();
+
+    // If pasted data matches expected length, fill all inputs
+    if (pastedData.length === 6) {
+      const otpArray = pastedData.split('');
+      setOtp(otpArray);
+
+      // Focus on the last input after paste
+      inputRefs.current[5]?.focus();
+    }
+    // If pasted data is shorter, fill as many inputs as possible
+    else if (pastedData.length > 0) {
+      const currentIndex = otp.findIndex((val) => val === '');
+      const availableSlots = 6 - currentIndex;
+      const dataToUse = pastedData.slice(0, availableSlots);
+
+      const newOtp = [...otp];
+      for (let i = 0; i < dataToUse.length; i++) {
+        newOtp[currentIndex + i] = dataToUse[i];
+      }
+
+      setOtp(newOtp);
+
+      // Focus on the next empty input or the last one
+      const nextIndex = Math.min(currentIndex + dataToUse.length, 5);
+      inputRefs.current[nextIndex]?.focus();
     }
   };
 
@@ -30,14 +80,53 @@ const SignupOTPPage: React.FC = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const otpString = otp.join('');
-    console.log('OTP submitted:', otpString);
+
+    if (otpString.length !== 6) {
+      setErrorMessage('Please enter a valid 6-character OTP');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setErrorMessage(null);
+
+    try {
+      const response = await verifyOTP(email, otpString);
+
+      if (response.success) {
+        // Navigate to password creation page
+        navigate('/signup/password');
+      } else {
+        setErrorMessage(response.message);
+      }
+    } catch (err) {
+      console.error('Error verifying OTP:', err);
+      setErrorMessage('An unexpected error occurred. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  const handleResetCode = () => {
-    console.log('Resetting code...');
+  const handleResetCode = async () => {
+    setErrorMessage(null);
+
+    try {
+      const response = await sendOTP(email);
+
+      if (response.success) {
+        // Clear OTP fields
+        setOtp(new Array(6).fill(''));
+        // Focus on first input
+        inputRefs.current[0]?.focus();
+      } else {
+        setErrorMessage(response.message);
+      }
+    } catch (err) {
+      console.error('Error resending OTP:', err);
+      setErrorMessage('Failed to resend OTP. Please try again.');
+    }
   };
 
   return (
@@ -67,7 +156,9 @@ const SignupOTPPage: React.FC = () => {
 
         <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
           <div className="mb-8">
-            <img src={HomesafeLogo} alt="Homesafe Logo" className="" />
+            <Link to="/">
+              <img src={HomesafeLogo} alt="Homesafe Logo" className="" />
+            </Link>
           </div>
 
           <div className="max-w-md">
@@ -87,17 +178,22 @@ const SignupOTPPage: React.FC = () => {
               <h1 className="text-xl md:text-2xl font-semibold text-gray-800">
                 Sign up on
               </h1>
-              <img
-                src={HomesafeLogo2}
-                className="w-[120px] md:w-[178px] max-h-[30px]"
-                alt="Homesafe Logo"
-              />
+              <Link to="/">
+                <img
+                  src={HomesafeLogo2}
+                  className="w-[120px] md:w-[178px] max-h-[30px]"
+                  alt="Homesafe Logo"
+                />
+              </Link>
             </div>
 
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
-                <p className="block text-sm font-medium text-gray-700 mb-4 text-center">
-                  Kindly enter the OTP sent to your email
+                <p className="block text-sm font-medium text-gray-700 mb-2 text-center">
+                  Kindly enter the OTP sent to {email}
+                </p>
+                <p className="block text-xs text-gray-500 mb-4 text-center">
+                  The OTP contains 6 characters (letters and/or numbers)
                 </p>
                 <div className="flex justify-between gap-2 md:gap-4 mb-4">
                   {otp.map((digit, index) => (
@@ -111,29 +207,39 @@ const SignupOTPPage: React.FC = () => {
                       }}
                       onChange={(e) => handleChange(e.target, index)}
                       onKeyDown={(e) => handleKeyDown(e, index)}
-                      className="w-8 h-8 md:w-12 md:h-12 text-center border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-base md:text-lg font-semibold"
+                      onPaste={handlePaste}
+                      className="w-8 h-8 md:w-12 md:h-12 text-center border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-base md:text-lg font-semibold uppercase"
+                      disabled={isSubmitting}
+                      autoComplete="one-time-code"
                     />
                   ))}
                 </div>
+                {errorMessage && (
+                  <p className="mb-2 text-sm text-red-600 text-center">
+                    {errorMessage}
+                  </p>
+                )}
                 <div className="text-right">
                   <button
                     type="button"
                     onClick={handleResetCode}
                     className="text-green-500 text-sm hover:text-green-600"
+                    disabled={isSubmitting || loading}
                   >
-                    Reset code
+                    {loading ? 'Sending...' : 'Reset code'}
                   </button>
                 </div>
               </div>
 
-              <Link to="/employer/signup/password" className="block w-full">
-                <button
-                  type="submit"
-                  className="w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors"
-                >
-                  Continue
-                </button>
-              </Link>
+              <button
+                type="submit"
+                className={`w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors ${
+                  isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
+                }`}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Verifying...' : 'Continue'}
+              </button>
             </form>
 
             <div className="my-4 text-center">
