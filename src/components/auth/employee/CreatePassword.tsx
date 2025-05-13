@@ -11,6 +11,7 @@ const SigninCreatePasswordPage: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('Password submitted:', password);
   };
 
   const togglePasswordVisibility = () => {
