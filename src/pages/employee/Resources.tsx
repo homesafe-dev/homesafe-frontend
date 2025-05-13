@@ -78,7 +78,6 @@ const ResourcesPage: React.FC = () => {
   };
 
   const handleDownload = (id: string) => {
-    console.log(`Downloading resource ${id}`);
     setActiveMenuId(null);
   };
 

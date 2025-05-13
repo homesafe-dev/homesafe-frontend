@@ -16,7 +16,6 @@ const StaffPage: React.FC = () => {
       setError(null);
       try {
         const response = await employerApi.getEmployees();
-        console.log('API Response:', response); // Debug log
 
         // Based on the actual API response, the structure is:
         // { status: true, message: "...", data: { current_page: 1, data: [...employees], ... } }
@@ -30,7 +29,6 @@ const StaffPage: React.FC = () => {
             const employeeData = response.data.data;
 
             if (Array.isArray(employeeData)) {
-              console.log('Setting employees array:', employeeData);
               setEmployees(employeeData);
             } else {
               console.error(

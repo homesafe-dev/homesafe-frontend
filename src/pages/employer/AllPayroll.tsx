@@ -26,7 +26,6 @@ const AllPayrollPage: React.FC = () => {
         currentPage,
         itemsPerPage
       );
-      console.log('Payroll history response:', response);
 
       if (response && response.status === true) {
         // Handle different response structures

@@ -26,7 +26,6 @@ const ContractCard: React.FC<ContractCardProps> = ({
 
   const handleSubmitTermination = (noticePeriod: string) => {
     // Handle the termination submission here
-    console.log('Termination submitted with notice period:', noticePeriod);
     setIsModalOpen(false);
   };
 

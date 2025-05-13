@@ -72,11 +72,10 @@ const ForgotPasswordOTPPage: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const otpString = otp.join('');
-    console.log('OTP submitted:', otpString);
   };
 
   const handleResetCode = () => {
-    console.log('Resetting code...');
+    //reset
   };
 
   return (

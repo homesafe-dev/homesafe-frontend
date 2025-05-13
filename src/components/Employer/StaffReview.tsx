@@ -14,7 +14,7 @@ const Loan: React.FC = () => {
   };
 
   const handleSubmitReview = (rating: number, feedback: string) => {
-    console.log('Review submitted:', { rating, feedback });
+  
   };
 
   return (

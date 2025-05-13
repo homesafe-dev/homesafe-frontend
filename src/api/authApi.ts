@@ -77,8 +77,6 @@ const authApi = {
         },
       };
 
-      // Log the payload for debugging
-      console.log('Registration payload: [FormData with image file]');
     } else {
       // Create a copy of the registration data
       payload = { ...registrationData };
@@ -87,12 +85,6 @@ const authApi = {
       if (typeof payload.is_employer !== 'undefined') {
         payload.is_employer = Boolean(payload.is_employer);
       }
-
-      // Log the payload for debugging
-      console.log('Registration payload:', {
-        ...payload,
-        facial_image: payload.facial_image ? '[BASE64_IMAGE]' : undefined,
-      });
     }
 
     const response = await axiosInstance.post(

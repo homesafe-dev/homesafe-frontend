@@ -127,24 +127,11 @@ const FacialCapturePage: React.FC = () => {
       // Add the image file as 'avatar'
       formData.append('avatar', selectedImage);
 
-      console.log('Sending registration data with profile image');
-
-      // Log the form data for debugging
-      for (const pair of formData.entries()) {
-        if (pair[0] === 'avatar') {
-          console.log(pair[0], '[File object]');
-        } else {
-          console.log(pair[0], pair[1]);
-        }
-      }
-
       // Use the AuthContext's completeRegistration function
       // This ensures the auth state is properly updated
-      console.log('Using AuthContext to complete registration');
       const response = await auth.completeRegistration(formData);
 
       // Process the response
-      console.log('Registration response:', response);
 
       if (response.success) {
         // Clear session storage
@@ -162,25 +149,25 @@ const FacialCapturePage: React.FC = () => {
         // Navigate to the appropriate dashboard based on the role
         if (response.data && response.data.role) {
           const role = response.data.role;
-          console.log('User role:', role);
+     
 
           if (role === 'employer') {
-            console.log('Navigating to employer dashboard');
+            
             navigate('/employer/dashboard');
           } else if (role === 'agent') {
-            console.log('Navigating to agent dashboard');
+          
             navigate('/agent/dashboard');
           } else if (role === 'employee') {
-            console.log('Navigating to employee dashboard');
+         
             navigate('/employee/dashboard');
           } else {
             // Default to employer dashboard if role is not recognized
-            console.log('Unrecognized role, defaulting to employer dashboard');
+           
             navigate('/employer/dashboard');
           }
         } else {
           // Default to employer dashboard if role is not provided
-          console.log('No role in response, defaulting to employer dashboard');
+        
           navigate('/employer/dashboard');
         }
       } else {
