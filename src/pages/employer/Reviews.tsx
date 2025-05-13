@@ -105,7 +105,6 @@ const ReviewsPage: React.FC<ReviewsPageProps> = ({
 
           const validRating =
             avgRating && !isNaN(parseFloat(avgRating)) ? avgRating : '0';
-         
 
           setAverageRating(validRating);
         } else {
