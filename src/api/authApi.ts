@@ -76,7 +76,6 @@ const authApi = {
           'Content-Type': 'multipart/form-data',
         },
       };
-
     } else {
       // Create a copy of the registration data
       payload = { ...registrationData };

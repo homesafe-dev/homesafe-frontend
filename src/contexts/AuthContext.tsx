@@ -26,32 +26,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Define logout function first to avoid reference issues
   const logout = () => {
-
     setUser(null);
-   
-
-    // Check if items exist before removing
-    const hasToken = !!localStorage.getItem('auth_token');
-    const hasUser = !!localStorage.getItem('auth_user');
-   
 
     localStorage.removeItem('auth_token');
     localStorage.removeItem('auth_user');
 
-    // Verify items were removed
-    const tokenAfter = localStorage.getItem('auth_token');
-    const userAfter = localStorage.getItem('auth_user');
-    
-
     // Ensure auth is marked as initialized after logout
     setAuthInitialized(true);
-
-
   };
 
   // Function to check if token is valid
   const checkTokenValidity = async (token: string) => {
-
     try {
       // Make a test request to a protected endpoint
       const response = await axiosInstance.get('/profile', {
@@ -61,15 +46,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
 
       return response.status === 200;
-    } catch (error) {
-  
+    } catch {
       return false;
     }
   };
 
   // Check for existing auth data on mount and validate token
   useEffect(() => {
-   
     // Set auth as not initialized initially
     setAuthInitialized(false);
 
@@ -128,7 +111,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       // Handle successful login
       if (response.status && response.data) {
-
         // Create user object based on the response data
         const userObj = {
           id: response.data.id || '1', // Use ID from response if available
@@ -142,10 +124,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         // Store auth token and user data if provided
         if (response.data.token) {
-
           localStorage.setItem('auth_token', response.data.token);
           localStorage.setItem('auth_user', JSON.stringify(userObj));
-         
         } else {
           console.warn('[AuthContext] No token in response data');
         }

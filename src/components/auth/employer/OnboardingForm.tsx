@@ -81,7 +81,6 @@ const OnboardingForm: React.FC = () => {
         is_employer: formData.userType === 'employer' ? true : false,
       };
 
-     
       // Store registration data in sessionStorage for the facial capture page
       sessionStorage.setItem(
         'registrationData',

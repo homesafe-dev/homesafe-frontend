@@ -76,7 +76,7 @@ const ResourcesPage: React.FC = () => {
     setActiveMenuId(null);
   };
 
-  const handleDownload = (id: string) => {
+  const handleDownload = () => {
     setActiveMenuId(null);
   };
 
@@ -161,7 +161,7 @@ const ResourcesPage: React.FC = () => {
                       </div>
                       <div
                         className="px-4 py-2 hover:bg-gray-100 flex items-center cursor-pointer"
-                        onClick={() => handleDownload(resource.id)}
+                        onClick={handleDownload}
                       >
                         <FiDownload className="mr-2" />
                         Download

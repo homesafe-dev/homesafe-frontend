@@ -25,7 +25,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   const handleWithdraw = () => {
-//hanndle
+    //hanndle
   };
 
   return (

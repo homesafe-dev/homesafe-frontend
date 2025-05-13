@@ -24,7 +24,7 @@ const payrollApi = {
           params: { page, limit },
         }
       );
-    
+
       return response.data;
     } catch (error) {
       console.error('Payroll API error:', error);

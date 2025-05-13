@@ -149,25 +149,21 @@ const FacialCapturePage: React.FC = () => {
         // Navigate to the appropriate dashboard based on the role
         if (response.data && response.data.role) {
           const role = response.data.role;
-     
 
           if (role === 'employer') {
-            
             navigate('/employer/dashboard');
           } else if (role === 'agent') {
-          
             navigate('/agent/dashboard');
           } else if (role === 'employee') {
-         
             navigate('/employee/dashboard');
           } else {
             // Default to employer dashboard if role is not recognized
-           
+
             navigate('/employer/dashboard');
           }
         } else {
           // Default to employer dashboard if role is not provided
-        
+
           navigate('/employer/dashboard');
         }
       } else {
