@@ -98,21 +98,14 @@ const ReviewsPage: React.FC<ReviewsPageProps> = ({
         const response = await userApi.getUserReviews(userId);
 
         if (response.status) {
-          console.log('Reviews API response:', response.data);
           setReviews(response.data.reviews || []);
 
           // Ensure average_rating is a valid number or default to '0'
           const avgRating = response.data.average_rating;
-          console.log(
-            'Average rating from API:',
-            avgRating,
-            'Type:',
-            typeof avgRating
-          );
 
           const validRating =
             avgRating && !isNaN(parseFloat(avgRating)) ? avgRating : '0';
-          console.log('Processed rating:', validRating);
+         
 
           setAverageRating(validRating);
         } else {

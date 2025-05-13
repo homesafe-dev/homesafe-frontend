@@ -128,7 +128,6 @@ const ReviewPage: React.FC<ReviewsPageProps> = ({
         const response = await userApi.getUserReviews(currentUserId);
 
         if (response.status) {
-          console.log('Reviews API response:', response.data);
           setReviews(response.data.reviews || []);
 
           // Ensure average_rating is a valid number or default to '0'

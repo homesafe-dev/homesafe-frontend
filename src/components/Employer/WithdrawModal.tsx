@@ -25,7 +25,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   const handleWithdraw = () => {
-    console.log('Processing withdrawal', { bankName, accountNumber, amount });
+//hanndle
   };
 
   return (

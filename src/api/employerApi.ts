@@ -18,7 +18,7 @@ const employerApi = {
   getEmployees: async () => {
     try {
       const response = await axiosInstance.get(EMPLOYER_ENDPOINTS.EMPLOYEES);
-      console.log('Raw API response:', response);
+ 
       return response.data;
     } catch (error) {
       console.error('API error:', error);

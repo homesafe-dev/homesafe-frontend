@@ -18,7 +18,6 @@ const PayrollPage: React.FC = () => {
     setError(null);
     try {
       const response = await payrollApi.getPayrollHistory(currentPage);
-      console.log('Payroll history response:', response);
 
       if (response && response.status === true) {
         // Handle different response structures

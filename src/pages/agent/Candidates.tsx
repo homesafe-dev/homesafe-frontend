@@ -119,7 +119,6 @@ const CandidatesPage: React.FC = () => {
 
       if (response.status) {
         setSuccess(response.message || 'Candidate registered successfully');
-        console.log('Registration response:', response);
         // Reset form or navigate
         setTimeout(() => {
           navigate('/agent/all-candidates');

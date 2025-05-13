@@ -26,15 +26,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Define logout function first to avoid reference issues
   const logout = () => {
-    console.log('[AuthContext] Logging out user');
+
     setUser(null);
-    console.log('[AuthContext] User state cleared');
+   
 
     // Check if items exist before removing
     const hasToken = !!localStorage.getItem('auth_token');
     const hasUser = !!localStorage.getItem('auth_user');
-    console.log('[AuthContext] Before logout - Token exists:', hasToken);
-    console.log('[AuthContext] Before logout - User exists:', hasUser);
+   
 
     localStorage.removeItem('auth_token');
     localStorage.removeItem('auth_user');
@@ -42,19 +41,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Verify items were removed
     const tokenAfter = localStorage.getItem('auth_token');
     const userAfter = localStorage.getItem('auth_user');
-    console.log('[AuthContext] After logout - Token exists:', !!tokenAfter);
-    console.log('[AuthContext] After logout - User exists:', !!userAfter);
+    
 
     // Ensure auth is marked as initialized after logout
     setAuthInitialized(true);
 
-    // Redirect to login page can be handled by the component that calls logout
-    console.log('[AuthContext] Logout complete');
+
   };
 
   // Function to check if token is valid
   const checkTokenValidity = async (token: string) => {
-    console.log('[AuthContext] Checking token validity');
+
     try {
       // Make a test request to a protected endpoint
       const response = await axiosInstance.get('/profile', {
@@ -62,72 +59,58 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log('[AuthContext] Token validation response:', response.status);
+
       return response.status === 200;
     } catch (error) {
-      console.error('[AuthContext] Token validation failed:', error);
+  
       return false;
     }
   };
 
   // Check for existing auth data on mount and validate token
   useEffect(() => {
-    console.log('[AuthContext] Initializing auth state');
+   
     // Set auth as not initialized initially
     setAuthInitialized(false);
 
     const token = localStorage.getItem('auth_token');
     const storedUser = localStorage.getItem('auth_user');
 
-    console.log('[AuthContext] Token exists:', !!token);
-    console.log('[AuthContext] User data exists:', !!storedUser);
-
     if (token && storedUser) {
       try {
         const parsedUser = JSON.parse(storedUser) as AuthUser;
-        console.log('[AuthContext] Parsed user:', parsedUser);
+
         setUser(parsedUser);
-        console.log('[AuthContext] User state set successfully');
 
         // Add a flag to indicate this is a page refresh
         // This helps prevent unnecessary API calls that might trigger 401 errors
         sessionStorage.setItem('is_page_refresh', 'true');
-        console.log('[AuthContext] Set page refresh flag in sessionStorage');
 
         // Clear the flag after a short delay
         setTimeout(() => {
           sessionStorage.removeItem('is_page_refresh');
-          console.log('[AuthContext] Cleared page refresh flag after timeout');
         }, 10000); // Increased timeout to 10 seconds
 
         // Validate token in background (don't wait for it)
         checkTokenValidity(token).then((isValid) => {
-          console.log('[AuthContext] Token validation result:', isValid);
           if (!isValid) {
             console.warn('[AuthContext] Token is invalid, logging out');
             logout();
           }
           // Mark auth as initialized regardless of token validity
           setAuthInitialized(true);
-          console.log('[AuthContext] Auth initialization complete');
         });
       } catch (error) {
         console.error('[AuthContext] Error parsing stored user data:', error);
         // Clear invalid data
         localStorage.removeItem('auth_token');
         localStorage.removeItem('auth_user');
-        console.log(
-          '[AuthContext] Cleared invalid auth data from localStorage'
-        );
         // Mark auth as initialized even if there was an error
         setAuthInitialized(true);
-        console.log('[AuthContext] Auth initialization complete (with error)');
       }
     } else {
-      console.log('[AuthContext] No auth data found in localStorage');
       // Mark auth as initialized even if no auth data was found
       setAuthInitialized(true);
-      console.log('[AuthContext] Auth initialization complete (no auth data)');
     }
   }, []);
 
@@ -136,19 +119,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     password: string,
     type: UserType
   ): Promise<OtpResponse> => {
-    console.log('[AuthContext] Login attempt:', { email, type });
     setLoading(true);
     setError(null);
 
     try {
-      console.log('[AuthContext] Calling login API');
       const response = await authApi.login(email, password);
-      console.log('[AuthContext] Login API response:', response);
       setLoading(false);
 
       // Handle successful login
       if (response.status && response.data) {
-        console.log('[AuthContext] Login successful, processing user data');
 
         // Create user object based on the response data
         const userObj = {
@@ -158,30 +137,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           type: (response.data.role as UserType) || type, // Use provided type as fallback
         };
 
-        console.log('[AuthContext] Created user object:', userObj);
-
         // Set user in state
         setUser(userObj);
-        console.log('[AuthContext] User state updated');
 
         // Store auth token and user data if provided
         if (response.data.token) {
-          console.log('[AuthContext] Storing auth token in localStorage');
+
           localStorage.setItem('auth_token', response.data.token);
           localStorage.setItem('auth_user', JSON.stringify(userObj));
-          console.log('[AuthContext] Auth data stored in localStorage');
-
-          // Verify the data was stored correctly
-          const storedToken = localStorage.getItem('auth_token');
-          const storedUser = localStorage.getItem('auth_user');
-          console.log(
-            '[AuthContext] Verification - Token stored:',
-            !!storedToken
-          );
-          console.log(
-            '[AuthContext] Verification - User stored:',
-            !!storedUser
-          );
+         
         } else {
           console.warn('[AuthContext] No token in response data');
         }
