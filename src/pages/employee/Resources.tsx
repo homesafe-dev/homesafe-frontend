@@ -1,75 +1,79 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FiMoreVertical, FiShare2, FiDownload, FiSearch } from 'react-icons/fi';
-import ResourceImg1 from '../../assets/images/Resource1.png';
-import ResourceImg2 from '../../assets/images/Resource2.png';
-import ResourceImg3 from '../../assets/images/Resource3.png';
 import ShareModal from '../../components/Employer/ResourceShareModal';
+import resourcesApi from '../../api/resourcesApi';
+
+// Helper function to extract YouTube video ID from URL
+const getYoutubeVideoId = (url: string): string => {
+  try {
+    // Handle different YouTube URL formats
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : '';
+  } catch (error) {
+    console.error('Error extracting YouTube video ID:', error);
+    return '';
+  }
+};
+
+// Define the resource type based on API response
+interface Resource {
+  id: number;
+  occupation_id: number;
+  video_link: string;
+  description: string;
+  occupation: {
+    id: number;
+    name: string;
+  };
+}
+
+// Define pagination metadata type
+interface PaginationMeta {
+  current_page: number;
+  from: number;
+  last_page: number;
+  path: string;
+  per_page: number;
+  to: number;
+  total: number;
+}
 
 const ResourcesPage: React.FC = () => {
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [resources, setResources] = useState<Resource[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [paginationMeta, setPaginationMeta] = useState<PaginationMeta | null>(null);
 
-  // Sample resources data
-  const resources = [
-    {
-      id: '1',
-      title: 'How to make Soup',
-      description:
-        'Meet Cali foster, a passionate chef from Lagos State, Nigeria. With a love for cooking that knows no bounds, Cali brings the flavors of Lagos to every dish.',
-      image: ResourceImg1,
-      type: 'Video',
-      url: 'www.makesoup.com',
-    },
-    {
-      id: '2',
-      title: 'How to make Soup',
-      description:
-        'Meet Cali foster, a passionate chef from Lagos State, Nigeria. With a love for cooking that knows no bounds, Cali brings the flavors of Lagos to every dish.',
-      image: ResourceImg1,
-      type: 'PDF',
-      url: 'www.makesoup.com',
-    },
-    {
-      id: '3',
-      title: 'How to make Soup',
-      description:
-        'Meet Cali foster, a passionate chef from Lagos State, Nigeria. With a love for cooking that knows no bounds, Cali brings the flavors of Lagos to every dish.',
-      image: ResourceImg2,
-      type: 'Video',
-      url: 'www.makesoup.com',
-    },
-    {
-      id: '4',
-      title: 'How to make Soup',
-      description:
-        'Meet Cali foster, a passionate chef from Lagos State, Nigeria. With a love for cooking that knows no bounds, Cali brings the flavors of Lagos to every dish.',
-      image: ResourceImg1,
-      type: 'Video',
-      url: 'www.makesoup.com',
-    },
-    {
-      id: '5',
-      title: 'How to make Soup',
-      description:
-        'Meet Cali foster, a passionate chef from Lagos State, Nigeria. With a love for cooking that knows no bounds, Cali brings the flavors of Lagos to every dish.',
-      image: ResourceImg3,
-      type: 'PDF',
-      url: 'www.makesoup.com',
-    },
-    {
-      id: '6',
-      title: 'How to make Soup',
-      description:
-        'Meet Cali foster, a passionate chef from Lagos State, Nigeria. With a love for cooking that knows no bounds, Cali brings the flavors of Lagos to every dish.',
-      image: ResourceImg1,
-      type: 'Video',
-      url: 'www.makesoup.com',
-    },
-  ];
+  // Fetch resources from API
+  useEffect(() => {
+    const fetchResources = async () => {
+      try {
+        setLoading(true);
+        const response = await resourcesApi.getLearningResources(currentPage);
+        if (response.status) {
+          setResources(response.data.data);
+          setPaginationMeta(response.data.meta);
+        } else {
+          setError('Failed to fetch resources');
+        }
+      } catch (err) {
+        console.error('Error fetching resources:', err);
+        setError('An error occurred while fetching resources');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const toggleMenu = (id: string) => {
-    setActiveMenuId(activeMenuId === id ? null : id);
+    fetchResources();
+  }, [currentPage]);
+
+  const toggleMenu = (id: number) => {
+    setActiveMenuId(activeMenuId === id.toString() ? null : id.toString());
   };
 
   const handleShare = () => {
@@ -79,6 +83,11 @@ const ResourcesPage: React.FC = () => {
 
   const handleDownload = () => {
     setActiveMenuId(null);
+  };
+
+  // Handle pagination
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
   React.useEffect(() => {
@@ -93,7 +102,7 @@ const ResourcesPage: React.FC = () => {
   }, []);
 
   return (
-    <div className=" min-h-screen">
+    <div className="min-h-screen">
       <div className="max-w-7xl mx-auto px-4 py-6">
         <ShareModal
           isOpen={isShareModalOpen}
@@ -116,88 +125,137 @@ const ResourcesPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {resources.map((resource) => (
-            <div
-              key={resource.id}
-              className="rounded-lg overflow-hidden bg-white p-2 shadow-sm border border-gray-50"
-            >
-              <div className="relative">
-                <img
-                  src={resource.image}
-                  alt={resource.title}
-                  className="w-full h-48 object-cover"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = 'https://via.placeholder.com/400x200';
-                  }}
-                />
-              </div>
+        {loading ? (
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500"></div>
+          </div>
+        ) : error ? (
+          <div className="text-center text-red-500 py-8">{error}</div>
+        ) : (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {resources.map((resource) => (
+                <div
+                  key={resource.id}
+                  className="rounded-lg overflow-hidden bg-white p-2 shadow-sm border border-gray-50"
+                >
+                  <div className="relative">
+                    <img
+                      src={`https://img.youtube.com/vi/${getYoutubeVideoId(resource.video_link)}/hqdefault.jpg`}
+                      alt={`${resource.occupation.name} resource`}
+                      className="w-full h-48 object-cover"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = 'https://via.placeholder.com/400x200';
+                      }}
+                    />
+                  </div>
 
-              <div className="p-4">
-                <div className="flex justify-between items-start relative">
-                  <h3 className="font-medium text-gray-900">
-                    {resource.title}
-                  </h3>
-                  <button
-                    className="text-gray-500 hover:text-gray-700"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleMenu(resource.id);
-                    }}
-                  >
-                    <FiMoreVertical />
-                  </button>
-                  {activeMenuId === resource.id && (
-                    <div
-                      className="absolute top-8 right-0 bg-white rounded-md shadow-lg overflow-hidden z-10 w-36"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <div
-                        className="px-4 py-2 hover:bg-gray-100 flex items-center cursor-pointer"
-                        onClick={handleShare}
+                  <div className="p-4">
+                    <div className="flex justify-between items-start relative">
+                      <h3 className="font-medium text-gray-900">
+                        {resource.occupation.name} Training
+                      </h3>
+                      <button
+                        className="text-gray-500 hover:text-gray-700"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleMenu(resource.id);
+                        }}
                       >
-                        <FiShare2 className="mr-2" />
-                        Share
-                      </div>
-                      <div
-                        className="px-4 py-2 hover:bg-gray-100 flex items-center cursor-pointer"
-                        onClick={handleDownload}
+                        <FiMoreVertical />
+                      </button>
+                      {activeMenuId === resource.id.toString() && (
+                        <div
+                          className="absolute top-8 right-0 bg-white rounded-md shadow-lg overflow-hidden z-10 w-36"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <div
+                            className="px-4 py-2 hover:bg-gray-100 flex items-center cursor-pointer"
+                            onClick={handleShare}
+                          >
+                            <FiShare2 className="mr-2" />
+                            Share
+                          </div>
+                          <div
+                            className="px-4 py-2 hover:bg-gray-100 flex items-center cursor-pointer"
+                            onClick={handleDownload}
+                          >
+                            <FiDownload className="mr-2" />
+                            Download
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    <p className="mt-2 text-sm text-gray-600">
+                      {resource.description}
+                    </p>
+
+                    <div className="mt-4 flex justify-between items-center">
+                      <a
+                        href={resource.video_link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-500 text-sm hover:underline"
                       >
-                        <FiDownload className="mr-2" />
-                        Download
+                        Watch Video
+                      </a>
+                      <div className="px-2 py-1 text-xs rounded-md bg-orange-100 text-orange-800">
+                        Video
                       </div>
                     </div>
-                  )}
-                </div>
-
-                <p className="mt-2 text-sm text-gray-600">
-                  {resource.description}
-                </p>
-
-                <div className="mt-4 flex justify-between items-center">
-                  <a
-                    href={resource.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-500 text-sm hover:underline"
-                  >
-                    {resource.url}
-                  </a>
-                  <div
-                    className={`px-2 py-1 text-xs rounded-md ${
-                      resource.type === 'Video'
-                        ? 'bg-orange-100 text-orange-800'
-                        : 'bg-green-100 text-green-800'
-                    }`}
-                  >
-                    {resource.type}
                   </div>
                 </div>
-              </div>
+              ))}
             </div>
-          ))}
-        </div>
+
+            {/* Pagination */}
+            {paginationMeta && (
+              <div className="flex justify-center mt-8">
+                <nav className="flex items-center space-x-2">
+                  <button
+                    onClick={() => handlePageChange(paginationMeta.current_page - 1)}
+                    disabled={paginationMeta.current_page === 1}
+                    className={`px-3 py-1 rounded ${
+                      paginationMeta.current_page === 1
+                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    }`}
+                  >
+                    Previous
+                  </button>
+
+                  {Array.from({ length: paginationMeta.last_page }, (_, i) => i + 1).map((page) => (
+                    <button
+                      key={page}
+                      onClick={() => handlePageChange(page)}
+                      className={`px-3 py-1 rounded ${
+                        page === paginationMeta.current_page
+                          ? 'bg-green-500 text-white'
+                          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  ))}
+
+                  <button
+                    onClick={() => handlePageChange(paginationMeta.current_page + 1)}
+                    disabled={paginationMeta.current_page === paginationMeta.last_page}
+                    className={`px-3 py-1 rounded ${
+                      paginationMeta.current_page === paginationMeta.last_page
+                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    }`}
+                  >
+                    Next
+                  </button>
+                </nav>
+              </div>
+            )}
+          </>
+        )}
       </div>
     </div>
   );

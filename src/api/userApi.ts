@@ -25,14 +25,20 @@ const userApi = {
 
   /**
    * Update user profile
-   * @param profileData - User profile data to update
+   * @param profileData - User profile data to update (can be FormData for file uploads or regular object)
    * @returns Promise with the API response
    */
   updateProfile: async (profileData: any) => {
     try {
-      const response = await axiosInstance.put(
+      // Set the appropriate content type for FormData
+      const config = profileData instanceof FormData
+        ? { headers: { 'Content-Type': 'multipart/form-data' } }
+        : {};
+
+      const response = await axiosInstance.post(
         USER_ENDPOINTS.PROFILE,
-        profileData
+        profileData,
+        config
       );
       return response.data;
     } catch (error) {
