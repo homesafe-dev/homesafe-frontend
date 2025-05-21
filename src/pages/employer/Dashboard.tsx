@@ -152,7 +152,7 @@ const DashboardContent: React.FC = () => {
         </div>
 
         {/* Staff Count Cards */}
-        <div className="bg-gray-50 p-6 rounded-lg shadow">
+        <div className="bg-[#E7E3F6] p-6 rounded-lg shadow">
           <div className="flex items-center gap-6">
             <div className="bg-[#C8EDDF80] p-4 rounded-full">
               <BsPeople className="text-gray-500" size={24} />
@@ -166,7 +166,7 @@ const DashboardContent: React.FC = () => {
           </div>
         </div>
 
-        <div className="bg-gray-50 p-6 rounded-lg shadow">
+        <div className="bg-[#E9E3E3] p-6 rounded-lg shadow">
           <div className="flex items-center gap-6">
             <div className="bg-[#EFAE7333] p-4 rounded-full">
               <BsPeople className="text-gray-500" size={24} />
@@ -184,36 +184,36 @@ const DashboardContent: React.FC = () => {
       {/* Activities Section */}
       <div className="mb-8">
         <h2 className="text-lg font-medium text-gray-700 mb-6">Activities</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Educational Resources Card */}
-          <div className="bg-[#E7E3F6] p-6 rounded-lg shadow min-h-[282px]">
+          <div className="bg-[#E7E3F6] p-6 rounded-lg shadow min-h-[180px]">
             <div className="flex justify-between">
               <div className="mt-12">
                 <p className="text-gray-600 text-sm">
                   Staff on Educational Resources
                 </p>
                 <h3 className="text-xl font-medium text-gray-800 mt-2">None</h3>
-                <button className="flex items-center gap-2 mt-6 bg-white border border-gray-300 text-gray-600 py-2 px-4 rounded-md text-sm">
+                {/* <button className="flex items-center gap-2 mt-6 bg-white border border-gray-300 text-gray-600 py-2 px-4 rounded-md text-sm">
                   <BsCreditCard size={12} />
                   Recommend Resources
-                </button>
+                </button> */}
               </div>
               <div className="bg-white w-[100px] h-[100px] rounded-full"></div>
             </div>
           </div>
 
           {/* Staff Payroll Card */}
-          <div className="bg-[#E9E3E3] p-6 rounded-lg shadow min-h-[282px]">
+          <div className="bg-[#E9E3E3] p-6 rounded-lg shadow min-h-[180px]">
             <div className="flex justify-between">
               <div className="mt-12">
                 <p className="text-gray-600 text-sm">Total Staff Payroll</p>
                 <h3 className="text-xl font-medium text-gray-800 mt-2">
                   ₦ 1,200,000.00
                 </h3>
-                <button className="flex items-center gap-2 mt-6 bg-white border border-gray-300 text-gray-600 py-2 px-4 rounded-md text-sm">
+                {/* <button className="flex items-center gap-2 mt-6 bg-white border border-gray-300 text-gray-600 py-2 px-4 rounded-md text-sm">
                   <FaPlus size={12} />
                   Add Staff to Payroll
-                </button>
+                </button> */}
               </div>
               <div className="bg-white w-[100px] h-[100px] rounded-full"></div>
             </div>

@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { FaPlus } from 'react-icons/fa';
+import { FaPlus, FaEllipsisV, FaEye } from 'react-icons/fa';
+import { BsBook } from 'react-icons/bs';
+import { Link } from 'react-router-dom';
 import userApi from '../../api/userApi';
+import walletApi from '../../api/walletApi';
+import { WalletTransaction } from '../../types/wallet';
 
 interface UserProfile {
   id: number;
@@ -18,8 +22,11 @@ interface UserProfile {
 
 const DashboardContent: React.FC = () => {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [transactions, setTransactions] = useState<WalletTransaction[]>([]);
   const [loading, setLoading] = useState(true);
+  const [transactionsLoading, setTransactionsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [transactionsError, setTransactionsError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -40,7 +47,24 @@ const DashboardContent: React.FC = () => {
       }
     };
 
+    const fetchTransactions = async () => {
+      setTransactionsLoading(true);
+      setTransactionsError(null);
+      try {
+        const response = await walletApi.getTransactions(1, 6);
+        if (response.status && response.data && response.data.data) {
+          setTransactions(response.data.data);
+        }
+      } catch (err: any) {
+        console.error('Error fetching transactions:', err);
+        setTransactionsError(err.message || 'Failed to load transactions');
+      } finally {
+        setTransactionsLoading(false);
+      }
+    };
+
     fetchUserProfile();
+    fetchTransactions();
   }, []);
 
   // Format currency
@@ -77,74 +101,222 @@ const DashboardContent: React.FC = () => {
         Hello {userProfile?.first_name || 'User'}
       </h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-[#E7F6F0] p-6 rounded-lg h-[282px] relative">
-          <div className="absolute top-6 right-6 w-[100px] h-[100px] bg-white rounded-full"></div>
-          <div className="max-w-[65%] h-full flex flex-col justify-center">
-            <h2 className="text-[16px] text-[#24292E] mb-2">Salary</h2>
-            <p className="text-[24px] font-semibold text-[#24292E] mb-6">
+      {/* Top 3 Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        {/* Salary Card */}
+        <div className="bg-[#174B35] text-white p-6 rounded-lg shadow relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-[180px] h-[180px] opacity-10">
+            <svg width="100%" height="100%" viewBox="0 0 100 100">
+              <line
+                x1="40"
+                y1="0"
+                x2="90"
+                y2="100"
+                stroke="white"
+                strokeWidth="1"
+              />
+              <line
+                x1="45"
+                y1="0"
+                x2="95"
+                y2="100"
+                stroke="white"
+                strokeWidth="1"
+              />
+              <line
+                x1="50"
+                y1="0"
+                x2="100"
+                y2="100"
+                stroke="white"
+                strokeWidth="1"
+              />
+              <line
+                x1="55"
+                y1="0"
+                x2="105"
+                y2="100"
+                stroke="white"
+                strokeWidth="1"
+              />
+              <line
+                x1="60"
+                y1="0"
+                x2="110"
+                y2="100"
+                stroke="white"
+                strokeWidth="1"
+              />
+            </svg>
+          </div>
+          <div className="mb-6">
+            <p className="text-white/80 text-sm mb-2">Monthly Salary</p>
+            <h2 className="text-2xl font-semibold">
               {userProfile?.salary
                 ? formatCurrency(userProfile.salary)
                 : '₦ 0.00'}
-            </p>
+            </h2>
+          </div>
+          <div className="flex gap-4">
+            <Link to="/employee/salary">
+              <button className="bg-white text-[#246D51] h-[42px] py-2 px-4 rounded flex items-center gap-2 text-sm">
+                <FaEye size={12} />
+                View Details
+              </button>
+            </Link>
+          </div>
+        </div>
 
-            <div className="flex gap-20">
-              <div>
-                <p className="text-gray-600 text-sm mb-1">Account Details:</p>
-                <p className="text-[#24292E] text-[14px]">Wema Bank</p>
-                <p className="text-[#24292E] text-[14px]">1234567890</p>
-              </div>
-
-              <div>
-                <p className="text-gray-600 text-sm mb-1">Payment Date:</p>
-                <p className="text-[#24292E] text-[14px]">25th Nov, 2024</p>
-                <p className="text-gray-600 text-[12px]">
-                  Payment is automated
-                </p>
-              </div>
+        {/* Wallet Balance Card */}
+        <div className="bg-[#E7E3F6] p-6 rounded-lg shadow">
+          <div className="flex items-center gap-6">
+            <div className="bg-[#C8EDDF80] p-4 rounded-full">
+              <FaPlus className="text-gray-500" size={24} />
+            </div>
+            <div>
+              <h3 className="text-[20px] font-normal text-[#24292E]">
+                {userProfile?.wallet?.current_balance
+                  ? formatCurrency(userProfile.wallet.current_balance)
+                  : '₦ 0.00'}
+              </h3>
+              <p className="text-[#24292E] mt-2 text-[16px]">
+                Wallet Balance
+              </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-[#FFF1F1] p-6 rounded-lg h-[282px] relative">
-          <div className="absolute top-6 right-6 w-[100px] h-[100px] bg-white rounded-full"></div>
-          <div className="max-w-[65%] h-full flex flex-col justify-center">
-            <h2 className="text-[16px] text-[#24292E] mb-2">Wallet Balance</h2>
-            <p className="text-[24px] font-semibold text-[#24292E] mb-6">
-              {userProfile?.wallet?.current_balance
-                ? formatCurrency(userProfile.wallet.current_balance)
-                : '₦ 0.00'}
-            </p>
+        {/* Educational Resources Card */}
+        <div className="bg-[#E9E3E3] p-6 rounded-lg shadow">
+          <div className="flex items-center gap-6">
+            <div className="bg-[#EFAE7333] p-4 rounded-full">
+              <BsBook className="text-gray-500" size={24} />
+            </div>
+            <div>
+              <h3 className="text-[20px] font-normal text-[#24292E]">0</h3>
+              <p className="text-[#24292E] mt-2 text-[16px]">
+                Educational Resources
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
 
-            <button className="flex items-center gap-2 bg-white text-[#24292E] py-3 px-4 rounded-lg text-[14px] w-fit">
-              <FaPlus size={12} />
-              Request for Salary Advance
+      {/* Bottom Card - Salary Advance */}
+      <div className="mb-8">
+        <h2 className="text-lg font-medium text-gray-700 mb-6">Activities</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-[#F1F1F1] p-6 rounded-lg shadow min-h-[180px] relative">
+            <div className="absolute top-6 right-6 w-[100px] h-[100px] bg-white rounded-full"></div>
+            <div className="mt-12">
+              <p className="text-gray-600 text-sm">Available Advance</p>
+              <h3 className="text-xl font-medium text-gray-800 mt-2">₦ 0.00</h3>
+              <p className="text-gray-500 text-sm mt-2">
+                You can request a salary advance after completing 3 months
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Transaction History Section */}
+      <div className="mt-8">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-lg font-medium text-gray-700">
+            Transaction History
+          </h2>
+          <Link to="/employee/salary">
+            <button className="text-[#7B858E] text-sm hover:underline">
+              View All
             </button>
-          </div>
+          </Link>
         </div>
 
-        <div className="bg-[#F1F0F9] p-6 rounded-lg h-[282px] relative">
-          <div className="absolute top-6 right-6 w-[100px] h-[100px] bg-white rounded-full"></div>
-          <div className="max-w-[65%] h-full flex flex-col justify-center">
-            <h2 className="text-[16px] text-[#24292E] mb-2">
-              Educational Resources
-            </h2>
-            <p className="text-[24px] font-semibold text-[#24292E]">None</p>
+        {transactionsLoading ? (
+          <div className="flex justify-center items-center h-40">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-500"></div>
           </div>
-        </div>
-
-        <div className="bg-[#F1F1F1] p-6 rounded-lg h-[282px] relative">
-          <div className="absolute top-6 right-6 w-[100px] h-[100px] bg-white rounded-full"></div>
-          <div className="max-w-[65%] h-full flex flex-col justify-center">
-            <h2 className="text-[16px] text-[#24292E] mb-2">Salary Advance</h2>
-            <p className="text-[24px] font-semibold text-[#24292E] mb-6">₦ 0</p>
-
-            <button className="flex items-center gap-2 bg-white text-[#24292E] py-3 px-4 rounded-lg text-[14px] w-fit">
-              <FaPlus size={12} />
-              Request for Salary Advance
-            </button>
+        ) : transactionsError ? (
+          <div className="bg-red-50 text-red-600 p-4 rounded-lg text-center">
+            {transactionsError}
           </div>
-        </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-green-50 rounded-lg overflow-hidden">
+              <thead className="text-left text-gray-600 text-sm">
+                <tr>
+                  <th className="py-4 px-6 font-medium">Transaction ID</th>
+                  <th className="py-4 px-6 font-medium">Type</th>
+                  <th className="py-4 px-6 font-medium">Description</th>
+                  <th className="py-4 px-6 font-medium">Amount</th>
+                  <th className="py-4 px-6 font-medium">Status</th>
+                  <th className="py-4 px-6 font-medium"></th>
+                </tr>
+              </thead>
+              <tbody className="bg-white">
+                {transactions.length > 0 ? (
+                  transactions.map((transaction) => (
+                    <tr
+                      key={transaction.id}
+                      className="border-b border-gray-100"
+                    >
+                      <td className="py-4 px-6">
+                        {transaction.transaction.reference_code.substring(
+                          0,
+                          10
+                        )}
+                        ...
+                      </td>
+                      <td className="py-4 px-6 capitalize">
+                        {transaction.type}
+                      </td>
+                      <td className="py-4 px-6">{transaction.description}</td>
+                      <td className="py-4 px-6">
+                        ₦{' '}
+                        {parseFloat(
+                          transaction.transaction.amount
+                        ).toLocaleString(undefined, {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}
+                      </td>
+                      <td className="py-4 px-6">
+                        <span
+                          className={`px-3 py-1 rounded-full text-xs ${
+                            transaction.transaction.status === 'successful'
+                              ? 'bg-green-100 text-green-700'
+                              : transaction.transaction.status === 'pending'
+                                ? 'bg-yellow-100 text-yellow-700'
+                                : 'bg-red-100 text-red-700'
+                          }`}
+                        >
+                          {transaction.transaction.status
+                            .charAt(0)
+                            .toUpperCase() +
+                            transaction.transaction.status.slice(1)}
+                        </span>
+                      </td>
+                      <td className="py-4 px-6">
+                        <button className="text-gray-500 hover:text-gray-700">
+                          <FaEllipsisV size={16} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan={6}
+                      className="py-8 px-6 text-center text-gray-500"
+                    >
+                      No transactions found
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );
