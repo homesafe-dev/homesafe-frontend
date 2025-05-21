@@ -7,6 +7,7 @@ const CONTRACT_ENDPOINTS = {
   GET_CONTRACT_DETAILS: '/contracts',
   UPDATE_CONTRACT: '/contracts',
   TERMINATE_CONTRACT: '/contracts/terminate',
+  GET_PROPOSALS: '/contracts/proposals',
 };
 
 // Contract API service
@@ -112,6 +113,27 @@ const contractApi = {
       return response.data;
     } catch (error) {
       console.error('Error terminating contract:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Get contract proposals
+   * @param page - Page number for pagination
+   * @param limit - Number of items per page
+   * @returns Promise with the API response containing contract proposals
+   */
+  getProposals: async (page = 1, limit = 10) => {
+    try {
+      const response = await axiosInstance.get(
+        CONTRACT_ENDPOINTS.GET_PROPOSALS,
+        {
+          params: { page, limit },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching contract proposals:', error);
       throw error;
     }
   },

@@ -1,23 +1,127 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
-import { FiX } from 'react-icons/fi';
+import { FiX, FiSearch } from 'react-icons/fi';
+import userApi from '../../api/userApi';
+
+interface Employer {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  avatar?: string;
+  company_name?: string;
+}
 
 interface EmployerReviewProps {
   isOpen: boolean;
   onClose: () => void;
+  onReviewSubmitted?: () => void;
 }
 
-const EmployerReview: React.FC<EmployerReviewProps> = ({ isOpen, onClose }) => {
+const EmployerReview: React.FC<EmployerReviewProps> = ({
+  isOpen,
+  onClose,
+  onReviewSubmitted
+}) => {
   const [rating, setRating] = useState(0);
-  const [employerName, setEmployerName] = useState('');
+  const [selectedEmployer, setSelectedEmployer] = useState<Employer | null>(null);
   const [feedback, setFeedback] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [employers, setEmployers] = useState<Employer[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      fetchEmployers();
+    }
+  }, [isOpen]);
+
+  const fetchEmployers = async () => {
+    try {
+      setIsLoading(true);
+      const response = await userApi.getEmployerList();
+      if (response.status) {
+        setEmployers(response.data.data || []);
+      } else {
+        setError(response.message || 'Failed to fetch employers');
+      }
+    } catch (err) {
+      console.error('Error fetching employers:', err);
+      setError('An error occurred while fetching employers');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const filteredEmployers = searchQuery
+    ? employers.filter(employer =>
+        `${employer.first_name} ${employer.last_name}`.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (employer.company_name && employer.company_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        employer.email.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : employers;
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    onClose();
+    if (rating === 0) {
+      setError('Please select a rating');
+      return;
+    }
+
+    if (!selectedEmployer) {
+      setError('Please select an employer');
+      return;
+    }
+
+    if (!feedback) {
+      setError('Please provide feedback');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      const response = await userApi.submitReview({
+        user_id: selectedEmployer.id,
+        rating,
+        comment: feedback
+      });
+
+      if (response.status) {
+        // Reset form
+        setRating(0);
+        setSelectedEmployer(null);
+        setFeedback('');
+        setSearchQuery('');
+
+        // Notify parent component that a review was submitted
+        if (onReviewSubmitted) {
+          onReviewSubmitted();
+        }
+
+        // Close modal
+        onClose();
+      } else {
+        setError(response.message || 'Failed to submit review');
+      }
+    } catch (err) {
+      console.error('Error submitting review:', err);
+      setError('An error occurred while submitting your review');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleEmployerSelect = (employer: Employer) => {
+    setSelectedEmployer(employer);
+    setSearchQuery('');
   };
 
   return (
@@ -54,33 +158,90 @@ const EmployerReview: React.FC<EmployerReviewProps> = ({ isOpen, onClose }) => {
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm mb-2">Employers' Name</label>
-              <input
-                type="text"
-                placeholder="Enter name"
-                value={employerName}
-                onChange={(e) => setEmployerName(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-1 focus:ring-gray-400"
-                required
-              />
+              <label className="block text-sm mb-2">Search Employer</label>
+              <div className="relative" ref={dropdownRef}>
+                <div className="relative">
+                  <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Search employers"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-400"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
+
+                {selectedEmployer && (
+                  <div className="mt-2 p-3 bg-gray-50 border border-gray-200 rounded-lg relative">
+                    <button
+                      type="button"
+                      className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
+                      onClick={() => setSelectedEmployer(null)}
+                    >
+                      <FiX size={18} />
+                    </button>
+                    <div className="font-medium pr-6">
+                      {selectedEmployer.first_name} {selectedEmployer.last_name}
+                    </div>
+                    {selectedEmployer.company_name && (
+                      <div className="text-sm text-gray-500">{selectedEmployer.company_name}</div>
+                    )}
+                    <div className="text-xs text-gray-400">{selectedEmployer.email}</div>
+                  </div>
+                )}
+
+                {searchQuery && !selectedEmployer && (
+                  <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                    {isLoading ? (
+                      <div className="p-4 text-center text-gray-500">Loading employers...</div>
+                    ) : filteredEmployers.length > 0 ? (
+                      filteredEmployers.map((employer) => (
+                        <div
+                          key={employer.id}
+                          className="p-3 hover:bg-gray-100 cursor-pointer"
+                          onClick={() => handleEmployerSelect(employer)}
+                        >
+                          <div className="font-medium">
+                            {employer.first_name} {employer.last_name}
+                          </div>
+                          {employer.company_name && (
+                            <div className="text-sm text-gray-500">{employer.company_name}</div>
+                          )}
+                          <div className="text-xs text-gray-400">{employer.email}</div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="p-4 text-center text-gray-500">
+                        No employers found matching your search
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
 
             <div>
               <label className="block text-sm mb-2">Additional Feedback</label>
               <textarea
-                placeholder="Tell us more"
+                placeholder="Tell us more about your experience with this employer"
                 value={feedback}
                 onChange={(e) => setFeedback(e.target.value)}
                 className="w-full border border-gray-300 rounded-lg p-3 h-32 resize-none focus:outline-none focus:ring-1 focus:ring-gray-400"
                 required
+                disabled={isSubmitting}
               />
             </div>
 
+            {error && (
+              <div className="text-red-500 text-sm mt-2 mb-2">{error}</div>
+            )}
+
             <button
               type="submit"
-              className="w-full bg-[#A5EA91] hover:bg-[#95ddb1] text-[#24292E] py-3 rounded-lg font-medium transition-colors"
+              className="w-full bg-[#A5EA91] hover:bg-[#95ddb1] text-[#24292E] py-3 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={isSubmitting}
             >
-              Submit Review
+              {isSubmitting ? 'Submitting...' : 'Submit Review'}
             </button>
           </div>
         </form>

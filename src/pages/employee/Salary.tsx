@@ -168,12 +168,12 @@ const Salary: React.FC = () => {
           <table className="w-full text-sm">
             <thead>
               <tr className="text-left text-gray-500 border-b border-gray-200">
-                <th className="py-3 px-2 bg-[#A5EA91]">Transaction Type</th>
-                <th className="py-3 px-2 bg-[#A5EA91]">Transaction ID</th>
-                <th className="py-3 px-2 bg-[#A5EA91]">Date</th>
-                <th className="py-3 px-2 bg-[#A5EA91]">Amount</th>
-                <th className="py-3 px-2 bg-[#A5EA91]">Description</th>
-                <th className="py-3 px-2 bg-[#A5EA91]">From/To</th>
+                <th className="py-3 px-2 bg-[#E7F6F0]">Transaction Type</th>
+                <th className="py-3 px-2 bg-[#E7F6F0]">Transaction ID</th>
+                <th className="py-3 px-2 bg-[#E7F6F0]">Date</th>
+                <th className="py-3 px-2 bg-[#E7F6F0]">Amount</th>
+                <th className="py-3 px-2 bg-[#E7F6F0]">Description</th>
+                <th className="py-3 px-2 bg-[#E7F6F0]">From/To</th>
               </tr>
             </thead>
             <tbody>

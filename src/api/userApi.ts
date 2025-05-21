@@ -5,6 +5,8 @@ const USER_ENDPOINTS = {
   PROFILE: '/profile',
   KYC: '/user-kyc',
   REVIEWS: (userId: number) => `/users/${userId}/reviews`,
+  MEDICAL: '/user-medicals',
+  EMPLOYER_LIST: '/employer-list',
 };
 
 // User API service
@@ -87,6 +89,83 @@ const userApi = {
       return response.data;
     } catch (error) {
       console.error('Error fetching user reviews:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Upload medical record
+   * @param medicalFile - Medical file to upload
+   * @returns Promise with the API response
+   */
+  uploadMedicalRecord: async (medicalFile: File) => {
+    try {
+      // Create FormData for file upload
+      const formData = new FormData();
+      formData.append('medical_file', medicalFile);
+
+      const config = {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      };
+
+      const response = await axiosInstance.post(
+        USER_ENDPOINTS.MEDICAL,
+        formData,
+        config
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error uploading medical record:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Get user medical records
+   * @returns Promise with the API response containing user medical records
+   */
+  getMedicalRecords: async () => {
+    try {
+      const response = await axiosInstance.get(USER_ENDPOINTS.MEDICAL);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching medical records:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Submit a review for a user
+   * @param reviewData - Review data including user_id, rating, and comment
+   * @returns Promise with the API response
+   */
+  submitReview: async (reviewData: { user_id: number; rating: number; comment: string }) => {
+    try {
+      const response = await axiosInstance.post(USER_ENDPOINTS.REVIEWS(reviewData.user_id), {
+        rating: reviewData.rating,
+        comment: reviewData.comment
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error submitting review:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Get employer list
+   * @param page - Page number for pagination
+   * @param limit - Number of items per page
+   * @returns Promise with the API response containing employer list
+   */
+  getEmployerList: async (page = 1, limit = 100) => {
+    try {
+      const response = await axiosInstance.get(USER_ENDPOINTS.EMPLOYER_LIST, {
+        params: { page, limit },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching employer list:', error);
       throw error;
     }
   },

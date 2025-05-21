@@ -1,4 +1,4 @@
-export type UserType = 'employer' | 'employee' | 'agent';
+export type UserType = 'employer' | 'employee' | 'agent' | 'admin';
 
 export interface AuthUser {
   id: string;

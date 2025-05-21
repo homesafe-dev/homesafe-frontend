@@ -11,6 +11,9 @@ interface CandidateProfileAboutProps {
   profileImage: string;
   rating: number;
   isOnline?: boolean;
+  showAdminActions?: boolean;
+  onBlockUser?: () => void;
+  onSuspendUser?: () => void;
 }
 
 const CandidateProfileAbout: React.FC<CandidateProfileAboutProps> = ({
@@ -24,6 +27,9 @@ const CandidateProfileAbout: React.FC<CandidateProfileAboutProps> = ({
   profileImage,
   rating,
   isOnline = true,
+  showAdminActions = false,
+  onBlockUser,
+  onSuspendUser,
 }) => {
   return (
     <div className="flex flex-col items-center bg-white rounded-lg p-4 h-full">
@@ -73,6 +79,23 @@ const CandidateProfileAbout: React.FC<CandidateProfileAboutProps> = ({
           Email
         </h3>
         <p className="text-[13px] text-[#246D51]">{email}</p>
+
+        {showAdminActions && (
+          <div className="mt-6 flex gap-2">
+            <button
+              onClick={onBlockUser}
+              className="bg-[#993018] text-white px-4 py-2 rounded-md w-full"
+            >
+              Block User
+            </button>
+            <button
+              onClick={onSuspendUser}
+              className="border border-[#993018] text-[#993018] px-4 py-2 rounded-md w-full"
+            >
+              Suspend User
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -184,7 +184,7 @@ const Hero: React.FC = () => {
       <div className="relative z-10 flex-grow flex items-center justify-center">
         <div className="text-center px-4 sm:px-6 max-w-4xl mx-auto">
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[56px] font-bold text-white mb-4 sm:mb-6 leading-tight">
-            HomeSafe, Comforts and confidentiality at your Fingertips
+            HomeSafe, Comforts and Confidentiality at your Fingertips
           </h2>
 
           <p className="text-lg sm:text-xl md:text-2xl lg:text-[32px] text-white max-w-2xl mx-auto">

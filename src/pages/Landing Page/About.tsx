@@ -10,7 +10,7 @@ const About = () => {
     <div>
       <Hero />
       <Cards />
-      <Founder />
+      {/* <Founder /> */}
       <CoreValues />
       <Footer />
     </div>
