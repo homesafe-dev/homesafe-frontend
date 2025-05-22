@@ -47,7 +47,6 @@ export default function AgentsTab() {
   const [error, setError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [occupations, setOccupations] = useState<Occupation[]>([]);
-  const [isLoadingOccupations, setIsLoadingOccupations] = useState(false);
   const [formData, setFormData] = useState<CreateAgentFormData>({
     email: '',
     first_name: '',
@@ -87,7 +86,6 @@ export default function AgentsTab() {
     // Fetch occupations
     const fetchOccupations = async () => {
       try {
-        setIsLoadingOccupations(true);
         const response = await agentApi.getOccupations();
         if (response.status && response.data) {
           setOccupations(response.data);
@@ -96,15 +94,17 @@ export default function AgentsTab() {
         }
       } catch (err) {
         console.error('Error fetching occupations:', err);
-      } finally {
-        setIsLoadingOccupations(false);
       }
     };
 
     fetchOccupations();
   }, []);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => {
     const { name, value } = e.target;
 
     if (name === 'occupation') {
@@ -170,7 +170,10 @@ export default function AgentsTab() {
       }
     } catch (err: any) {
       console.error('Error creating agent:', err);
-      setFormError(err.response?.data?.message || 'An error occurred while creating the agent');
+      setFormError(
+        err.response?.data?.message ||
+          'An error occurred while creating the agent'
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -285,7 +288,9 @@ export default function AgentsTab() {
                   {agent.address ? agent.address.split(',')[0] : 'Lagos'}
                 </td>
                 <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
-                  {agent.total_employees !== undefined ? agent.total_employees : 'N/A'}
+                  {agent.total_employees !== undefined
+                    ? agent.total_employees
+                    : 'N/A'}
                 </td>
                 <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
                   {agent.phone || 'N/A'}
@@ -298,7 +303,9 @@ export default function AgentsTab() {
                         : 'bg-green-100 text-green-800'
                     }`}
                   >
-                    {agent.status === 'not verified' ? 'Unverified' : 'Verified'}
+                    {agent.status === 'not verified'
+                      ? 'Unverified'
+                      : 'Verified'}
                   </span>
                 </td>
                 <td className="px-6 py-4 text-right">
@@ -359,7 +366,10 @@ export default function AgentsTab() {
             <form onSubmit={handleSubmit}>
               <div className="grid grid-cols-2 gap-4 mb-4">
                 <div>
-                  <label htmlFor="first_name" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="first_name"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     First Name*
                   </label>
                   <input
@@ -374,7 +384,10 @@ export default function AgentsTab() {
                 </div>
 
                 <div>
-                  <label htmlFor="last_name" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="last_name"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Last Name*
                   </label>
                   <input
@@ -389,7 +402,10 @@ export default function AgentsTab() {
                 </div>
 
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Email*
                   </label>
                   <input
@@ -404,7 +420,10 @@ export default function AgentsTab() {
                 </div>
 
                 <div>
-                  <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="password"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Password*
                   </label>
                   <input
@@ -419,7 +438,10 @@ export default function AgentsTab() {
                 </div>
 
                 <div>
-                  <label htmlFor="dob" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="dob"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Date of Birth*
                   </label>
                   <input
@@ -434,7 +456,10 @@ export default function AgentsTab() {
                 </div>
 
                 <div>
-                  <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="address"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Address*
                   </label>
                   <input
@@ -449,7 +474,10 @@ export default function AgentsTab() {
                 </div>
 
                 <div>
-                  <label htmlFor="salary" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="salary"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Salary*
                   </label>
                   <input
@@ -464,7 +492,10 @@ export default function AgentsTab() {
                 </div>
 
                 <div>
-                  <label htmlFor="occupation" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="occupation"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Occupation*
                   </label>
                   <select

@@ -159,7 +159,9 @@ export default function DashboardAgentsTab() {
                   {agent.address ? agent.address.split(',')[0] : 'Lagos'}
                 </td>
                 <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
-                  {agent.total_employees !== undefined ? agent.total_employees : 'N/A'}
+                  {agent.total_employees !== undefined
+                    ? agent.total_employees
+                    : 'N/A'}
                 </td>
                 <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
                   {agent.phone || 'N/A'}
@@ -172,7 +174,9 @@ export default function DashboardAgentsTab() {
                         : 'bg-green-100 text-green-800'
                     }`}
                   >
-                    {agent.status === 'not verified' ? 'Unverified' : 'Verified'}
+                    {agent.status === 'not verified'
+                      ? 'Unverified'
+                      : 'Verified'}
                   </span>
                 </td>
               </tr>

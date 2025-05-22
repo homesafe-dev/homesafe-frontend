@@ -68,13 +68,14 @@ interface ContractCardProps {
 }
 
 const ContractCard: React.FC<ContractCardProps> = ({ proposal, imageUrl }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   // Add safety checks for the proposal structure
   if (!proposal || !proposal.contract || !proposal.proposal) {
     console.warn('Invalid proposal structure in ContractCard:', proposal);
     return null;
   }
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const { contract, proposal: proposalData } = proposal;
 
   // Safely access employer name
