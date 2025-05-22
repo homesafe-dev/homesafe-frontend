@@ -131,6 +131,34 @@ const contractApi = {
           params: { page, limit },
         }
       );
+
+      // Log the response structure for debugging
+      console.log('Contract proposals API response:', JSON.stringify(response.data, null, 2));
+
+      // Handle the new API response structure
+      if (response.data && response.data.status) {
+        // Check if data.data exists and contains an array
+        if (response.data.data && Array.isArray(response.data.data.data)) {
+          // Flatten the array of arrays into a single array of proposal objects
+          const flattenedData = response.data.data.data.flat();
+          console.log('Flattened data:', flattenedData);
+
+          // Return the same structure as before but with flattened data
+          return {
+            ...response.data,
+            data: flattenedData
+          };
+        } else {
+          console.warn('Unexpected data structure in API response:', response.data);
+          // If we can't find the expected structure, return an empty array for data
+          // to prevent errors in the UI
+          return {
+            ...response.data,
+            data: []
+          };
+        }
+      }
+
       return response.data;
     } catch (error) {
       console.error('Error fetching contract proposals:', error);
