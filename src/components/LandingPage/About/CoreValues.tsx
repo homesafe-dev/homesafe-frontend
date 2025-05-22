@@ -3,7 +3,7 @@ import Vision from '../../../assets/icons/vision.svg';
 
 export default function CoreValues() {
   return (
-    <div className="w-full bg-white py-12 sm:py-20">
+    <div className="w-full bg-[#F8F8F8] py-12 sm:py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-2xl sm:text-3xl font-medium text-center text-gray-800 mb-8 sm:mb-10">
           Our Core Values

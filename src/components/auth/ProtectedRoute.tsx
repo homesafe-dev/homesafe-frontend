@@ -56,6 +56,8 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       return <Navigate to="/employee/dashboard" replace />;
     } else if (user.type === 'agent') {
       return <Navigate to="/agent/dashboard" replace />;
+    } else if (user.type === 'admin') {
+      return <Navigate to="/admin/dashboard" replace />;
     }
 
     // Default fallback
