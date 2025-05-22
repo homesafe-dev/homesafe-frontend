@@ -158,12 +158,16 @@ const Medical: React.FC = () => {
 
       {/* Upload Medical Record Section */}
       <div className="bg-white rounded-lg p-6 shadow-sm mb-8">
-        <h2 className="text-lg font-medium text-gray-900 mb-4">Upload Medical Record</h2>
+        <h2 className="text-lg font-medium text-gray-900 mb-4">
+          Upload Medical Record
+        </h2>
 
         <div className="mb-4">
           <label className="w-full h-[50px] flex items-center px-3 py-2 border border-[#DEE0E3] rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 bg-white text-gray-400 text-sm cursor-pointer">
             <IoCloudUploadOutline className="mr-2" />
-            {selectedFile ? selectedFile.name : 'Upload or drop a medical file (.png, .jpg, .pdf)'}
+            {selectedFile
+              ? selectedFile.name
+              : 'Upload or drop a medical file (.png, .jpg, .pdf)'}
             <input
               type="file"
               ref={fileInputRef}
@@ -208,7 +212,9 @@ const Medical: React.FC = () => {
         </div>
       ) : medicalRecords.length === 0 ? (
         <div className="text-center py-8">
-          <p className="text-gray-600">No medical records found. Upload your first medical record above.</p>
+          <p className="text-gray-600">
+            No medical records found. Upload your first medical record above.
+          </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

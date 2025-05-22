@@ -40,7 +40,6 @@ export default function EmployersTab() {
         if (response.status) {
           // The employers array is in response.data.data
           setEmployers(response.data.data || []);
-
         } else {
           setError(response.message || 'Failed to fetch employers');
         }
@@ -78,9 +77,7 @@ export default function EmployersTab() {
             <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
               Status
             </th>
-            <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
-
-            </th>
+            <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal"></th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200">

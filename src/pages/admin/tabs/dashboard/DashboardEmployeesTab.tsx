@@ -132,8 +132,8 @@ export default function DashboardEmployeesTab() {
           ) : (
             // Data loaded successfully
             employees.map((employee) => (
-              <tr 
-                key={employee.id} 
+              <tr
+                key={employee.id}
                 className="hover:bg-gray-50 cursor-pointer"
                 onClick={() => navigate(`/admin/user/${employee.id}`)}
               >
@@ -165,7 +165,9 @@ export default function DashboardEmployeesTab() {
                   })}
                 </td>
                 <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
-                  {employee.employer ? employee.employer.name : 'No employer assigned'}
+                  {employee.employer
+                    ? employee.employer.name
+                    : 'No employer assigned'}
                 </td>
                 <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
                   {employee.gender.charAt(0).toUpperCase() +

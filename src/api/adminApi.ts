@@ -79,7 +79,9 @@ const adminApi = {
    */
   approveUser: async (userId) => {
     try {
-      const response = await axiosInstance.post(`${ADMIN_ENDPOINTS.APPROVE_USER}/${userId}`);
+      const response = await axiosInstance.post(
+        `${ADMIN_ENDPOINTS.APPROVE_USER}/${userId}`
+      );
       return response.data;
     } catch (error) {
       console.error('Error approving user:', error);
@@ -94,7 +96,9 @@ const adminApi = {
    */
   declineUser: async (userId) => {
     try {
-      const response = await axiosInstance.post(`${ADMIN_ENDPOINTS.DECLINE_USER}/${userId}`);
+      const response = await axiosInstance.post(
+        `${ADMIN_ENDPOINTS.DECLINE_USER}/${userId}`
+      );
       return response.data;
     } catch (error) {
       console.error('Error declining user:', error);
@@ -110,9 +114,12 @@ const adminApi = {
    */
   getUnapprovedUsers: async (page = 1, limit = 15) => {
     try {
-      const response = await axiosInstance.get(ADMIN_ENDPOINTS.UNAPPROVED_USERS, {
-        params: { page, limit },
-      });
+      const response = await axiosInstance.get(
+        ADMIN_ENDPOINTS.UNAPPROVED_USERS,
+        {
+          params: { page, limit },
+        }
+      );
 
       return response.data;
     } catch (error) {
@@ -127,32 +134,41 @@ const adminApi = {
    */
   getTrackedEmployees: async (page = 1, limit = 15) => {
     try {
-      const response = await axiosInstance.get(ADMIN_ENDPOINTS.TRACK_EMPLOYEES, {
-        params: { page, limit },
-      });
+      const response = await axiosInstance.get(
+        ADMIN_ENDPOINTS.TRACK_EMPLOYEES,
+        {
+          params: { page, limit },
+        }
+      );
 
       // Transform the data to match the format expected by the Track component
-      if (response.data.status && response.data.data && response.data.data.data) {
+      if (
+        response.data.status &&
+        response.data.data &&
+        response.data.data.data
+      ) {
         // Access the nested data array
         const employeesArray = response.data.data.data;
 
-        const transformedData = employeesArray.map(employee => ({
+        const transformedData = employeesArray.map((employee) => ({
           id: employee.id,
           candidate: `${employee.first_name} ${employee.last_name}`,
           title: employee.title || 'Staff',
           email: employee.email,
           avatar: employee.avatar,
           date: employee.created_at,
-          placement: employee.employer ? `${employee.employer.name}` : 'No employer assigned',
+          placement: employee.employer
+            ? `${employee.employer.name}`
+            : 'No employer assigned',
           gender: employee.gender,
           phone: employee.phone,
-          status: employee.is_verified ? 'Verified' : 'Unverified'
+          status: employee.is_verified ? 'Verified' : 'Unverified',
         }));
 
         return {
           status: response.data.status,
           message: response.data.message,
-          data: transformedData
+          data: transformedData,
         };
       }
 
@@ -175,11 +191,17 @@ const adminApi = {
         params: { page: 1, limit: 100 },
       });
 
-      if (response.data.status && response.data.data && response.data.data.data) {
+      if (
+        response.data.status &&
+        response.data.data &&
+        response.data.data.data
+      ) {
         // Access the nested data array
         const employeesArray = response.data.data.data;
 
-        const employee = employeesArray.find(emp => emp.id === parseInt(employeeId));
+        const employee = employeesArray.find(
+          (emp) => emp.id === parseInt(employeeId)
+        );
 
         if (employee) {
           // Transform to match the format expected by the CandidateProfile component
@@ -190,16 +212,18 @@ const adminApi = {
             email: employee.email,
             avatar: employee.avatar,
             date: employee.created_at,
-            placement: employee.employer ? `${employee.employer.name}` : 'No employer assigned',
+            placement: employee.employer
+              ? `${employee.employer.name}`
+              : 'No employer assigned',
             gender: employee.gender,
             phone: employee.phone,
-            status: employee.is_verified ? 'Verified' : 'Unverified'
+            status: employee.is_verified ? 'Verified' : 'Unverified',
           };
 
           return {
             status: true,
             message: 'Employee found',
-            data: transformedEmployee
+            data: transformedEmployee,
           };
         }
       }
@@ -207,7 +231,7 @@ const adminApi = {
       return {
         status: false,
         message: 'Employee not found',
-        data: null
+        data: null,
       };
     } catch (error) {
       console.error('Error fetching employee details:', error);
@@ -222,7 +246,9 @@ const adminApi = {
    */
   blockUser: async (userId) => {
     try {
-      const response = await axiosInstance.post(`${ADMIN_ENDPOINTS.BLOCK_USER}/${userId}`);
+      const response = await axiosInstance.post(
+        `${ADMIN_ENDPOINTS.BLOCK_USER}/${userId}`
+      );
       return response.data;
     } catch (error) {
       console.error('Error blocking user:', error);
@@ -237,7 +263,9 @@ const adminApi = {
    */
   suspendUser: async (userId) => {
     try {
-      const response = await axiosInstance.post(`${ADMIN_ENDPOINTS.SUSPEND_USER}/${userId}`);
+      const response = await axiosInstance.post(
+        `${ADMIN_ENDPOINTS.SUSPEND_USER}/${userId}`
+      );
       return response.data;
     } catch (error) {
       console.error('Error suspending user:', error);

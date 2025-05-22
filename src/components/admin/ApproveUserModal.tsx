@@ -5,7 +5,10 @@ interface ApproveUserModalProps {
   onApprove: () => void;
 }
 
-export default function ApproveUserModal({ onClose, onApprove }: ApproveUserModalProps) {
+export default function ApproveUserModal({
+  onClose,
+  onApprove,
+}: ApproveUserModalProps) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-8 max-w-md w-full">
@@ -17,7 +20,7 @@ export default function ApproveUserModal({ onClose, onApprove }: ApproveUserModa
             <FaTimes />
           </button>
         </div>
-        
+
         <div className="flex flex-col items-center justify-center mt-4">
           <div className="w-16 h-16 flex items-center justify-center rounded-full bg-gray-100">
             <div className="relative">
@@ -41,13 +44,15 @@ export default function ApproveUserModal({ onClose, onApprove }: ApproveUserModa
               </div>
             </div>
           </div>
-          
-          <h2 className="text-2xl font-semibold mt-6 text-center">Approve User</h2>
-          
+
+          <h2 className="text-2xl font-semibold mt-6 text-center">
+            Approve User
+          </h2>
+
           <p className="text-gray-600 text-center mt-4">
             Approving this user will give them access to your platform.
           </p>
-          
+
           <button
             onClick={onApprove}
             className="w-full mt-8 bg-[#C8EDDF80] hover:bg-[#C8EDDF] text-[#174B35] font-medium py-3 px-4 rounded-md transition-colors"

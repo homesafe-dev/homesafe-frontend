@@ -33,9 +33,10 @@ const userApi = {
   updateProfile: async (profileData: any) => {
     try {
       // Set the appropriate content type for FormData
-      const config = profileData instanceof FormData
-        ? { headers: { 'Content-Type': 'multipart/form-data' } }
-        : {};
+      const config =
+        profileData instanceof FormData
+          ? { headers: { 'Content-Type': 'multipart/form-data' } }
+          : {};
 
       const response = await axiosInstance.post(
         USER_ENDPOINTS.PROFILE,
@@ -105,7 +106,7 @@ const userApi = {
       formData.append('medical_file', medicalFile);
 
       const config = {
-        headers: { 'Content-Type': 'multipart/form-data' }
+        headers: { 'Content-Type': 'multipart/form-data' },
       };
 
       const response = await axiosInstance.post(
@@ -139,12 +140,19 @@ const userApi = {
    * @param reviewData - Review data including user_id, rating, and comment
    * @returns Promise with the API response
    */
-  submitReview: async (reviewData: { user_id: number; rating: number; comment: string }) => {
+  submitReview: async (reviewData: {
+    user_id: number;
+    rating: number;
+    comment: string;
+  }) => {
     try {
-      const response = await axiosInstance.post(USER_ENDPOINTS.REVIEWS(reviewData.user_id), {
-        rating: reviewData.rating,
-        comment: reviewData.comment
-      });
+      const response = await axiosInstance.post(
+        USER_ENDPOINTS.REVIEWS(reviewData.user_id),
+        {
+          rating: reviewData.rating,
+          comment: reviewData.comment,
+        }
+      );
       return response.data;
     } catch (error) {
       console.error('Error submitting review:', error);

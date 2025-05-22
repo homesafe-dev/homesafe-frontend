@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { FaUser } from 'react-icons/fa';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import EmployersTab from './tabs/EmployersTab';
 import AgentsTab from './tabs/AgentsTab';
@@ -26,9 +25,7 @@ export default function AllUsersPage() {
     <div className="p-0">
       {/* Header */}
       <div className="mb-8">
-        <h2 className="text-[#24292E] text-[20px] font-semibold">
-          Users
-        </h2>
+        <h2 className="text-[#24292E] text-[20px] font-semibold">Users</h2>
         <p className="text-gray-600 text-sm mt-1">
           Manage all users in the system
         </p>

@@ -52,7 +52,9 @@ export default function UserDetailsPage() {
           // Check if data is an array or has a data property
           const employeeList = Array.isArray(employeeResponse.data.data)
             ? employeeResponse.data.data
-            : (Array.isArray(employeeResponse.data) ? employeeResponse.data : []);
+            : Array.isArray(employeeResponse.data)
+              ? employeeResponse.data
+              : [];
 
           const employeeData = employeeList.find(
             (user: any) => user.id === parseInt(id || '0')
@@ -70,7 +72,7 @@ export default function UserDetailsPage() {
           // Check if data is an array or has a data property
           const employerList = Array.isArray(employerResponse.data)
             ? employerResponse.data
-            : (employerResponse.data.data || []);
+            : employerResponse.data.data || [];
 
           const employerData = employerList.find(
             (user: any) => user.id === parseInt(id || '0')
@@ -88,7 +90,7 @@ export default function UserDetailsPage() {
           // Check if data is an array or has a data property
           const agentList = Array.isArray(agentResponse.data)
             ? agentResponse.data
-            : (agentResponse.data.data || []);
+            : agentResponse.data.data || [];
 
           const agentData = agentList.find(
             (user: any) => user.id === parseInt(id || '0')
@@ -203,7 +205,6 @@ export default function UserDetailsPage() {
           >
             Decline User
           </button>
-
         </div>
       </div>
 
@@ -211,7 +212,9 @@ export default function UserDetailsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
             <div>
-              <h3 className="text-sm font-medium text-gray-500">Facial Capturing</h3>
+              <h3 className="text-sm font-medium text-gray-500">
+                Facial Capturing
+              </h3>
               <div className="flex justify-between items-center mt-1">
                 <p className="text-sm text-gray-900">Camera photo</p>
                 <button className="text-gray-500 hover:text-gray-700">
@@ -241,24 +244,34 @@ export default function UserDetailsPage() {
             </div>
 
             <div>
-              <h3 className="text-sm font-medium text-gray-500">Phone Number</h3>
+              <h3 className="text-sm font-medium text-gray-500">
+                Phone Number
+              </h3>
               <p className="mt-1 text-sm text-gray-900">{user.phone}</p>
             </div>
 
             <div>
-              <h3 className="text-sm font-medium text-gray-500">Home Address</h3>
+              <h3 className="text-sm font-medium text-gray-500">
+                Home Address
+              </h3>
               <p className="mt-1 text-sm text-gray-900">{user.address}</p>
             </div>
           </div>
 
           <div className="space-y-4">
             <div>
-              <h3 className="text-sm font-medium text-gray-500">Bank Verification Number</h3>
-              <p className="mt-1 text-sm text-gray-900">{user.bank_verification_number || '0123456789'}</p>
+              <h3 className="text-sm font-medium text-gray-500">
+                Bank Verification Number
+              </h3>
+              <p className="mt-1 text-sm text-gray-900">
+                {user.bank_verification_number || '0123456789'}
+              </p>
             </div>
 
             <div>
-              <h3 className="text-sm font-medium text-gray-500">Photo of you</h3>
+              <h3 className="text-sm font-medium text-gray-500">
+                Photo of you
+              </h3>
               <div className="flex justify-between items-center mt-1">
                 <p className="text-sm text-gray-900">Jpeg</p>
                 <button className="text-gray-500 hover:text-gray-700">
@@ -269,11 +282,15 @@ export default function UserDetailsPage() {
 
             <div>
               <h3 className="text-sm font-medium text-gray-500">Occupation</h3>
-              <p className="mt-1 text-sm text-gray-900">{user.occupation || 'Bank Manager'}</p>
+              <p className="mt-1 text-sm text-gray-900">
+                {user.occupation || 'Bank Manager'}
+              </p>
             </div>
 
             <div>
-              <h3 className="text-sm font-medium text-gray-500">Date of Birth</h3>
+              <h3 className="text-sm font-medium text-gray-500">
+                Date of Birth
+              </h3>
               <p className="mt-1 text-sm text-gray-900">
                 {new Date(user.dob).toLocaleDateString('en-US', {
                   month: 'long',
@@ -284,9 +301,13 @@ export default function UserDetailsPage() {
             </div>
 
             <div>
-              <h3 className="text-sm font-medium text-gray-500">Means of Identification</h3>
+              <h3 className="text-sm font-medium text-gray-500">
+                Means of Identification
+              </h3>
               <div className="flex justify-between items-center mt-1">
-                <p className="text-sm text-gray-900">{user.passport || 'Passport'}</p>
+                <p className="text-sm text-gray-900">
+                  {user.passport || 'Passport'}
+                </p>
                 <button className="text-gray-500 hover:text-gray-700">
                   <FaEye />
                 </button>
@@ -294,9 +315,13 @@ export default function UserDetailsPage() {
             </div>
 
             <div>
-              <h3 className="text-sm font-medium text-gray-500">Proof of Address (E.g Utility bill, Bank statement)</h3>
+              <h3 className="text-sm font-medium text-gray-500">
+                Proof of Address (E.g Utility bill, Bank statement)
+              </h3>
               <div className="flex justify-between items-center mt-1">
-                <p className="text-sm text-gray-900">{user.bank_statement || 'Bank Statement'}</p>
+                <p className="text-sm text-gray-900">
+                  {user.bank_statement || 'Bank Statement'}
+                </p>
                 <button className="text-gray-500 hover:text-gray-700">
                   <FaEye />
                 </button>

@@ -7,9 +7,10 @@ import resourcesApi from '../../api/resourcesApi';
 const getYoutubeVideoId = (url: string): string => {
   try {
     // Handle different YouTube URL formats
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const regExp =
+      /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
     const match = url.match(regExp);
-    return (match && match[2].length === 11) ? match[2] : '';
+    return match && match[2].length === 11 ? match[2] : '';
   } catch (error) {
     console.error('Error extracting YouTube video ID:', error);
     return '';
@@ -47,7 +48,9 @@ const ResourcesPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [paginationMeta, setPaginationMeta] = useState<PaginationMeta | null>(null);
+  const [paginationMeta, setPaginationMeta] = useState<PaginationMeta | null>(
+    null
+  );
 
   // Fetch resources from API
   useEffect(() => {
@@ -215,7 +218,9 @@ const ResourcesPage: React.FC = () => {
               <div className="flex justify-center mt-8">
                 <nav className="flex items-center space-x-2">
                   <button
-                    onClick={() => handlePageChange(paginationMeta.current_page - 1)}
+                    onClick={() =>
+                      handlePageChange(paginationMeta.current_page - 1)
+                    }
                     disabled={paginationMeta.current_page === 1}
                     className={`px-3 py-1 rounded ${
                       paginationMeta.current_page === 1
@@ -226,7 +231,10 @@ const ResourcesPage: React.FC = () => {
                     Previous
                   </button>
 
-                  {Array.from({ length: paginationMeta.last_page }, (_, i) => i + 1).map((page) => (
+                  {Array.from(
+                    { length: paginationMeta.last_page },
+                    (_, i) => i + 1
+                  ).map((page) => (
                     <button
                       key={page}
                       onClick={() => handlePageChange(page)}
@@ -241,8 +249,12 @@ const ResourcesPage: React.FC = () => {
                   ))}
 
                   <button
-                    onClick={() => handlePageChange(paginationMeta.current_page + 1)}
-                    disabled={paginationMeta.current_page === paginationMeta.last_page}
+                    onClick={() =>
+                      handlePageChange(paginationMeta.current_page + 1)
+                    }
+                    disabled={
+                      paginationMeta.current_page === paginationMeta.last_page
+                    }
                     className={`px-3 py-1 rounded ${
                       paginationMeta.current_page === paginationMeta.last_page
                         ? 'bg-gray-100 text-gray-400 cursor-not-allowed'

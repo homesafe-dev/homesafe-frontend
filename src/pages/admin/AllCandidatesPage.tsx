@@ -76,9 +76,7 @@ const AllCandidatesPage = () => {
     <div className="p-0">
       {/* Header */}
       <div className="mb-8">
-        <h2 className="text-[#24292E] text-[20px] font-semibold">
-          Candidates
-        </h2>
+        <h2 className="text-[#24292E] text-[20px] font-semibold">Candidates</h2>
         <p className="text-gray-600 text-sm mt-1">
           Here are all your candidates
         </p>
@@ -195,7 +193,10 @@ const AllCandidatesPage = () => {
               ) : users.length === 0 ? (
                 // Empty state
                 <tr>
-                  <td colSpan={7} className="px-6 py-4 text-center text-gray-500">
+                  <td
+                    colSpan={7}
+                    className="px-6 py-4 text-center text-gray-500"
+                  >
                     No {activeTab} found
                   </td>
                 </tr>
@@ -232,7 +233,8 @@ const AllCandidatesPage = () => {
                       {user.address ? user.address.split(',')[0] : 'Lagos'}
                     </td>
                     <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
-                      {user.gender.charAt(0).toUpperCase() + user.gender.slice(1)}
+                      {user.gender.charAt(0).toUpperCase() +
+                        user.gender.slice(1)}
                     </td>
                     <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
                       {user.phone}
@@ -297,7 +299,9 @@ const AllCandidatesPage = () => {
               })}
 
               <button
-                onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
+                onClick={() =>
+                  handlePageChange(Math.min(totalPages, currentPage + 1))
+                }
                 disabled={currentPage === totalPages}
                 className={`p-2 rounded-full ${
                   currentPage === totalPages

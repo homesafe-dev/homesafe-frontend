@@ -153,16 +153,18 @@ const Medical: React.FC = () => {
   };
 
   // Filter records based on search term
-  const filteredRecords = medicalRecords.filter(record => {
+  const filteredRecords = medicalRecords.filter((record) => {
     if (!searchTerm) return true;
 
     // Convert search term and date to lowercase for case-insensitive search
     const searchLower = searchTerm.toLowerCase();
-    const date = new Date(record.date_uploaded).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    }).toLowerCase();
+    const date = new Date(record.date_uploaded)
+      .toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+      .toLowerCase();
 
     // Check if date contains the search term
     return date.includes(searchLower);
@@ -186,12 +188,16 @@ const Medical: React.FC = () => {
 
       {/* Upload Medical Record Section */}
       <div className="bg-white rounded-lg p-6 shadow-sm mb-8">
-        <h2 className="text-lg font-medium text-gray-900 mb-4">Upload Medical Record</h2>
+        <h2 className="text-lg font-medium text-gray-900 mb-4">
+          Upload Medical Record
+        </h2>
 
         <div className="mb-4">
           <label className="w-full h-[50px] flex items-center px-3 py-2 border border-[#DEE0E3] rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 bg-white text-gray-400 text-sm cursor-pointer">
             <IoCloudUploadOutline className="mr-2" />
-            {selectedFile ? selectedFile.name : 'Upload or drop a medical file (.png, .jpg, .pdf)'}
+            {selectedFile
+              ? selectedFile.name
+              : 'Upload or drop a medical file (.png, .jpg, .pdf)'}
             <input
               type="file"
               ref={fileInputRef}
@@ -237,7 +243,9 @@ const Medical: React.FC = () => {
       ) : filteredRecords.length === 0 ? (
         <div className="text-center py-8">
           <p className="text-gray-600">
-            {searchTerm ? 'No medical records match your search.' : 'No medical records found. Upload your first medical record above.'}
+            {searchTerm
+              ? 'No medical records match your search.'
+              : 'No medical records found. Upload your first medical record above.'}
           </p>
         </div>
       ) : (

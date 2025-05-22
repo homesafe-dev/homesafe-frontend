@@ -21,10 +21,12 @@ interface EmployerReviewProps {
 const EmployerReview: React.FC<EmployerReviewProps> = ({
   isOpen,
   onClose,
-  onReviewSubmitted
+  onReviewSubmitted,
 }) => {
   const [rating, setRating] = useState(0);
-  const [selectedEmployer, setSelectedEmployer] = useState<Employer | null>(null);
+  const [selectedEmployer, setSelectedEmployer] = useState<Employer | null>(
+    null
+  );
   const [feedback, setFeedback] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -57,10 +59,16 @@ const EmployerReview: React.FC<EmployerReviewProps> = ({
   };
 
   const filteredEmployers = searchQuery
-    ? employers.filter(employer =>
-        `${employer.first_name} ${employer.last_name}`.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (employer.company_name && employer.company_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
-        employer.email.toLowerCase().includes(searchQuery.toLowerCase())
+    ? employers.filter(
+        (employer) =>
+          `${employer.first_name} ${employer.last_name}`
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase()) ||
+          (employer.company_name &&
+            employer.company_name
+              .toLowerCase()
+              .includes(searchQuery.toLowerCase())) ||
+          employer.email.toLowerCase().includes(searchQuery.toLowerCase())
       )
     : employers;
 
@@ -91,7 +99,7 @@ const EmployerReview: React.FC<EmployerReviewProps> = ({
       const response = await userApi.submitReview({
         user_id: selectedEmployer.id,
         rating,
-        comment: feedback
+        comment: feedback,
       });
 
       if (response.status) {
@@ -184,16 +192,22 @@ const EmployerReview: React.FC<EmployerReviewProps> = ({
                       {selectedEmployer.first_name} {selectedEmployer.last_name}
                     </div>
                     {selectedEmployer.company_name && (
-                      <div className="text-sm text-gray-500">{selectedEmployer.company_name}</div>
+                      <div className="text-sm text-gray-500">
+                        {selectedEmployer.company_name}
+                      </div>
                     )}
-                    <div className="text-xs text-gray-400">{selectedEmployer.email}</div>
+                    <div className="text-xs text-gray-400">
+                      {selectedEmployer.email}
+                    </div>
                   </div>
                 )}
 
                 {searchQuery && !selectedEmployer && (
                   <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
                     {isLoading ? (
-                      <div className="p-4 text-center text-gray-500">Loading employers...</div>
+                      <div className="p-4 text-center text-gray-500">
+                        Loading employers...
+                      </div>
                     ) : filteredEmployers.length > 0 ? (
                       filteredEmployers.map((employer) => (
                         <div
@@ -205,9 +219,13 @@ const EmployerReview: React.FC<EmployerReviewProps> = ({
                             {employer.first_name} {employer.last_name}
                           </div>
                           {employer.company_name && (
-                            <div className="text-sm text-gray-500">{employer.company_name}</div>
+                            <div className="text-sm text-gray-500">
+                              {employer.company_name}
+                            </div>
                           )}
-                          <div className="text-xs text-gray-400">{employer.email}</div>
+                          <div className="text-xs text-gray-400">
+                            {employer.email}
+                          </div>
                         </div>
                       ))
                     ) : (

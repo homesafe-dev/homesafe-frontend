@@ -26,7 +26,9 @@ const DashboardContent: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [transactionsLoading, setTransactionsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [transactionsError, setTransactionsError] = useState<string | null>(null);
+  const [transactionsError, setTransactionsError] = useState<string | null>(
+    null
+  );
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -179,9 +181,7 @@ const DashboardContent: React.FC = () => {
                   ? formatCurrency(userProfile.wallet.current_balance)
                   : '₦ 0.00'}
               </h3>
-              <p className="text-[#24292E] mt-2 text-[16px]">
-                Wallet Balance
-              </p>
+              <p className="text-[#24292E] mt-2 text-[16px]">Wallet Balance</p>
             </div>
           </div>
         </div>
