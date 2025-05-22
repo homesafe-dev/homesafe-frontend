@@ -133,7 +133,10 @@ const contractApi = {
       );
 
       // Log the response structure for debugging
-      console.log('Contract proposals API response:', JSON.stringify(response.data, null, 2));
+      console.log(
+        'Contract proposals API response:',
+        JSON.stringify(response.data, null, 2)
+      );
 
       // Handle the new API response structure
       if (response.data && response.data.status) {
@@ -146,15 +149,18 @@ const contractApi = {
           // Return the same structure as before but with flattened data
           return {
             ...response.data,
-            data: flattenedData
+            data: flattenedData,
           };
         } else {
-          console.warn('Unexpected data structure in API response:', response.data);
+          console.warn(
+            'Unexpected data structure in API response:',
+            response.data
+          );
           // If we can't find the expected structure, return an empty array for data
           // to prevent errors in the UI
           return {
             ...response.data,
-            data: []
+            data: [],
           };
         }
       }

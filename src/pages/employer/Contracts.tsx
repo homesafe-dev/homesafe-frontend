@@ -85,10 +85,7 @@ const ContractCard: React.FC<ContractCardProps> = ({ proposal, imageUrl }) => {
   let formattedDate = 'Unknown date';
   try {
     if (proposalData.created_at) {
-      formattedDate = format(
-        new Date(proposalData.created_at),
-        'MMM dd, yyyy'
-      );
+      formattedDate = format(new Date(proposalData.created_at), 'MMM dd, yyyy');
     }
   } catch (error) {
     console.error('Error formatting date:', error);

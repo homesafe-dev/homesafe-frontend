@@ -229,11 +229,14 @@ const AllCandidatesPage = () => {
                     </td>
                     <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
                       {user.created_at
-                        ? new Date(user.created_at).toLocaleDateString('en-US', {
-                            day: 'numeric',
-                            month: 'short',
-                            year: 'numeric',
-                          })
+                        ? new Date(user.created_at).toLocaleDateString(
+                            'en-US',
+                            {
+                              day: 'numeric',
+                              month: 'short',
+                              year: 'numeric',
+                            }
+                          )
                         : 'N/A'}
                     </td>
                     <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
@@ -241,10 +244,13 @@ const AllCandidatesPage = () => {
                     </td>
                     <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
                       {activeTab === 'agents'
-                        ? (user.total_employees !== undefined ? `${user.total_employees} employees` : 'N/A')
-                        : (user.gender
-                            ? user.gender.charAt(0).toUpperCase() + user.gender.slice(1)
-                            : 'N/A')}
+                        ? user.total_employees !== undefined
+                          ? `${user.total_employees} employees`
+                          : 'N/A'
+                        : user.gender
+                          ? user.gender.charAt(0).toUpperCase() +
+                            user.gender.slice(1)
+                          : 'N/A'}
                     </td>
                     <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
                       {user.phone || 'N/A'}
@@ -253,13 +259,21 @@ const AllCandidatesPage = () => {
                       <span
                         className={`px-3 py-1 rounded-full text-[13px] ${
                           activeTab === 'agents'
-                            ? (user.status === 'not verified' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800')
-                            : (user.is_verified === 0 ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800')
+                            ? user.status === 'not verified'
+                              ? 'bg-red-100 text-red-800'
+                              : 'bg-green-100 text-green-800'
+                            : user.is_verified === 0
+                              ? 'bg-red-100 text-red-800'
+                              : 'bg-green-100 text-green-800'
                         }`}
                       >
                         {activeTab === 'agents'
-                          ? (user.status === 'not verified' ? 'Unverified' : 'Verified')
-                          : (user.is_verified === 0 ? 'Unverified' : 'Verified')}
+                          ? user.status === 'not verified'
+                            ? 'Unverified'
+                            : 'Verified'
+                          : user.is_verified === 0
+                            ? 'Unverified'
+                            : 'Verified'}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-center">
