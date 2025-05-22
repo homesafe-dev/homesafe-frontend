@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { FaPlus, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import CreatePayrollModal from '../../components/Employer/CreatePayrollModal';
 import payrollApi from '../../api/payrollApi';
@@ -53,10 +53,6 @@ const PayrollPage: React.FC = () => {
     fetchPayrollHistory();
   }, [fetchPayrollHistory]);
 
-  const handleOpenCreateModal = () => {
-    setIsCreateModalOpen(true);
-  };
-
   const handleCloseCreateModal = () => {
     setIsCreateModalOpen(false);
     // Refresh payroll history after creating a new entry
@@ -73,13 +69,13 @@ const PayrollPage: React.FC = () => {
     <div className="w-full max-w-7xl mx-auto">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-[20px] font-semibold text-[#24292E]">Payroll</h1>
-        <button
+        {/* <button
           className="bg-[#A5EA91] text-[#24292E] font-semibold w-[211px] h-[38px] px-4 py-2 rounded-md text-[13px] flex items-center gap-2"
           onClick={handleOpenCreateModal}
         >
           <FaPlus size={12} />
           <span>Add New Staff to Payroll</span>
-        </button>
+        </button> */}
       </div>
 
       <div className="mb-8">

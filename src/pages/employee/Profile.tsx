@@ -8,6 +8,10 @@ interface ProfileFormData {
   lastName: string;
   phoneNumber: string;
   email: string;
+  gender: string;
+  dob: string;
+  address: string;
+  profileDescription: string;
 }
 
 interface UserProfile {
@@ -15,8 +19,16 @@ interface UserProfile {
   first_name: string;
   last_name: string;
   email: string;
+  username: string;
   phone: string;
   avatar: string;
+  gender: string;
+  dob: string;
+  address: string;
+  status: number;
+  is_verified: number;
+  salary: string;
+  profile_description: string;
   [key: string]: any;
 }
 
@@ -32,6 +44,10 @@ const EmployeeProfilePage: React.FC = () => {
     lastName: '',
     phoneNumber: '',
     email: '',
+    gender: '',
+    dob: '',
+    address: '',
+    profileDescription: '',
   });
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,7 +64,11 @@ const EmployeeProfilePage: React.FC = () => {
     setProfileImage(null);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -76,6 +96,10 @@ const EmployeeProfilePage: React.FC = () => {
             lastName: userData.last_name || '',
             phoneNumber: userData.phone || '',
             email: userData.email || '',
+            gender: userData.gender || '',
+            dob: userData.dob || '',
+            address: userData.address || '',
+            profileDescription: userData.profile_description || '',
           });
         } else {
           setError('Failed to fetch user profile');
@@ -96,20 +120,34 @@ const EmployeeProfilePage: React.FC = () => {
     try {
       setLoading(true);
 
-      const profileData = {
-        first_name: formData.firstName,
-        last_name: formData.lastName,
-        phone: formData.phoneNumber,
-        email: formData.email,
-      };
+      // Create FormData object for file upload
+      const formDataObj = new FormData();
 
-      const response = await userApi.updateProfile(profileData);
+      // Add all form fields to FormData
+      formDataObj.append('first_name', formData.firstName);
+      formDataObj.append('last_name', formData.lastName);
+      formDataObj.append('phone', formData.phoneNumber);
+      formDataObj.append('email', formData.email);
+      formDataObj.append('gender', formData.gender);
+      formDataObj.append('dob', formData.dob);
+      formDataObj.append('address', formData.address);
+      formDataObj.append('profile_description', formData.profileDescription);
+
+      // Handle profile image upload if it's a File object (not a URL string)
+      const fileInput = document.querySelector(
+        'input[type="file"]'
+      ) as HTMLInputElement;
+      if (fileInput && fileInput.files && fileInput.files[0]) {
+        formDataObj.append('avatar', fileInput.files[0]);
+      }
+
+      const response = await userApi.updateProfile(formDataObj);
 
       if (response.status) {
         // Show success message or notification
         alert('Profile updated successfully');
       } else {
-        setError('Failed to update profile');
+        setError(response.message || 'Failed to update profile');
       }
     } catch (err) {
       setError('Error updating profile');
@@ -253,6 +291,80 @@ const EmployeeProfilePage: React.FC = () => {
                 placeholder="example@gmail.com"
                 value={formData.email}
                 onChange={handleInputChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800 placeholder-[#BDC2C7]"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="gender"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Gender
+              </label>
+              <select
+                id="gender"
+                name="gender"
+                value={formData.gender}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800"
+              >
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <div>
+              <label
+                htmlFor="dob"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Date of Birth
+              </label>
+              <input
+                type="date"
+                id="dob"
+                name="dob"
+                value={formData.dob}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="address"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Address
+              </label>
+              <input
+                type="text"
+                id="address"
+                name="address"
+                placeholder="Your address"
+                value={formData.address}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800 placeholder-[#BDC2C7]"
+              />
+            </div>
+
+            <div className="md:col-span-2">
+              <label
+                htmlFor="profileDescription"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Profile Description
+              </label>
+              <textarea
+                id="profileDescription"
+                name="profileDescription"
+                placeholder="Tell us about yourself"
+                value={formData.profileDescription}
+                onChange={handleInputChange}
+                rows={4}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800 placeholder-[#BDC2C7]"
               />
             </div>

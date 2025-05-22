@@ -14,6 +14,8 @@ const protectEmployeeRoute = (element: ReactNode) =>
   protectRoute(element, ['employee']);
 const protectAgentRoute = (element: ReactNode) =>
   protectRoute(element, ['agent']);
+const protectAdminRoute = (element: ReactNode) =>
+  protectRoute(element, ['admin']);
 
 // Auth Components
 import EmployerLoginForm from '../components/auth/employer/LoginForm';
@@ -33,6 +35,20 @@ import NotificationsPage from '../components/Employer/NotificationsPage';
 import EmployerDashboard from '../pages/employer/Dashboard';
 import EmployeeDashboard from '../pages/employee/Dashboard';
 import AgentDashboard from '../pages/agent/Dashboard';
+import AdminDashboard from '../pages/admin/Dashboard';
+import AdminAllUsers from '../pages/admin/AllUsersPage';
+import AdminAllCandidates from '../pages/admin/AllCandidatesPage';
+import UserDetailsPage from '../pages/admin/UserDetailsPage';
+import AdminTrack from '../pages/admin/Track';
+import AdminCandidateProfile from '../pages/admin/CandidateProfile';
+import AdminTransactions from '../pages/admin/Transactions';
+import AdminAllTransactions from '../pages/admin/AllTransactions';
+import AdminReviews from '../pages/admin/Reviews';
+import AdminProfile from '../pages/admin/Profile';
+import AdminSecurity from '../pages/admin/Security';
+import AdminSettings from '../pages/admin/AdminSettings';
+import CreateAdmin from '../pages/admin/CreateAdmin';
+import AllAdmins from '../pages/admin/AllAdmins';
 import FacialCapturePage from '../components/auth/employer/FacialCapture';
 import EmployeeFacialCapturePage from '../components/auth/employee/FacialCapture';
 import CreatePassword from '../components/auth/employee/CreatePassword';
@@ -41,6 +57,7 @@ import CreatePassword from '../components/auth/employee/CreatePassword';
 import EmployerLayout from '../components/layouts/Employer/Layout';
 import EmployeeLayout from '../components/layouts/Employee/Layout';
 import AgentLayout from '../components/layouts/Agent/Layout';
+import AdminLayout from '../components/layouts/Admin/Layout';
 import WalletPage from '../pages/employer/WalletPage';
 import WalletHistory from '../pages/employer/WalletHistory';
 import WalletTopUp from '../pages/employer/WalletTopUp';
@@ -110,7 +127,7 @@ export const router = createBrowserRouter([
   {
     path: 'protected-test',
     element: (
-      <ProtectedRoute allowedRoles={['employer', 'employee', 'agent']}>
+      <ProtectedRoute allowedRoles={['employer', 'employee', 'agent', 'admin']}>
         <TestPage />
       </ProtectedRoute>
     ),
@@ -126,6 +143,10 @@ export const router = createBrowserRouter([
   {
     path: 'agent-only',
     element: protectAgentRoute(<TestPage />),
+  },
+  {
+    path: 'admin-only',
+    element: protectAdminRoute(<TestPage />),
   },
   // Auth Routes (shared across all user types at top level)
   {
@@ -503,6 +524,128 @@ export const router = createBrowserRouter([
           <AgentLayout>
             <AgentKYCPage />
           </AgentLayout>
+        ),
+      },
+    ],
+  },
+  // Admin Routes
+  {
+    path: '/admin',
+    children: [
+      {
+        path: '',
+        element: <Navigate to="/login" replace />,
+      },
+      {
+        path: 'dashboard',
+        element: protectAdminRoute(
+          <AdminLayout>
+            <AdminDashboard />
+          </AdminLayout>
+        ),
+      },
+      {
+        path: 'all-users',
+        element: protectAdminRoute(
+          <AdminLayout>
+            <AdminAllUsers />
+          </AdminLayout>
+        ),
+      },
+      {
+        path: 'all-candidates',
+        element: protectAdminRoute(
+          <AdminLayout>
+            <AdminAllCandidates />
+          </AdminLayout>
+        ),
+      },
+      {
+        path: 'user/:id',
+        element: protectAdminRoute(
+          <AdminLayout>
+            <UserDetailsPage />
+          </AdminLayout>
+        ),
+      },
+      {
+        path: 'track',
+        element: protectAdminRoute(
+          <AdminLayout>
+            <AdminTrack />
+          </AdminLayout>
+        ),
+      },
+      {
+        path: 'candidate-profile/:id',
+        element: protectAdminRoute(
+          <AdminLayout>
+            <AdminCandidateProfile />
+          </AdminLayout>
+        ),
+      },
+      {
+        path: 'transactions',
+        element: protectAdminRoute(
+          <AdminLayout>
+            <AdminTransactions />
+          </AdminLayout>
+        ),
+      },
+      {
+        path: 'all-transactions',
+        element: protectAdminRoute(
+          <AdminLayout>
+            <AdminAllTransactions />
+          </AdminLayout>
+        ),
+      },
+      {
+        path: 'reviews',
+        element: protectAdminRoute(
+          <AdminLayout>
+            <AdminReviews />
+          </AdminLayout>
+        ),
+      },
+      {
+        path: 'profile',
+        element: protectAdminRoute(
+          <AdminLayout>
+            <AdminProfile />
+          </AdminLayout>
+        ),
+      },
+      {
+        path: 'security',
+        element: protectAdminRoute(
+          <AdminLayout>
+            <AdminSecurity />
+          </AdminLayout>
+        ),
+      },
+      {
+        path: 'admin-settings',
+        element: protectAdminRoute(
+          <AdminLayout>
+            <AdminSettings />
+          </AdminLayout>
+        ),
+      },
+      {
+        path: 'create-admin',
+        element: protectAdminRoute(
+          <AdminLayout>
+            <CreateAdmin />
+          </AdminLayout>
+        ),
+      },
+      {
+        path: 'all-admins',
+        element: protectAdminRoute(
+          <AdminLayout>
+            <AllAdmins />
+          </AdminLayout>
         ),
       },
     ],
