@@ -65,7 +65,9 @@ const EmployeeProfilePage: React.FC = () => {
   };
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
   ) => {
     const { name, value } = e.target;
     setFormData({
@@ -132,7 +134,9 @@ const EmployeeProfilePage: React.FC = () => {
       formDataObj.append('profile_description', formData.profileDescription);
 
       // Handle profile image upload if it's a File object (not a URL string)
-      const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+      const fileInput = document.querySelector(
+        'input[type="file"]'
+      ) as HTMLInputElement;
       if (fileInput && fileInput.files && fileInput.files[0]) {
         formDataObj.append('avatar', fileInput.files[0]);
       }

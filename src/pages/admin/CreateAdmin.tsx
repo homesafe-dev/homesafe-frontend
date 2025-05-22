@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { FaArrowLeft, FaChevronDown } from 'react-icons/fa';
 import { LuCalendarDays } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
-import adminSettingsApi from '../../api/adminSettingsApi';
 
 interface AdminFormData {
   firstName: string;
@@ -43,8 +42,14 @@ const CreateAdmin: React.FC = () => {
       setError(null);
 
       // Validate form data
-      if (!formData.firstName || !formData.lastName || !formData.email || 
-          !formData.phoneNumber || !formData.dateOfBirth || !formData.gender) {
+      if (
+        !formData.firstName ||
+        !formData.lastName ||
+        !formData.email ||
+        !formData.phoneNumber ||
+        !formData.dateOfBirth ||
+        !formData.gender
+      ) {
         setError('Please fill in all fields');
         setLoading(false);
         return;
@@ -62,7 +67,7 @@ const CreateAdmin: React.FC = () => {
       // const response = await adminSettingsApi.createAdmin(adminData);
 
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // Redirect back to admin settings page
       navigate('/admin/admin-settings');
@@ -93,7 +98,10 @@ const CreateAdmin: React.FC = () => {
       )}
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-sm">
+      <form
+        onSubmit={handleSubmit}
+        className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-sm"
+      >
         <div className="grid grid-cols-1 gap-6">
           <div>
             <label

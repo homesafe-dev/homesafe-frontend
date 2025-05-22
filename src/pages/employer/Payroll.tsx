@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { FaPlus, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import CreatePayrollModal from '../../components/Employer/CreatePayrollModal';
 import payrollApi from '../../api/payrollApi';
@@ -52,10 +52,6 @@ const PayrollPage: React.FC = () => {
   useEffect(() => {
     fetchPayrollHistory();
   }, [fetchPayrollHistory]);
-
-  const handleOpenCreateModal = () => {
-    setIsCreateModalOpen(true);
-  };
 
   const handleCloseCreateModal = () => {
     setIsCreateModalOpen(false);

@@ -120,8 +120,8 @@ export default function DashboardAgentsTab() {
           ) : (
             // Data loaded successfully
             agents.map((agent) => (
-              <tr 
-                key={agent.id} 
+              <tr
+                key={agent.id}
                 className="hover:bg-gray-50 cursor-pointer"
                 onClick={() => navigate(`/admin/user/${agent.id}`)}
               >
@@ -156,8 +156,7 @@ export default function DashboardAgentsTab() {
                   {agent.address ? agent.address.split(',')[0] : 'Lagos'}
                 </td>
                 <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
-                  {agent.gender.charAt(0).toUpperCase() +
-                    agent.gender.slice(1)}
+                  {agent.gender.charAt(0).toUpperCase() + agent.gender.slice(1)}
                 </td>
                 <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
                   {agent.phone}

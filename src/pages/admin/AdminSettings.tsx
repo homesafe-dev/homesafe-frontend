@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
-import adminSettingsApi from '../../api/adminSettingsApi';
 
 interface Admin {
   id: number;
@@ -35,17 +34,19 @@ const AdminSettings: React.FC = () => {
       // const response = await adminSettingsApi.getAdmins(currentPage);
 
       // For now, using mock data
-      await new Promise(resolve => setTimeout(resolve, 500)); // Simulate API delay
+      await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate API delay
 
-      const mockAdmins: Admin[] = Array(4).fill(null).map((_, index) => ({
-        id: index + 1,
-        full_name: 'Naomi Abiodun John',
-        email: 'name@email.com',
-        phone_number: '07012345678',
-        date_of_birth: '24th Dec 1990',
-        gender: 'Female',
-        status: 'Verified'
-      }));
+      const mockAdmins: Admin[] = Array(4)
+        .fill(null)
+        .map((_, index) => ({
+          id: index + 1,
+          full_name: 'Naomi Abiodun John',
+          email: 'name@email.com',
+          phone_number: '07012345678',
+          date_of_birth: '24th Dec 1990',
+          gender: 'Female',
+          status: 'Verified',
+        }));
 
       setAdmins(mockAdmins);
       setTotalPages(3); // Mock total pages
@@ -83,7 +84,7 @@ const AdminSettings: React.FC = () => {
       // await adminSettingsApi.deleteAdmin(adminId);
 
       // For now, just update the UI
-      setAdmins(admins.filter(admin => admin.id !== adminId));
+      setAdmins(admins.filter((admin) => admin.id !== adminId));
       setShowOptionsFor(null);
     } catch (err) {
       setError('Failed to remove admin');
@@ -156,7 +157,11 @@ const AdminSettings: React.FC = () => {
                   <td className="py-3 px-4 flex items-center">
                     <div className="w-8 h-8 rounded-full bg-gray-200 mr-2 overflow-hidden">
                       {admin.avatar ? (
-                        <img src={admin.avatar} alt={admin.full_name} className="w-full h-full object-cover" />
+                        <img
+                          src={admin.avatar}
+                          alt={admin.full_name}
+                          className="w-full h-full object-cover"
+                        />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-gray-500">
                           {admin.full_name.charAt(0)}
@@ -201,14 +206,22 @@ const AdminSettings: React.FC = () => {
       ) : (
         <div className="flex flex-col items-center justify-center py-12">
           <div className="bg-gray-100 rounded-full p-8 mb-4">
-            <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="60" height="60" rx="30" fill="#F5F5F5"/>
-              <path d="M20 20H40V40H20V20Z" fill="#D9D9D9"/>
-              <path d="M25 25H35V30H25V25Z" fill="#BDBDBD"/>
-              <path d="M25 32H35V35H25V32Z" fill="#BDBDBD"/>
+            <svg
+              width="60"
+              height="60"
+              viewBox="0 0 60 60"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect width="60" height="60" rx="30" fill="#F5F5F5" />
+              <path d="M20 20H40V40H20V20Z" fill="#D9D9D9" />
+              <path d="M25 25H35V30H25V25Z" fill="#BDBDBD" />
+              <path d="M25 32H35V35H25V32Z" fill="#BDBDBD" />
             </svg>
           </div>
-          <h3 className="text-lg font-medium text-gray-800 mb-1">Nothing Here</h3>
+          <h3 className="text-lg font-medium text-gray-800 mb-1">
+            Nothing Here
+          </h3>
           <p className="text-gray-500">You don't have a review yet</p>
         </div>
       )}

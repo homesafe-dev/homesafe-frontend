@@ -40,7 +40,6 @@ export default function AgentsTab() {
         if (response.status) {
           // The agents array is in response.data.data
           setAgents(response.data.data || []);
-
         } else {
           setError(response.message || 'Failed to fetch agents');
         }
@@ -78,9 +77,7 @@ export default function AgentsTab() {
             <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
               Status
             </th>
-            <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
-
-            </th>
+            <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal"></th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200">
@@ -160,8 +157,7 @@ export default function AgentsTab() {
                   {agent.address ? agent.address.split(',')[0] : 'Lagos'}
                 </td>
                 <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
-                  {agent.gender.charAt(0).toUpperCase() +
-                    agent.gender.slice(1)}
+                  {agent.gender.charAt(0).toUpperCase() + agent.gender.slice(1)}
                 </td>
                 <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
                   {agent.phone}

@@ -18,9 +18,12 @@ const adminSettingsApi = {
    */
   getAdmins: async (page = 1, limit = 15) => {
     try {
-      const response = await axiosInstance.get(ADMIN_SETTINGS_ENDPOINTS.GET_ADMINS, {
-        params: { page, limit },
-      });
+      const response = await axiosInstance.get(
+        ADMIN_SETTINGS_ENDPOINTS.GET_ADMINS,
+        {
+          params: { page, limit },
+        }
+      );
 
       return response.data;
     } catch (error) {

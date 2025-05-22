@@ -1,5 +1,4 @@
 import { BsPeople } from 'react-icons/bs';
-import { FaUser } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import adminApi from '../../api/adminApi';
@@ -15,7 +14,6 @@ export default function AdminDashboard() {
   const [employerCount, setEmployerCount] = useState(0);
   const [terminatedCount, setTerminatedCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('employers');
 
   useEffect(() => {
@@ -28,9 +26,10 @@ export default function AdminDashboard() {
         if (employeeResponse.status) {
           setEmployeeCount(employeeResponse.data.total || 0);
           // Count terminated employees (this is just an example, adjust based on your API)
-          const terminated = employeeResponse.data.data?.filter(
-            (employee: any) => employee.status === 0
-          ).length || 0;
+          const terminated =
+            employeeResponse.data.data?.filter(
+              (employee: any) => employee.status === 0
+            ).length || 0;
           setTerminatedCount(terminated);
         }
 
@@ -41,7 +40,6 @@ export default function AdminDashboard() {
           setEmployerCount(employerResponse.data.data?.length || 0);
         }
       } catch (err) {
-        setError('Error fetching dashboard data');
         console.error('Error fetching dashboard data:', err);
       } finally {
         setIsLoading(false);

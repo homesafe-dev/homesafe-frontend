@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaArrowLeft } from 'react-icons/fa';
 import userApi from '../../api/userApi';
-import { useNavigate } from 'react-router-dom';
 
 interface ProfileFormData {
   firstName: string;
@@ -33,7 +31,6 @@ interface UserProfile {
 }
 
 const AdminProfilePage: React.FC = () => {
-  const navigate = useNavigate();
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -64,7 +61,9 @@ const AdminProfilePage: React.FC = () => {
   };
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
   ) => {
     const { name, value } = e.target;
     setFormData({
@@ -131,7 +130,9 @@ const AdminProfilePage: React.FC = () => {
       formDataObj.append('profile_description', formData.profileDescription);
 
       // Handle profile image upload if it's a File object (not a URL string)
-      const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+      const fileInput = document.querySelector(
+        'input[type="file"]'
+      ) as HTMLInputElement;
       if (fileInput && fileInput.files && fileInput.files[0]) {
         formDataObj.append('avatar', fileInput.files[0]);
       }

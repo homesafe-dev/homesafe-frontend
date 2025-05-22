@@ -67,16 +67,16 @@ interface ContractCardProps {
   imageUrl: string;
 }
 
-const ContractCard: React.FC<ContractCardProps> = ({
-  proposal,
-  imageUrl,
-}) => {
+const ContractCard: React.FC<ContractCardProps> = ({ proposal, imageUrl }) => {
   const { contract, proposal: proposalData } = proposal;
-  const employeeName = contract.employee ?
-    `${contract.employee.first_name} ${contract.employee.last_name}` :
-    'Unknown Employee';
+  const employeeName = contract.employee
+    ? `${contract.employee.first_name} ${contract.employee.last_name}`
+    : 'Unknown Employee';
 
-  const formattedDate = format(new Date(proposalData.created_at), 'MMM dd, yyyy');
+  const formattedDate = format(
+    new Date(proposalData.created_at),
+    'MMM dd, yyyy'
+  );
   const description = `Contract proposal for ${contract.position} position. Created on ${formattedDate}. Status: ${proposalData.status}`;
 
   return (
@@ -88,15 +88,22 @@ const ContractCard: React.FC<ContractCardProps> = ({
           className="w-full h-[174px] object-cover rounded-sm"
         />
       </div>
-      <h3 className="font-semibold text-[16px] text-[#24292E] mb-2">{employeeName}</h3>
+      <h3 className="font-semibold text-[16px] text-[#24292E] mb-2">
+        {employeeName}
+      </h3>
       <p className="text-[13px] text-[#48525B] mb-3">{description}</p>
       <div className="flex justify-between items-center">
-        <span className={`px-2 py-1 rounded-full text-xs ${
-          proposalData.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
-          proposalData.status === 'accepted' ? 'bg-green-100 text-green-700' :
-          'bg-red-100 text-red-700'
-        }`}>
-          {proposalData.status.charAt(0).toUpperCase() + proposalData.status.slice(1)}
+        <span
+          className={`px-2 py-1 rounded-full text-xs ${
+            proposalData.status === 'pending'
+              ? 'bg-yellow-100 text-yellow-700'
+              : proposalData.status === 'accepted'
+                ? 'bg-green-100 text-green-700'
+                : 'bg-red-100 text-red-700'
+          }`}
+        >
+          {proposalData.status.charAt(0).toUpperCase() +
+            proposalData.status.slice(1)}
         </span>
         <button className="flex items-center justify-center rounded-[6px] text-[#6C7A89] text-xs border border-[#DCDEE5] w-[98px] h-[32px]">
           <FiDownload className="mr-1 text-black" size={14} />
@@ -142,19 +149,21 @@ const ContractsPage: React.FC<ContractsPageProps> = ({
   }, []);
 
   // Filter proposals based on search term
-  const filteredProposals = proposals.filter(proposal => {
+  const filteredProposals = proposals.filter((proposal) => {
     if (!searchTerm) return true;
 
     const searchLower = searchTerm.toLowerCase();
-    const employeeName = proposal.contract.employee ?
-      `${proposal.contract.employee.first_name} ${proposal.contract.employee.last_name}`.toLowerCase() :
-      '';
+    const employeeName = proposal.contract.employee
+      ? `${proposal.contract.employee.first_name} ${proposal.contract.employee.last_name}`.toLowerCase()
+      : '';
     const position = proposal.contract.position.toLowerCase();
     const status = proposal.proposal.status.toLowerCase();
 
-    return employeeName.includes(searchLower) ||
-           position.includes(searchLower) ||
-           status.includes(searchLower);
+    return (
+      employeeName.includes(searchLower) ||
+      position.includes(searchLower) ||
+      status.includes(searchLower)
+    );
   });
 
   return (
@@ -183,7 +192,9 @@ const ContractsPage: React.FC<ContractsPageProps> = ({
         </div>
       ) : filteredProposals.length === 0 ? (
         <div className="text-center py-12 text-gray-500">
-          {searchTerm ? 'No contracts match your search.' : 'No contract proposals found.'}
+          {searchTerm
+            ? 'No contracts match your search.'
+            : 'No contract proposals found.'}
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

@@ -84,52 +84,56 @@ const generateMockReviews = (count: number): Review[] => {
       first_name: 'Cali',
       last_name: 'Foster Jenkins',
       occupation: 'Chef',
-      location: 'Lagos State'
+      location: 'Lagos State',
     },
     {
       id: 2,
       first_name: 'John',
       last_name: 'Doe',
       occupation: 'Software Engineer',
-      location: 'Abuja'
+      location: 'Abuja',
     },
     {
       id: 3,
       first_name: 'Sarah',
       last_name: 'Smith',
       occupation: 'Accountant',
-      location: 'Port Harcourt'
+      location: 'Port Harcourt',
     },
     {
       id: 4,
       first_name: 'Michael',
       last_name: 'Johnson',
       occupation: 'Teacher',
-      location: 'Kano'
-    }
+      location: 'Kano',
+    },
   ];
 
   const comments = [
     'Meet Cali foster, a passionate chef from Lagos State, Nigeria. With a love for cooking that knows no bounds, Cali brings the flavors of Lagos to every dish.',
     'Excellent service and very professional.',
     'Great experience working with them.',
-    'Highly recommended for their expertise and dedication.'
+    'Highly recommended for their expertise and dedication.',
   ];
 
-  return Array(count).fill(null).map((_, index) => {
-    const reviewerIndex = index % reviewers.length;
-    const commentIndex = index % comments.length;
-    
-    return {
-      id: index + 1,
-      reviewer_id: reviewers[reviewerIndex].id,
-      user_id: 100 + index,
-      rating: Math.floor(Math.random() * 2) + 4, // Random rating between 4-5
-      comment: comments[commentIndex],
-      created_at: new Date(Date.now() - Math.random() * 10000000000).toISOString(),
-      reviewer: reviewers[reviewerIndex]
-    };
-  });
+  return Array(count)
+    .fill(null)
+    .map((_, index) => {
+      const reviewerIndex = index % reviewers.length;
+      const commentIndex = index % comments.length;
+
+      return {
+        id: index + 1,
+        reviewer_id: reviewers[reviewerIndex].id,
+        user_id: 100 + index,
+        rating: Math.floor(Math.random() * 2) + 4, // Random rating between 4-5
+        comment: comments[commentIndex],
+        created_at: new Date(
+          Date.now() - Math.random() * 10000000000
+        ).toISOString(),
+        reviewer: reviewers[reviewerIndex],
+      };
+    });
 };
 
 const mockEmployerReviews = generateMockReviews(9);
@@ -137,8 +141,10 @@ const mockAgentReviews = generateMockReviews(6);
 const mockEmployeeReviews = generateMockReviews(12);
 
 const Reviews: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'employers' | 'agents' | 'employees'>('employers');
-  const [loading, setLoading] = useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState<
+    'employers' | 'agents' | 'employees'
+  >('employers');
+  const [loading] = useState<boolean>(false);
 
   const formatDate = (dateString: string) => {
     try {
@@ -177,7 +183,7 @@ const Reviews: React.FC = () => {
   return (
     <div className="bg-white rounded-lg p-6">
       <h1 className="text-2xl font-semibold mb-6">All Reviews</h1>
-      
+
       {/* Tabs */}
       <div className="mb-6">
         <div className="inline-flex border border-gray-200 rounded-md overflow-hidden">
@@ -221,9 +227,7 @@ const Reviews: React.FC = () => {
             {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Reviews
           </h2>
           <div className="flex items-center">
-            <span className="text-lg font-medium mr-2">
-              {averageRating}
-            </span>
+            <span className="text-lg font-medium mr-2">{averageRating}</span>
             <div className="flex">
               {[...Array(5)].map((_, index) => {
                 const ratingValue = parseFloat(averageRating);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
 import EmployerReview from '../../components/Employee/EmployerReview';
 import userApi from '../../api/userApi';
@@ -93,13 +93,8 @@ const ReviewsPage: React.FC<ReviewsPageProps> = ({
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch reviews when component mounts or when userId changes
-  useEffect(() => {
-    fetchUserReviews();
-  }, [userId]);
-
   // Function to fetch user reviews
-  const fetchUserReviews = async () => {
+  const fetchUserReviews = useCallback(async () => {
     try {
       setLoading(true);
       const response = await userApi.getUserReviews(userId);
@@ -122,7 +117,12 @@ const ReviewsPage: React.FC<ReviewsPageProps> = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId]);
+
+  // Fetch reviews when component mounts or when userId changes
+  useEffect(() => {
+    fetchUserReviews();
+  }, [fetchUserReviews]);
 
   // Format date for display
   const formatDate = (dateString: string) => {

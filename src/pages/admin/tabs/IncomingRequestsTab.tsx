@@ -76,9 +76,7 @@ export default function IncomingRequestsTab() {
             <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
               Status
             </th>
-            <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
-              
-            </th>
+            <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal"></th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200">
@@ -153,8 +151,7 @@ export default function IncomingRequestsTab() {
                   {user.address ? user.address.split(',')[0] : 'Lagos'}
                 </td>
                 <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
-                  {user.gender.charAt(0).toUpperCase() +
-                    user.gender.slice(1)}
+                  {user.gender.charAt(0).toUpperCase() + user.gender.slice(1)}
                 </td>
                 <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
                   {user.phone}

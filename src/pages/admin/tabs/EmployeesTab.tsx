@@ -71,7 +71,6 @@ export default function EmployeesTab() {
         if (response.status) {
           const employeeData = response.data as EmployeeListResponse;
           setEmployees(employeeData.data);
-
         } else {
           setError(response.message || 'Failed to fetch employees');
         }
@@ -109,9 +108,7 @@ export default function EmployeesTab() {
             <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
               Status
             </th>
-            <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
-
-            </th>
+            <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal"></th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200">

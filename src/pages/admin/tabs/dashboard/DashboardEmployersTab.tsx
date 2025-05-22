@@ -120,8 +120,8 @@ export default function DashboardEmployersTab() {
           ) : (
             // Data loaded successfully
             employers.map((employer) => (
-              <tr 
-                key={employer.id} 
+              <tr
+                key={employer.id}
                 className="hover:bg-gray-50 cursor-pointer"
                 onClick={() => navigate(`/admin/user/${employer.id}`)}
               >

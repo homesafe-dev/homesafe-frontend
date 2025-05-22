@@ -37,7 +37,7 @@ const AdminSecurityPage: React.FC = () => {
     }
 
     if (passwordFormData.newPassword.length < 8) {
-      setError("Password must be at least 8 characters long");
+      setError('Password must be at least 8 characters long');
       return;
     }
 
@@ -45,8 +45,8 @@ const AdminSecurityPage: React.FC = () => {
     setLoading(true);
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       // Reset form and show success message
       setPasswordFormData({
         currentPassword: '',
@@ -54,10 +54,10 @@ const AdminSecurityPage: React.FC = () => {
         confirmPassword: '',
       });
       setShowPasswordForm(false);
-      setSuccess("Password changed successfully");
+      setSuccess('Password changed successfully');
     } catch (err) {
-      setError("Failed to change password. Please try again.");
-      console.error("Error changing password:", err);
+      setError('Failed to change password. Please try again.');
+      console.error('Error changing password:', err);
     } finally {
       setLoading(false);
     }
@@ -86,11 +86,13 @@ const AdminSecurityPage: React.FC = () => {
           Change Password
         </h2>
         <p className="text-sm text-[#81899E] mb-4 max-w-md mt-2">
-          The new password will be used to log into your account. Make sure it's at least 8 characters and includes a mix of letters, numbers, and symbols for better security.
+          The new password will be used to log into your account. Make sure it's
+          at least 8 characters and includes a mix of letters, numbers, and
+          symbols for better security.
         </p>
 
         {!showPasswordForm ? (
-          <button 
+          <button
             className="px-4 py-2 text-[#174B35] border border-[#A5EA91] mt-2 rounded-md text-sm hover:bg-gray-50"
             onClick={() => setShowPasswordForm(true)}
           >
@@ -99,7 +101,10 @@ const AdminSecurityPage: React.FC = () => {
         ) : (
           <form onSubmit={handleSubmit} className="mt-4 max-w-md">
             <div className="mb-4">
-              <label htmlFor="currentPassword" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="currentPassword"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Current Password
               </label>
               <input
@@ -112,9 +117,12 @@ const AdminSecurityPage: React.FC = () => {
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500"
               />
             </div>
-            
+
             <div className="mb-4">
-              <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="newPassword"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 New Password
               </label>
               <input
@@ -127,9 +135,12 @@ const AdminSecurityPage: React.FC = () => {
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500"
               />
             </div>
-            
+
             <div className="mb-4">
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="confirmPassword"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Confirm New Password
               </label>
               <input
@@ -142,7 +153,7 @@ const AdminSecurityPage: React.FC = () => {
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500"
               />
             </div>
-            
+
             <div className="flex space-x-4">
               <button
                 type="button"
@@ -158,7 +169,7 @@ const AdminSecurityPage: React.FC = () => {
               >
                 Cancel
               </button>
-              
+
               <button
                 type="submit"
                 disabled={loading}
@@ -183,7 +194,9 @@ const AdminSecurityPage: React.FC = () => {
           Two-Factor Authentication
         </h2>
         <p className="text-sm text-[#81899E] mb-4 max-w-md mt-2">
-          Add an extra layer of security to your account by enabling two-factor authentication. When enabled, you'll be required to enter a verification code in addition to your password when logging in.
+          Add an extra layer of security to your account by enabling two-factor
+          authentication. When enabled, you'll be required to enter a
+          verification code in addition to your password when logging in.
         </p>
 
         <button className="px-4 py-2 text-[#174B35] border border-[#A5EA91] mt-2 rounded-md text-sm hover:bg-gray-50">
