@@ -68,16 +68,36 @@ interface ContractCardProps {
 }
 
 const ContractCard: React.FC<ContractCardProps> = ({ proposal, imageUrl }) => {
+  // Add safety checks for the proposal structure
+  if (!proposal || !proposal.contract || !proposal.proposal) {
+    console.warn('Invalid proposal structure in ContractCard:', proposal);
+    return null;
+  }
+
   const { contract, proposal: proposalData } = proposal;
+
+  // Safely access employee name
   const employeeName = contract.employee
-    ? `${contract.employee.first_name} ${contract.employee.last_name}`
+    ? `${contract.employee.first_name || ''} ${contract.employee.last_name || ''}`
     : 'Unknown Employee';
 
-  const formattedDate = format(
-    new Date(proposalData.created_at),
-    'MMM dd, yyyy'
-  );
-  const description = `Contract proposal for ${contract.position} position. Created on ${formattedDate}. Status: ${proposalData.status}`;
+  // Safely format date
+  let formattedDate = 'Unknown date';
+  try {
+    if (proposalData.created_at) {
+      formattedDate = format(
+        new Date(proposalData.created_at),
+        'MMM dd, yyyy'
+      );
+    }
+  } catch (error) {
+    console.error('Error formatting date:', error);
+  }
+
+  // Safely create description
+  const position = contract.position || 'Unknown';
+  const status = proposalData.status || 'Unknown';
+  const description = `Contract proposal for ${position} position. Created on ${formattedDate}. Status: ${status}`;
 
   return (
     <div className="bg-white p-4 rounded-md border border-gray-100">
@@ -95,15 +115,14 @@ const ContractCard: React.FC<ContractCardProps> = ({ proposal, imageUrl }) => {
       <div className="flex justify-between items-center">
         <span
           className={`px-2 py-1 rounded-full text-xs ${
-            proposalData.status === 'pending'
+            status === 'pending'
               ? 'bg-yellow-100 text-yellow-700'
-              : proposalData.status === 'accepted'
+              : status === 'accepted'
                 ? 'bg-green-100 text-green-700'
                 : 'bg-red-100 text-red-700'
           }`}
         >
-          {proposalData.status.charAt(0).toUpperCase() +
-            proposalData.status.slice(1)}
+          {status.charAt(0).toUpperCase() + status.slice(1)}
         </span>
         <button className="flex items-center justify-center rounded-[6px] text-[#6C7A89] text-xs border border-[#DCDEE5] w-[98px] h-[32px]">
           <FiDownload className="mr-1 text-black" size={14} />
@@ -133,7 +152,13 @@ const ContractsPage: React.FC<ContractsPageProps> = ({
         const response = await contractApi.getProposals();
 
         if (response.status && response.data) {
-          setProposals(response.data);
+          // Ensure data is an array before setting it
+          if (Array.isArray(response.data)) {
+            setProposals(response.data);
+          } else {
+            console.error('Unexpected data format:', response.data);
+            setError('Received invalid data format from server');
+          }
         } else {
           setError('Failed to fetch contract proposals');
         }
@@ -152,12 +177,22 @@ const ContractsPage: React.FC<ContractsPageProps> = ({
   const filteredProposals = proposals.filter((proposal) => {
     if (!searchTerm) return true;
 
+    // Add safety checks for the proposal structure
+    if (!proposal || !proposal.contract || !proposal.proposal) {
+      console.warn('Invalid proposal structure:', proposal);
+      return false;
+    }
+
     const searchLower = searchTerm.toLowerCase();
+
+    // Safely access employee name
     const employeeName = proposal.contract.employee
-      ? `${proposal.contract.employee.first_name} ${proposal.contract.employee.last_name}`.toLowerCase()
+      ? `${proposal.contract.employee.first_name || ''} ${proposal.contract.employee.last_name || ''}`.toLowerCase()
       : '';
-    const position = proposal.contract.position.toLowerCase();
-    const status = proposal.proposal.status.toLowerCase();
+
+    // Safely access position and status
+    const position = (proposal.contract.position || '').toLowerCase();
+    const status = (proposal.proposal.status || '').toLowerCase();
 
     return (
       employeeName.includes(searchLower) ||
