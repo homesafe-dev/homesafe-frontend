@@ -10,11 +10,16 @@ interface User {
   last_name: string;
   email: string;
   avatar: string;
-  created_at: string;
-  address: string;
-  gender: string;
   phone: string;
-  is_verified: number;
+  // Fields that might be different between user types
+  created_at?: string;
+  address?: string;
+  gender?: string;
+  is_verified?: number;
+  status?: string;
+  total_employees?: number;
+  average_rating?: number | null;
+  total_reviews?: number;
 }
 
 const AllCandidatesPage = () => {
@@ -149,7 +154,7 @@ const AllCandidatesPage = () => {
                   Location
                 </th>
                 <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
-                  Gender
+                  {activeTab === 'agents' ? 'Total Employees' : 'Gender'}
                 </th>
                 <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
                   Phone Number
@@ -223,31 +228,52 @@ const AllCandidatesPage = () => {
                       {`${user.first_name} ${user.last_name}`}
                     </td>
                     <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
-                      {new Date(user.created_at).toLocaleDateString('en-US', {
-                        day: 'numeric',
-                        month: 'short',
-                        year: 'numeric',
-                      })}
+                      {user.created_at
+                        ? new Date(user.created_at).toLocaleDateString(
+                            'en-US',
+                            {
+                              day: 'numeric',
+                              month: 'short',
+                              year: 'numeric',
+                            }
+                          )
+                        : 'N/A'}
                     </td>
                     <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
                       {user.address ? user.address.split(',')[0] : 'Lagos'}
                     </td>
                     <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
-                      {user.gender.charAt(0).toUpperCase() +
-                        user.gender.slice(1)}
+                      {activeTab === 'agents'
+                        ? user.total_employees !== undefined
+                          ? `${user.total_employees} employees`
+                          : 'N/A'
+                        : user.gender
+                          ? user.gender.charAt(0).toUpperCase() +
+                            user.gender.slice(1)
+                          : 'N/A'}
                     </td>
                     <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
-                      {user.phone}
+                      {user.phone || 'N/A'}
                     </td>
                     <td className="px-6 py-4">
                       <span
                         className={`px-3 py-1 rounded-full text-[13px] ${
-                          user.is_verified === 0
-                            ? 'bg-red-100 text-red-800'
-                            : 'bg-green-100 text-green-800'
+                          activeTab === 'agents'
+                            ? user.status === 'not verified'
+                              ? 'bg-red-100 text-red-800'
+                              : 'bg-green-100 text-green-800'
+                            : user.is_verified === 0
+                              ? 'bg-red-100 text-red-800'
+                              : 'bg-green-100 text-green-800'
                         }`}
                       >
-                        {user.is_verified === 0 ? 'Unverified' : 'Verified'}
+                        {activeTab === 'agents'
+                          ? user.status === 'not verified'
+                            ? 'Unverified'
+                            : 'Verified'
+                          : user.is_verified === 0
+                            ? 'Unverified'
+                            : 'Verified'}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-center">

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { FaUser } from 'react-icons/fa';
+import { FaUser, FaPlus } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import adminApi from '../../../../api/adminApi';
 
@@ -7,21 +7,18 @@ interface Agent {
   id: number;
   first_name: string;
   last_name: string;
-  title: string;
-  username: string | null;
   email: string;
-  email_verified_at: string;
-  avatar: string;
-  gender: string;
-  dob: string;
   phone: string;
-  address: string;
-  status: number;
-  is_verified: number;
-  salary: string;
-  profile_description: string | null;
-  created_at: string;
-  updated_at: string;
+  avatar: string;
+  status: string;
+  total_employees: number;
+  average_rating: number | null;
+  total_reviews: number;
+  // Optional fields that might be in different API responses
+  gender?: string;
+  address?: string;
+  created_at?: string;
+  is_verified?: number;
 }
 
 export default function DashboardAgentsTab() {
@@ -55,6 +52,16 @@ export default function DashboardAgentsTab() {
 
   return (
     <div className="overflow-x-auto">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-semibold">Agents</h2>
+        <button
+          onClick={() => navigate('/admin/agents')}
+          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md flex items-center"
+        >
+          <FaPlus className="mr-2" /> Create New Agent
+        </button>
+      </div>
+
       <table className="w-full">
         <thead className="bg-[#C8EDDF80] h-[56px] text-left">
           <tr>
@@ -62,13 +69,13 @@ export default function DashboardAgentsTab() {
               Full Name
             </th>
             <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
-              Date
+              Email
             </th>
             <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
               Location
             </th>
             <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
-              Gender
+              Total Employees
             </th>
             <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
               Phone Number
@@ -146,30 +153,30 @@ export default function DashboardAgentsTab() {
                   {`${agent.first_name} ${agent.last_name}`}
                 </td>
                 <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
-                  {new Date(agent.created_at).toLocaleDateString('en-US', {
-                    day: 'numeric',
-                    month: 'short',
-                    year: 'numeric',
-                  })}
+                  {agent.email || 'N/A'}
                 </td>
                 <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
                   {agent.address ? agent.address.split(',')[0] : 'Lagos'}
                 </td>
                 <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
-                  {agent.gender.charAt(0).toUpperCase() + agent.gender.slice(1)}
+                  {agent.total_employees !== undefined
+                    ? agent.total_employees
+                    : 'N/A'}
                 </td>
                 <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
-                  {agent.phone}
+                  {agent.phone || 'N/A'}
                 </td>
                 <td className="px-6 py-4">
                   <span
                     className={`px-3 py-1 rounded-full text-[13px] ${
-                      agent.is_verified === 0
+                      agent.status === 'not verified'
                         ? 'bg-red-100 text-red-800'
                         : 'bg-green-100 text-green-800'
                     }`}
                   >
-                    {agent.is_verified === 0 ? 'Unverified' : 'Verified'}
+                    {agent.status === 'not verified'
+                      ? 'Unverified'
+                      : 'Verified'}
                   </span>
                 </td>
               </tr>
