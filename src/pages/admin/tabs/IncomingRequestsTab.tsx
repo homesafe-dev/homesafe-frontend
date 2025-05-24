@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import { FaUser } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import adminApi from '../../../api/adminApi';
+import DropdownMenu from '../../../components/common/DropdownMenu';
+import ApproveUserModal from '../../../components/admin/ApproveUserModal';
+import DeclineUserModal from '../../../components/admin/DeclineUserModal';
 
 interface User {
   id: number;
@@ -29,29 +32,68 @@ export default function IncomingRequestsTab() {
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showApproveModal, setShowApproveModal] = useState(false);
+  const [showDeclineModal, setShowDeclineModal] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+
+  const fetchUnapprovedUsers = async () => {
+    try {
+      setIsLoading(true);
+      // Use a larger limit to ensure we get all unapproved users
+      const response = await adminApi.getUnapprovedUsers(1, 100);
+      if (response.status) {
+        // The users array is in response.data.data
+        setUsers(response.data.data || []);
+      } else {
+        setError(response.message || 'Failed to fetch incoming requests');
+      }
+    } catch (err) {
+      setError('Error fetching incoming requests');
+      console.error('Error fetching incoming requests:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchUnapprovedUsers = async () => {
-      try {
-        setIsLoading(true);
-        // Use a larger limit to ensure we get all unapproved users
-        const response = await adminApi.getUnapprovedUsers(1, 100);
-        if (response.status) {
-          // The users array is in response.data.data
-          setUsers(response.data.data || []);
-        } else {
-          setError(response.message || 'Failed to fetch incoming requests');
-        }
-      } catch (err) {
-        setError('Error fetching incoming requests');
-        console.error('Error fetching incoming requests:', err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchUnapprovedUsers();
   }, []);
+
+  const handleApproveUser = async () => {
+    if (!selectedUserId) return;
+
+    try {
+      const response = await adminApi.approveUser(selectedUserId.toString());
+      if (response.status) {
+        // Refresh the list after approval
+        fetchUnapprovedUsers();
+        setShowApproveModal(false);
+      } else {
+        setError(response.message || 'Failed to approve user');
+      }
+    } catch (err) {
+      setError('Error approving user');
+      console.error('Error approving user:', err);
+    }
+  };
+
+  const handleDeclineUser = async () => {
+    if (!selectedUserId) return;
+
+    try {
+      const response = await adminApi.declineUser(selectedUserId.toString());
+      if (response.status) {
+        // Refresh the list after declining
+        fetchUnapprovedUsers();
+        setShowDeclineModal(false);
+      } else {
+        setError(response.message || 'Failed to decline user');
+      }
+    } catch (err) {
+      setError('Error declining user');
+      console.error('Error declining user:', err);
+    }
+  };
 
   return (
     <div className="overflow-x-auto">
@@ -162,18 +204,50 @@ export default function IncomingRequestsTab() {
                   </span>
                 </td>
                 <td className="px-6 py-4 text-right">
-                  <button
-                    onClick={() => navigate(`/admin/user/${user.id}`)}
-                    className="text-gray-600 hover:text-gray-900 text-sm"
-                  >
-                    View Details
-                  </button>
+                  <DropdownMenu
+                    options={[
+                      {
+                        label: 'View Details',
+                        onClick: () => navigate(`/admin/user/${user.id}`),
+                      },
+                      {
+                        label: 'Approve',
+                        onClick: () => {
+                          setSelectedUserId(user.id);
+                          setShowApproveModal(true);
+                        },
+                      },
+                      {
+                        label: 'Decline',
+                        onClick: () => {
+                          setSelectedUserId(user.id);
+                          setShowDeclineModal(true);
+                        },
+                      },
+                    ]}
+                  />
                 </td>
               </tr>
             ))
           )}
         </tbody>
       </table>
+
+      {/* Approve User Modal */}
+      {showApproveModal && (
+        <ApproveUserModal
+          onClose={() => setShowApproveModal(false)}
+          onApprove={handleApproveUser}
+        />
+      )}
+
+      {/* Decline User Modal */}
+      {showDeclineModal && (
+        <DeclineUserModal
+          onClose={() => setShowDeclineModal(false)}
+          onDecline={handleDeclineUser}
+        />
+      )}
     </div>
   );
 }

@@ -120,12 +120,14 @@ export default function AdminDashboard() {
               View all candidates in the system
             </p>
           </div>
-          <button
-            onClick={() => navigate('/admin/all-candidates')}
-            className="text-[#7B858E] hover:text-gray-900 font-semibold text-[13px]"
-          >
-            View All
-          </button>
+          <div className="flex space-x-4">
+            <button
+              onClick={() => navigate('/admin/all-candidates')}
+              className="text-[#7B858E] hover:text-gray-900 font-semibold text-[13px]"
+            >
+              View All
+            </button>
+          </div>
         </div>
 
         {/* Tabs */}

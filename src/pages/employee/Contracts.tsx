@@ -69,16 +69,40 @@ interface ContractCardProps {
 
 const ContractCard: React.FC<ContractCardProps> = ({ proposal, imageUrl }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Add safety checks for the proposal structure
+  if (!proposal || !proposal.contract || !proposal.proposal) {
+    console.warn('Invalid proposal structure in ContractCard:', proposal);
+    return null;
+  }
+
   const { contract, proposal: proposalData } = proposal;
 
+  // Safely access employer name
   const employerName = contract.employer
-    ? `${contract.employer.first_name} ${contract.employer.last_name}`
+    ? `${contract.employer.first_name || ''} ${contract.employer.last_name || ''}`
     : 'Unknown Employer';
 
-  const startDate = format(new Date(contract.start_date), 'MMM dd, yyyy');
-  const endDate = format(new Date(contract.end_date), 'MMM dd, yyyy');
+  // Safely format dates
+  let startDate = 'Unknown';
+  let endDate = 'Unknown';
+  try {
+    if (contract.start_date) {
+      startDate = format(new Date(contract.start_date), 'MMM dd, yyyy');
+    }
+    if (contract.end_date) {
+      endDate = format(new Date(contract.end_date), 'MMM dd, yyyy');
+    }
+  } catch (error) {
+    console.error('Error formatting dates:', error);
+  }
 
-  const description = `${contract.position} position. Duration: ${contract.duration_months} months (${startDate} - ${endDate}). Working days: ${contract.working_days_per_month}/month, ${contract.working_hours_per_week} hours/week.`;
+  // Safely create description
+  const position = contract.position || 'Unknown';
+  const durationMonths = contract.duration_months || 'Unknown';
+  const workingDays = contract.working_days_per_month || 'Unknown';
+  const workingHours = contract.working_hours_per_week || 'Unknown';
+  const description = `${position} position. Duration: ${durationMonths} months (${startDate} - ${endDate}). Working days: ${workingDays}/month, ${workingHours} hours/week.`;
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -95,6 +119,9 @@ const ContractCard: React.FC<ContractCardProps> = ({ proposal, imageUrl }) => {
 
   // Only show terminate button for active contracts
   const isActive = contract.status === 'active' || contract.is_active;
+
+  // Safely get status
+  const status = proposalData.status || 'Unknown';
 
   return (
     <div className="bg-white p-4 rounded-md border border-gray-100">
@@ -113,15 +140,14 @@ const ContractCard: React.FC<ContractCardProps> = ({ proposal, imageUrl }) => {
       <div className="flex justify-between items-center">
         <span
           className={`px-2 py-1 rounded-full text-xs ${
-            proposalData.status === 'pending'
+            status === 'pending'
               ? 'bg-yellow-100 text-yellow-700'
-              : proposalData.status === 'accepted'
+              : status === 'accepted'
                 ? 'bg-green-100 text-green-700'
                 : 'bg-red-100 text-red-700'
           }`}
         >
-          {proposalData.status.charAt(0).toUpperCase() +
-            proposalData.status.slice(1)}
+          {status.charAt(0).toUpperCase() + status.slice(1)}
         </span>
 
         {isActive && (
@@ -162,7 +188,13 @@ const ContractsPage: React.FC<ContractsPageProps> = ({
         const response = await contractApi.getProposals();
 
         if (response.status && response.data) {
-          setProposals(response.data);
+          // Ensure data is an array before setting it
+          if (Array.isArray(response.data)) {
+            setProposals(response.data);
+          } else {
+            console.error('Unexpected data format:', response.data);
+            setError('Received invalid data format from server');
+          }
         } else {
           setError('Failed to fetch contract proposals');
         }
@@ -181,12 +213,22 @@ const ContractsPage: React.FC<ContractsPageProps> = ({
   const filteredProposals = proposals.filter((proposal) => {
     if (!searchTerm) return true;
 
+    // Add safety checks for the proposal structure
+    if (!proposal || !proposal.contract || !proposal.proposal) {
+      console.warn('Invalid proposal structure:', proposal);
+      return false;
+    }
+
     const searchLower = searchTerm.toLowerCase();
+
+    // Safely access employer name
     const employerName = proposal.contract.employer
-      ? `${proposal.contract.employer.first_name} ${proposal.contract.employer.last_name}`.toLowerCase()
+      ? `${proposal.contract.employer.first_name || ''} ${proposal.contract.employer.last_name || ''}`.toLowerCase()
       : '';
-    const position = proposal.contract.position.toLowerCase();
-    const status = proposal.proposal.status.toLowerCase();
+
+    // Safely access position and status
+    const position = (proposal.contract.position || '').toLowerCase();
+    const status = (proposal.proposal.status || '').toLowerCase();
 
     return (
       employerName.includes(searchLower) ||
