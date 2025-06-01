@@ -13,6 +13,22 @@ const ADMIN_ENDPOINTS = {
   SUSPEND_USER: '/admin/suspend-user', // Endpoint to suspend a user
 };
 
+interface Employee {
+  id: number;
+  first_name: string;
+  last_name: string;
+  title?: string;
+  email: string;
+  avatar?: string;
+  created_at: string;
+  employer?: {
+    name: string;
+  };
+  gender: string;
+  phone: string;
+  is_verified: boolean;
+}
+
 // Admin API service
 const adminApi = {
   /**
@@ -77,7 +93,7 @@ const adminApi = {
    * @param userId - The ID of the user to approve
    * @returns Promise with the API response
    */
-  approveUser: async (userId) => {
+  approveUser: async (userId: string | number) => {
     try {
       const response = await axiosInstance.post(
         `${ADMIN_ENDPOINTS.APPROVE_USER}/${userId}`
@@ -94,7 +110,7 @@ const adminApi = {
    * @param userId - The ID of the user to decline
    * @returns Promise with the API response
    */
-  declineUser: async (userId) => {
+  declineUser: async (userId: string | number) => {
     try {
       const response = await axiosInstance.post(
         `${ADMIN_ENDPOINTS.DECLINE_USER}/${userId}`
@@ -141,16 +157,14 @@ const adminApi = {
         }
       );
 
-      // Transform the data to match the format expected by the Track component
       if (
         response.data.status &&
         response.data.data &&
         response.data.data.data
       ) {
-        // Access the nested data array
-        const employeesArray = response.data.data.data;
+        const employeesArray = response.data.data.data as Employee[];
 
-        const transformedData = employeesArray.map((employee) => ({
+        const transformedData = employeesArray.map((employee: Employee) => ({
           id: employee.id,
           candidate: `${employee.first_name} ${employee.last_name}`,
           title: employee.title || 'Staff',
@@ -184,9 +198,8 @@ const adminApi = {
    * @param employeeId - ID of the employee
    * @returns Promise with the API response containing employee details
    */
-  getEmployeeById: async (employeeId) => {
+  getEmployeeById: async (employeeId: string | number) => {
     try {
-      // Get all employees (with a high limit to ensure we get the one we need)
       const response = await axiosInstance.get(ADMIN_ENDPOINTS.EMPLOYEE_LIST, {
         params: { page: 1, limit: 100 },
       });
@@ -196,15 +209,13 @@ const adminApi = {
         response.data.data &&
         response.data.data.data
       ) {
-        // Access the nested data array
-        const employeesArray = response.data.data.data;
+        const employeesArray = response.data.data.data as Employee[];
 
         const employee = employeesArray.find(
-          (emp) => emp.id === parseInt(employeeId)
+          (emp: Employee) => emp.id === parseInt(employeeId as string)
         );
 
         if (employee) {
-          // Transform to match the format expected by the CandidateProfile component
           const transformedEmployee = {
             id: employee.id,
             candidate: `${employee.first_name} ${employee.last_name}`,
@@ -244,7 +255,7 @@ const adminApi = {
    * @param userId - The ID of the user to block
    * @returns Promise with the API response
    */
-  blockUser: async (userId) => {
+  blockUser: async (userId: string | number) => {
     try {
       const response = await axiosInstance.post(
         `${ADMIN_ENDPOINTS.BLOCK_USER}/${userId}`
@@ -261,7 +272,7 @@ const adminApi = {
    * @param userId - The ID of the user to suspend
    * @returns Promise with the API response
    */
-  suspendUser: async (userId) => {
+  suspendUser: async (userId: string | number) => {
     try {
       const response = await axiosInstance.post(
         `${ADMIN_ENDPOINTS.SUSPEND_USER}/${userId}`

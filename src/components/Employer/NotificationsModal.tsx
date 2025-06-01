@@ -10,7 +10,7 @@ export interface NotificationItem {
   message: string;
   date: string;
   read: boolean;
-  type: 'medical' | 'salary' | 'other';
+  type: 'medical' | 'salary' | 'other' | 'registration' | 'system';
 }
 
 interface NotificationsModalProps {
