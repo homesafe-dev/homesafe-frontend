@@ -16,7 +16,7 @@ interface Employee {
   candidate: string;
   title: string;
   email: string;
-  avatar: string;
+  avatar?: string;
   date: string;
   placement: string;
   gender: string;

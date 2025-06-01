@@ -227,7 +227,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const completeRegistration = async (
-    data: RegistrationData
+    data: RegistrationData | FormData
   ): Promise<OtpResponse> => {
     setLoading(true);
     setError(null);
@@ -236,35 +236,39 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const response = await authApi.completeRegistration(data);
       setLoading(false);
 
-      // Handle the response based on the format provided
       if (response.status && response.data) {
-        // Create user object based on the response data
         const userObj = {
-          id: response.data.id || '1', // Use ID from response if available
-          email: data.email, // Use the email from the registration data
+          id: response.data.id || '1',
+          email:
+            data instanceof FormData
+              ? (data.get('email') as string)
+              : data.email,
           name: `${response.data.first_name} ${response.data.last_name}`,
-          type: response.data.role as UserType, // Convert role to UserType
+          type: response.data.role as UserType,
         };
 
-        // Set user in state
         setUser(userObj);
 
-        // Store auth token and user data if provided
         if (response.data.token) {
           localStorage.setItem('auth_token', response.data.token);
           localStorage.setItem('auth_user', JSON.stringify(userObj));
         }
-      }
 
-      return {
-        success: response.status,
-        message: response.message,
-        data: response.data,
-      };
+        return {
+          success: true,
+          message: response.message,
+          data: response.data,
+        };
+      } else {
+        return {
+          success: false,
+          message: response.message || 'Registration failed',
+          data: response.data,
+        };
+      }
     } catch (err: any) {
       setLoading(false);
-      const errorMessage =
-        err.response?.data?.message || 'Failed to complete registration';
+      const errorMessage = err.response?.data?.message || 'Registration failed';
       setError(errorMessage);
       return {
         success: false,
