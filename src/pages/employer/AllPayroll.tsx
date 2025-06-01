@@ -14,10 +14,6 @@ const AllPayrollPage: React.FC = () => {
   const [totalPages, setTotalPages] = useState<number>(1);
   const [itemsPerPage] = useState<number>(15);
 
-  useEffect(() => {
-    fetchPayrollHistory();
-  }, [currentPage, itemsPerPage, fetchPayrollHistory]);
-
   const fetchPayrollHistory = React.useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -58,6 +54,10 @@ const AllPayrollPage: React.FC = () => {
       setLoading(false);
     }
   }, [currentPage, itemsPerPage]);
+
+  useEffect(() => {
+    fetchPayrollHistory();
+  }, [fetchPayrollHistory]);
 
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {

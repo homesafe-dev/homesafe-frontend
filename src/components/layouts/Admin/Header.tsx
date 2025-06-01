@@ -24,6 +24,17 @@ interface UserProfile {
   [key: string]: any;
 }
 
+type NotificationType =
+  | 'registration'
+  | 'system'
+  | 'other'
+  | 'salary'
+  | 'medical';
+
+interface ExtendedNotificationItem extends Omit<NotificationItem, 'type'> {
+  type: NotificationType;
+}
+
 const Header: React.FC<HeaderProps> = ({
   userEmail: propUserEmail,
   userName: propUserName,
@@ -36,7 +47,9 @@ const Header: React.FC<HeaderProps> = ({
   const [, setLoading] = useState(true);
   // Error state is used in the fetchUserProfile function
   const [, setError] = useState<string | null>(null);
-  const [notifications, setNotifications] = useState<NotificationItem[]>([
+  const [notifications, setNotifications] = useState<
+    ExtendedNotificationItem[]
+  >([
     {
       id: '1',
       title: 'New Employer Registration',
