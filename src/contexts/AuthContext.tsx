@@ -252,13 +252,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (response.data.token) {
           localStorage.setItem('auth_token', response.data.token);
           localStorage.setItem('auth_user', JSON.stringify(userObj));
-        }
+      }
 
-        return {
+      return {
           success: true,
-          message: response.message,
-          data: response.data,
-        };
+        message: response.message,
+        data: response.data,
+      };
       } else {
         return {
           success: false,
