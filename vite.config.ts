@@ -3,14 +3,11 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/postcss";
 
 // https://vitejs.dev/config/
-export default defineConfig({   
-    plugins: [react()],   
+export default defineConfig({
+    plugins: [react()],
     css: {
         postcss: {
             plugins: [tailwindcss()],
-        },   
     },
-    preview: {
-        allowedHosts: ["homesafe-frontend.onrender.com"]
-    }
+  }
 });
