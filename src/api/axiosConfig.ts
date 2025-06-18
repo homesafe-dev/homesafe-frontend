@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://192.227.190.166/api',
+  baseURL:
+    import.meta.env.VITE_BACKEND_BASE_URL || 'https://homesafeng.xyz/api',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -12,7 +13,7 @@ axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('auth_token');
 
-    if (token) {
+    if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
@@ -34,6 +35,7 @@ axiosInstance.interceptors.response.use(
       if (status === 401) {
         // Skip auth endpoints
         if (
+          config.url &&
           !config.url.includes('/login') &&
           !config.url.includes('/verify-otp') &&
           !config.url.includes('/send-otp') &&
