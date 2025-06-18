@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.BACKEND_BASE_URL || 'https://homesafeng.xyz/api',
+  baseURL:
+    import.meta.env.VITE_BACKEND_BASE_URL || 'https://homesafeng.xyz/api',
   headers: {
     'Content-Type': 'application/json',
   },
