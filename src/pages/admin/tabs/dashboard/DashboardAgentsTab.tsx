@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { FaUser, FaPlus } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
 import adminApi from '../../../../api/adminApi';
+import CreateUserModal from '../../../../components/CreateUserModal';
 
 interface Agent {
   id: number;
@@ -22,10 +22,10 @@ interface Agent {
 }
 
 export default function DashboardAgentsTab() {
-  const navigate = useNavigate();
   const [agents, setAgents] = useState<Agent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
   useEffect(() => {
     const fetchAgents = async () => {
@@ -61,7 +61,7 @@ export default function DashboardAgentsTab() {
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Agents</h2>
         <button
-          onClick={() => navigate('/admin/agents')}
+          onClick={() => setShowCreateModal(true)}
           className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md flex items-center"
         >
           <FaPlus className="mr-2" /> Create New Agent
@@ -190,6 +190,16 @@ export default function DashboardAgentsTab() {
           )}
         </tbody>
       </table>
+
+      <CreateUserModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        userType="agent"
+        onSuccess={() => {
+          // Refresh the agents list
+          window.location.reload();
+        }}
+      />
     </div>
   );
 }

@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { FaUser } from 'react-icons/fa';
+import { FaUser, FaPlus } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import adminApi from '../../../api/adminApi';
 import DropdownMenu from '../../../components/common/DropdownMenu';
+import CreateUserModal from '../../../components/CreateUserModal';
 
 interface Employer {
   id: number;
@@ -30,6 +31,7 @@ export default function EmployersTab() {
   const [employers, setEmployers] = useState<Employer[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
   useEffect(() => {
     const fetchEmployers = async () => {
@@ -62,6 +64,16 @@ export default function EmployersTab() {
 
   return (
     <div className="overflow-x-auto">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-semibold">All Employers</h2>
+        <button
+          onClick={() => setShowCreateModal(true)}
+          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md flex items-center"
+        >
+          <FaPlus className="mr-2" /> Create New Employer
+        </button>
+      </div>
+
       <table className="w-full">
         <thead className="bg-[#C8EDDF80] h-[56px] text-left">
           <tr>
@@ -192,6 +204,16 @@ export default function EmployersTab() {
           )}
         </tbody>
       </table>
+
+      <CreateUserModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        userType="employer"
+        onSuccess={() => {
+          // Refresh the employers list
+          window.location.reload();
+        }}
+      />
     </div>
   );
 }
