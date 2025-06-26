@@ -31,11 +31,17 @@ export default function DashboardAgentsTab() {
     const fetchAgents = async () => {
       try {
         setIsLoading(true);
+        setError(null);
+
         // Use a smaller limit for the dashboard preview
         const response = await adminApi.getAgentList(1, 5);
+        console.log('Dashboard Agents API Response:', response); // Debug log
+
         if (response.status) {
-          // The agents array is in response.data.data
-          setAgents(response.data.data || []);
+          // Handle the new paginated response structure
+          const agentData = response.data?.data || response.data || [];
+          console.log('Extracted dashboard agent data:', agentData); // Debug log
+          setAgents(agentData);
         } else {
           setError(response.message || 'Failed to fetch agents');
         }

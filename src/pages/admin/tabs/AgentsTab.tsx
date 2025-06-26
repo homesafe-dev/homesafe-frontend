@@ -64,11 +64,17 @@ export default function AgentsTab() {
   const fetchAgents = async () => {
     try {
       setIsLoading(true);
+      setError(null);
+
       // Use a larger limit to ensure we get all agents
       const response = await adminApi.getAgentList(1, 100);
+      console.log('Agents API Response:', response); // Debug log
+
       if (response.status) {
-        // The agents array is in response.data.data
-        setAgents(response.data.data || []);
+        // Handle the new paginated response structure
+        const agentData = response.data?.data || response.data || [];
+        console.log('Extracted agent data:', agentData); // Debug log
+        setAgents(agentData);
       } else {
         setError(response.message || 'Failed to fetch agents');
       }

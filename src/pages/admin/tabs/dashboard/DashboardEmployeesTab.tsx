@@ -46,11 +46,17 @@ export default function DashboardEmployeesTab() {
     const fetchEmployees = async () => {
       try {
         setIsLoading(true);
+        setError(null);
+
         // Use a smaller limit for the dashboard preview
         const response = await adminApi.getEmployeeList(1, 5);
+        console.log('Dashboard Employees API Response:', response); // Debug log
+
         if (response.status) {
-          const employeeData = response.data as EmployeeListResponse;
-          setEmployees(employeeData.data);
+          // Handle the new paginated response structure
+          const employeeData = response.data?.data || response.data || [];
+          console.log('Extracted dashboard employee data:', employeeData); // Debug log
+          setEmployees(employeeData);
         } else {
           setError(response.message || 'Failed to fetch employees');
         }
