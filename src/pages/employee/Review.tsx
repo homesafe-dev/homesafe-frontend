@@ -85,19 +85,24 @@ interface ReviewsPageProps {
 
 const ReviewsPage: React.FC<ReviewsPageProps> = ({
   title = 'Reviews',
-  userId = 7, // Default user ID, can be passed as prop or fetched from auth context
+  userId, // Optional prop, will fetch from profile if not provided
 }) => {
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [averageRating, setAverageRating] = useState<string>('0');
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [currentUserId, setCurrentUserId] = useState<number | null>(null);
 
   // Function to fetch user reviews
   const fetchUserReviews = useCallback(async () => {
+    if (!currentUserId) return;
+
     try {
       setLoading(true);
-      const response = await userApi.getUserReviews(userId);
+      setError(null);
+
+      const response = await userApi.getUserReviews(currentUserId);
 
       if (response.status) {
         setReviews(response.data.reviews || []);
@@ -117,9 +122,40 @@ const ReviewsPage: React.FC<ReviewsPageProps> = ({
     } finally {
       setLoading(false);
     }
+  }, [currentUserId]);
+
+  // Fetch user profile to get actual user ID
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        // If userId is provided as prop, use it directly
+        if (userId) {
+          setCurrentUserId(userId);
+          return;
+        }
+
+        // Otherwise, fetch from profile API
+        const profileResponse = await userApi.getProfile();
+
+        if (profileResponse.status && profileResponse.data) {
+          setCurrentUserId(profileResponse.data.id);
+        } else {
+          setError('Failed to fetch user profile');
+        }
+      } catch (err) {
+        console.error('Error fetching user profile:', err);
+        setError('Error fetching user profile');
+        setLoading(false);
+      }
+    };
+
+    fetchUserProfile();
   }, [userId]);
 
-  // Fetch reviews when component mounts or when userId changes
+  // Fetch reviews when currentUserId changes
   useEffect(() => {
     fetchUserReviews();
   }, [fetchUserReviews]);

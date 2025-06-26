@@ -7,6 +7,7 @@ const USER_ENDPOINTS = {
   REVIEWS: (userId: number) => `/users/${userId}/reviews`,
   MEDICAL: '/user-medicals',
   EMPLOYER_LIST: '/employer-list',
+  CHANGE_PASSWORD: '/change-password',
 };
 
 // User API service
@@ -174,6 +175,27 @@ const userApi = {
       return response.data;
     } catch (error) {
       console.error('Error fetching employer list:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Change user password
+   * @param passwordData - Object containing old_password and new_password
+   * @returns Promise with the API response
+   */
+  changePassword: async (passwordData: {
+    old_password: string;
+    new_password: string;
+  }) => {
+    try {
+      const response = await axiosInstance.post(
+        USER_ENDPOINTS.CHANGE_PASSWORD,
+        passwordData
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error changing password:', error);
       throw error;
     }
   },

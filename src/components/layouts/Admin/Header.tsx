@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { LuBellDot } from 'react-icons/lu';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
-import NotificationsModal, {
-  NotificationItem,
-} from '../../Employer/NotificationsModal';
+import NotificationsModal from '../../common/NotificationsModal';
 import ProfileIcon from '../../../assets/icons/profile.svg';
 import LogoutIcon from '../../../assets/icons/logout.svg';
 import SecurityIcon from '../../../assets/icons/security.svg';
@@ -36,49 +34,7 @@ const Header: React.FC<HeaderProps> = ({
   const [, setLoading] = useState(true);
   // Error state is used in the fetchUserProfile function
   const [, setError] = useState<string | null>(null);
-  const [notifications, setNotifications] = useState<NotificationItem[]>([
-    {
-      id: '1',
-      title: 'New Employer Registration',
-      message: 'A new employer has registered on the platform.',
-      date: 'Nov 24',
-      read: false,
-      type: 'registration',
-    },
-    {
-      id: '2',
-      title: 'New Agent Registration',
-      message: 'A new agent has registered on the platform.',
-      date: 'Nov 24',
-      read: false,
-      type: 'registration',
-    },
-    {
-      id: '3',
-      title: 'System Update',
-      message: 'The system will undergo maintenance tonight.',
-      date: 'Nov 24',
-      read: false,
-      type: 'system',
-    },
-  ]);
 
-  const handleMarkAllAsRead = () => {
-    setNotifications(
-      notifications.map((notification) => ({
-        ...notification,
-        read: true,
-      }))
-    );
-  };
-
-  const handleViewNotification = (id: string) => {
-    setNotifications(
-      notifications.map((notification) =>
-        notification.id === id ? { ...notification, read: true } : notification
-      )
-    );
-  };
 
   const handleLogout = () => {
     localStorage.removeItem('auth_token');
@@ -205,9 +161,7 @@ const Header: React.FC<HeaderProps> = ({
       <NotificationsModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        notifications={notifications}
-        onMarkAllAsRead={handleMarkAllAsRead}
-        onViewNotification={handleViewNotification}
+        portalType="admin"
       />
     </header>
   );

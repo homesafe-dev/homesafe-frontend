@@ -103,7 +103,7 @@ const ForgotPasswordOTPPage: React.FC = () => {
 
       if (response.status) {
         // Navigate to reset password page
-        navigate('/employer/reset-password');
+        navigate('/reset-password');
       } else {
         setError(response.message || 'Invalid OTP. Please try again.');
       }

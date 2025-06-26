@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FiArrowLeft, FiCalendar, FiChevronDown } from 'react-icons/fi';
+import { FiArrowLeft, FiChevronDown } from 'react-icons/fi';
 import ArtisanImg from '../../assets/images/artisans.png';
 import { useNavigate, useLocation } from 'react-router-dom';
 import artisanApi from '../../api/artisanApi';
@@ -298,7 +298,7 @@ const ArtisanProfileView: React.FC = () => {
                       value={formData.start_date}
                       onChange={handleInputChange}
                     />
-                    <FiCalendar className="absolute right-3 top-3 text-gray-400" />
+                 
                   </div>
                 </div>
 

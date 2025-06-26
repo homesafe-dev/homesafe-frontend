@@ -24,6 +24,18 @@ const WalletPage: React.FC = () => {
     setIsWithdrawModalOpen(false);
   };
 
+  // Function to refresh wallet data
+  const refreshWalletData = async () => {
+    try {
+      const response = await walletApi.getBalance();
+      if (response.status && response.data) {
+        setWalletBalance(response.data.current_balance);
+      }
+    } catch (err) {
+      console.error('Error fetching wallet balance:', err);
+    }
+  };
+
   useEffect(() => {
     // Fetch wallet balance
     const fetchWalletBalance = async () => {
@@ -60,6 +72,17 @@ const WalletPage: React.FC = () => {
 
     fetchWalletBalance();
     fetchTransactions();
+
+    // Check if we're returning from a payment
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('payment_success') === 'true') {
+      // Refresh wallet data after successful payment
+      setTimeout(() => {
+        refreshWalletData();
+      }, 1000);
+      // Clean up URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
   }, [currentPage, itemsPerPage]);
 
   return (

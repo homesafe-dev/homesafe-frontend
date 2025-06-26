@@ -29,7 +29,10 @@ import EmployerForgotPassword from '../components/auth/employer/ForgotPassword';
 import EmployerForgotPasswordOTP from '../components/auth/employer/ForgotPasswordOTP';
 import EmployerResetPassword from '../components/auth/employer/ResetPassword';
 import OnboardingForm from '../components/auth/employer/OnboardingForm';
-import NotificationsPage from '../components/Employer/NotificationsPage';
+import EmployerNotificationsPage from '../components/Employer/NotificationsPage';
+import EmployeeNotificationsPage from '../components/Employee/NotificationsPage';
+import AgentNotificationsPage from '../components/Agent/NotificationsPage';
+import AdminNotificationsPage from '../components/admin/NotificationsPage';
 
 // Dashboard Components
 import EmployerDashboard from '../pages/employer/Dashboard';
@@ -61,6 +64,7 @@ import AdminLayout from '../components/layouts/Admin/Layout';
 import WalletPage from '../pages/employer/WalletPage';
 import WalletHistory from '../pages/employer/WalletHistory';
 import WalletTopUp from '../pages/employer/WalletTopUp';
+import PaymentVerification from '../pages/employer/PaymentVerification';
 import Profile from '../pages/employer/Profile';
 import Security from '../pages/employer/Security';
 import KYCPage from '../pages/employer/KYCPage';
@@ -237,7 +241,7 @@ export const router = createBrowserRouter([
         path: 'notifications',
         element: protectEmployerRoute(
           <EmployerLayout>
-            <NotificationsPage />
+            <EmployerNotificationsPage />
           </EmployerLayout>
         ),
       },
@@ -262,6 +266,14 @@ export const router = createBrowserRouter([
         element: protectEmployerRoute(
           <EmployerLayout>
             <WalletTopUp />
+          </EmployerLayout>
+        ),
+      },
+      {
+        path: 'wallet/payment/verify',
+        element: protectEmployerRoute(
+          <EmployerLayout>
+            <PaymentVerification />
           </EmployerLayout>
         ),
       },
@@ -397,6 +409,14 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: 'notifications',
+        element: protectEmployeeRoute(
+          <EmployeeLayout>
+            <EmployeeNotificationsPage />
+          </EmployeeLayout>
+        ),
+      },
+      {
         path: 'salary',
         element: protectEmployeeRoute(
           <EmployeeLayout>
@@ -526,6 +546,14 @@ export const router = createBrowserRouter([
           </AgentLayout>
         ),
       },
+      {
+        path: 'notifications',
+        element: protectAgentRoute(
+          <AgentLayout>
+            <AgentNotificationsPage />
+          </AgentLayout>
+        ),
+      },
     ],
   },
   // Admin Routes
@@ -645,6 +673,14 @@ export const router = createBrowserRouter([
         element: protectAdminRoute(
           <AdminLayout>
             <AllAdmins />
+          </AdminLayout>
+        ),
+      },
+      {
+        path: 'notifications',
+        element: protectAdminRoute(
+          <AdminLayout>
+            <AdminNotificationsPage />
           </AdminLayout>
         ),
       },

@@ -60,6 +60,18 @@ const DashboardContent: React.FC = () => {
 
     fetchWalletBalance();
     fetchTransactions();
+
+    // Check if we're returning from a payment
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('payment_success') === 'true') {
+      // Refresh wallet data after successful payment
+      setTimeout(() => {
+        fetchWalletBalance();
+        fetchTransactions();
+      }, 1000);
+      // Clean up URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
   }, []);
 
   return (

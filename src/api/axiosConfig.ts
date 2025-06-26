@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://192.227.190.166/api',
+  baseURL: 'https://homesafeng.xyz/api',
   headers: {
     'Content-Type': 'application/json',
   },
