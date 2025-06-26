@@ -7,6 +7,8 @@ const WALLET_ENDPOINTS = {
   TOP_UP: '/wallet/top-up',
   WITHDRAW: '/wallet/withdraw',
   TRANSFER: '/wallet/transfer',
+  INITIALIZE_PAYMENT: 'wallet/initialize-payment',
+  VERIFY_PAYMENT: '/verify-payment',
 };
 
 // Wallet API service
@@ -88,6 +90,33 @@ const walletApi = {
       amount,
       recipient_email: recipientEmail,
       description,
+    });
+    return response.data;
+  },
+
+  /**
+   * Initialize Paystack payment
+   * @param amount - Amount to pay
+   * @param callbackUrl - URL to redirect after payment
+   * @returns Promise with the API response containing authorization URL
+   */
+  initializePayment: async (amount: number, callbackUrl: string) => {
+    const response = await axiosInstance.post(WALLET_ENDPOINTS.INITIALIZE_PAYMENT, {
+      amount: parseFloat(amount.toString()),
+      payment_method: 'external_funding',
+      callback_url: callbackUrl,
+    });
+    return response.data;
+  },
+
+  /**
+   * Verify Paystack payment
+   * @param reference - Payment reference from Paystack
+   * @returns Promise with the API response
+   */
+  verifyPayment: async (reference: string) => {
+    const response = await axiosInstance.post(WALLET_ENDPOINTS.VERIFY_PAYMENT, {
+      reference,
     });
     return response.data;
   },

@@ -211,9 +211,6 @@ const DashboardContent: React.FC = () => {
             <div className="mt-12">
               <p className="text-gray-600 text-sm">Available Advance</p>
               <h3 className="text-xl font-medium text-gray-800 mt-2">₦ 0.00</h3>
-              <p className="text-gray-500 text-sm mt-2">
-                You can request a salary advance after completing 3 months
-              </p>
             </div>
           </div>
         </div>

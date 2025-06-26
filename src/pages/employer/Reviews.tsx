@@ -84,18 +84,53 @@ interface ReviewsPageProps {
 
 const ReviewsPage: React.FC<ReviewsPageProps> = ({
   title = 'Reviews',
-  userId = 7, // Default user ID, can be passed as prop
+  userId, // Optional prop, will fetch from profile if not provided
 }) => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [averageRating, setAverageRating] = useState<string>('0');
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [currentUserId, setCurrentUserId] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        // If userId is provided as prop, use it directly
+        if (userId) {
+          setCurrentUserId(userId);
+          return;
+        }
+
+        // Otherwise, fetch from profile API
+        const profileResponse = await userApi.getProfile();
+
+        if (profileResponse.status && profileResponse.data) {
+          setCurrentUserId(profileResponse.data.id);
+        } else {
+          setError('Failed to fetch user profile');
+        }
+      } catch (err) {
+        console.error('Error fetching user profile:', err);
+        setError('Error fetching user profile');
+        setLoading(false);
+      }
+    };
+
+    fetchUserProfile();
+  }, [userId]);
 
   useEffect(() => {
     const fetchUserReviews = async () => {
+      if (!currentUserId) return;
+
       try {
         setLoading(true);
-        const response = await userApi.getUserReviews(userId);
+        setError(null);
+
+        const response = await userApi.getUserReviews(currentUserId);
 
         if (response.status) {
           setReviews(response.data.reviews || []);
@@ -120,7 +155,7 @@ const ReviewsPage: React.FC<ReviewsPageProps> = ({
     };
 
     fetchUserReviews();
-  }, [userId]);
+  }, [currentUserId]);
 
   const formatDate = (dateString: string) => {
     try {
