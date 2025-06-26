@@ -2,7 +2,7 @@ import axiosInstance from './axiosConfig';
 
 // Artisan API endpoints
 const ARTISAN_ENDPOINTS = {
-  EMPLOYEE_LIST: '/employee-list',
+  EMPLOYEE_LIST: '/users',
 };
 
 // Artisan API service
@@ -18,7 +18,11 @@ const artisanApi = {
       const response = await axiosInstance.get(
         ARTISAN_ENDPOINTS.EMPLOYEE_LIST,
         {
-          params: { page, limit },
+          params: {
+            role: 'employee',
+            page,
+            limit
+          },
         }
       );
       return response.data;
@@ -40,7 +44,11 @@ const artisanApi = {
       const response = await axiosInstance.get(
         ARTISAN_ENDPOINTS.EMPLOYEE_LIST,
         {
-          params: { page: 1, limit: 100 },
+          params: {
+            role: 'employee',
+            page: 1,
+            limit: 100
+          },
         }
       );
 

@@ -34,11 +34,17 @@ export default function DashboardEmployersTab() {
     const fetchEmployers = async () => {
       try {
         setIsLoading(true);
+        setError(null);
+
         // Use a smaller limit for the dashboard preview
         const response = await adminApi.getEmployerList(1, 5);
+        console.log('Dashboard Employers API Response:', response); // Debug log
+
         if (response.status) {
-          // The employers array is in response.data.data
-          setEmployers(response.data.data || []);
+          // Handle the new paginated response structure
+          const employerData = response.data?.data || response.data || [];
+          console.log('Extracted dashboard employer data:', employerData); // Debug log
+          setEmployers(employerData);
         } else {
           setError(response.message || 'Failed to fetch employers');
         }

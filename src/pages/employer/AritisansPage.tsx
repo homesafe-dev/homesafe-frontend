@@ -63,9 +63,18 @@ const ArtisansPage: React.FC = () => {
           currentPage,
           itemsPerPage
         );
+
+        console.log('Artisans API Response:', response); // Debug log
+
         if (response.status && response.data) {
-          setArtisans(response.data.data);
-          setTotalPages(response.data.last_page);
+          // Handle the new paginated response structure
+          const artisanData = response.data?.data || response.data || [];
+          console.log('Extracted artisan data:', artisanData); // Debug log
+
+          setArtisans(artisanData);
+          setTotalPages(response.data?.last_page || 1);
+        } else {
+          setError(response.message || 'Failed to load artisans');
         }
       } catch (err: any) {
         console.error('Error fetching artisans:', err);

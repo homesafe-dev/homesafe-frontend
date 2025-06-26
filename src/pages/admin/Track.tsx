@@ -30,9 +30,15 @@ const AdminTrack = () => {
     const fetchEmployees = async () => {
       try {
         setIsLoading(true);
-        const response = await adminApi.getTrackedEmployees();
+        setError(null);
+
+        const response = await adminApi.getTrackedEmployees(1, 50);
+        console.log('Tracked Employees API Response:', response); // Debug log
+
         if (response.status) {
-          setEmployees(response.data);
+          // Handle the response data structure
+          const employeeData = response.data || [];
+          setEmployees(employeeData);
         } else {
           setError(response.message || 'Failed to fetch employees');
         }

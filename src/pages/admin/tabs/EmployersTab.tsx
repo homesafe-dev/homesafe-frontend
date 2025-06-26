@@ -35,11 +35,17 @@ export default function EmployersTab() {
     const fetchEmployers = async () => {
       try {
         setIsLoading(true);
+        setError(null);
+
         // Use a larger limit to ensure we get all employers
         const response = await adminApi.getEmployerList(1, 100);
+        console.log('Employers API Response:', response); // Debug log
+
         if (response.status) {
-          // The employers array is in response.data.data
-          setEmployers(response.data.data || []);
+          // Handle the new paginated response structure
+          const employerData = response.data?.data || response.data || [];
+          console.log('Extracted employer data:', employerData); // Debug log
+          setEmployers(employerData);
         } else {
           setError(response.message || 'Failed to fetch employers');
         }

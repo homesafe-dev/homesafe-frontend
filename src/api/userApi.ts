@@ -6,7 +6,7 @@ const USER_ENDPOINTS = {
   KYC: '/user-kyc',
   REVIEWS: (userId: number) => `/users/${userId}/reviews`,
   MEDICAL: '/user-medicals',
-  EMPLOYER_LIST: '/employer-list',
+  EMPLOYER_LIST: '/users',
   CHANGE_PASSWORD: '/change-password',
 };
 
@@ -167,10 +167,14 @@ const userApi = {
    * @param limit - Number of items per page
    * @returns Promise with the API response containing employer list
    */
-  getEmployerList: async (page = 1, limit = 100) => {
+  getEmployerList: async (page = 1, limit = 10) => {
     try {
       const response = await axiosInstance.get(USER_ENDPOINTS.EMPLOYER_LIST, {
-        params: { page, limit },
+        params: {
+          role: 'employer',
+          page,
+          limit
+        },
       });
       return response.data;
     } catch (error) {

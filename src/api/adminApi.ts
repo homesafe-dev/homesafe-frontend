@@ -2,13 +2,13 @@ import axiosInstance from './axiosConfig';
 
 // Admin API endpoints
 const ADMIN_ENDPOINTS = {
-  EMPLOYER_LIST: '/employer-list',
-  EMPLOYEE_LIST: '/employee-list',
-  AGENT_LIST: '/agent-list', // This might need to be updated based on actual API
+  EMPLOYER_LIST: '/users',
+  EMPLOYEE_LIST: '/users',
+  AGENT_LIST: '/users',
   APPROVE_USER: '/admin/approve-user', // Endpoint to approve a user
   DECLINE_USER: '/admin/decline-user', // Endpoint to decline a user
   UNAPPROVED_USERS: '/admin/unapproved-users', // Endpoint to get unapproved users
-  TRACK_EMPLOYEES: '/employee-list', // Using employee-list for tracking employees
+  TRACK_EMPLOYEES: '/users', // Using unified users endpoint for tracking employees
   BLOCK_USER: '/admin/block-user', // Endpoint to block a user
   SUSPEND_USER: '/admin/suspend-user', // Endpoint to suspend a user
 };
@@ -24,7 +24,11 @@ const adminApi = {
   getEmployerList: async (page = 1, limit = 15) => {
     try {
       const response = await axiosInstance.get(ADMIN_ENDPOINTS.EMPLOYER_LIST, {
-        params: { page, limit },
+        params: {
+          role: 'employer',
+          page,
+          limit
+        },
       });
 
       return response.data;
@@ -43,7 +47,11 @@ const adminApi = {
   getEmployeeList: async (page = 1, limit = 15) => {
     try {
       const response = await axiosInstance.get(ADMIN_ENDPOINTS.EMPLOYEE_LIST, {
-        params: { page, limit },
+        params: {
+          role: 'employee',
+          page,
+          limit
+        },
       });
 
       return response.data;
@@ -59,10 +67,14 @@ const adminApi = {
    * @param limit - Number of items per page
    * @returns Promise with the API response
    */
-  getAgentList: async (page = 1, limit = 15) => {
+  getAgentList: async (page = 1, limit = 20) => {
     try {
       const response = await axiosInstance.get(ADMIN_ENDPOINTS.AGENT_LIST, {
-        params: { page, limit },
+        params: {
+          role: 'agent',
+          page,
+          limit
+        },
       });
 
       return response.data;
@@ -137,7 +149,11 @@ const adminApi = {
       const response = await axiosInstance.get(
         ADMIN_ENDPOINTS.TRACK_EMPLOYEES,
         {
-          params: { page, limit },
+          params: {
+            role: 'employee',
+            page,
+            limit
+          },
         }
       );
 
@@ -188,7 +204,11 @@ const adminApi = {
     try {
       // Get all employees (with a high limit to ensure we get the one we need)
       const response = await axiosInstance.get(ADMIN_ENDPOINTS.EMPLOYEE_LIST, {
-        params: { page: 1, limit: 100 },
+        params: {
+          role: 'employee',
+          page: 1,
+          limit: 100
+        },
       });
 
       if (

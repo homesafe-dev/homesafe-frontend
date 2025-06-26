@@ -44,9 +44,18 @@ const EmployerReview: React.FC<EmployerReviewProps> = ({
   const fetchEmployers = async () => {
     try {
       setIsLoading(true);
-      const response = await userApi.getEmployerList();
+      setError(null); // Clear any previous errors
+
+      // Use a higher limit to get more employers for selection
+      const response = await userApi.getEmployerList(1, 50);
+
+      console.log('Employer API Response:', response); // Debug log
+
       if (response.status) {
-        setEmployers(response.data.data || []);
+        // Handle the new paginated response structure
+        const employerData = response.data?.data?.data || response.data?.data || response.data || [];
+        console.log('Extracted employer data:', employerData); // Debug log
+        setEmployers(employerData);
       } else {
         setError(response.message || 'Failed to fetch employers');
       }

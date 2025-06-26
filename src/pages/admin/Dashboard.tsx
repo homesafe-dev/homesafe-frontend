@@ -22,22 +22,29 @@ export default function AdminDashboard() {
         setIsLoading(true);
 
         // Fetch employee data
-        const employeeResponse = await adminApi.getEmployeeList();
+        const employeeResponse = await adminApi.getEmployeeList(1, 100);
+        console.log('Employee API Response:', employeeResponse); // Debug log
+
         if (employeeResponse.status) {
-          setEmployeeCount(employeeResponse.data.total || 0);
+          // Handle new paginated response structure
+          const employeeData = employeeResponse.data?.data || employeeResponse.data || [];
+          setEmployeeCount(employeeResponse.data?.total || employeeData.length || 0);
+
           // Count terminated employees (this is just an example, adjust based on your API)
-          const terminated =
-            employeeResponse.data.data?.filter(
-              (employee: any) => employee.status === 0
-            ).length || 0;
+          const terminated = employeeData.filter(
+            (employee: any) => employee.status === 0
+          ).length || 0;
           setTerminatedCount(terminated);
         }
 
         // Fetch employer data
-        const employerResponse = await adminApi.getEmployerList();
+        const employerResponse = await adminApi.getEmployerList(1, 100);
+        console.log('Employer API Response:', employerResponse); // Debug log
+
         if (employerResponse.status) {
-          // The employers array is in response.data.data
-          setEmployerCount(employerResponse.data.data?.length || 0);
+          // Handle new paginated response structure
+          const employerData = employerResponse.data?.data || employerResponse.data || [];
+          setEmployerCount(employerResponse.data?.total || employerData.length || 0);
         }
       } catch (err) {
         console.error('Error fetching dashboard data:', err);
