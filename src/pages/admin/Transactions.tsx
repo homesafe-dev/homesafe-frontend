@@ -1,50 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BsThreeDotsVertical } from 'react-icons/bs';
-
-// Mock transaction data
-interface Transaction {
-  id: string;
-  name: string;
-  type: string;
-  transactionId: string;
-  date: string;
-  amount: string;
-  description: string;
-  status: string;
-}
-
-// Generate mock transactions with different types
-const generateMockTransactions = (): Transaction[] => {
-  const transactionTypes = [
-    { type: 'Credit', description: 'Wallet top-up', amount: 'N 50,000' },
-    { type: 'Debit', description: 'Salary payment', amount: 'N 120,000' },
-    { type: 'Debit', description: 'Withdrawal', amount: 'N 75,000' },
-  ];
-
-  return Array(30)
-    .fill(null)
-    .map((_, index) => {
-      const typeIndex = index % 3;
-      return {
-        id: `${index + 1}`,
-        name: 'Johnathan James',
-        type: transactionTypes[typeIndex].type,
-        transactionId: `1234HY5434SU${index + 76}`,
-        date: '24th Dec 2024',
-        amount: transactionTypes[typeIndex].amount,
-        description: transactionTypes[typeIndex].description,
-        status:
-          Math.random() > 0.2
-            ? 'Successful'
-            : Math.random() > 0.5
-              ? 'Pending'
-              : 'Failed',
-      };
-    });
-};
-
-const mockTransactions: Transaction[] = generateMockTransactions();
+import transactionApi, { Transaction, TransactionFilters } from '../../api/transactionApi';
+import { format } from 'date-fns';
 
 const Transactions: React.FC = () => {
   const navigate = useNavigate();
@@ -55,63 +13,65 @@ const Transactions: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState<string>('');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [showOptionsFor, setShowOptionsFor] = useState<string | null>(null);
 
   useEffect(() => {
-    // Simulate API call with mock data
     const fetchTransactions = async () => {
       setLoading(true);
       try {
-        // Simulate network delay
-        await new Promise((resolve) => setTimeout(resolve, 500));
+        // Build filters based on active tab and date range
+        const filters: TransactionFilters = {
+          limit: itemsPerPage,
+          page: currentPage,
+        };
 
-        // Filter transactions based on active tab
-        let filteredTransactions = [...mockTransactions];
+        // Map tab to wallet_source filter
         if (activeTab === 'top-up') {
-          filteredTransactions = mockTransactions.filter((t) =>
-            t.description.toLowerCase().includes('top-up')
-          );
+          filters.wallet_source = 'top-up';
         } else if (activeTab === 'salaries') {
-          filteredTransactions = mockTransactions.filter((t) =>
-            t.description.toLowerCase().includes('salary')
-          );
+          filters.wallet_source = 'salary';
         } else if (activeTab === 'withdrawals') {
-          filteredTransactions = mockTransactions.filter((t) =>
-            t.description.toLowerCase().includes('withdrawal')
-          );
+          filters.wallet_source = 'withdrawal';
         }
 
-        // Apply date filters if provided
-        if (startDate && endDate) {
-          // In a real app, you would parse and compare actual dates
-          // For this mock, we'll just pretend the filter is applied
-          console.log(`Filtering by date range: ${startDate} to ${endDate}`);
+        // Add date filters if provided
+        if (startDate) {
+          filters.from_date = startDate;
+        }
+        if (endDate) {
+          filters.to_date = endDate;
         }
 
-        // Calculate pagination
-        const totalItems = filteredTransactions.length;
-        setTotalPages(Math.ceil(totalItems / itemsPerPage));
+        // Add search filter if provided
+        if (searchTerm.trim()) {
+          filters.search = searchTerm.trim();
+        }
 
-        // Get current page items
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        const paginatedTransactions = filteredTransactions.slice(
-          startIndex,
-          startIndex + itemsPerPage
-        );
+        // Fetch transactions from API
+        const response = await transactionApi.getAllTransactions(filters);
 
-        setTransactions(paginatedTransactions);
+        if (response.status && response.data) {
+          setTransactions(response.data.transactions);
+          setTotalPages(response.data.pagination.total_pages);
+        } else {
+          setTransactions([]);
+          setTotalPages(1);
+        }
       } catch (error) {
         console.error('Error fetching transactions:', error);
+        setTransactions([]);
+        setTotalPages(1);
       } finally {
         setLoading(false);
       }
     };
 
     fetchTransactions();
-  }, [activeTab, currentPage, itemsPerPage, startDate, endDate]);
+  }, [activeTab, currentPage, itemsPerPage, startDate, endDate, searchTerm]);
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
@@ -131,12 +91,24 @@ const Transactions: React.FC = () => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold">All Transactions</h1>
 
-        <div className="flex items-center gap-2">
-          <span className="text-gray-600">Filter By</span>
+        <div className="flex items-center gap-4">
+          {/* Search Input */}
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Search transactions..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="border border-gray-300 rounded-md px-3 py-2 text-sm w-64"
+            />
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="text-gray-600">Filter By</span>
           <div className="flex items-center gap-2">
             <div className="relative">
               <input
-                type="text"
+                type="date"
                 placeholder="Start Date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
@@ -160,7 +132,7 @@ const Transactions: React.FC = () => {
             <span>-</span>
             <div className="relative">
               <input
-                type="text"
+                type="date"
                 placeholder="End Date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
@@ -259,11 +231,20 @@ const Transactions: React.FC = () => {
                     key={transaction.id}
                     className="border-b border-gray-200 hover:bg-gray-50"
                   >
-                    <td className="py-3 px-4">{transaction.name}</td>
+                    <td className="py-3 px-4">
+                      {transaction.user
+                        ? `${transaction.user.first_name} ${transaction.user.last_name}`
+                        : 'N/A'
+                      }
+                    </td>
                     <td className="py-3 px-4">{transaction.type}</td>
-                    <td className="py-3 px-4">{transaction.transactionId}</td>
-                    <td className="py-3 px-4">{transaction.date}</td>
-                    <td className="py-3 px-4">{transaction.amount}</td>
+                    <td className="py-3 px-4">{transaction.reference}</td>
+                    <td className="py-3 px-4">
+                      {format(new Date(transaction.created_at), 'MMM dd, yyyy')}
+                    </td>
+                    <td className="py-3 px-4">
+                      {transaction.currency} {transaction.amount.toLocaleString()}
+                    </td>
                     <td className="py-3 px-4">{transaction.description}</td>
                     <td className="py-3 px-4">
                       <span
@@ -349,6 +330,7 @@ const Transactions: React.FC = () => {
         </div>
       )}
     </div>
+  </div>
   );
 };
 

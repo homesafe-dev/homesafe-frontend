@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { FaUser } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { FaUser, FaPlus } from 'react-icons/fa';
 import adminApi from '../../../../api/adminApi';
+import CreateUserModal from '../../../../components/CreateUserModal';
 
 interface Employee {
   id: number;
@@ -37,10 +37,10 @@ interface EmployeeListResponse {
 }
 
 export default function DashboardEmployeesTab() {
-  const navigate = useNavigate();
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -73,6 +73,16 @@ export default function DashboardEmployeesTab() {
 
   return (
     <div className="overflow-x-auto">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-semibold">Employees</h2>
+        <button
+          onClick={() => setShowCreateModal(true)}
+          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md flex items-center"
+        >
+          <FaPlus className="mr-2" /> Create New Employee
+        </button>
+      </div>
+
       <table className="w-full">
         <thead className="bg-[#C8EDDF80] h-[56px] text-left">
           <tr>
@@ -198,6 +208,16 @@ export default function DashboardEmployeesTab() {
           )}
         </tbody>
       </table>
+
+      <CreateUserModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        userType="employee"
+        onSuccess={() => {
+          // Refresh the employees list
+          window.location.reload();
+        }}
+      />
     </div>
   );
 }

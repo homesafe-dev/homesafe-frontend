@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
+import CreateUserModal from '../../components/CreateUserModal';
 
 interface Admin {
   id: number;
@@ -22,6 +23,7 @@ const AdminSettings: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [showOptionsFor, setShowOptionsFor] = useState<number | null>(null);
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
   useEffect(() => {
     fetchAdmins();
@@ -115,7 +117,7 @@ const AdminSettings: React.FC = () => {
             View All
           </button>
           <button
-            onClick={() => navigate('/admin/create-admin')}
+            onClick={() => setShowCreateModal(true)}
             className="px-4 py-2 bg-[#A5EA91] text-[#174B35] rounded-md flex items-center"
           >
             <span className="mr-1">+</span> Create New Admin
@@ -260,6 +262,15 @@ const AdminSettings: React.FC = () => {
           </button>
         </div>
       )}
+      <CreateUserModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        userType="admin"
+        onSuccess={() => {
+          // Refresh the admins list
+          fetchAdmins();
+        }}
+      />
     </div>
   );
 };

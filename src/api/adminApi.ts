@@ -11,6 +11,7 @@ const ADMIN_ENDPOINTS = {
   TRACK_EMPLOYEES: '/users', // Using unified users endpoint for tracking employees
   BLOCK_USER: '/admin/block-user', // Endpoint to block a user
   SUSPEND_USER: '/admin/suspend-user', // Endpoint to suspend a user
+  OCCUPATIONS: '/occupations', // Endpoint to get occupations
 };
 
 // Admin API service
@@ -57,6 +58,20 @@ const adminApi = {
       return response.data;
     } catch (error) {
       console.error('Error fetching employee list:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Get occupations list from the API
+   * @returns Promise with the API response containing occupations data
+   */
+  getOccupations: async () => {
+    try {
+      const response = await axiosInstance.get(ADMIN_ENDPOINTS.OCCUPATIONS);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching occupations:', error);
       throw error;
     }
   },
