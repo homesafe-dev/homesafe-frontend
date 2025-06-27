@@ -147,15 +147,22 @@ const DashboardContent: React.FC = () => {
               })}
             </h2>
           </div>
-          <div className="flex gap-4">
+          <div className="flex gap-4 relative z-10">
             <Link to="/employer/wallet/top-up">
-              <button className="bg-white hover:bg-green-600 text-[#246D51] h-[42px] py-2 px-4 rounded flex items-center gap-2 text-sm">
+              <button
+                className="bg-white hover:bg-green-600 text-[#246D51] h-[42px] py-2 px-4 rounded flex items-center gap-2 text-sm cursor-pointer"
+                onClick={() => console.log('Top-up button clicked!')}
+              >
                 <FaPlus size={12} />
                 Top-up
               </button>
             </Link>
             <Link to="/employer/wallet">
-              <button className="bg-white text-green-800 h-[42px] py-2 px-4 rounded flex items-center gap-2 text-sm">
+              <button
+                className="bg-white text-green-800 h-[42px] py-2 px-4 rounded flex items-center gap-2 text-sm hover:bg-gray-50 cursor-pointer relative z-20"
+               
+                style={{ pointerEvents: 'auto' }}
+              >
                 <BsCreditCard size={12} />
                 Withdraw
               </button>

@@ -294,10 +294,10 @@ const AdminTrack = () => {
                               <span className="text-red-600">Block User</span>
                             </div>
                           )}
-                          <div className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer">
+                          {/* <div className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer">
                             <RiDeleteBin6Line className="text-gray-500" />
                             <span>Remove</span>
-                          </div>
+                          </div> */}
                         </div>
                       )}
                     </td>

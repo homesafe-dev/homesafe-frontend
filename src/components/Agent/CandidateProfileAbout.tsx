@@ -55,7 +55,7 @@ const CandidateProfileAbout: React.FC<CandidateProfileAboutProps> = ({
         {location} {age > 0 ? `| ${age} yrs old` : ''}
       </p>
 
-      <div className="bg-[#C8EDDF80] mt-[0.5rem] text-[#48525B] w-[64px] h-[26px] flex items-center justify-center px-3 py-1 rounded-[8px] text-[13px] mb-2">
+      <div className="bg-[#C8EDDF80] mt-[0.5rem] text-[#48525B] min-w-[64px] h-[26px] flex items-center justify-center px-3 py-1 rounded-[8px] text-[13px] mb-2 whitespace-nowrap">
         {role}
       </div>
 

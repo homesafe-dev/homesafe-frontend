@@ -328,6 +328,7 @@ const WalletPage: React.FC = () => {
       <WithdrawModal
         isOpen={isWithdrawModalOpen}
         onClose={handleCloseWithdrawModal}
+        onSuccess={refreshWalletData}
       />
     </div>
   );

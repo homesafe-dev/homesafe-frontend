@@ -6,6 +6,7 @@ const WALLET_ENDPOINTS = {
   BALANCE: '/wallet',
   TOP_UP: '/wallet/top-up',
   WITHDRAW: '/wallet/withdraw',
+  INITIALIZE_WITHDRAWAL: '/wallet/initialize-withdrawal',
   TRANSFER: '/wallet/transfer',
   INITIALIZE_PAYMENT: 'wallet/initialize-payment',
   VERIFY_PAYMENT: '/verify-payment',
@@ -61,7 +62,7 @@ const walletApi = {
   },
 
   /**
-   * Withdraw from wallet
+   * Withdraw from wallet (Legacy)
    * @param amount - Amount to withdraw
    * @param bankDetails - Bank details for withdrawal
    * @returns Promise with the API response
@@ -72,6 +73,40 @@ const walletApi = {
       bank_details: bankDetails,
     });
     return response.data;
+  },
+
+  /**
+   * Initialize withdrawal (New API)
+   * @param amount - Amount to withdraw
+   * @param bankCode - Bank code
+   * @param accountNumber - Account number
+   * @param accountName - Account holder name
+   * @returns Promise with the API response
+   */
+  initializeWithdrawal: async (
+    amount: number,
+    bankCode: string,
+    accountNumber: string,
+    accountName: string
+  ) => {
+    try {
+      const response = await axiosInstance.post(WALLET_ENDPOINTS.INITIALIZE_WITHDRAWAL, {
+        amount,
+        bank_code: bankCode,
+        account_number: accountNumber,
+        account_name: accountName,
+      });
+      return response.data;
+    } catch (error: any) {
+      // Handle the expected 503 Service Unavailable response
+      if (error.response?.status === 503) {
+        return {
+          status: false,
+          message: error.response.data?.message || 'Withdrawal service is currently unavailable',
+        };
+      }
+      throw error;
+    }
   },
 
   /**
