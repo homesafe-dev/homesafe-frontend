@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { FaUser, FaPlus } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 import adminApi from '../../../../api/adminApi';
 import CreateUserModal from '../../../../components/CreateUserModal';
 
@@ -25,6 +26,7 @@ interface Employer {
 }
 
 export default function DashboardEmployersTab() {
+  const navigate = useNavigate();
   const [employers, setEmployers] = useState<Employer[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -63,12 +65,7 @@ export default function DashboardEmployersTab() {
     <div className="overflow-x-auto">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Employers</h2>
-        <button
-          onClick={() => setShowCreateModal(true)}
-          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md flex items-center"
-        >
-          <FaPlus className="mr-2" /> Create New Employer
-        </button>
+
       </div>
 
       <table className="w-full">

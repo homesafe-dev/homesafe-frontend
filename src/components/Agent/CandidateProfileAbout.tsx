@@ -12,7 +12,9 @@ interface CandidateProfileAboutProps {
   rating: number;
   isOnline?: boolean;
   showAdminActions?: boolean;
+  isBlocked?: boolean;
   onBlockUser?: () => void;
+  onUnblockUser?: () => void;
   onSuspendUser?: () => void;
 }
 
@@ -28,7 +30,9 @@ const CandidateProfileAbout: React.FC<CandidateProfileAboutProps> = ({
   rating,
   isOnline = true,
   showAdminActions = false,
+  isBlocked = false,
   onBlockUser,
+  onUnblockUser,
   onSuspendUser,
 }) => {
   return (
@@ -82,12 +86,21 @@ const CandidateProfileAbout: React.FC<CandidateProfileAboutProps> = ({
 
         {showAdminActions && (
           <div className="mt-6 flex gap-2">
-            <button
-              onClick={onBlockUser}
-              className="bg-[#993018] text-white px-4 py-2 rounded-md w-full"
-            >
-              Block User
-            </button>
+            {isBlocked ? (
+              <button
+                onClick={onUnblockUser}
+                className="bg-green-600 text-white px-4 py-2 rounded-md w-full"
+              >
+                Unblock User
+              </button>
+            ) : (
+              <button
+                onClick={onBlockUser}
+                className="bg-[#993018] text-white px-4 py-2 rounded-md w-full"
+              >
+                Block User
+              </button>
+            )}
             <button
               onClick={onSuspendUser}
               className="border border-[#993018] text-[#993018] px-4 py-2 rounded-md w-full"

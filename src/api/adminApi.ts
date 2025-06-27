@@ -10,8 +10,10 @@ const ADMIN_ENDPOINTS = {
   UNAPPROVED_USERS: '/admin/unapproved-users', // Endpoint to get unapproved users
   TRACK_EMPLOYEES: '/users', // Using unified users endpoint for tracking employees
   BLOCK_USER: '/admin/block-user', // Endpoint to block a user
+  UNBLOCK_USER: '/admin/unblock-user', // Endpoint to unblock a user
   SUSPEND_USER: '/admin/suspend-user', // Endpoint to suspend a user
   OCCUPATIONS: '/occupations', // Endpoint to get occupations
+  TRANSACTIONS: '/admin/transactions', // Endpoint to get transactions
 };
 
 // Admin API service
@@ -95,6 +97,29 @@ const adminApi = {
       return response.data;
     } catch (error) {
       console.error('Error fetching agent list:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Get all admins
+   * @param page - Page number for pagination
+   * @param limit - Number of items per page
+   * @returns Promise with the API response
+   */
+  getAdminList: async (page = 1, limit = 10) => {
+    try {
+      const response = await axiosInstance.get('/users', {
+        params: {
+          role: 'admin',
+          page,
+          limit
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching admin list:', error);
       throw error;
     }
   },
@@ -193,7 +218,10 @@ const adminApi = {
             : 'No employer assigned',
           gender: employee.gender,
           phone: employee.phone,
-          status: employee.is_verified ? 'Verified' : 'Unverified',
+          is_verified: employee.is_verified,
+          approval_status: employee.approval_status,
+          is_blocked: employee.is_blocked,
+          status: employee.is_verified ? 'Verified' : 'Unverified', // Keep for backward compatibility
         }));
 
         return {
@@ -252,7 +280,10 @@ const adminApi = {
               : 'No employer assigned',
             gender: employee.gender,
             phone: employee.phone,
-            status: employee.is_verified ? 'Verified' : 'Unverified',
+            is_verified: employee.is_verified,
+            approval_status: employee.approval_status,
+            is_blocked: employee.is_blocked,
+            status: employee.is_verified ? 'Verified' : 'Unverified', // Keep for backward compatibility
           };
 
           return {
@@ -292,6 +323,23 @@ const adminApi = {
   },
 
   /**
+   * Unblock a user
+   * @param userId - The ID of the user to unblock
+   * @returns Promise with the API response
+   */
+  unblockUser: async (userId) => {
+    try {
+      const response = await axiosInstance.post(
+        `${ADMIN_ENDPOINTS.UNBLOCK_USER}/${userId}`
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error unblocking user:', error);
+      throw error;
+    }
+  },
+
+  /**
    * Suspend a user
    * @param userId - The ID of the user to suspend
    * @returns Promise with the API response
@@ -304,6 +352,33 @@ const adminApi = {
       return response.data;
     } catch (error) {
       console.error('Error suspending user:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Get all transactions with filters (Admin)
+   * @param filters - Filter options for transactions
+   * @returns Promise with the API response
+   */
+  getTransactions: async (filters = {}) => {
+    try {
+      const params = new URLSearchParams();
+
+      // Add filters to params
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== '') {
+          params.append(key, value.toString());
+        }
+      });
+
+      const response = await axiosInstance.get(
+        `${ADMIN_ENDPOINTS.TRANSACTIONS}?${params.toString()}`
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching transactions:', error);
       throw error;
     }
   },

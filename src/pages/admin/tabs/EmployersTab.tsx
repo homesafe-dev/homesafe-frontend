@@ -20,6 +20,7 @@ interface Employer {
   address: string;
   status: number;
   is_verified: number;
+  is_blocked: boolean;
   salary: string;
   profile_description: string | null;
   created_at: string;
@@ -32,6 +33,46 @@ export default function EmployersTab() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
+
+  const handleBlockUser = async (userId: number) => {
+    try {
+      const response = await adminApi.blockUser(userId);
+      if (response.status) {
+        alert('User blocked successfully');
+        // Update the employer list to reflect the change
+        setEmployers(employers.map(emp =>
+          emp.id === userId
+            ? { ...emp, is_blocked: true }
+            : emp
+        ));
+      } else {
+        alert(response.message || 'Failed to block user');
+      }
+    } catch (error) {
+      console.error('Error blocking user:', error);
+      alert('An error occurred while blocking the user');
+    }
+  };
+
+  const handleUnblockUser = async (userId: number) => {
+    try {
+      const response = await adminApi.unblockUser(userId);
+      if (response.status) {
+        alert('User unblocked successfully');
+        // Update the employer list to reflect the change
+        setEmployers(employers.map(emp =>
+          emp.id === userId
+            ? { ...emp, is_blocked: false }
+            : emp
+        ));
+      } else {
+        alert(response.message || 'Failed to unblock user');
+      }
+    } catch (error) {
+      console.error('Error unblocking user:', error);
+      alert('An error occurred while unblocking the user');
+    }
+  };
 
   useEffect(() => {
     const fetchEmployers = async () => {
@@ -66,12 +107,7 @@ export default function EmployersTab() {
     <div className="overflow-x-auto">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">All Employers</h2>
-        <button
-          onClick={() => setShowCreateModal(true)}
-          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md flex items-center"
-        >
-          <FaPlus className="mr-2" /> Create New Employer
-        </button>
+
       </div>
 
       <table className="w-full">
@@ -195,6 +231,12 @@ export default function EmployersTab() {
                       {
                         label: 'View Details',
                         onClick: () => navigate(`/admin/user/${employer.id}`),
+                      },
+                      {
+                        label: employer.is_blocked ? 'Unblock User' : 'Block User',
+                        onClick: () => employer.is_blocked
+                          ? handleUnblockUser(employer.id)
+                          : handleBlockUser(employer.id),
                       },
                     ]}
                   />

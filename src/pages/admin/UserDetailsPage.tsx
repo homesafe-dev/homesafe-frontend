@@ -20,7 +20,7 @@ interface UserDetails {
   address: string;
   status: number;
   is_verified: number;
-  is_approved: boolean;
+  approval_status: string;
   salary: string;
   profile_description: string | null;
   created_at: string;
@@ -186,26 +186,52 @@ export default function UserDetailsPage() {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <button
-          onClick={() => navigate(-1)}
-          className="flex items-center text-gray-600 hover:text-gray-900"
-        >
-          <FaArrowLeft className="mr-2" /> Back
-        </button>
-        <div className="flex space-x-4">
+        <div className="flex items-center space-x-4">
           <button
-            onClick={() => setShowApproveModal(true)}
-            className="bg-[#C8EDDF80] text-[#174B35] px-4 py-2 rounded-md hover:bg-[#C8EDDF] transition-colors"
+            onClick={() => navigate(-1)}
+            className="flex items-center text-gray-600 hover:text-gray-900"
           >
-            Approve User
+            <FaArrowLeft className="mr-2" /> Back
           </button>
-          <button
-            onClick={() => setShowDeclineModal(true)}
-            className="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-50 transition-colors"
-          >
-            Decline User
-          </button>
+          {/* User Status Indicator */}
+          {user && (
+            <div className="flex items-center space-x-2">
+              <span className="text-sm text-gray-500">Status:</span>
+              <span
+                className={`px-3 py-1 rounded-full text-xs font-medium ${
+                  user.approval_status === 'approved'
+                    ? 'bg-green-100 text-green-800'
+                    : user.approval_status === 'pending'
+                    ? 'bg-yellow-100 text-yellow-800'
+                    : 'bg-red-100 text-red-800'
+                }`}
+              >
+                {user.approval_status === 'approved'
+                  ? 'Approved'
+                  : user.approval_status === 'pending'
+                  ? 'Pending Approval'
+                  : 'Not Approved'}
+              </span>
+            </div>
+          )}
         </div>
+        {/* Only show approve/decline buttons for users with pending approval status */}
+        {user && user.approval_status === 'pending' && (
+          <div className="flex space-x-4">
+            <button
+              onClick={() => setShowApproveModal(true)}
+              className="bg-[#C8EDDF80] text-[#174B35] px-4 py-2 rounded-md hover:bg-[#C8EDDF] transition-colors"
+            >
+              Approve User
+            </button>
+            <button
+              onClick={() => setShowDeclineModal(true)}
+              className="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-50 transition-colors"
+            >
+              Decline User
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="bg-white shadow rounded-lg p-6">
