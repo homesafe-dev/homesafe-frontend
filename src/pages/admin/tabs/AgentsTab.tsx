@@ -21,6 +21,7 @@ interface Agent {
   address?: string;
   created_at?: string;
   is_verified?: number;
+  is_blocked?: boolean;
 }
 
 
@@ -31,6 +32,46 @@ export default function AgentsTab() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
+
+  const handleBlockUser = async (userId: number) => {
+    try {
+      const response = await adminApi.blockUser(userId);
+      if (response.status) {
+        alert('User blocked successfully');
+        // Update the agent list to reflect the change
+        setAgents(agents.map(agent =>
+          agent.id === userId
+            ? { ...agent, is_blocked: true }
+            : agent
+        ));
+      } else {
+        alert(response.message || 'Failed to block user');
+      }
+    } catch (error) {
+      console.error('Error blocking user:', error);
+      alert('An error occurred while blocking the user');
+    }
+  };
+
+  const handleUnblockUser = async (userId: number) => {
+    try {
+      const response = await adminApi.unblockUser(userId);
+      if (response.status) {
+        alert('User unblocked successfully');
+        // Update the agent list to reflect the change
+        setAgents(agents.map(agent =>
+          agent.id === userId
+            ? { ...agent, is_blocked: false }
+            : agent
+        ));
+      } else {
+        alert(response.message || 'Failed to unblock user');
+      }
+    } catch (error) {
+      console.error('Error unblocking user:', error);
+      alert('An error occurred while unblocking the user');
+    }
+  };
 
   const fetchAgents = async () => {
     try {
@@ -200,6 +241,12 @@ export default function AgentsTab() {
                       {
                         label: 'View Details',
                         onClick: () => navigate(`/admin/user/${agent.id}`),
+                      },
+                      {
+                        label: agent.is_blocked ? 'Unblock User' : 'Block User',
+                        onClick: () => agent.is_blocked
+                          ? handleUnblockUser(agent.id)
+                          : handleBlockUser(agent.id),
                       },
                     ]}
                   />

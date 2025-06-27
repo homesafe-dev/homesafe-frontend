@@ -22,6 +22,7 @@ interface Employee {
   gender: string;
   phone: string;
   status: string;
+  is_blocked?: boolean;
 }
 
 const AdminCandidateProfile: React.FC = () => {
@@ -89,13 +90,38 @@ const AdminCandidateProfile: React.FC = () => {
       const response = await adminApi.blockUser(employee.id);
       if (response.status) {
         alert('User blocked successfully');
-        // Optionally navigate back or refresh data
+        // Refresh the employee data to reflect the change
+        const updatedResponse = await adminApi.getEmployeeById(employee.id);
+        if (updatedResponse.status) {
+          setEmployee(updatedResponse.data);
+        }
       } else {
         alert(response.message || 'Failed to block user');
       }
     } catch (error) {
       console.error('Error blocking user:', error);
       alert('An error occurred while blocking the user');
+    }
+  };
+
+  const handleUnblockUser = async () => {
+    if (!employee) return;
+
+    try {
+      const response = await adminApi.unblockUser(employee.id);
+      if (response.status) {
+        alert('User unblocked successfully');
+        // Refresh the employee data to reflect the change
+        const updatedResponse = await adminApi.getEmployeeById(employee.id);
+        if (updatedResponse.status) {
+          setEmployee(updatedResponse.data);
+        }
+      } else {
+        alert(response.message || 'Failed to unblock user');
+      }
+    } catch (error) {
+      console.error('Error unblocking user:', error);
+      alert('An error occurred while unblocking the user');
     }
   };
 
@@ -158,7 +184,9 @@ const AdminCandidateProfile: React.FC = () => {
             profileImage={employee.avatar || ArtisanImg}
             rating={4.0} // Default rating
             showAdminActions={true}
+            isBlocked={employee.is_blocked}
             onBlockUser={handleBlockUser}
+            onUnblockUser={handleUnblockUser}
             onSuspendUser={handleSuspendUser}
           />
         </div>
