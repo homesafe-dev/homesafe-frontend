@@ -1,31 +1,93 @@
 import React, { useState } from 'react';
 import { FiX, FiChevronDown } from 'react-icons/fi';
+import walletApi from '../../api/walletApi';
+import { getBankNames, getBankCode } from '../../utils/banks';
 
 interface WithdrawModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSuccess?: () => void;
 }
 
-const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose }) => {
+const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, onSuccess }) => {
   const [bankName, setBankName] = useState('');
   const [accountNumber, setAccountNumber] = useState('');
+  const [accountName, setAccountName] = useState('');
   const [amount, setAmount] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [banks] = useState([
-    'Access Bank',
-    'GTBank',
-    'First Bank',
-    'UBA',
-    'Zenith Bank',
-    'Wema Bank',
-    'Fidelity Bank',
-    'Sterling Bank',
-  ]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  const banks = getBankNames();
 
   if (!isOpen) return null;
 
-  const handleWithdraw = () => {
-    //hanndle
+  const resetForm = () => {
+    setBankName('');
+    setAccountNumber('');
+    setAccountName('');
+    setAmount('');
+    setError(null);
+    setSuccess(null);
+    setIsDropdownOpen(false);
+  };
+
+  const handleClose = () => {
+    resetForm();
+    onClose();
+  };
+
+  const handleWithdraw = async () => {
+    setError(null);
+    setSuccess(null);
+
+    // Validation
+    if (!bankName) {
+      setError('Please select a bank');
+      return;
+    }
+    if (!accountNumber) {
+      setError('Please enter account number');
+      return;
+    }
+    if (!accountName) {
+      setError('Please enter account holder name');
+      return;
+    }
+    if (!amount || parseFloat(amount) <= 0) {
+      setError('Please enter a valid amount');
+      return;
+    }
+
+    const bankCode = getBankCode(bankName);
+    if (!bankCode) {
+      setError('Invalid bank selected');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const response = await walletApi.initializeWithdrawal(
+        parseFloat(amount),
+        bankCode,
+        accountNumber,
+        accountName
+      );
+
+      if (response.status) {
+        setSuccess('Withdrawal initiated successfully!');
+        setTimeout(() => {
+          handleClose();
+          onSuccess?.();
+        }, 2000);
+      } else {
+        setError(response.message || 'Withdrawal failed');
+      }
+    } catch (err: any) {
+      setError(err.message || 'An error occurred during withdrawal');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -36,8 +98,9 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose }) => {
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-2xl font-medium text-gray-800">Withdraw</h2>
             <button
-              onClick={onClose}
+              onClick={handleClose}
               className="rounded-full p-1 hover:bg-gray-100"
+              disabled={isLoading}
             >
               <FiX size={20} />
             </button>
@@ -47,6 +110,20 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose }) => {
             Provide an account details for withdrawal
           </p>
 
+          {/* Error Message */}
+          {error && (
+            <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md text-sm">
+              {error}
+            </div>
+          )}
+
+          {/* Success Message */}
+          {success && (
+            <div className="mb-4 p-3 bg-green-100 text-green-700 rounded-md text-sm">
+              {success}
+            </div>
+          )}
+
           {/* Bank Name Dropdown */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -55,8 +132,9 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose }) => {
             <div className="relative">
               <button
                 type="button"
-                className="w-full text-left bg-white border border-gray-300 rounded p-3 focus:outline-none focus:ring-1 focus:ring-gray-400 flex justify-between items-center"
+                className="w-full text-left bg-white border border-gray-300 rounded p-3 focus:outline-none focus:ring-1 focus:ring-gray-400 flex justify-between items-center disabled:opacity-50"
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                disabled={isLoading}
               >
                 <span className={bankName ? 'text-gray-900' : 'text-gray-400'}>
                   {bankName || 'Select'}
@@ -92,9 +170,24 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose }) => {
             <input
               type="text"
               placeholder="0123456789"
-              className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring-1 focus:ring-gray-400"
+              className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring-1 focus:ring-gray-400 disabled:opacity-50"
               value={accountNumber}
               onChange={(e) => setAccountNumber(e.target.value)}
+              disabled={isLoading}
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Account Holder Name
+            </label>
+            <input
+              type="text"
+              placeholder="John Doe"
+              className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring-1 focus:ring-gray-400 disabled:opacity-50"
+              value={accountName}
+              onChange={(e) => setAccountName(e.target.value)}
+              disabled={isLoading}
             />
           </div>
 
@@ -103,19 +196,23 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose }) => {
               Amount
             </label>
             <input
-              type="text"
-              placeholder="00.00"
-              className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring-1 focus:ring-gray-400"
+              type="number"
+              placeholder="0.00"
+              min="0"
+              step="0.01"
+              className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring-1 focus:ring-gray-400 disabled:opacity-50"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
+              disabled={isLoading}
             />
           </div>
 
           <button
             onClick={handleWithdraw}
-            className="w-full bg-green-400 hover:bg-green-500 text-center py-4 rounded-md text-gray-800 font-medium"
+            disabled={isLoading || !!success}
+            className="w-full bg-green-400 hover:bg-green-500 disabled:bg-gray-300 disabled:cursor-not-allowed text-center py-4 rounded-md text-gray-800 font-medium transition-colors"
           >
-            Withdraw
+            {isLoading ? 'Processing...' : success ? 'Success!' : 'Withdraw'}
           </button>
         </div>
       </div>

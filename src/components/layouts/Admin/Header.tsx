@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { LuBellDot } from 'react-icons/lu';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
@@ -34,6 +34,7 @@ const Header: React.FC<HeaderProps> = ({
   const [, setLoading] = useState(true);
   // Error state is used in the fetchUserProfile function
   const [, setError] = useState<string | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
 
   const handleLogout = () => {
@@ -60,6 +61,23 @@ const Header: React.FC<HeaderProps> = ({
     };
 
     fetchUserProfile();
+  }, []);
+
+  // Handle click outside dropdown to close it
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, []);
 
   // Use profile data or fallback to props
@@ -90,7 +108,7 @@ const Header: React.FC<HeaderProps> = ({
             </button>
 
             {/* User profile */}
-            <div className="relative">
+            <div className="relative" ref={dropdownRef}>
               <button
                 className="flex items-center space-x-2"
                 onClick={() => setShowDropdown(!showDropdown)}
