@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FiSearch, FiDownload } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
 import ContractImg from '../../assets/images/Contract.png';
 import contractApi from '../../api/contractApi';
 import { format } from 'date-fns';
@@ -60,6 +61,7 @@ interface Contract {
 interface ContractProposal {
   contract: Contract;
   proposal: Proposal;
+  employee: Employee;
 }
 
 interface ContractCardProps {
@@ -68,17 +70,19 @@ interface ContractCardProps {
 }
 
 const ContractCard: React.FC<ContractCardProps> = ({ proposal, imageUrl }) => {
+  const navigate = useNavigate();
+
   // Add safety checks for the proposal structure
   if (!proposal || !proposal.contract || !proposal.proposal) {
     console.warn('Invalid proposal structure in ContractCard:', proposal);
     return null;
   }
 
-  const { contract, proposal: proposalData } = proposal;
+  const { contract, proposal: proposalData, employee } = proposal;
 
-  // Safely access employee name
-  const employeeName = contract.employee
-    ? `${contract.employee.first_name || ''} ${contract.employee.last_name || ''}`
+  // Safely access employee name from the top-level employee object
+  const employeeName = employee
+    ? `${employee.first_name || ''} ${employee.last_name || ''}`.trim()
     : 'Unknown Employee';
 
   // Safely format date
@@ -96,6 +100,10 @@ const ContractCard: React.FC<ContractCardProps> = ({ proposal, imageUrl }) => {
   const status = proposalData.status || 'Unknown';
   const description = `Contract proposal for ${position} position. Created on ${formattedDate}. Status: ${status}`;
 
+  const handleViewDetails = () => {
+    navigate(`/employer/${contract.id}/proposal`);
+  };
+
   return (
     <div className="bg-white p-4 rounded-md border border-gray-100">
       <div className="mb-3">
@@ -109,7 +117,7 @@ const ContractCard: React.FC<ContractCardProps> = ({ proposal, imageUrl }) => {
         {employeeName}
       </h3>
       <p className="text-[13px] text-[#48525B] mb-3">{description}</p>
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center mb-3">
         <span
           className={`px-2 py-1 rounded-full text-xs ${
             status === 'pending'
@@ -121,6 +129,15 @@ const ContractCard: React.FC<ContractCardProps> = ({ proposal, imageUrl }) => {
         >
           {status.charAt(0).toUpperCase() + status.slice(1)}
         </span>
+      </div>
+
+      <div className="flex gap-2">
+        <button
+          onClick={handleViewDetails}
+          className="flex-1 flex items-center justify-center rounded-[6px] text-[#246D51] text-xs border border-[#246D51] hover:bg-[#246D51] hover:text-white transition-colors h-[32px]"
+        >
+          View Details
+        </button>
         <button className="flex items-center justify-center rounded-[6px] text-[#6C7A89] text-xs border border-[#DCDEE5] w-[98px] h-[32px]">
           <FiDownload className="mr-1 text-black" size={14} />
           Download
@@ -182,9 +199,9 @@ const ContractsPage: React.FC<ContractsPageProps> = ({
 
     const searchLower = searchTerm.toLowerCase();
 
-    // Safely access employee name
-    const employeeName = proposal.contract.employee
-      ? `${proposal.contract.employee.first_name || ''} ${proposal.contract.employee.last_name || ''}`.toLowerCase()
+    // Safely access employee name from the top-level employee object
+    const employeeName = proposal.employee
+      ? `${proposal.employee.first_name || ''} ${proposal.employee.last_name || ''}`.toLowerCase().trim()
       : '';
 
     // Safely access position and status

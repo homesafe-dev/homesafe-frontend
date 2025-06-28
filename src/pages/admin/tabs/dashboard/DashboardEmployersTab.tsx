@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { FaUser, FaPlus } from 'react-icons/fa';
+import { FaUser } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import adminApi from '../../../../api/adminApi';
 import CreateUserModal from '../../../../components/CreateUserModal';
@@ -19,6 +19,7 @@ interface Employer {
   address: string;
   status: number;
   is_verified: number;
+  is_blocked: boolean;
   salary: string;
   profile_description: string | null;
   created_at: string;
@@ -89,6 +90,9 @@ export default function DashboardEmployersTab() {
             <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
               Status
             </th>
+            <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
+              Blocked Status
+            </th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200">
@@ -114,19 +118,22 @@ export default function DashboardEmployersTab() {
                 <td className="px-6 py-4">
                   <div className="h-8 bg-gray-200 rounded"></div>
                 </td>
+                <td className="px-6 py-4">
+                  <div className="h-8 bg-gray-200 rounded"></div>
+                </td>
               </tr>
             ))
           ) : error ? (
             // Error state
             <tr>
-              <td colSpan={6} className="px-6 py-4 text-center text-red-500">
+              <td colSpan={7} className="px-6 py-4 text-center text-red-500">
                 {error}
               </td>
             </tr>
           ) : employers.length === 0 ? (
             // Empty state
             <tr>
-              <td colSpan={6} className="px-6 py-4 text-center text-gray-500">
+              <td colSpan={7} className="px-6 py-4 text-center text-gray-500">
                 No employers found
               </td>
             </tr>
@@ -184,6 +191,17 @@ export default function DashboardEmployersTab() {
                     }`}
                   >
                     {employer.is_verified === 0 ? 'Unverified' : 'Verified'}
+                  </span>
+                </td>
+                <td className="px-6 py-4">
+                  <span
+                    className={`px-3 py-1 rounded-full text-[13px] ${
+                      employer.is_blocked
+                        ? 'bg-red-100 text-red-800'
+                        : 'bg-green-100 text-green-800'
+                    }`}
+                  >
+                    {employer.is_blocked ? 'Blocked' : 'Active'}
                   </span>
                 </td>
               </tr>

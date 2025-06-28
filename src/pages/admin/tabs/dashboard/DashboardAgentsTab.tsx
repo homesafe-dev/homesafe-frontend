@@ -19,6 +19,7 @@ interface Agent {
   address?: string;
   created_at?: string;
   is_verified?: number;
+  is_blocked?: boolean;
 }
 
 export default function DashboardAgentsTab() {
@@ -89,6 +90,9 @@ export default function DashboardAgentsTab() {
             <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
               Status
             </th>
+            <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
+              Blocked Status
+            </th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200">
@@ -114,19 +118,22 @@ export default function DashboardAgentsTab() {
                 <td className="px-6 py-4">
                   <div className="h-8 bg-gray-200 rounded"></div>
                 </td>
+                <td className="px-6 py-4">
+                  <div className="h-8 bg-gray-200 rounded"></div>
+                </td>
               </tr>
             ))
           ) : error ? (
             // Error state
             <tr>
-              <td colSpan={6} className="px-6 py-4 text-center text-red-500">
+              <td colSpan={7} className="px-6 py-4 text-center text-red-500">
                 {error}
               </td>
             </tr>
           ) : agents.length === 0 ? (
             // Empty state
             <tr>
-              <td colSpan={6} className="px-6 py-4 text-center text-gray-500">
+              <td colSpan={7} className="px-6 py-4 text-center text-gray-500">
                 No agents found
               </td>
             </tr>
@@ -183,6 +190,17 @@ export default function DashboardAgentsTab() {
                     {agent.status === 'not verified'
                       ? 'Unverified'
                       : 'Verified'}
+                  </span>
+                </td>
+                <td className="px-6 py-4">
+                  <span
+                    className={`px-3 py-1 rounded-full text-[13px] ${
+                      agent.is_blocked
+                        ? 'bg-red-100 text-red-800'
+                        : 'bg-green-100 text-green-800'
+                    }`}
+                  >
+                    {agent.is_blocked ? 'Blocked' : 'Active'}
                   </span>
                 </td>
               </tr>

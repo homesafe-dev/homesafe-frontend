@@ -79,11 +79,14 @@ import EmployeeResources from '../pages/employee/Resources';
 import Medical from '../pages/employer/Medical';
 import ReviewsPage from '../pages/employer/Reviews';
 import Contracts from '../pages/employer/Contracts';
+import EmployerProposalDetails from '../pages/employer/ProposalDetails';
 // Removed unused import: HomesafeForgotPasswordPage
 import Salary from '../pages/employee/Salary';
 import EmployeeMedical from '../pages/employee/Medical';
 import EmployeeReview from '../pages/employee/Review';
 import EmployeeContracts from '../pages/employee/Contracts';
+import EmployeeProposalDetails from '../pages/employee/ProposalDetails';
+import EmployeeContractView from '../pages/employee/ContractView';
 import EmployeeProfilePage from '../pages/employee/Profile';
 import EmployeeSecurityPage from '../pages/employee/Security';
 import EmployeeKYCPage from '../pages/employee/KYCPage';
@@ -357,6 +360,14 @@ export const router = createBrowserRouter([
           </EmployerLayout>
         ),
       },
+      {
+        path: ':contractId/proposal',
+        element: protectEmployerRoute(
+          <EmployerLayout>
+            <EmployerProposalDetails />
+          </EmployerLayout>
+        ),
+      },
     ],
   },
   // Employee Routes
@@ -454,6 +465,20 @@ export const router = createBrowserRouter([
           <EmployeeLayout>
             <EmployeeContracts />
           </EmployeeLayout>
+        ),
+      },
+      {
+        path: ':contractId/proposal',
+        element: protectEmployeeRoute(
+          <EmployeeLayout>
+            <EmployeeProposalDetails />
+          </EmployeeLayout>
+        ),
+      },
+      {
+        path: ':contractId/contract',
+        element: protectEmployeeRoute(
+          <EmployeeContractView />
         ),
       },
     ],
