@@ -23,6 +23,32 @@ interface Employee {
   phone: string;
   status: string;
   is_blocked?: boolean;
+  average_rating?: string | null;
+  occupations?: {
+    id: number;
+    name: string;
+    created_at: string;
+    updated_at: string;
+    pivot: {
+      user_id: number;
+      occupation_id: number;
+    };
+  }[];
+  reviews?: {
+    id: number;
+    reviewer_id: number;
+    user_id: number;
+    rating: number;
+    comment: string;
+    created_at: string;
+    updated_at: string;
+    date: string; // Added by transformation
+  }[];
+  user_medicals?: {
+    id: number;
+    medical_file: string;
+    date_uploaded: string;
+  }[];
 }
 
 const AdminCandidateProfile: React.FC = () => {
@@ -182,7 +208,11 @@ const AdminCandidateProfile: React.FC = () => {
             phone={employee.phone}
             email={employee.email}
             profileImage={employee.avatar || ArtisanImg}
-            rating={4.0} // Default rating
+            rating={employee.average_rating ? parseFloat(employee.average_rating) :
+              (employee.reviews && employee.reviews.length > 0 ?
+                employee.reviews.reduce((sum, review) => sum + review.rating, 0) / employee.reviews.length :
+                0)
+            }
             showAdminActions={true}
             isBlocked={employee.is_blocked}
             onBlockUser={handleBlockUser}
@@ -225,7 +255,7 @@ const AdminCandidateProfile: React.FC = () => {
           <div className="p-2">
             {activeTab === 'medical' && (
               <CandidateMedicHistory
-                reportDate="24th November"
+                medicalFiles={employee.user_medicals}
                 candidateName={employee.candidate}
               />
             )}
@@ -245,6 +275,7 @@ const AdminCandidateProfile: React.FC = () => {
                 candidateName={employee.candidate}
                 gender={employee.gender}
                 bio={`Meet ${employee.candidate}, a ${employee.gender} domestic staff${employee.title ? ` working as a ${employee.title}` : ''}. ${employee.candidate} is dedicated to providing quality service.`}
+                reviews={employee.reviews}
               />
             )}
           </div>

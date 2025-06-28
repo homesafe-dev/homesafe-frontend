@@ -1,121 +1,161 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
+import { useParams, useNavigate } from 'react-router-dom';
 import StaffProfileAbout from '../../components/Employer/StaffProfileAbout';
 import MedicalHistory from '../../components/Employer/StaffMedicHistory';
 import EducationalResources from '../../components/Employer/StaffResources';
-import Salary from '../../components/Employer/StaffSalary';
-import Loan from '../../components/Employer/StaffLoan';
 import StaffReview from '../../components/Employer/StaffReview';
+import employerApi from '../../api/employerApi';
 import ArtisanImg from '../../assets/images/artisans.png';
-const StaffProfile: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('medical');
 
-  const staffData = {
-    name: 'Cali Foster Jenkins',
-    location: 'Lagos',
-    age: 23,
-    role: 'Chef',
-    bio: 'Meet Cali foster, a passionate chef from Lagos State, Nigeria. With a love for cooking that knows no bounds, Cali brings the flavors of Lagos to every dish. From traditional Nigerian cuisine to innovative fusion dishes, this Lagos-born chef is dedicated to sharing the rich culinary heritage of his hometown with the world.',
-    phone: '+234 700 1234 456',
-    email: 'califoster@email.com',
-    profileImage: ArtisanImg,
-    rating: 4.5,
+interface Employee {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  avatar: string | null;
+  gender: string;
+  dob: string;
+  phone: string;
+  address: string;
+  salary: string;
+  profile_description: string | null;
+  approval_status: string;
+  is_verified: number;
+  reviews: any[];
+  user_medicals: {
+    id: number;
+    user_id: number;
+    medical_file: string;
+    date_uploaded: string;
+    created_at: string;
+    updated_at: string;
+  }[];
+  occupations: {
+    id: number;
+    name: string;
+    pivot: {
+      user_id: number;
+      occupation_id: number;
+    };
+  }[];
+  pivot: {
+    employer_id: number;
+    user_id: number;
+  };
+}
+
+const StaffProfile: React.FC = () => {
+  const { employeeId } = useParams<{ employeeId: string }>();
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState('medical');
+  const [employee, setEmployee] = useState<Employee | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchEmployeeData = async () => {
+      if (!employeeId) {
+        setError('No employee ID provided');
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        setError(null);
+
+        const response = await employerApi.getEmployees();
+
+        if (response.status && response.data && response.data.data) {
+          const foundEmployee = response.data.data.find(
+            (emp: Employee) => emp.id === Number(employeeId)
+          );
+
+          if (foundEmployee) {
+            setEmployee(foundEmployee);
+          } else {
+            setError('Employee not found');
+          }
+        } else {
+          setError('Failed to fetch employee data');
+        }
+      } catch (err: any) {
+        console.error('Error fetching employee data:', err);
+        setError(err.message || 'Failed to fetch employee data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEmployeeData();
+  }, [employeeId]);
+
+  const calculateAge = (dob: string) => {
+    const birthDate = new Date(dob);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+
+    return age;
   };
 
+  const extractLocation = (address: string) => {
+    // Extract city/state from address
+    const parts = address.split(',');
+    return parts.length > 1 ? parts[parts.length - 1].trim() : address;
+  };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-500"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-red-50 text-red-600 p-4 rounded-lg text-center">
+        {error}
+      </div>
+    );
+  }
+
+  if (!employee) {
+    return (
+      <div className="bg-gray-50 text-gray-600 p-4 rounded-lg text-center">
+        Employee not found
+      </div>
+    );
+  }
+
+  // Prepare data for components
   const educationalResources = [
+    // This would come from API in the future
     {
-      title: 'Best way to make Pasta',
+      title: 'Professional Development',
       startDate: '24th Nov, 2024',
-      description:
-        'A book on how well to improve in pasta making, this helps you to be an expert in the kitchen.',
-      chapterCount: 34,
-      recipeCount: 28,
-      thumbnail: '/path-to-thumbnail.jpg',
-    },
-    {
-      title: 'Culinary Skills',
-      startDate: '24th Nov, 2024',
-      description:
-        'A book on how well to improve in pasta making, this helps you to be an expert in the kitchen.',
-      chapterCount: 34,
-      recipeCount: 28,
+      description: 'Ongoing professional development and training resources.',
+      chapterCount: 0,
+      recipeCount: 0,
       thumbnail: '/path-to-thumbnail.jpg',
     },
   ];
 
-  const salaryData = {
-    currentSalary: '100,000.00',
-    advancedLoan: '-',
-    accountDetails: {
-      bank: 'Wema Bank',
-      accountNumber: '1234567890',
-    },
-    nextPaymentDate: '25th Nov, 2024',
-    salaryHistory: [
-      {
-        paymentDate: '24th Dec 2024',
-        accountDetails: {
-          bank: 'Wema Bank',
-          accountNumber: '0123456789',
-        },
-        amount: '₦50,000',
-        salaryAdvance: '-',
-        redeemSalary: '-',
-        status: 'Paid',
-      },
-      {
-        paymentDate: '24th Dec 2024',
-        accountDetails: {
-          bank: 'Wema Bank',
-          accountNumber: '0123456789',
-        },
-        amount: '₦50,000',
-        salaryAdvance: '-',
-        redeemSalary: '-',
-        status: 'Paid',
-      },
-      {
-        paymentDate: '24th Dec 2024',
-        accountDetails: {
-          bank: 'Wema Bank',
-          accountNumber: '0123456789',
-        },
-        amount: '₦50,000',
-        salaryAdvance: '-',
-        redeemSalary: '-',
-        status: 'Paid',
-      },
-      {
-        paymentDate: '24th Dec 2024',
-        accountDetails: {
-          bank: 'Wema Bank',
-          accountNumber: '0123456789',
-        },
-        amount: '₦50,000',
-        salaryAdvance: '-',
-        redeemSalary: '-',
-        status: 'Paid',
-      },
-      {
-        paymentDate: '24th Dec 2024',
-        accountDetails: {
-          bank: 'Wema Bank',
-          accountNumber: '0123456789',
-        },
-        amount: '₦50,000',
-        salaryAdvance: '-',
-        redeemSalary: '-',
-        status: 'Paid',
-      },
-    ],
-  };
-
   return (
     <div className="rounded-lg ">
       <div className="p-4 border-b border-gray-100">
-        <button className="flex items-center text-gray-600">
+        <button
+          className="flex items-center text-gray-600"
+          onClick={() => navigate(-1)}
+        >
           <FaArrowLeft className="mr-2" />
-          <span>Cali's Profile</span>
+          <span>{employee.first_name}'s Profile</span>
         </button>
       </div>
 
@@ -123,15 +163,16 @@ const StaffProfile: React.FC = () => {
         {/* Left panel */}
         <div className="w-1/3 border-r bg-white border-gray-100 p-6 shadow-md">
           <StaffProfileAbout
-            name={staffData.name}
-            location={staffData.location}
-            age={staffData.age}
-            role={staffData.role}
-            bio={staffData.bio}
-            phone={staffData.phone}
-            email={staffData.email}
-            profileImage={staffData.profileImage}
-            rating={staffData.rating}
+            name={`${employee.first_name} ${employee.last_name}`}
+            location={extractLocation(employee.address)}
+            age={calculateAge(employee.dob)}
+            role={employee.occupations.length > 0 ? employee.occupations[0].name : 'Staff'}
+            bio={employee.profile_description || `Meet ${employee.first_name} ${employee.last_name}, a dedicated professional who brings skill and commitment to their work.`}
+            phone={employee.phone}
+            email={employee.email}
+            profileImage={employee.avatar || ArtisanImg}
+            rating={4.0} // Default rating, would come from reviews calculation
+            contractId={employee.id} // Pass employee ID as contract ID for termination
           />
         </div>
 
@@ -152,18 +193,6 @@ const StaffProfile: React.FC = () => {
               Educational Resources
             </button>
             <button
-              className={`px-4 py-3 ${activeTab === 'salary' ? 'border-b-2 border-green-600 text-green-600' : 'text-gray-600'}`}
-              onClick={() => setActiveTab('salary')}
-            >
-              Salary
-            </button>
-            <button
-              className={`px-4 py-3 ${activeTab === 'loan' ? 'border-b-2 border-green-600 text-green-600' : 'text-gray-600'}`}
-              onClick={() => setActiveTab('loan')}
-            >
-              Loan
-            </button>
-            <button
               className={`px-4 py-3 ${activeTab === 'reviews' ? 'border-b-2 border-green-600 text-green-600' : 'text-gray-600'}`}
               onClick={() => setActiveTab('reviews')}
             >
@@ -174,14 +203,21 @@ const StaffProfile: React.FC = () => {
           {/* Tab content */}
           <div className="p-2">
             {activeTab === 'medical' && (
-              <MedicalHistory reportDate="24th November" />
+              <MedicalHistory
+                medicalFiles={employee.user_medicals}
+                employeeName={employee.first_name}
+              />
             )}
             {activeTab === 'educational' && (
               <EducationalResources resources={educationalResources} />
             )}
-            {activeTab === 'salary' && <Salary {...salaryData} />}
-            {activeTab === 'loan' && <Loan />}
-            {activeTab === 'reviews' && <StaffReview />}
+            {activeTab === 'reviews' && (
+              <StaffReview
+                reviews={employee.reviews}
+                employeeName={`${employee.first_name} ${employee.last_name}`}
+                employeeId={employee.id}
+              />
+            )}
           </div>
         </div>
       </div>

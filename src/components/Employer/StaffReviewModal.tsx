@@ -6,33 +6,48 @@ interface ReviewModalProps {
   onClose: () => void;
   onSubmit: (rating: number, feedback: string) => void;
   staffName: string;
+  isSubmitting?: boolean;
 }
 
 const ReviewModal: React.FC<ReviewModalProps> = ({
   isOpen,
   onClose,
   onSubmit,
+  staffName,
+  isSubmitting = false,
 }) => {
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
   const [feedback, setFeedback] = useState('');
 
-  if (!isOpen) return null;
-
-  const handleSubmit = () => {
-    onSubmit(rating, feedback);
+  // Reset form when modal closes
+  const handleClose = () => {
+    setRating(0);
+    setHoveredRating(0);
+    setFeedback('');
     onClose();
   };
 
+  if (!isOpen) return null;
+
+  const handleSubmit = () => {
+    if (rating === 0) {
+      return; // Don't submit if no rating is selected
+    }
+    onSubmit(rating, feedback);
+    // Don't close the modal here - let the parent handle it after successful submission
+  };
+
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50">
+    <div className="fixed inset-0 flex items-center justify-center z-50" onClick={handleClose}>
       <div className="absolute inset-0 bg-black/30 backdrop-blur-sm"></div>
-      <div className="bg-white rounded-lg p-6 w-full max-w-md relative z-10">
+      <div className="bg-white rounded-lg p-6 w-full max-w-md relative z-10" onClick={(e) => e.stopPropagation()}>
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-medium">Review Cali</h2>
+          <h2 className="text-xl font-medium">Review {staffName}</h2>
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className="text-gray-500 hover:text-gray-700"
+            disabled={isSubmitting}
           >
             <FaTimes />
           </button>
@@ -71,9 +86,17 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
 
         <button
           onClick={handleSubmit}
-          className="w-full py-3 bg-[#A5EA91] text-[#24292E] rounded-md font-medium hover:bg-green-500 transition duration-200"
+          disabled={rating === 0 || isSubmitting}
+          className="w-full py-3 bg-[#A5EA91] text-[#24292E] rounded-md font-medium hover:bg-green-500 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Submit Review
+          {isSubmitting ? (
+            <div className="flex items-center justify-center">
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[#24292E] mr-2"></div>
+              Submitting...
+            </div>
+          ) : (
+            'Submit Review'
+          )}
         </button>
       </div>
     </div>

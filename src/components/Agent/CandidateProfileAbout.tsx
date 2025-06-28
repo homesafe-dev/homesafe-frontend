@@ -101,12 +101,12 @@ const CandidateProfileAbout: React.FC<CandidateProfileAboutProps> = ({
                 Block User
               </button>
             )}
-            <button
+            {/* <button
               onClick={onSuspendUser}
               className="border border-[#993018] text-[#993018] px-4 py-2 rounded-md w-full"
             >
               Suspend User
-            </button>
+            </button> */}
           </div>
         )}
       </div>
