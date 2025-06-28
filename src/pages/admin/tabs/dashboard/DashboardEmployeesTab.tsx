@@ -184,6 +184,9 @@ export default function DashboardEmployeesTab() {
               Status
             </th>
             <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
+              Blocked Status
+            </th>
+            <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
               Actions
             </th>
           </tr>
@@ -211,19 +214,22 @@ export default function DashboardEmployeesTab() {
                 <td className="px-6 py-4">
                   <div className="h-8 bg-gray-200 rounded"></div>
                 </td>
+                <td className="px-6 py-4">
+                  <div className="h-8 bg-gray-200 rounded"></div>
+                </td>
               </tr>
             ))
           ) : error ? (
             // Error state
             <tr>
-              <td colSpan={6} className="px-6 py-4 text-center text-red-500">
+              <td colSpan={8} className="px-6 py-4 text-center text-red-500">
                 {error}
               </td>
             </tr>
           ) : employees.length === 0 ? (
             // Empty state
             <tr>
-              <td colSpan={6} className="px-6 py-4 text-center text-gray-500">
+              <td colSpan={8} className="px-6 py-4 text-center text-gray-500">
                 No employees found
               </td>
             </tr>
@@ -282,6 +288,17 @@ export default function DashboardEmployeesTab() {
                       </span>
                     );
                   })()}
+                </td>
+                <td className="px-6 py-4">
+                  <span
+                    className={`px-3 py-1 rounded-full text-[13px] ${
+                      employee.is_blocked
+                        ? 'bg-red-100 text-red-800'
+                        : 'bg-green-100 text-green-800'
+                    }`}
+                  >
+                    {employee.is_blocked ? 'Blocked' : 'Active'}
+                  </span>
                 </td>
                 <td className="px-6 py-4 relative">
                   <button

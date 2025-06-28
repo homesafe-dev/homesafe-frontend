@@ -139,6 +139,9 @@ export default function AgentsTab() {
             <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
               Status
             </th>
+            <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
+              Blocked Status
+            </th>
             <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal"></th>
           </tr>
         </thead>
@@ -168,19 +171,22 @@ export default function AgentsTab() {
                 <td className="px-6 py-4">
                   <div className="h-8 bg-gray-200 rounded"></div>
                 </td>
+                <td className="px-6 py-4">
+                  <div className="h-8 bg-gray-200 rounded"></div>
+                </td>
               </tr>
             ))
           ) : error ? (
             // Error state
             <tr>
-              <td colSpan={7} className="px-6 py-4 text-center text-red-500">
+              <td colSpan={8} className="px-6 py-4 text-center text-red-500">
                 {error}
               </td>
             </tr>
           ) : agents.length === 0 ? (
             // Empty state
             <tr>
-              <td colSpan={7} className="px-6 py-4 text-center text-gray-500">
+              <td colSpan={8} className="px-6 py-4 text-center text-gray-500">
                 No agents found
               </td>
             </tr>
@@ -233,6 +239,17 @@ export default function AgentsTab() {
                     {agent.status === 'not verified'
                       ? 'Unverified'
                       : 'Verified'}
+                  </span>
+                </td>
+                <td className="px-6 py-4">
+                  <span
+                    className={`px-3 py-1 rounded-full text-[13px] ${
+                      agent.is_blocked
+                        ? 'bg-red-100 text-red-800'
+                        : 'bg-green-100 text-green-800'
+                    }`}
+                  >
+                    {agent.is_blocked ? 'Blocked' : 'Active'}
                   </span>
                 </td>
                 <td className="px-6 py-4 text-right">

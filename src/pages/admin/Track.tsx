@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
-import { RiDeleteBin6Line } from 'react-icons/ri';
 import { FaUser } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { FaRegUser } from 'react-icons/fa';
@@ -154,6 +153,7 @@ const AdminTrack = () => {
                   Phone Number
                 </th>
                 <th className="px-4 py-3 text-left font-medium">Status</th>
+                <th className="px-4 py-3 text-left font-medium">Blocked Status</th>
                 <th className="px-4 py-3 text-left font-medium w-12"></th>
               </tr>
             </thead>
@@ -187,6 +187,9 @@ const AdminTrack = () => {
                       <div className="h-6 bg-gray-200 rounded w-20"></div>
                     </td>
                     <td className="px-4 py-3">
+                      <div className="h-6 bg-gray-200 rounded w-20"></div>
+                    </td>
+                    <td className="px-4 py-3">
                       <div className="h-4 bg-gray-200 rounded w-4"></div>
                     </td>
                   </tr>
@@ -195,7 +198,7 @@ const AdminTrack = () => {
                 // Empty state
                 <tr>
                   <td
-                    colSpan={7}
+                    colSpan={8}
                     className="px-4 py-3 text-center text-gray-500"
                   >
                     No candidates found
@@ -251,6 +254,17 @@ const AdminTrack = () => {
                           </button>
                         );
                       })()}
+                    </td>
+                    <td className="px-4 py-3">
+                      <span
+                        className={`px-3 py-1 rounded-full text-[13px] ${
+                          employee.is_blocked
+                            ? 'bg-red-100 text-red-800'
+                            : 'bg-green-100 text-green-800'
+                        }`}
+                      >
+                        {employee.is_blocked ? 'Blocked' : 'Active'}
+                      </span>
                     </td>
                     <td className="px-4 py-3 relative">
                       <button

@@ -8,6 +8,8 @@ const CONTRACT_ENDPOINTS = {
   UPDATE_CONTRACT: '/contracts',
   TERMINATE_CONTRACT: '/contracts/terminate',
   GET_PROPOSALS: '/contracts/proposals',
+  GET_SINGLE_PROPOSAL: '/contracts',
+  RESPOND_TO_PROPOSAL: '/contracts/proposals',
 };
 
 // Contract API service
@@ -168,6 +170,42 @@ const contractApi = {
       return response.data;
     } catch (error) {
       console.error('Error fetching contract proposals:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Get single proposal details by contract ID
+   * @param contractId - ID of the contract
+   * @returns Promise with the API response containing proposal details
+   */
+  getSingleProposal: async (contractId: number) => {
+    try {
+      const response = await axiosInstance.get(
+        `${CONTRACT_ENDPOINTS.GET_SINGLE_PROPOSAL}/${contractId}/proposal`
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching single proposal:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Respond to a proposal (accept or decline)
+   * @param proposalId - ID of the proposal
+   * @param action - 'accept' or 'decline'
+   * @returns Promise with the API response
+   */
+  respondToProposal: async (proposalId: number, action: 'accept' | 'decline') => {
+    try {
+      const response = await axiosInstance.post(
+        `${CONTRACT_ENDPOINTS.RESPOND_TO_PROPOSAL}/${proposalId}/respond`,
+        { response: action === 'accept' ? 'accepted' : 'declined' }
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error responding to proposal:', error);
       throw error;
     }
   },
