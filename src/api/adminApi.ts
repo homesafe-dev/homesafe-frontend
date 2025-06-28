@@ -284,6 +284,13 @@ const adminApi = {
             approval_status: employee.approval_status,
             is_blocked: employee.is_blocked,
             status: employee.is_verified ? 'Verified' : 'Unverified', // Keep for backward compatibility
+            average_rating: employee.average_rating,
+            occupations: employee.occupations || [],
+            reviews: employee.reviews ? employee.reviews.map(review => ({
+              ...review,
+              date: review.created_at, // Map created_at to date for consistency
+            })) : [],
+            user_medicals: employee.user_medicals || [],
           };
 
           return {

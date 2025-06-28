@@ -305,7 +305,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: 'staff/profile',
+        path: 'staff/profile/:employeeId',
         element: protectEmployerRoute(
           <EmployerLayout>
             <StaffProfile />

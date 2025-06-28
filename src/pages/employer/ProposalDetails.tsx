@@ -54,6 +54,9 @@ const EmployerProposalDetailsPage: React.FC = () => {
   const [proposalData, setProposalData] = useState<ContractProposal | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [terminating, setTerminating] = useState<boolean>(false);
+  const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProposalDetails = async () => {
@@ -64,7 +67,7 @@ const EmployerProposalDetailsPage: React.FC = () => {
         if (response.status && response.data) {
           // Find the specific proposal by contract ID
           const foundProposal = response.data.find(
-            (proposal: ContractProposal) => 
+            (proposal: ContractProposal) =>
               proposal.contract.id.toString() === contractId
           );
 
@@ -88,6 +91,37 @@ const EmployerProposalDetailsPage: React.FC = () => {
       fetchProposalDetails();
     }
   }, [contractId]);
+
+  const handleTerminateContract = async () => {
+    if (!contractId) {
+      setError('Contract ID not found');
+      return;
+    }
+
+    try {
+      setTerminating(true);
+      setError(null);
+      setSuccessMessage(null);
+
+      const response = await contractApi.terminateContract(Number(contractId));
+
+      if (response.status) {
+        setSuccessMessage(response.message || 'Contract terminated successfully');
+        setShowConfirmation(false);
+        // Optionally navigate back to contracts page after a delay
+        setTimeout(() => {
+          navigate('/employer/contracts');
+        }, 2000);
+      } else {
+        setError('Failed to terminate contract');
+      }
+    } catch (err: any) {
+      console.error('Error terminating contract:', err);
+      setError(err.response?.data?.message || 'An error occurred while terminating the contract');
+    } finally {
+      setTerminating(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -180,8 +214,8 @@ const EmployerProposalDetailsPage: React.FC = () => {
                 About me
               </h3>
               <p className="text-[13px] text-[#48525B] mb-6">
-                Meet {employee.first_name}, a dedicated professional with experience in {contract.position}. 
-                With a commitment to excellence and reliability, {employee.first_name} brings passion 
+                Meet {employee.first_name}, a dedicated professional with experience in {contract.position}.
+                With a commitment to excellence and reliability, {employee.first_name} brings passion
                 and expertise to every task, ensuring quality service and professional standards.
               </p>
 
@@ -197,16 +231,57 @@ const EmployerProposalDetailsPage: React.FC = () => {
               </h3>
               <p className="text-[13px] text-[#246D51] mb-6">{employee.email}</p>
 
-              {/* View Contract Button */}
+              {/* Terminate Contract Button */}
               <div className="mt-4">
-                <button className="text-white rounded-md py-2 text-sm w-full h-[34px] bg-[#246D51] hover:bg-[#1a5a3e] transition-colors">
-                  View Contract
+                <button
+                  onClick={() => setShowConfirmation(true)}
+                  disabled={terminating}
+                  className="text-white rounded-md py-2 text-sm w-full h-[34px] bg-[#dc3545] hover:bg-[#c82333] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {terminating ? 'Terminating...' : 'Terminate Contract'}
                 </button>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Success Message */}
+      {successMessage && (
+        <div className="fixed top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded z-50">
+          {successMessage}
+        </div>
+      )}
+
+      {/* Confirmation Dialog */}
+      {showConfirmation && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              Confirm Contract Termination
+            </h3>
+            <p className="text-gray-600 mb-6">
+              Are you sure you want to terminate this contract with {employee?.first_name} {employee?.last_name}?
+              This action cannot be undone.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowConfirmation(false)}
+                className="flex-1 px-4 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleTerminateContract}
+                disabled={terminating}
+                className="flex-1 px-4 py-2 text-white bg-[#dc3545] rounded-md hover:bg-[#c82333] transition-colors disabled:opacity-50"
+              >
+                {terminating ? 'Terminating...' : 'Terminate'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

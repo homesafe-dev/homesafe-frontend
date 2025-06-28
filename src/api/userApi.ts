@@ -53,10 +53,10 @@ const userApi = {
 
   /**
    * Submit KYC information
-   * @param kycData - KYC data to submit
+   * @param kycData - KYC data to submit with number and type fields
    * @returns Promise with the API response
    */
-  submitKYC: async (kycData: any) => {
+  submitKYC: async (kycData: { number: number; type: string }) => {
     try {
       const response = await axiosInstance.post(USER_ENDPOINTS.KYC, kycData);
       return response.data;
@@ -200,6 +200,28 @@ const userApi = {
       return response.data;
     } catch (error) {
       console.error('Error changing password:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Create a review for a user
+   * @param userId - ID of the user being reviewed
+   * @param reviewData - Object containing rating and comment
+   * @returns Promise with the API response
+   */
+  createReview: async (userId: number, reviewData: {
+    rating: number;
+    comment: string;
+  }) => {
+    try {
+      const response = await axiosInstance.post(
+        USER_ENDPOINTS.REVIEWS(userId),
+        reviewData
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error creating review:', error);
       throw error;
     }
   },

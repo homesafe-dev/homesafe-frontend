@@ -4,6 +4,7 @@ import { BsCreditCard, BsPeople } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 import walletApi from '../../api/walletApi';
 import userApi from '../../api/userApi';
+import employerApi from '../../api/employerApi';
 import { WalletTransaction } from '../../types/wallet';
 
 const DashboardContent: React.FC = () => {
@@ -12,6 +13,8 @@ const DashboardContent: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [userName, setUserName] = useState<string>('User');
+  const [totalStaff, setTotalStaff] = useState<number>(0);
+  const [totalPayroll, setTotalPayroll] = useState<number>(0);
 
   useEffect(() => {
     // Fetch user profile data
@@ -58,8 +61,30 @@ const DashboardContent: React.FC = () => {
       }
     };
 
+    // Fetch employees data for staff metrics
+    const fetchStaffMetrics = async () => {
+      try {
+        const response = await employerApi.getEmployees();
+        if (response.status && response.data) {
+          // Set total staff count from pagination total
+          setTotalStaff(response.data.total || 0);
+
+          // Calculate total payroll by summing all employee salaries
+          const employees = response.data.data || [];
+          const totalPayrollAmount = employees.reduce((sum: number, employee: any) => {
+            const salary = parseFloat(employee.salary || '0');
+            return sum + salary;
+          }, 0);
+          setTotalPayroll(totalPayrollAmount);
+        }
+      } catch (err) {
+        console.error('Error fetching staff metrics:', err);
+      }
+    };
+
     fetchWalletBalance();
     fetchTransactions();
+    fetchStaffMetrics();
 
     // Check if we're returning from a payment
     const urlParams = new URLSearchParams(window.location.search);
@@ -160,7 +185,7 @@ const DashboardContent: React.FC = () => {
             <Link to="/employer/wallet">
               <button
                 className="bg-white text-green-800 h-[42px] py-2 px-4 rounded flex items-center gap-2 text-sm hover:bg-gray-50 cursor-pointer relative z-20"
-               
+
                 style={{ pointerEvents: 'auto' }}
               >
                 <BsCreditCard size={12} />
@@ -170,28 +195,14 @@ const DashboardContent: React.FC = () => {
           </div>
         </div>
 
-        {/* Staff Count Cards */}
+        {/* Staff Count Card */}
         <div className="bg-[#E7E3F6] p-6 rounded-lg shadow">
           <div className="flex items-center gap-6">
             <div className="bg-[#C8EDDF80] p-4 rounded-full">
               <BsPeople className="text-gray-500" size={24} />
             </div>
             <div>
-              <h3 className="text-[20px] font-normal text-[#24292E]">00</h3>
-              <p className="text-[#24292E] mt-2 text-[16px]">
-                Total Number of Staff
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-[#E9E3E3] p-6 rounded-lg shadow">
-          <div className="flex items-center gap-6">
-            <div className="bg-[#EFAE7333] p-4 rounded-full">
-              <BsPeople className="text-gray-500" size={24} />
-            </div>
-            <div>
-              <h3 className="text-[20px] font-normal text-[#24292E]">00</h3>
+              <h3 className="text-[20px] font-normal text-[#24292E]">{totalStaff}</h3>
               <p className="text-[#24292E] mt-2 text-[16px]">
                 Total Number of Staff
               </p>
@@ -227,7 +238,10 @@ const DashboardContent: React.FC = () => {
               <div className="mt-12">
                 <p className="text-gray-600 text-sm">Total Staff Payroll</p>
                 <h3 className="text-xl font-medium text-gray-800 mt-2">
-                  ₦ 1,200,000.00
+                  ₦{totalPayroll.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
                 </h3>
                 {/* <button className="flex items-center gap-2 mt-6 bg-white border border-gray-300 text-gray-600 py-2 px-4 rounded-md text-sm">
                   <FaPlus size={12} />

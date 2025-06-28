@@ -100,17 +100,12 @@ const contractApi = {
   /**
    * Terminate a contract
    * @param contractId - ID of the contract to terminate
-   * @param terminationData - Termination data including reason and notice period
    * @returns Promise with the API response
    */
-  terminateContract: async (
-    contractId: number,
-    terminationData: { reason: string; notice_period: string }
-  ) => {
+  terminateContract: async (contractId: number) => {
     try {
       const response = await axiosInstance.post(
-        `${CONTRACT_ENDPOINTS.TERMINATE_CONTRACT}/${contractId}`,
-        terminationData
+        `/contracts/${contractId}/terminate`
       );
       return response.data;
     } catch (error) {

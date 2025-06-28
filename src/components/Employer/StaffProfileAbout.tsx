@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import TerminateStaffModal from './TerminateStaffModal';
 import TerminateContractConfirmation from './TerminateConfirmation';
+import contractApi from '../../api/contractApi';
+import Toast from '../common/Toast';
 
 interface StaffProfileAboutProps {
   name: string;
@@ -13,6 +15,7 @@ interface StaffProfileAboutProps {
   profileImage: string;
   rating: number;
   isOnline?: boolean;
+  contractId?: number; // Contract ID for termination
 }
 
 const StaffProfileAbout: React.FC<StaffProfileAboutProps> = ({
@@ -25,10 +28,33 @@ const StaffProfileAbout: React.FC<StaffProfileAboutProps> = ({
   email,
   profileImage,
   isOnline = true,
+  contractId,
 }) => {
   const [isTerminateModalOpen, setIsTerminateModalOpen] = useState(false);
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
   const [selectedNoticePeriod, setSelectedNoticePeriod] = useState('');
+  const [isTerminating, setIsTerminating] = useState(false);
+  const [toast, setToast] = useState<{
+    message: string;
+    type: 'success' | 'error' | 'info';
+    isVisible: boolean;
+  }>({
+    message: '',
+    type: 'info',
+    isVisible: false,
+  });
+
+  const showToast = (message: string, type: 'success' | 'error' | 'info') => {
+    setToast({
+      message,
+      type,
+      isVisible: true,
+    });
+  };
+
+  const hideToast = () => {
+    setToast(prev => ({ ...prev, isVisible: false }));
+  };
 
   const handleOpenTerminateModal = () => {
     setIsTerminateModalOpen(true);
@@ -38,10 +64,37 @@ const StaffProfileAbout: React.FC<StaffProfileAboutProps> = ({
     setIsTerminateModalOpen(false);
   };
 
-  const handleSubmitTermination = (noticePeriod: string) => {
+  const handleSubmitTermination = async (noticePeriod: string) => {
     setSelectedNoticePeriod(noticePeriod);
     setIsTerminateModalOpen(false);
-    setIsConfirmationOpen(true);
+
+    // Check if contractId is available
+    if (!contractId) {
+      showToast('Contract ID not found. Cannot terminate contract.', 'error');
+      return;
+    }
+
+    try {
+      setIsTerminating(true);
+
+      // Call the terminate contract API
+      const response = await contractApi.terminateContract(contractId);
+
+      if (response.status) {
+        showToast(response.message || 'Contract terminated successfully', 'success');
+        setIsConfirmationOpen(true);
+      } else {
+        showToast(response.message || 'Failed to terminate contract', 'error');
+      }
+    } catch (error: any) {
+      console.error('Error terminating contract:', error);
+      showToast(
+        error.response?.data?.message || 'An error occurred while terminating the contract',
+        'error'
+      );
+    } finally {
+      setIsTerminating(false);
+    }
   };
 
   const handleCloseConfirmation = () => {
@@ -101,10 +154,18 @@ const StaffProfileAbout: React.FC<StaffProfileAboutProps> = ({
 
         <div className="mt-4">
           <button
-            className="text-white rounded-md py-2 text-sm w-[117px] h-[34px] bg-[#993018]"
+            className="text-white rounded-md py-2 text-sm w-[117px] h-[34px] bg-[#993018] hover:bg-[#7d2a1f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={handleOpenTerminateModal}
+            disabled={isTerminating || !contractId}
           >
-            Terminate Staff
+            {isTerminating ? (
+              <div className="flex items-center justify-center">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-1"></div>
+                <span className="text-xs">Terminating...</span>
+              </div>
+            ) : (
+              'Terminate Staff'
+            )}
           </button>
         </div>
       </div>
@@ -120,6 +181,14 @@ const StaffProfileAbout: React.FC<StaffProfileAboutProps> = ({
         employeeName={name}
         terminationPeriod={selectedNoticePeriod}
         onClose={handleCloseConfirmation}
+      />
+
+      {/* Toast Notification */}
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.isVisible}
+        onClose={hideToast}
       />
     </div>
   );

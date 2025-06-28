@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import userApi from '../../api/userApi';
+import Toast from '../../components/common/Toast';
 
 interface KYCFormData {
   idType: string;
   ninNumber: string;
-  dateOfBirth: string;
 }
 
 interface UserProfile {
@@ -30,8 +30,28 @@ const EmployeeKYCPage: React.FC = () => {
   const [formData, setFormData] = useState<KYCFormData>({
     idType: '',
     ninNumber: '',
-    dateOfBirth: '',
   });
+  const [toast, setToast] = useState<{
+    message: string;
+    type: 'success' | 'error' | 'info';
+    isVisible: boolean;
+  }>({
+    message: '',
+    type: 'info',
+    isVisible: false,
+  });
+
+  const showToast = (message: string, type: 'success' | 'error' | 'info') => {
+    setToast({
+      message,
+      type,
+      isVisible: true,
+    });
+  };
+
+  const hideToast = () => {
+    setToast(prev => ({ ...prev, isVisible: false }));
+  };
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -42,11 +62,7 @@ const EmployeeKYCPage: React.FC = () => {
           const userData = response.data;
           setUserProfile(userData);
 
-          // Update form data with user profile information
-          setFormData((prevFormData) => ({
-            ...prevFormData,
-            dateOfBirth: userData.dob || '',
-          }));
+          // User profile loaded successfully
         } else {
           setError('Failed to fetch user profile');
         }
@@ -77,22 +93,30 @@ const EmployeeKYCPage: React.FC = () => {
       setSubmitting(true);
       setError(null);
 
-      // Create FormData object for NIN verification
-      const kycFormData = new FormData();
-      kycFormData.append('id_type', formData.idType);
-      kycFormData.append('nin_number', formData.ninNumber);
-      kycFormData.append('dob', formData.dateOfBirth);
+      // Validate form data
+      if (!formData.idType || !formData.ninNumber) {
+        setError('Please fill in all required fields');
+        return;
+      }
 
-      const response = await userApi.submitKYC(kycFormData);
+      // Create payload for KYC API
+      const kycPayload = {
+        number: parseInt(formData.ninNumber),
+        type: formData.idType,
+      };
+
+      const response = await userApi.submitKYC(kycPayload);
 
       if (response.status) {
-        alert('NIN verification submitted successfully');
-        navigate('/employee/dashboard');
+        showToast(response.message || 'KYC verification submitted successfully', 'success');
+        setTimeout(() => {
+          navigate('/employee/dashboard');
+        }, 2000);
       } else {
         setError(response.message || 'Failed to submit NIN verification');
       }
     } catch (err: any) {
-      setError(err.message || 'Error submitting NIN verification');
+      setError(err.response?.data?.message || err.message || 'Error submitting NIN verification');
       console.error('Error submitting NIN verification:', err);
     } finally {
       setSubmitting(false);
@@ -112,7 +136,7 @@ const EmployeeKYCPage: React.FC = () => {
             <span className="text-gray-800">Back</span>
           </button>
           <h1 className="text-2xl font-semibold text-gray-800">KYC Verification</h1>
-          <p className="text-gray-600 mt-2">Please enter your NIN and DOB for verification</p>
+          <p className="text-gray-600 mt-2">Please enter your NIN for verification</p>
         </div>
       </div>
 
@@ -124,6 +148,51 @@ const EmployeeKYCPage: React.FC = () => {
         <div className="bg-red-50 text-red-600 p-4 rounded-lg text-center mb-6">
           {error}
         </div>
+      ) : userProfile?.is_verified === 1 ? (
+        <div className="bg-white rounded-lg border-2 border-gray-300 shadow-sm p-12 max-w-3xl">
+          {/* Header Section */}
+          <div className="mb-8">
+            <div className="flex items-center mb-4">
+              <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center mr-3">
+                <span className="text-green-600 font-semibold">✅</span>
+              </div>
+              <div>
+                <h2 className="text-lg font-semibold text-gray-800">KYC Verification Complete</h2>
+                <p className="text-sm text-green-600">Your KYC verification has already been submitted and processed.</p>
+              </div>
+            </div>
+          </div>
+
+          {/* User Name Display */}
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Name
+            </label>
+            <div className="text-lg font-medium text-gray-800">
+              {userProfile ? `${userProfile.first_name} ${userProfile.last_name}` : 'Loading...'}
+            </div>
+          </div>
+
+          {/* Status Message */}
+          <div className="mb-8">
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+              <p className="text-green-800 font-medium">✅ KYC Verification Status: Completed</p>
+              <p className="text-green-600 text-sm mt-1">
+                Your identity has been successfully verified. You can now access all platform features.
+              </p>
+            </div>
+          </div>
+
+          {/* Back to Dashboard Button */}
+          <div className="flex justify-start">
+            <button
+              onClick={() => navigate('/employee/dashboard')}
+              className="px-8 py-3 bg-green-300 text-black rounded-md hover:bg-green-400 transition-colors font-medium"
+            >
+              Back to Dashboard
+            </button>
+          </div>
+        </div>
       ) : (
         <div className="bg-white rounded-lg border-2 border-gray-300 shadow-sm p-12 max-w-3xl">
           {/* Header Section */}
@@ -134,7 +203,7 @@ const EmployeeKYCPage: React.FC = () => {
               </div>
               <div>
                 <h2 className="text-lg font-semibold text-gray-800">ID Verification</h2>
-                <p className="text-sm text-orange-600">Your ID verification is required. Please submit a valid identification document by 31/12/24.</p>
+                <p className="text-sm text-orange-600">Please use NIN number 1000000001 for verification</p>
               </div>
             </div>
           </div>
@@ -151,7 +220,7 @@ const EmployeeKYCPage: React.FC = () => {
 
           {/* Instructional Text */}
           <div className="mb-8">
-            <p className="text-gray-600">Please enter your NIN and DOB for verification</p>
+            <p className="text-gray-600">Please enter your NIN for verification</p>
           </div>
 
           {/* Form Container with Border */}
@@ -193,21 +262,7 @@ const EmployeeKYCPage: React.FC = () => {
                 />
               </div>
 
-              {/* Date of Birth */}
-              <div>
-                <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-700 mb-2">
-                  Date of Birth
-                </label>
-                <input
-                  type="date"
-                  id="dateOfBirth"
-                  name="dateOfBirth"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-700"
-                  value={formData.dateOfBirth}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
+
             </form>
           </div>
 
@@ -231,6 +286,14 @@ const EmployeeKYCPage: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Toast Notification */}
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.isVisible}
+        onClose={hideToast}
+      />
     </div>
   );
 };
