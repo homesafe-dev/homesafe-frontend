@@ -27,13 +27,16 @@ export default function AdminDashboard() {
 
         if (employeeResponse.status) {
           // Handle new paginated response structure
-          const employeeData = employeeResponse.data?.data || employeeResponse.data || [];
-          setEmployeeCount(employeeResponse.data?.total || employeeData.length || 0);
+          const employeeData =
+            employeeResponse.data?.data || employeeResponse.data || [];
+          setEmployeeCount(
+            employeeResponse.data?.total || employeeData.length || 0
+          );
 
           // Count terminated employees (this is just an example, adjust based on your API)
-          const terminated = employeeData.filter(
-            (employee: any) => employee.status === 0
-          ).length || 0;
+          const terminated =
+            employeeData.filter((employee: any) => employee.status === 0)
+              .length || 0;
           setTerminatedCount(terminated);
         }
 
@@ -43,8 +46,11 @@ export default function AdminDashboard() {
 
         if (employerResponse.status) {
           // Handle new paginated response structure
-          const employerData = employerResponse.data?.data || employerResponse.data || [];
-          setEmployerCount(employerResponse.data?.total || employerData.length || 0);
+          const employerData =
+            employerResponse.data?.data || employerResponse.data || [];
+          setEmployerCount(
+            employerResponse.data?.total || employerData.length || 0
+          );
         }
       } catch (err) {
         console.error('Error fetching dashboard data:', err);

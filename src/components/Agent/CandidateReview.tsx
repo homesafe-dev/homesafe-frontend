@@ -28,12 +28,9 @@ interface CandidateReviewProps {
 
 const CandidateReview: React.FC<CandidateReviewProps> = ({
   candidateName,
-  bio,
-  gender = 'female',
   reviews = [],
 }) => {
   // Generate a default bio if none is provided
-  const defaultBio = `Meet ${candidateName}, a ${gender} domestic staff. ${candidateName} is dedicated to providing quality service.`;
 
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, index) => (
@@ -47,7 +44,10 @@ const CandidateReview: React.FC<CandidateReviewProps> = ({
 
   const calculateAverageRating = () => {
     if (reviews.length === 0) return 0;
-    const totalRating = reviews.reduce((sum, review) => sum + (review.rating || 0), 0);
+    const totalRating = reviews.reduce(
+      (sum, review) => sum + (review.rating || 0),
+      0
+    );
     return totalRating / reviews.length;
   };
 
@@ -85,7 +85,10 @@ const CandidateReview: React.FC<CandidateReviewProps> = ({
         </div>
 
         {reviews.map((review) => (
-          <div key={review.id} className="bg-white border border-gray-200 rounded-lg p-4">
+          <div
+            key={review.id}
+            className="bg-white border border-gray-200 rounded-lg p-4"
+          >
             <div className="flex justify-between items-start mb-2">
               <div className="flex items-center space-x-2">
                 <div className="flex">{renderStars(review.rating)}</div>
@@ -94,10 +97,12 @@ const CandidateReview: React.FC<CandidateReviewProps> = ({
                 </span>
               </div>
               <span className="text-sm text-gray-500">
-                {new Date(review.date || review.created_at || '').toLocaleDateString('en-GB', {
+                {new Date(
+                  review.date || review.created_at || ''
+                ).toLocaleDateString('en-GB', {
                   day: 'numeric',
                   month: 'long',
-                  year: 'numeric'
+                  year: 'numeric',
                 })}
               </span>
             </div>
@@ -116,7 +121,8 @@ const CandidateReview: React.FC<CandidateReviewProps> = ({
                   />
                 )}
                 <p className="text-xs text-gray-500">
-                  Reviewed by {review.reviewer
+                  Reviewed by{' '}
+                  {review.reviewer
                     ? `${review.reviewer.first_name} ${review.reviewer.last_name}`
                     : review.reviewer_name}
                 </p>

@@ -53,7 +53,7 @@ const StaffProfileAbout: React.FC<StaffProfileAboutProps> = ({
   };
 
   const hideToast = () => {
-    setToast(prev => ({ ...prev, isVisible: false }));
+    setToast((prev) => ({ ...prev, isVisible: false }));
   };
 
   const handleOpenTerminateModal = () => {
@@ -81,7 +81,10 @@ const StaffProfileAbout: React.FC<StaffProfileAboutProps> = ({
       const response = await contractApi.terminateContract(contractId);
 
       if (response.status) {
-        showToast(response.message || 'Contract terminated successfully', 'success');
+        showToast(
+          response.message || 'Contract terminated successfully',
+          'success'
+        );
         setIsConfirmationOpen(true);
       } else {
         showToast(response.message || 'Failed to terminate contract', 'error');
@@ -89,7 +92,8 @@ const StaffProfileAbout: React.FC<StaffProfileAboutProps> = ({
     } catch (error: any) {
       console.error('Error terminating contract:', error);
       showToast(
-        error.response?.data?.message || 'An error occurred while terminating the contract',
+        error.response?.data?.message ||
+          'An error occurred while terminating the contract',
         'error'
       );
     } finally {

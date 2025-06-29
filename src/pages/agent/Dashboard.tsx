@@ -80,9 +80,10 @@ export default function AgentDashboard() {
               <h2 className="text-[20px] text-[#24292E] font-normal">
                 {isLoading
                   ? '...'
-                  : employees.filter((e) =>
-                      e.placement &&
-                      e.placement.toLowerCase() !== 'no employer assigned'
+                  : employees.filter(
+                      (e) =>
+                        e.placement &&
+                        e.placement.toLowerCase() !== 'no employer assigned'
                     ).length}
               </h2>
               <p className="text-[#24292E] text-[16px]">
@@ -230,12 +231,14 @@ export default function AgentDashboard() {
                     <td className="px-6 py-4 text-[13px] font-normal">
                       <span
                         className={`${
-                          employee.placement.toLowerCase() === 'no employer assigned'
+                          employee.placement.toLowerCase() ===
+                          'no employer assigned'
                             ? 'text-gray-500 italic'
                             : 'text-[#24292E]'
                         }`}
                       >
-                        {employee.placement.toLowerCase() === 'no employer assigned'
+                        {employee.placement.toLowerCase() ===
+                        'no employer assigned'
                           ? 'Not on placement'
                           : employee.placement}
                       </span>

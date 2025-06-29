@@ -1,5 +1,9 @@
 import React, { useEffect } from 'react';
-import { IoCheckmarkCircleOutline, IoCloseCircleOutline, IoInformationCircleOutline } from 'react-icons/io5';
+import {
+  IoCheckmarkCircleOutline,
+  IoCloseCircleOutline,
+  IoInformationCircleOutline,
+} from 'react-icons/io5';
 
 export interface ToastProps {
   message: string;
@@ -44,13 +48,19 @@ const Toast: React.FC<ToastProps> = ({
   const getIcon = () => {
     switch (type) {
       case 'success':
-        return <IoCheckmarkCircleOutline size={20} className="text-green-600" />;
+        return (
+          <IoCheckmarkCircleOutline size={20} className="text-green-600" />
+        );
       case 'error':
         return <IoCloseCircleOutline size={20} className="text-red-600" />;
       case 'info':
-        return <IoInformationCircleOutline size={20} className="text-blue-600" />;
+        return (
+          <IoInformationCircleOutline size={20} className="text-blue-600" />
+        );
       default:
-        return <IoInformationCircleOutline size={20} className="text-gray-600" />;
+        return (
+          <IoInformationCircleOutline size={20} className="text-gray-600" />
+        );
     }
   };
 

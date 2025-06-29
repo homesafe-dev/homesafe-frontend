@@ -138,7 +138,17 @@ const AllTransactions: React.FC = () => {
     };
 
     fetchTransactions();
-  }, [activeTab, currentPage, itemsPerPage, startDate, endDate, searchTerm, statusFilter, paymentMethodFilter, walletSourceFilter]);
+  }, [
+    activeTab,
+    currentPage,
+    itemsPerPage,
+    startDate,
+    endDate,
+    searchTerm,
+    statusFilter,
+    paymentMethodFilter,
+    walletSourceFilter,
+  ]);
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
@@ -229,28 +239,28 @@ const AllTransactions: React.FC = () => {
 
           <div className="flex items-center gap-2">
             <span className="text-gray-600">Date Range</span>
-          <div className="flex items-center gap-2">
-            <div className="relative">
-              <input
-                type="date"
-                placeholder="Start Date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                className="border border-gray-300 rounded-md px-3 py-2 text-sm"
-              />
-            </div>
-            <span>-</span>
-            <div className="relative">
-              <input
-                type="date"
-                placeholder="End Date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                className="border border-gray-300 rounded-md px-3 py-2 text-sm"
-              />
+            <div className="flex items-center gap-2">
+              <div className="relative">
+                <input
+                  type="date"
+                  placeholder="Start Date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  className="border border-gray-300 rounded-md px-3 py-2 text-sm"
+                />
+              </div>
+              <span>-</span>
+              <div className="relative">
+                <input
+                  type="date"
+                  placeholder="End Date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  className="border border-gray-300 rounded-md px-3 py-2 text-sm"
+                />
+              </div>
             </div>
           </div>
-        </div>
 
           {/* Clear Filters Button */}
           <button
@@ -338,21 +348,30 @@ const AllTransactions: React.FC = () => {
                           <td className="py-3 px-4">
                             {transaction.user
                               ? `${transaction.user.first_name} ${transaction.user.last_name}`
-                              : 'N/A'
-                            }
+                              : 'N/A'}
                           </td>
                           <td className="py-3 px-4">{transaction.type}</td>
-                          <td className="py-3 px-4">{transaction.reference_code}</td>
                           <td className="py-3 px-4">
-                            {format(new Date(transaction.created_at), 'MMM dd, yyyy')}
+                            {transaction.reference_code}
+                          </td>
+                          <td className="py-3 px-4">
+                            {format(
+                              new Date(transaction.created_at),
+                              'MMM dd, yyyy'
+                            )}
                           </td>
                           <td className="py-3 px-4">
                             ₦{parseFloat(transaction.amount).toLocaleString()}
                           </td>
                           <td className="py-3 px-4">
-                            <span className="capitalize">{transaction.payment_method?.replace('_', ' ')}</span>
+                            <span className="capitalize">
+                              {transaction.payment_method?.replace('_', ' ')}
+                            </span>
                           </td>
-                          <td className="py-3 px-4">{transaction.wallet_transaction?.description || transaction.type}</td>
+                          <td className="py-3 px-4">
+                            {transaction.wallet_transaction?.description ||
+                              transaction.type}
+                          </td>
                           <td className="py-3 px-4">
                             <span
                               className={`px-3 py-1 rounded-full text-xs ${

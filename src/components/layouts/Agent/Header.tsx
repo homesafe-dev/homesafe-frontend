@@ -83,8 +83,6 @@ const Header: React.FC<HeaderProps> = () => {
     };
   }, []);
 
-
-
   const handleLogout = () => {
     // Clear auth token from localStorage
     localStorage.removeItem('auth_token');

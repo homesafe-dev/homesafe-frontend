@@ -3,8 +3,6 @@ import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
 import { format } from 'date-fns';
 import reviewApi, { Review, ReviewFilters } from '../../api/reviewApi';
 
-
-
 interface ReviewCardProps {
   reviewerName: string;
   reviewerAvatar?: string;
@@ -59,8 +57,6 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
     </div>
   );
 };
-
-
 
 const Reviews: React.FC = () => {
   const [activeTab, setActiveTab] = useState<
@@ -122,10 +118,14 @@ const Reviews: React.FC = () => {
 
           // Set average rating from API response
           if (response.data.summary?.average_rating) {
-            setAverageRating(parseFloat(response.data.summary.average_rating).toFixed(1));
+            setAverageRating(
+              parseFloat(response.data.summary.average_rating).toFixed(1)
+            );
           } else {
             // Calculate average rating from current reviews
-            const avgRating = calculateAverageRating(response.data.reviews.data);
+            const avgRating = calculateAverageRating(
+              response.data.reviews.data
+            );
             setAverageRating(avgRating);
           }
         } else {
@@ -176,7 +176,11 @@ const Reviews: React.FC = () => {
 
           <select
             value={ratingFilter}
-            onChange={(e) => setRatingFilter(e.target.value === '' ? '' : Number(e.target.value))}
+            onChange={(e) =>
+              setRatingFilter(
+                e.target.value === '' ? '' : Number(e.target.value)
+              )
+            }
             className="border border-gray-300 rounded-md px-3 py-2 text-sm"
           >
             <option value="">All Ratings</option>
@@ -294,7 +298,9 @@ const Reviews: React.FC = () => {
                       key={pageNum}
                       onClick={() => handlePageChange(pageNum)}
                       className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                        currentPage === pageNum ? 'bg-gray-200' : 'hover:bg-gray-100'
+                        currentPage === pageNum
+                          ? 'bg-gray-200'
+                          : 'hover:bg-gray-100'
                       }`}
                     >
                       {pageNum}

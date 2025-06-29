@@ -90,19 +90,24 @@ const walletApi = {
     accountName: string
   ) => {
     try {
-      const response = await axiosInstance.post(WALLET_ENDPOINTS.INITIALIZE_WITHDRAWAL, {
-        amount,
-        bank_code: bankCode,
-        account_number: accountNumber,
-        account_name: accountName,
-      });
+      const response = await axiosInstance.post(
+        WALLET_ENDPOINTS.INITIALIZE_WITHDRAWAL,
+        {
+          amount,
+          bank_code: bankCode,
+          account_number: accountNumber,
+          account_name: accountName,
+        }
+      );
       return response.data;
     } catch (error: any) {
       // Handle the expected 503 Service Unavailable response
       if (error.response?.status === 503) {
         return {
           status: false,
-          message: error.response.data?.message || 'Withdrawal service is currently unavailable',
+          message:
+            error.response.data?.message ||
+            'Withdrawal service is currently unavailable',
         };
       }
       throw error;
@@ -136,11 +141,14 @@ const walletApi = {
    * @returns Promise with the API response containing authorization URL
    */
   initializePayment: async (amount: number, callbackUrl: string) => {
-    const response = await axiosInstance.post(WALLET_ENDPOINTS.INITIALIZE_PAYMENT, {
-      amount: parseFloat(amount.toString()),
-      payment_method: 'external_funding',
-      callback_url: callbackUrl,
-    });
+    const response = await axiosInstance.post(
+      WALLET_ENDPOINTS.INITIALIZE_PAYMENT,
+      {
+        amount: parseFloat(amount.toString()),
+        payment_method: 'external_funding',
+        callback_url: callbackUrl,
+      }
+    );
     return response.data;
   },
 

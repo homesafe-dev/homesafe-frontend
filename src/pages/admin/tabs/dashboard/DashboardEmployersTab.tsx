@@ -66,7 +66,6 @@ export default function DashboardEmployersTab() {
     <div className="overflow-x-auto">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Employers</h2>
-
       </div>
 
       <table className="w-full">

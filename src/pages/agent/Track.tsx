@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
-import { RiDeleteBin6Line } from 'react-icons/ri';
 import { FaUser } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { FaRegUser } from 'react-icons/fa';
@@ -187,12 +186,14 @@ const CandidateTracker = () => {
                     <td className="px-4 py-3">
                       <span
                         className={`${
-                          employee.placement.toLowerCase() === 'no employer assigned'
+                          employee.placement.toLowerCase() ===
+                          'no employer assigned'
                             ? 'text-gray-500 italic'
                             : 'text-gray-700'
                         }`}
                       >
-                        {employee.placement.toLowerCase() === 'no employer assigned'
+                        {employee.placement.toLowerCase() ===
+                        'no employer assigned'
                           ? 'Not on placement'
                           : employee.placement}
                       </span>
@@ -219,7 +220,11 @@ const CandidateTracker = () => {
                       </button>
                     </td>
                     <td className="px-4 py-3 relative">
-                      <div ref={showOptionsFor === employee.id ? dropdownRef : null}>
+                      <div
+                        ref={
+                          showOptionsFor === employee.id ? dropdownRef : null
+                        }
+                      >
                         <button
                           onClick={() => toggleOptions(employee.id)}
                           className="text-gray-400 hover:text-gray-600"

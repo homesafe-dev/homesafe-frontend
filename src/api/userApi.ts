@@ -173,7 +173,7 @@ const userApi = {
         params: {
           role: 'employer',
           page,
-          limit
+          limit,
         },
       });
       return response.data;
@@ -210,10 +210,13 @@ const userApi = {
    * @param reviewData - Object containing rating and comment
    * @returns Promise with the API response
    */
-  createReview: async (userId: number, reviewData: {
-    rating: number;
-    comment: string;
-  }) => {
+  createReview: async (
+    userId: number,
+    reviewData: {
+      rating: number;
+      comment: string;
+    }
+  ) => {
     try {
       const response = await axiosInstance.post(
         USER_ENDPOINTS.REVIEWS(userId),

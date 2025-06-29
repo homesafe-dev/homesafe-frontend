@@ -35,7 +35,9 @@ const AdminTrack = () => {
   };
 
   // Helper function to get employee status
-  const getEmployeeStatus = (employee: Employee): { text: string; style: string } => {
+  const getEmployeeStatus = (
+    employee: Employee
+  ): { text: string; style: string } => {
     if (employee.is_verified === 1) {
       return { text: 'Verified', style: 'bg-green-100 text-green-800' };
     } else {
@@ -84,11 +86,11 @@ const AdminTrack = () => {
       if (response.status) {
         alert('User blocked successfully');
         // Update the employee list to reflect the change
-        setEmployees(employees.map(emp =>
-          emp.id === userId
-            ? { ...emp, is_blocked: true }
-            : emp
-        ));
+        setEmployees(
+          employees.map((emp) =>
+            emp.id === userId ? { ...emp, is_blocked: true } : emp
+          )
+        );
       } else {
         alert(response.message || 'Failed to block user');
       }
@@ -105,11 +107,11 @@ const AdminTrack = () => {
       if (response.status) {
         alert('User unblocked successfully');
         // Update the employee list to reflect the change
-        setEmployees(employees.map(emp =>
-          emp.id === userId
-            ? { ...emp, is_blocked: false }
-            : emp
-        ));
+        setEmployees(
+          employees.map((emp) =>
+            emp.id === userId ? { ...emp, is_blocked: false } : emp
+          )
+        );
       } else {
         alert(response.message || 'Failed to unblock user');
       }
@@ -153,7 +155,9 @@ const AdminTrack = () => {
                   Phone Number
                 </th>
                 <th className="px-4 py-3 text-left font-medium">Status</th>
-                <th className="px-4 py-3 text-left font-medium">Blocked Status</th>
+                <th className="px-4 py-3 text-left font-medium">
+                  Blocked Status
+                </th>
                 <th className="px-4 py-3 text-left font-medium w-12"></th>
               </tr>
             </thead>
@@ -249,7 +253,9 @@ const AdminTrack = () => {
                       {(() => {
                         const status = getEmployeeStatus(employee);
                         return (
-                          <button className={`px-3 py-1 rounded-full text-[13px] ${status.style}`}>
+                          <button
+                            className={`px-3 py-1 rounded-full text-[13px] ${status.style}`}
+                          >
                             {status.text}
                           </button>
                         );
@@ -292,18 +298,40 @@ const AdminTrack = () => {
                               className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer"
                               onClick={() => handleUnblockUser(employee.id)}
                             >
-                              <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
+                              <svg
+                                className="w-4 h-4 text-green-500"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"
+                                />
                               </svg>
-                              <span className="text-green-600">Unblock User</span>
+                              <span className="text-green-600">
+                                Unblock User
+                              </span>
                             </div>
                           ) : (
                             <div
                               className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer"
                               onClick={() => handleBlockUser(employee.id)}
                             >
-                              <svg className="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                              <svg
+                                className="w-4 h-4 text-red-500"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                                />
                               </svg>
                               <span className="text-red-600">Block User</span>
                             </div>

@@ -59,7 +59,9 @@ describe('notificationApi', () => {
       const mockError = new Error('Network error');
       mockAxios.get.mockRejectedValue(mockError);
 
-      await expect(notificationApi.getNotifications()).rejects.toThrow('Network error');
+      await expect(notificationApi.getNotifications()).rejects.toThrow(
+        'Network error'
+      );
       expect(mockAxios.get).toHaveBeenCalledWith('/notifications');
     });
   });
@@ -82,7 +84,9 @@ describe('notificationApi', () => {
 
       const result = await notificationApi.markAsRead(notificationId);
 
-      expect(mockAxios.patch).toHaveBeenCalledWith(`/notifications/${notificationId}/mark-as-read`);
+      expect(mockAxios.patch).toHaveBeenCalledWith(
+        `/notifications/${notificationId}/mark-as-read`
+      );
       expect(result).toEqual(mockResponse.data);
     });
 
@@ -91,8 +95,12 @@ describe('notificationApi', () => {
       const mockError = new Error('Network error');
       mockAxios.patch.mockRejectedValue(mockError);
 
-      await expect(notificationApi.markAsRead(notificationId)).rejects.toThrow('Network error');
-      expect(mockAxios.patch).toHaveBeenCalledWith(`/notifications/${notificationId}/mark-as-read`);
+      await expect(notificationApi.markAsRead(notificationId)).rejects.toThrow(
+        'Network error'
+      );
+      expect(mockAxios.patch).toHaveBeenCalledWith(
+        `/notifications/${notificationId}/mark-as-read`
+      );
     });
   });
 
@@ -128,9 +136,16 @@ describe('notificationApi', () => {
 
       expect(mockAxios.get).toHaveBeenCalledWith('/notifications');
       expect(mockAxios.patch).toHaveBeenCalledTimes(2);
-      expect(mockAxios.patch).toHaveBeenCalledWith('/notifications/1/mark-as-read');
-      expect(mockAxios.patch).toHaveBeenCalledWith('/notifications/2/mark-as-read');
-      expect(result).toEqual({ status: true, message: 'All notifications marked as read' });
+      expect(mockAxios.patch).toHaveBeenCalledWith(
+        '/notifications/1/mark-as-read'
+      );
+      expect(mockAxios.patch).toHaveBeenCalledWith(
+        '/notifications/2/mark-as-read'
+      );
+      expect(result).toEqual({
+        status: true,
+        message: 'All notifications marked as read',
+      });
     });
 
     it('should handle case when no unread notifications exist', async () => {
@@ -152,7 +167,10 @@ describe('notificationApi', () => {
 
       expect(mockAxios.get).toHaveBeenCalledWith('/notifications');
       expect(mockAxios.patch).not.toHaveBeenCalled();
-      expect(result).toEqual({ status: true, message: 'All notifications marked as read' });
+      expect(result).toEqual({
+        status: true,
+        message: 'All notifications marked as read',
+      });
     });
   });
 });

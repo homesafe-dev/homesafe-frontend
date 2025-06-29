@@ -97,7 +97,10 @@ const StaffProfile: React.FC = () => {
     let age = today.getFullYear() - birthDate.getFullYear();
     const monthDiff = today.getMonth() - birthDate.getMonth();
 
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birthDate.getDate())
+    ) {
       age--;
     }
 
@@ -166,8 +169,15 @@ const StaffProfile: React.FC = () => {
             name={`${employee.first_name} ${employee.last_name}`}
             location={extractLocation(employee.address)}
             age={calculateAge(employee.dob)}
-            role={employee.occupations.length > 0 ? employee.occupations[0].name : 'Staff'}
-            bio={employee.profile_description || `Meet ${employee.first_name} ${employee.last_name}, a dedicated professional who brings skill and commitment to their work.`}
+            role={
+              employee.occupations.length > 0
+                ? employee.occupations[0].name
+                : 'Staff'
+            }
+            bio={
+              employee.profile_description ||
+              `Meet ${employee.first_name} ${employee.last_name}, a dedicated professional who brings skill and commitment to their work.`
+            }
             phone={employee.phone}
             email={employee.email}
             profileImage={employee.avatar || ArtisanImg}

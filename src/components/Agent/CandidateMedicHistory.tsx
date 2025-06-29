@@ -35,7 +35,10 @@ const CandidateMedicHistory: React.FC<CandidateMedicHistoryProps> = ({
   return (
     <div className="space-y-4">
       {medicalFiles.map((medical) => (
-        <div key={medical.id} className="flex items-center justify-start p-4 border border-gray-200 rounded-lg">
+        <div
+          key={medical.id}
+          className="flex items-center justify-start p-4 border border-gray-200 rounded-lg"
+        >
           <img src={MedicalImg} alt="medical" className="mr-4" />
           <div className="flex-1">
             <h3 className="font-medium text-gray-800">Medical Report</h3>
@@ -44,8 +47,9 @@ const CandidateMedicHistory: React.FC<CandidateMedicHistoryProps> = ({
               {new Date(medical.date_uploaded).toLocaleDateString('en-GB', {
                 day: 'numeric',
                 month: 'long',
-                year: 'numeric'
-              })}.
+                year: 'numeric',
+              })}
+              .
             </p>
             <button
               onClick={() => handleViewMedical(medical.medical_file)}

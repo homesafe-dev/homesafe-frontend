@@ -192,7 +192,10 @@ const contractApi = {
    * @param action - 'accept' or 'decline'
    * @returns Promise with the API response
    */
-  respondToProposal: async (proposalId: number, action: 'accept' | 'decline') => {
+  respondToProposal: async (
+    proposalId: number,
+    action: 'accept' | 'decline'
+  ) => {
     try {
       const response = await axiosInstance.post(
         `${CONTRACT_ENDPOINTS.RESPOND_TO_PROPOSAL}/${proposalId}/respond`,

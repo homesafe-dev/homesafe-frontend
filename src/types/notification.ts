@@ -49,7 +49,15 @@ export interface NotificationItem {
   message: string;
   date: string;
   read: boolean;
-  type: 'medical' | 'salary' | 'wallet' | 'placement' | 'contract' | 'system' | 'registration' | 'other';
+  type:
+    | 'medical'
+    | 'salary'
+    | 'wallet'
+    | 'placement'
+    | 'contract'
+    | 'system'
+    | 'registration'
+    | 'other';
   avatar?: string;
   user?: {
     name: string;
@@ -72,7 +80,9 @@ export interface SingleNotificationApiResponse {
 }
 
 // Utility function to convert API notification to UI notification
-export const convertApiNotificationToUI = (apiNotification: ApiNotification): NotificationItem => {
+export const convertApiNotificationToUI = (
+  apiNotification: ApiNotification
+): NotificationItem => {
   // Extract notification type from the class name
   const getNotificationType = (type: string): NotificationItem['type'] => {
     if (type.includes('WalletTransaction')) return 'wallet';
@@ -87,6 +97,7 @@ export const convertApiNotificationToUI = (apiNotification: ApiNotification): No
 
   // Generate title based on notification type
   const generateTitle = (type: string, data: NotificationData): string => {
+    console.log(data);
     const notificationType = getNotificationType(type);
     switch (notificationType) {
       case 'wallet':
@@ -112,14 +123,18 @@ export const convertApiNotificationToUI = (apiNotification: ApiNotification): No
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
     const now = new Date();
-    const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
-    
+    const diffInHours = Math.floor(
+      (now.getTime() - date.getTime()) / (1000 * 60 * 60)
+    );
+
     if (diffInHours < 1) return 'Just now';
-    if (diffInHours < 24) return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
-    
+    if (diffInHours < 24)
+      return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
+
     const diffInDays = Math.floor(diffInHours / 24);
-    if (diffInDays < 7) return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
-    
+    if (diffInDays < 7)
+      return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
+
     return date.toLocaleDateString();
   };
 

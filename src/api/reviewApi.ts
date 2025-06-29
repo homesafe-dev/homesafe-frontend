@@ -86,7 +86,9 @@ const reviewApi = {
    * @param filters - Filter options for reviews
    * @returns Promise with the API response
    */
-  getAllReviews: async (filters: ReviewFilters = {}): Promise<ReviewResponse> => {
+  getAllReviews: async (
+    filters: ReviewFilters = {}
+  ): Promise<ReviewResponse> => {
     try {
       const params = new URLSearchParams();
 
@@ -139,7 +141,10 @@ const reviewApi = {
     search: string,
     sort_by?: ReviewFilters['sort_by'],
     sort_order?: ReviewFilters['sort_order'],
-    additionalFilters: Omit<ReviewFilters, 'search' | 'sort_by' | 'sort_order'> = {}
+    additionalFilters: Omit<
+      ReviewFilters,
+      'search' | 'sort_by' | 'sort_order'
+    > = {}
   ): Promise<ReviewResponse> => {
     return reviewApi.getAllReviews({
       search,
@@ -161,7 +166,10 @@ const reviewApi = {
     from_date: string,
     to_date: string,
     role?: ReviewFilters['role'],
-    additionalFilters: Omit<ReviewFilters, 'from_date' | 'to_date' | 'role'> = {}
+    additionalFilters: Omit<
+      ReviewFilters,
+      'from_date' | 'to_date' | 'role'
+    > = {}
   ): Promise<ReviewResponse> => {
     return reviewApi.getAllReviews({
       from_date,

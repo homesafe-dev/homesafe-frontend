@@ -107,10 +107,6 @@ const ContractCard: React.FC<ContractCardProps> = ({ proposal, imageUrl }) => {
   const workingHours = contract.working_hours_per_week || 'Unknown';
   const description = `${position} position. Duration: ${durationMonths} months (${startDate} - ${endDate}). Working days: ${workingDays}/month, ${workingHours} hours/week.`;
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
@@ -123,9 +119,6 @@ const ContractCard: React.FC<ContractCardProps> = ({ proposal, imageUrl }) => {
   const handleViewDetails = () => {
     navigate(`/employee/${contract.id}/proposal`);
   };
-
-  // Only show terminate button for active contracts
-  const isActive = contract.status === 'active' || contract.is_active;
 
   // Safely get status
   const status = proposalData.status || 'Unknown';
@@ -239,7 +232,9 @@ const ContractsPage: React.FC<ContractsPageProps> = ({
 
     // Safely access employer name from the top-level employer object
     const employerName = proposal.employer
-      ? `${proposal.employer.first_name || ''} ${proposal.employer.last_name || ''}`.toLowerCase().trim()
+      ? `${proposal.employer.first_name || ''} ${proposal.employer.last_name || ''}`
+          .toLowerCase()
+          .trim()
       : '';
 
     // Safely access position and status

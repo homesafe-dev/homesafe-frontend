@@ -39,9 +39,15 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50" onClick={handleClose}>
+    <div
+      className="fixed inset-0 flex items-center justify-center z-50"
+      onClick={handleClose}
+    >
       <div className="absolute inset-0 bg-black/30 backdrop-blur-sm"></div>
-      <div className="bg-white rounded-lg p-6 w-full max-w-md relative z-10" onClick={(e) => e.stopPropagation()}>
+      <div
+        className="bg-white rounded-lg p-6 w-full max-w-md relative z-10"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-medium">Review {staffName}</h2>
           <button

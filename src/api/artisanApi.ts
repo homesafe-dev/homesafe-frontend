@@ -21,7 +21,7 @@ const artisanApi = {
           params: {
             role: 'employee',
             page,
-            limit
+            limit,
           },
         }
       );
@@ -47,7 +47,7 @@ const artisanApi = {
           params: {
             role: 'employee',
             page: 1,
-            limit: 100
+            limit: 100,
           },
         }
       );

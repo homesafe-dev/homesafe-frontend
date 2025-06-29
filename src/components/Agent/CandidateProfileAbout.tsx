@@ -33,7 +33,6 @@ const CandidateProfileAbout: React.FC<CandidateProfileAboutProps> = ({
   isBlocked = false,
   onBlockUser,
   onUnblockUser,
-  onSuspendUser,
 }) => {
   return (
     <div className="flex flex-col items-center bg-white rounded-lg p-4 h-full">

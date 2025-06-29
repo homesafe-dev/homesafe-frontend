@@ -23,27 +23,36 @@ const TransactionStats: React.FC = () => {
         // Fetch all transactions to calculate stats
         // In a real implementation, this should be a dedicated stats endpoint
         const response = await adminApi.getTransactions({ limit: 1000 });
-        
+
         if (response.status && response.data?.data) {
           const transactions = response.data.data;
-          
+
           const calculatedStats: TransactionStats = {
             total_transactions: transactions.length,
-            successful_transactions: transactions.filter(t => t.status === 'successful').length,
-            pending_transactions: transactions.filter(t => t.status === 'pending').length,
-            failed_transactions: transactions.filter(t => t.status === 'failed').length,
-            total_amount: transactions.reduce((sum, t) => sum + parseFloat(t.amount), 0),
+            successful_transactions: transactions.filter(
+              (t) => t.status === 'successful'
+            ).length,
+            pending_transactions: transactions.filter(
+              (t) => t.status === 'pending'
+            ).length,
+            failed_transactions: transactions.filter(
+              (t) => t.status === 'failed'
+            ).length,
+            total_amount: transactions.reduce(
+              (sum, t) => sum + parseFloat(t.amount),
+              0
+            ),
             successful_amount: transactions
-              .filter(t => t.status === 'successful')
+              .filter((t) => t.status === 'successful')
               .reduce((sum, t) => sum + parseFloat(t.amount), 0),
             pending_amount: transactions
-              .filter(t => t.status === 'pending')
+              .filter((t) => t.status === 'pending')
               .reduce((sum, t) => sum + parseFloat(t.amount), 0),
             failed_amount: transactions
-              .filter(t => t.status === 'failed')
+              .filter((t) => t.status === 'failed')
               .reduce((sum, t) => sum + parseFloat(t.amount), 0),
           };
-          
+
           setStats(calculatedStats);
         }
       } catch (error) {
@@ -126,7 +135,9 @@ const TransactionStats: React.FC = () => {
                 {card.amount}
               </p>
             </div>
-            <div className={`w-12 h-12 ${card.bgColor} rounded-full flex items-center justify-center`}>
+            <div
+              className={`w-12 h-12 ${card.bgColor} rounded-full flex items-center justify-center`}
+            >
               <svg
                 className={`w-6 h-6 ${card.textColor}`}
                 fill="none"
