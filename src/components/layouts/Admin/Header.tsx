@@ -22,17 +22,6 @@ interface UserProfile {
   [key: string]: any;
 }
 
-type NotificationType =
-  | 'registration'
-  | 'system'
-  | 'other'
-  | 'salary'
-  | 'medical';
-
-interface ExtendedNotificationItem extends Omit<NotificationItem, 'type'> {
-  type: NotificationType;
-}
-
 const Header: React.FC<HeaderProps> = ({
   userEmail: propUserEmail,
   userName: propUserName,
