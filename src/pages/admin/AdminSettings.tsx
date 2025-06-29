@@ -75,7 +75,8 @@ const AdminSettings: React.FC = () => {
         setTotalPages(1);
       }
     } catch (err: any) {
-      const errorMessage = err.response?.data?.message || 'Failed to fetch admins';
+      const errorMessage =
+        err.response?.data?.message || 'Failed to fetch admins';
       setError(errorMessage);
       setAdmins([]);
       setTotalPages(1);
@@ -117,7 +118,8 @@ const AdminSettings: React.FC = () => {
       // Show success message (optional)
       console.log('Admin removed successfully');
     } catch (err: any) {
-      const errorMessage = err.response?.data?.message || 'Failed to remove admin';
+      const errorMessage =
+        err.response?.data?.message || 'Failed to remove admin';
       setError(errorMessage);
       console.error('Error removing admin:', err);
     }
@@ -204,15 +206,15 @@ const AdminSettings: React.FC = () => {
                   <td className="py-3 px-4">{admin.email}</td>
                   <td className="py-3 px-4">{admin.phone}</td>
                   <td className="py-3 px-4">
-                    {admin.dob ? (
-                      (() => {
-                        try {
-                          return format(new Date(admin.dob), 'MMM dd, yyyy');
-                        } catch {
-                          return admin.dob;
-                        }
-                      })()
-                    ) : 'N/A'}
+                    {admin.dob
+                      ? (() => {
+                          try {
+                            return format(new Date(admin.dob), 'MMM dd, yyyy');
+                          } catch {
+                            return admin.dob;
+                          }
+                        })()
+                      : 'N/A'}
                   </td>
                   <td className="py-3 px-4 capitalize">{admin.gender}</td>
                   <td className="py-3 px-4">

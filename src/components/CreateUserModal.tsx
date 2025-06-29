@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { FaTimes } from 'react-icons/fa';
-import userRegistrationApi, { UserRegistrationData } from '../api/userRegistrationApi';
+import userRegistrationApi, {
+  UserRegistrationData,
+} from '../api/userRegistrationApi';
 import adminApi from '../api/adminApi';
 
 interface CreateUserModalProps {
@@ -15,25 +17,16 @@ interface Occupation {
   name: string;
 }
 
-interface User {
-  id: number;
-  first_name: string;
-  last_name: string;
-  email: string;
-}
-
 const CreateUserModal: React.FC<CreateUserModalProps> = ({
   isOpen,
   onClose,
   userType,
-  onSuccess
+  onSuccess,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [occupations, setOccupations] = useState<Occupation[]>([]);
-  const [agents, setAgents] = useState<User[]>([]);
-  const [employers, setEmployers] = useState<User[]>([]);
 
   const [formData, setFormData] = useState({
     first_name: '',
@@ -90,19 +83,21 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({
     onClose();
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: name === 'salary' ? Number(value) : value,
     }));
   };
 
   const handleOccupationChange = (occupationId: number) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       occupations: prev.occupations.includes(occupationId)
-        ? prev.occupations.filter(id => id !== occupationId)
+        ? prev.occupations.filter((id) => id !== occupationId)
         : [...prev.occupations, occupationId],
     }));
   };
@@ -142,7 +137,12 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({
         password: formData.password,
         salary: formData.salary,
         role: userType,
-        occupations: (userType === 'admin' || userType === 'agent' || userType === 'employer') ? [1] : formData.occupations,
+        occupations:
+          userType === 'admin' ||
+          userType === 'agent' ||
+          userType === 'employer'
+            ? [1]
+            : formData.occupations,
       };
 
       // Remove agent and employer assignment for employees
@@ -154,7 +154,9 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({
       const response = await userRegistrationApi.registerUser(userData);
 
       if (response.status) {
-        setSuccess(`${userType.charAt(0).toUpperCase() + userType.slice(1)} created successfully!`);
+        setSuccess(
+          `${userType.charAt(0).toUpperCase() + userType.slice(1)} created successfully!`
+        );
         setTimeout(() => {
           handleClose();
           if (onSuccess) onSuccess();
@@ -298,7 +300,7 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({
                 Occupations *
               </label>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-2 max-h-32 overflow-y-auto">
-                {occupations.map(occupation => (
+                {occupations.map((occupation) => (
                   <label key={occupation.id} className="flex items-center">
                     <input
                       type="checkbox"
@@ -326,7 +328,9 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({
               disabled={isLoading}
               className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50"
             >
-              {isLoading ? 'Creating...' : `Create ${userType.charAt(0).toUpperCase() + userType.slice(1)}`}
+              {isLoading
+                ? 'Creating...'
+                : `Create ${userType.charAt(0).toUpperCase() + userType.slice(1)}`}
             </button>
           </div>
         </form>

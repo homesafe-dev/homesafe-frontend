@@ -298,7 +298,6 @@ const ArtisanProfileView: React.FC = () => {
                       value={formData.start_date}
                       onChange={handleInputChange}
                     />
-                 
                   </div>
                 </div>
 

@@ -40,11 +40,11 @@ export default function EmployersTab() {
       if (response.status) {
         alert('User blocked successfully');
         // Update the employer list to reflect the change
-        setEmployers(employers.map(emp =>
-          emp.id === userId
-            ? { ...emp, is_blocked: true }
-            : emp
-        ));
+        setEmployers(
+          employers.map((emp) =>
+            emp.id === userId ? { ...emp, is_blocked: true } : emp
+          )
+        );
       } else {
         alert(response.message || 'Failed to block user');
       }
@@ -60,11 +60,11 @@ export default function EmployersTab() {
       if (response.status) {
         alert('User unblocked successfully');
         // Update the employer list to reflect the change
-        setEmployers(employers.map(emp =>
-          emp.id === userId
-            ? { ...emp, is_blocked: false }
-            : emp
-        ));
+        setEmployers(
+          employers.map((emp) =>
+            emp.id === userId ? { ...emp, is_blocked: false } : emp
+          )
+        );
       } else {
         alert(response.message || 'Failed to unblock user');
       }
@@ -107,7 +107,6 @@ export default function EmployersTab() {
     <div className="overflow-x-auto">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">All Employers</h2>
-
       </div>
 
       <table className="w-full">
@@ -250,10 +249,13 @@ export default function EmployersTab() {
                         onClick: () => navigate(`/admin/user/${employer.id}`),
                       },
                       {
-                        label: employer.is_blocked ? 'Unblock User' : 'Block User',
-                        onClick: () => employer.is_blocked
-                          ? handleUnblockUser(employer.id)
-                          : handleBlockUser(employer.id),
+                        label: employer.is_blocked
+                          ? 'Unblock User'
+                          : 'Block User',
+                        onClick: () =>
+                          employer.is_blocked
+                            ? handleUnblockUser(employer.id)
+                            : handleBlockUser(employer.id),
                       },
                     ]}
                   />

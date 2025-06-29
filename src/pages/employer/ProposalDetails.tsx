@@ -51,7 +51,9 @@ interface ContractProposal {
 const EmployerProposalDetailsPage: React.FC = () => {
   const { contractId } = useParams<{ contractId: string }>();
   const navigate = useNavigate();
-  const [proposalData, setProposalData] = useState<ContractProposal | null>(null);
+  const [proposalData, setProposalData] = useState<ContractProposal | null>(
+    null
+  );
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [terminating, setTerminating] = useState<boolean>(false);
@@ -106,7 +108,9 @@ const EmployerProposalDetailsPage: React.FC = () => {
       const response = await contractApi.terminateContract(Number(contractId));
 
       if (response.status) {
-        setSuccessMessage(response.message || 'Contract terminated successfully');
+        setSuccessMessage(
+          response.message || 'Contract terminated successfully'
+        );
         setShowConfirmation(false);
         // Optionally navigate back to contracts page after a delay
         setTimeout(() => {
@@ -117,7 +121,10 @@ const EmployerProposalDetailsPage: React.FC = () => {
       }
     } catch (err: any) {
       console.error('Error terminating contract:', err);
-      setError(err.response?.data?.message || 'An error occurred while terminating the contract');
+      setError(
+        err.response?.data?.message ||
+          'An error occurred while terminating the contract'
+      );
     } finally {
       setTerminating(false);
     }
@@ -162,7 +169,9 @@ const EmployerProposalDetailsPage: React.FC = () => {
         >
           ← Back to All Contracts
         </button>
-        <h2 className="text-xl font-semibold text-[#24292E]">Contract Details</h2>
+        <h2 className="text-xl font-semibold text-[#24292E]">
+          Contract Details
+        </h2>
       </div>
 
       <div className="flex justify-center">
@@ -179,7 +188,8 @@ const EmployerProposalDetailsPage: React.FC = () => {
               ) : (
                 <div className="rounded-full w-24 h-24 bg-gray-300 flex items-center justify-center border-4 border-white shadow-sm">
                   <span className="text-white text-xl font-semibold">
-                    {employee.first_name.charAt(0)}{employee.last_name.charAt(0)}
+                    {employee.first_name.charAt(0)}
+                    {employee.last_name.charAt(0)}
                   </span>
                 </div>
               )}
@@ -214,22 +224,28 @@ const EmployerProposalDetailsPage: React.FC = () => {
                 About me
               </h3>
               <p className="text-[13px] text-[#48525B] mb-6">
-                Meet {employee.first_name}, a dedicated professional with experience in {contract.position}.
-                With a commitment to excellence and reliability, {employee.first_name} brings passion
-                and expertise to every task, ensuring quality service and professional standards.
+                Meet {employee.first_name}, a dedicated professional with
+                experience in {contract.position}. With a commitment to
+                excellence and reliability, {employee.first_name} brings passion
+                and expertise to every task, ensuring quality service and
+                professional standards.
               </p>
 
               {/* Contact Details */}
               <h3 className="text-[#246D51] font-semibold text-[16px] mb-2">
                 Contact Details
               </h3>
-              <p className="text-[13px] text-[#246D51] mb-4">{employee.phone}</p>
+              <p className="text-[13px] text-[#246D51] mb-4">
+                {employee.phone}
+              </p>
 
               {/* Email */}
               <h3 className="text-[#246D51] font-semibold text-[16px] mb-2">
                 Email
               </h3>
-              <p className="text-[13px] text-[#246D51] mb-6">{employee.email}</p>
+              <p className="text-[13px] text-[#246D51] mb-6">
+                {employee.email}
+              </p>
 
               {/* Terminate Contract Button */}
               <div className="mt-4">
@@ -261,8 +277,9 @@ const EmployerProposalDetailsPage: React.FC = () => {
               Confirm Contract Termination
             </h3>
             <p className="text-gray-600 mb-6">
-              Are you sure you want to terminate this contract with {employee?.first_name} {employee?.last_name}?
-              This action cannot be undone.
+              Are you sure you want to terminate this contract with{' '}
+              {employee?.first_name} {employee?.last_name}? This action cannot
+              be undone.
             </p>
             <div className="flex gap-3">
               <button

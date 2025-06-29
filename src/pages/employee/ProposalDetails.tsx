@@ -51,7 +51,9 @@ interface ContractProposal {
 const ProposalDetailsPage: React.FC = () => {
   const { contractId } = useParams<{ contractId: string }>();
   const navigate = useNavigate();
-  const [proposalData, setProposalData] = useState<ContractProposal | null>(null);
+  const [proposalData, setProposalData] = useState<ContractProposal | null>(
+    null
+  );
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -61,7 +63,9 @@ const ProposalDetailsPage: React.FC = () => {
         setLoading(true);
 
         // Use the specific API endpoint for single proposal
-        const response = await contractApi.getSingleProposal(Number(contractId));
+        const response = await contractApi.getSingleProposal(
+          Number(contractId)
+        );
 
         if (response.status && response.data) {
           setProposalData(response.data);
@@ -120,7 +124,9 @@ const ProposalDetailsPage: React.FC = () => {
         >
           ← Back to All Contracts
         </button>
-        <h2 className="text-xl font-semibold text-[#24292E]">Contract Details</h2>
+        <h2 className="text-xl font-semibold text-[#24292E]">
+          Contract Details
+        </h2>
       </div>
 
       <div className="flex justify-center">
@@ -137,7 +143,8 @@ const ProposalDetailsPage: React.FC = () => {
               ) : (
                 <div className="rounded-full w-24 h-24 bg-gray-300 flex items-center justify-center border-4 border-white shadow-sm">
                   <span className="text-white text-xl font-semibold">
-                    {employer.first_name.charAt(0)}{employer.last_name.charAt(0)}
+                    {employer.first_name.charAt(0)}
+                    {employer.last_name.charAt(0)}
                   </span>
                 </div>
               )}
@@ -167,22 +174,28 @@ const ProposalDetailsPage: React.FC = () => {
                 About me
               </h3>
               <p className="text-[13px] text-[#48525B] mb-6">
-                Meet {employer.first_name}, a passionate employer looking for dedicated staff.
-                With a commitment to providing a great working environment, {employer.first_name}
-                values professionalism and mutual respect in all working relationships.
+                Meet {employer.first_name}, a passionate employer looking for
+                dedicated staff. With a commitment to providing a great working
+                environment, {employer.first_name}
+                values professionalism and mutual respect in all working
+                relationships.
               </p>
 
               {/* Contact Details */}
               <h3 className="text-[#246D51] font-semibold text-[16px] mb-2">
                 Contact Details
               </h3>
-              <p className="text-[13px] text-[#246D51] mb-4">{employer.phone}</p>
+              <p className="text-[13px] text-[#246D51] mb-4">
+                {employer.phone}
+              </p>
 
               {/* Email */}
               <h3 className="text-[#246D51] font-semibold text-[16px] mb-2">
                 Email
               </h3>
-              <p className="text-[13px] text-[#246D51] mb-6">{employer.email}</p>
+              <p className="text-[13px] text-[#246D51] mb-6">
+                {employer.email}
+              </p>
 
               {/* View Contract Button */}
               <div className="mt-4">

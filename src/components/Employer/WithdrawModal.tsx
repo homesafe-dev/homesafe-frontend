@@ -9,7 +9,11 @@ interface WithdrawModalProps {
   onSuccess?: () => void;
 }
 
-const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, onSuccess }) => {
+const WithdrawModal: React.FC<WithdrawModalProps> = ({
+  isOpen,
+  onClose,
+  onSuccess,
+}) => {
   const [bankName, setBankName] = useState('');
   const [accountNumber, setAccountNumber] = useState('');
   const [accountName, setAccountName] = useState('');

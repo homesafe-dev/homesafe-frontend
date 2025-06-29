@@ -240,8 +240,7 @@ const Transactions: React.FC = () => {
                     <td className="py-3 px-4">
                       {transaction.user
                         ? `${transaction.user.first_name} ${transaction.user.last_name}`
-                        : 'N/A'
-                      }
+                        : 'N/A'}
                     </td>
                     <td className="py-3 px-4">{transaction.type}</td>
                     <td className="py-3 px-4">{transaction.reference_code}</td>
@@ -252,10 +251,13 @@ const Transactions: React.FC = () => {
                       ₦{parseFloat(transaction.amount).toLocaleString()}
                     </td>
                     <td className="py-3 px-4">
-                      <span className="capitalize">{transaction.payment_method?.replace('_', ' ')}</span>
+                      <span className="capitalize">
+                        {transaction.payment_method?.replace('_', ' ')}
+                      </span>
                     </td>
                     <td className="py-3 px-4">
-                      {transaction.wallet_transaction?.description || transaction.type}
+                      {transaction.wallet_transaction?.description ||
+                        transaction.type}
                     </td>
                     <td className="py-3 px-4">
                       <span

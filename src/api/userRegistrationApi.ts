@@ -42,7 +42,9 @@ const userRegistrationApi = {
    * @param userData - User registration data
    * @returns Promise with the API response
    */
-  registerUser: async (userData: UserRegistrationData): Promise<UserRegistrationResponse> => {
+  registerUser: async (
+    userData: UserRegistrationData
+  ): Promise<UserRegistrationResponse> => {
     try {
       const response = await axiosInstance.post(
         USER_REGISTRATION_ENDPOINTS.REGISTER_USER,
@@ -61,7 +63,9 @@ const userRegistrationApi = {
    * @param agentData - Agent registration data
    * @returns Promise with the API response
    */
-  registerAgent: async (agentData: Omit<UserRegistrationData, 'role' | 'agent_id' | 'employer_id'>): Promise<UserRegistrationResponse> => {
+  registerAgent: async (
+    agentData: Omit<UserRegistrationData, 'role' | 'agent_id' | 'employer_id'>
+  ): Promise<UserRegistrationResponse> => {
     return userRegistrationApi.registerUser({
       ...agentData,
       role: 'agent',
@@ -74,7 +78,12 @@ const userRegistrationApi = {
    * @param employeeData - Employee registration data
    * @returns Promise with the API response
    */
-  registerEmployee: async (employeeData: Omit<UserRegistrationData, 'role'> & { agent_id: number; employer_id: number }): Promise<UserRegistrationResponse> => {
+  registerEmployee: async (
+    employeeData: Omit<UserRegistrationData, 'role'> & {
+      agent_id: number;
+      employer_id: number;
+    }
+  ): Promise<UserRegistrationResponse> => {
     return userRegistrationApi.registerUser({
       ...employeeData,
       role: 'employee',
@@ -86,7 +95,12 @@ const userRegistrationApi = {
    * @param employerData - Employer registration data
    * @returns Promise with the API response
    */
-  registerEmployer: async (employerData: Omit<UserRegistrationData, 'role' | 'agent_id' | 'employer_id'>): Promise<UserRegistrationResponse> => {
+  registerEmployer: async (
+    employerData: Omit<
+      UserRegistrationData,
+      'role' | 'agent_id' | 'employer_id'
+    >
+  ): Promise<UserRegistrationResponse> => {
     return userRegistrationApi.registerUser({
       ...employerData,
       role: 'employer',
@@ -99,7 +113,9 @@ const userRegistrationApi = {
    * @param adminData - Admin registration data
    * @returns Promise with the API response
    */
-  registerAdmin: async (adminData: Omit<UserRegistrationData, 'role' | 'agent_id' | 'employer_id'>): Promise<UserRegistrationResponse> => {
+  registerAdmin: async (
+    adminData: Omit<UserRegistrationData, 'role' | 'agent_id' | 'employer_id'>
+  ): Promise<UserRegistrationResponse> => {
     return userRegistrationApi.registerUser({
       ...adminData,
       role: 'admin',

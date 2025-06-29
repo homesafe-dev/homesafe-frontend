@@ -53,7 +53,11 @@ const EmployerReview: React.FC<EmployerReviewProps> = ({
 
       if (response.status) {
         // Handle the new paginated response structure
-        const employerData = response.data?.data?.data || response.data?.data || response.data || [];
+        const employerData =
+          response.data?.data?.data ||
+          response.data?.data ||
+          response.data ||
+          [];
         console.log('Extracted employer data:', employerData); // Debug log
         setEmployers(employerData);
       } else {

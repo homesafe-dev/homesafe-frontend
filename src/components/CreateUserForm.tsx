@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
-import userRegistrationApi, { UserRegistrationData } from '../api/userRegistrationApi';
+import userRegistrationApi, {
+  UserRegistrationData,
+} from '../api/userRegistrationApi';
 import adminApi from '../api/adminApi';
 
 interface CreateUserFormProps {
@@ -22,14 +24,18 @@ interface User {
   email: string;
 }
 
-const CreateUserForm: React.FC<CreateUserFormProps> = ({ userType, title, redirectPath }) => {
+const CreateUserForm: React.FC<CreateUserFormProps> = ({
+  userType,
+  title,
+  redirectPath,
+}) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [occupations, setOccupations] = useState<Occupation[]>([]);
-  const [agents, setAgents] = useState<User[]>([]);
-  const [employers, setEmployers] = useState<User[]>([]);
+  const [agents] = useState<User[]>([]);
+  const [employers] = useState<User[]>([]);
 
   const [formData, setFormData] = useState({
     first_name: '',
@@ -62,19 +68,21 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({ userType, title, redire
     fetchData();
   }, [userType]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: name === 'salary' ? Number(value) : value,
     }));
   };
 
   const handleOccupationChange = (occupationId: number) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       occupations: prev.occupations.includes(occupationId)
-        ? prev.occupations.filter(id => id !== occupationId)
+        ? prev.occupations.filter((id) => id !== occupationId)
         : [...prev.occupations, occupationId],
     }));
   };
@@ -98,7 +106,10 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({ userType, title, redire
       return;
     }
 
-    if (userType === 'employee' && (!formData.agent_id || !formData.employer_id)) {
+    if (
+      userType === 'employee' &&
+      (!formData.agent_id || !formData.employer_id)
+    ) {
       setError('Please select both an agent and an employer for the employee');
       setIsLoading(false);
       return;
@@ -113,7 +124,12 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({ userType, title, redire
         password: formData.password,
         salary: formData.salary,
         role: userType,
-        occupations: (userType === 'admin' || userType === 'agent' || userType === 'employer') ? [1] : formData.occupations, // Default occupation for admin/agent/employer
+        occupations:
+          userType === 'admin' ||
+          userType === 'agent' ||
+          userType === 'employer'
+            ? [1]
+            : formData.occupations, // Default occupation for admin/agent/employer
       };
 
       if (userType === 'employee') {
@@ -270,7 +286,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({ userType, title, redire
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 >
                   <option value="">Select an agent</option>
-                  {agents.map(agent => (
+                  {agents.map((agent) => (
                     <option key={agent.id} value={agent.id}>
                       {agent.first_name} {agent.last_name}
                     </option>
@@ -290,7 +306,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({ userType, title, redire
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 >
                   <option value="">Select an employer</option>
-                  {employers.map(employer => (
+                  {employers.map((employer) => (
                     <option key={employer.id} value={employer.id}>
                       {employer.first_name} {employer.last_name}
                     </option>
@@ -306,7 +322,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({ userType, title, redire
                 Occupations *
               </label>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                {occupations.map(occupation => (
+                {occupations.map((occupation) => (
                   <label key={occupation.id} className="flex items-center">
                     <input
                       type="checkbox"

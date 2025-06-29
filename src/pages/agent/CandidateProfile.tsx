@@ -155,9 +155,13 @@ const CandidateProfile: React.FC = () => {
             phone={employee.phone}
             email={employee.email}
             profileImage={employee.avatar || ArtisanImg}
-            rating={employee.reviews.length > 0 ?
-              employee.reviews.reduce((sum: number, review: any) => sum + (review.rating || 0), 0) / employee.reviews.length :
-              4.0
+            rating={
+              employee.reviews.length > 0
+                ? employee.reviews.reduce(
+                    (sum: number, review: any) => sum + (review.rating || 0),
+                    0
+                  ) / employee.reviews.length
+                : 4.0
             }
           />
         </div>

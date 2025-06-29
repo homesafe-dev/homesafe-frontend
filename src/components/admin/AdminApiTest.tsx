@@ -17,7 +17,8 @@ const AdminApiTest: React.FC = () => {
       setResult(response);
       console.log('✅ API call successful:', response);
     } catch (err: any) {
-      const errorMessage = err.response?.data?.message || err.message || 'Unknown error';
+      const errorMessage =
+        err.response?.data?.message || err.message || 'Unknown error';
       setError(errorMessage);
       console.error('❌ API call failed:', err);
     } finally {
@@ -33,18 +34,21 @@ const AdminApiTest: React.FC = () => {
     try {
       console.log('Testing direct fetch...');
       const token = localStorage.getItem('auth_token');
-      
+
       if (!token) {
         throw new Error('No auth token found');
       }
 
-      const response = await fetch('https://homesafeng.xyz/api/users?role=admin&limit=10', {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await fetch(
+        'https://homesafeng.xyz/api/users?role=admin&limit=10',
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -64,7 +68,7 @@ const AdminApiTest: React.FC = () => {
   return (
     <div className="p-6 bg-white rounded-lg shadow">
       <h2 className="text-xl font-semibold mb-4">Admin API Test</h2>
-      
+
       <div className="space-y-4">
         <div className="flex gap-4">
           <button
@@ -74,7 +78,7 @@ const AdminApiTest: React.FC = () => {
           >
             {loading ? 'Testing...' : 'Test adminApi.getAdminList()'}
           </button>
-          
+
           <button
             onClick={testDirectFetch}
             disabled={loading}
@@ -94,26 +98,42 @@ const AdminApiTest: React.FC = () => {
           <div className="p-4 bg-green-100 border border-green-400 text-green-700 rounded">
             <strong>Success!</strong>
             <details className="mt-2">
-              <summary className="cursor-pointer font-medium">View Response</summary>
+              <summary className="cursor-pointer font-medium">
+                View Response
+              </summary>
               <pre className="mt-2 text-sm bg-white p-2 rounded border overflow-auto max-h-96">
                 {JSON.stringify(result, null, 2)}
               </pre>
             </details>
-            
+
             {result.data?.data && (
               <div className="mt-4">
-                <p><strong>Total Admins:</strong> {result.data.total || result.data.data.length}</p>
-                <p><strong>Current Page:</strong> {result.data.current_page || 1}</p>
-                <p><strong>Per Page:</strong> {result.data.per_page || result.data.data.length}</p>
-                
+                <p>
+                  <strong>Total Admins:</strong>{' '}
+                  {result.data.total || result.data.data.length}
+                </p>
+                <p>
+                  <strong>Current Page:</strong> {result.data.current_page || 1}
+                </p>
+                <p>
+                  <strong>Per Page:</strong>{' '}
+                  {result.data.per_page || result.data.data.length}
+                </p>
+
                 {result.data.data.length > 0 && (
                   <div className="mt-2">
                     <strong>First Admin:</strong>
                     <ul className="ml-4 text-sm">
-                      <li>Name: {result.data.data[0].first_name} {result.data.data[0].last_name}</li>
+                      <li>
+                        Name: {result.data.data[0].first_name}{' '}
+                        {result.data.data[0].last_name}
+                      </li>
                       <li>Email: {result.data.data[0].email}</li>
                       <li>Phone: {result.data.data[0].phone}</li>
-                      <li>Verified: {result.data.data[0].is_verified ? 'Yes' : 'No'}</li>
+                      <li>
+                        Verified:{' '}
+                        {result.data.data[0].is_verified ? 'Yes' : 'No'}
+                      </li>
                     </ul>
                   </div>
                 )}
@@ -127,7 +147,9 @@ const AdminApiTest: React.FC = () => {
         <h3 className="font-medium mb-2">Instructions:</h3>
         <ol className="text-sm space-y-1">
           <li>1. Make sure you're logged in as an admin</li>
-          <li>2. Click "Test adminApi.getAdminList()" to test the API method</li>
+          <li>
+            2. Click "Test adminApi.getAdminList()" to test the API method
+          </li>
           <li>3. Click "Test Direct Fetch" to test the raw API call</li>
           <li>4. Check the browser console for detailed logs</li>
         </ol>

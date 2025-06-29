@@ -37,7 +37,6 @@ const Header: React.FC<HeaderProps> = ({
   const [, setError] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-
   const handleLogout = () => {
     localStorage.removeItem('auth_token');
     navigate('/login');

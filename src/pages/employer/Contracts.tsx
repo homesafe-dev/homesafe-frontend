@@ -201,7 +201,9 @@ const ContractsPage: React.FC<ContractsPageProps> = ({
 
     // Safely access employee name from the top-level employee object
     const employeeName = proposal.employee
-      ? `${proposal.employee.first_name || ''} ${proposal.employee.last_name || ''}`.toLowerCase().trim()
+      ? `${proposal.employee.first_name || ''} ${proposal.employee.last_name || ''}`
+          .toLowerCase()
+          .trim()
       : '';
 
     // Safely access position and status

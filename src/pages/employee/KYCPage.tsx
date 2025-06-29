@@ -50,7 +50,7 @@ const EmployeeKYCPage: React.FC = () => {
   };
 
   const hideToast = () => {
-    setToast(prev => ({ ...prev, isVisible: false }));
+    setToast((prev) => ({ ...prev, isVisible: false }));
   };
 
   useEffect(() => {
@@ -108,7 +108,10 @@ const EmployeeKYCPage: React.FC = () => {
       const response = await userApi.submitKYC(kycPayload);
 
       if (response.status) {
-        showToast(response.message || 'KYC verification submitted successfully', 'success');
+        showToast(
+          response.message || 'KYC verification submitted successfully',
+          'success'
+        );
         setTimeout(() => {
           navigate('/employee/dashboard');
         }, 2000);
@@ -116,7 +119,11 @@ const EmployeeKYCPage: React.FC = () => {
         setError(response.message || 'Failed to submit NIN verification');
       }
     } catch (err: any) {
-      setError(err.response?.data?.message || err.message || 'Error submitting NIN verification');
+      setError(
+        err.response?.data?.message ||
+          err.message ||
+          'Error submitting NIN verification'
+      );
       console.error('Error submitting NIN verification:', err);
     } finally {
       setSubmitting(false);
@@ -135,8 +142,12 @@ const EmployeeKYCPage: React.FC = () => {
             <FaArrowLeft className="mr-2" />
             <span className="text-gray-800">Back</span>
           </button>
-          <h1 className="text-2xl font-semibold text-gray-800">KYC Verification</h1>
-          <p className="text-gray-600 mt-2">Please enter your NIN for verification</p>
+          <h1 className="text-2xl font-semibold text-gray-800">
+            KYC Verification
+          </h1>
+          <p className="text-gray-600 mt-2">
+            Please enter your NIN for verification
+          </p>
         </div>
       </div>
 
@@ -157,8 +168,13 @@ const EmployeeKYCPage: React.FC = () => {
                 <span className="text-green-600 font-semibold">✅</span>
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-gray-800">KYC Verification Complete</h2>
-                <p className="text-sm text-green-600">Your KYC verification has already been submitted and processed.</p>
+                <h2 className="text-lg font-semibold text-gray-800">
+                  KYC Verification Complete
+                </h2>
+                <p className="text-sm text-green-600">
+                  Your KYC verification has already been submitted and
+                  processed.
+                </p>
               </div>
             </div>
           </div>
@@ -169,16 +185,21 @@ const EmployeeKYCPage: React.FC = () => {
               Name
             </label>
             <div className="text-lg font-medium text-gray-800">
-              {userProfile ? `${userProfile.first_name} ${userProfile.last_name}` : 'Loading...'}
+              {userProfile
+                ? `${userProfile.first_name} ${userProfile.last_name}`
+                : 'Loading...'}
             </div>
           </div>
 
           {/* Status Message */}
           <div className="mb-8">
             <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-              <p className="text-green-800 font-medium">✅ KYC Verification Status: Completed</p>
+              <p className="text-green-800 font-medium">
+                ✅ KYC Verification Status: Completed
+              </p>
               <p className="text-green-600 text-sm mt-1">
-                Your identity has been successfully verified. You can now access all platform features.
+                Your identity has been successfully verified. You can now access
+                all platform features.
               </p>
             </div>
           </div>
@@ -202,8 +223,12 @@ const EmployeeKYCPage: React.FC = () => {
                 <span className="text-green-600 font-semibold">🆔</span>
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-gray-800">ID Verification</h2>
-                <p className="text-sm text-orange-600">Please use NIN number 1000000001 for verification</p>
+                <h2 className="text-lg font-semibold text-gray-800">
+                  ID Verification
+                </h2>
+                <p className="text-sm text-orange-600">
+                  Please use NIN number 1000000001 for verification
+                </p>
               </div>
             </div>
           </div>
@@ -214,13 +239,17 @@ const EmployeeKYCPage: React.FC = () => {
               Name
             </label>
             <div className="text-lg font-medium text-gray-800">
-              {userProfile ? `${userProfile.first_name} ${userProfile.last_name}` : 'Loading...'}
+              {userProfile
+                ? `${userProfile.first_name} ${userProfile.last_name}`
+                : 'Loading...'}
             </div>
           </div>
 
           {/* Instructional Text */}
           <div className="mb-8">
-            <p className="text-gray-600">Please enter your NIN for verification</p>
+            <p className="text-gray-600">
+              Please enter your NIN for verification
+            </p>
           </div>
 
           {/* Form Container with Border */}
@@ -228,7 +257,10 @@ const EmployeeKYCPage: React.FC = () => {
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* ID Type */}
               <div>
-                <label htmlFor="idType" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="idType"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   ID Type
                 </label>
                 <select
@@ -240,14 +272,19 @@ const EmployeeKYCPage: React.FC = () => {
                   required
                 >
                   <option value="">Select ID Type</option>
-                  <option value="nin">National Identification Number (NIN)</option>
+                  <option value="nin">
+                    National Identification Number (NIN)
+                  </option>
                   <option value="virtual_nin">Virtual NIN</option>
                 </select>
               </div>
 
               {/* NIN Number */}
               <div>
-                <label htmlFor="ninNumber" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="ninNumber"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   NIN Number
                 </label>
                 <input
@@ -261,8 +298,6 @@ const EmployeeKYCPage: React.FC = () => {
                   required
                 />
               </div>
-
-
             </form>
           </div>
 

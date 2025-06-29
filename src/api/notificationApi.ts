@@ -14,7 +14,9 @@ const notificationApi = {
    */
   getNotifications: async () => {
     try {
-      const response = await axiosInstance.get(NOTIFICATION_ENDPOINTS.GET_NOTIFICATIONS);
+      const response = await axiosInstance.get(
+        NOTIFICATION_ENDPOINTS.GET_NOTIFICATIONS
+      );
       return response.data;
     } catch (error) {
       console.error('Error fetching notifications:', error);
@@ -47,22 +49,22 @@ const notificationApi = {
     try {
       // First get all notifications
       const notificationsResponse = await notificationApi.getNotifications();
-      
+
       if (notificationsResponse.status && notificationsResponse.data) {
         // Mark each unread notification as read
         const unreadNotifications = notificationsResponse.data.filter(
           (notification: any) => !notification.read_at
         );
-        
-        const markAsReadPromises = unreadNotifications.map((notification: any) =>
-          notificationApi.markAsRead(notification.id)
+
+        const markAsReadPromises = unreadNotifications.map(
+          (notification: any) => notificationApi.markAsRead(notification.id)
         );
-        
+
         await Promise.all(markAsReadPromises);
-        
+
         return { status: true, message: 'All notifications marked as read' };
       }
-      
+
       return notificationsResponse;
     } catch (error) {
       console.error('Error marking all notifications as read:', error);

@@ -69,11 +69,11 @@ export default function EmployeesTab() {
       if (response.status) {
         alert('User blocked successfully');
         // Update the employee list to reflect the change
-        setEmployees(employees.map(emp =>
-          emp.id === userId
-            ? { ...emp, is_blocked: true }
-            : emp
-        ));
+        setEmployees(
+          employees.map((emp) =>
+            emp.id === userId ? { ...emp, is_blocked: true } : emp
+          )
+        );
       } else {
         alert(response.message || 'Failed to block user');
       }
@@ -89,11 +89,11 @@ export default function EmployeesTab() {
       if (response.status) {
         alert('User unblocked successfully');
         // Update the employee list to reflect the change
-        setEmployees(employees.map(emp =>
-          emp.id === userId
-            ? { ...emp, is_blocked: false }
-            : emp
-        ));
+        setEmployees(
+          employees.map((emp) =>
+            emp.id === userId ? { ...emp, is_blocked: false } : emp
+          )
+        );
       } else {
         alert(response.message || 'Failed to unblock user');
       }
@@ -254,10 +254,13 @@ export default function EmployeesTab() {
                         onClick: () => navigate(`/admin/user/${employee.id}`),
                       },
                       {
-                        label: employee.is_blocked ? 'Unblock User' : 'Block User',
-                        onClick: () => employee.is_blocked
-                          ? handleUnblockUser(employee.id)
-                          : handleBlockUser(employee.id),
+                        label: employee.is_blocked
+                          ? 'Unblock User'
+                          : 'Block User',
+                        onClick: () =>
+                          employee.is_blocked
+                            ? handleUnblockUser(employee.id)
+                            : handleBlockUser(employee.id),
                       },
                     ]}
                   />

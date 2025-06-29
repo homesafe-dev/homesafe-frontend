@@ -30,7 +30,7 @@ const adminApi = {
         params: {
           role: 'employer',
           page,
-          limit
+          limit,
         },
       });
 
@@ -53,7 +53,7 @@ const adminApi = {
         params: {
           role: 'employee',
           page,
-          limit
+          limit,
         },
       });
 
@@ -90,7 +90,7 @@ const adminApi = {
         params: {
           role: 'agent',
           page,
-          limit
+          limit,
         },
       });
 
@@ -113,7 +113,7 @@ const adminApi = {
         params: {
           role: 'admin',
           page,
-          limit
+          limit,
         },
       });
 
@@ -192,7 +192,7 @@ const adminApi = {
           params: {
             role: 'employee',
             page,
-            limit
+            limit,
           },
         }
       );
@@ -250,7 +250,7 @@ const adminApi = {
         params: {
           role: 'employee',
           page: 1,
-          limit: 100
+          limit: 100,
         },
       });
 
@@ -286,10 +286,12 @@ const adminApi = {
             status: employee.is_verified ? 'Verified' : 'Unverified', // Keep for backward compatibility
             average_rating: employee.average_rating,
             occupations: employee.occupations || [],
-            reviews: employee.reviews ? employee.reviews.map(review => ({
-              ...review,
-              date: review.created_at, // Map created_at to date for consistency
-            })) : [],
+            reviews: employee.reviews
+              ? employee.reviews.map((review) => ({
+                  ...review,
+                  date: review.created_at, // Map created_at to date for consistency
+                }))
+              : [],
             user_medicals: employee.user_medicals || [],
           };
 

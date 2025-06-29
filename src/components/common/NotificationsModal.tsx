@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { IoEyeOutline, IoNotificationsOutline, IoCheckmarkCircleOutline } from 'react-icons/io5';
+import {
+  IoEyeOutline,
+  IoNotificationsOutline,
+  IoCheckmarkCircleOutline,
+} from 'react-icons/io5';
 import { Link } from 'react-router-dom';
 import notificationApi from '../../api/notificationApi';
-import { NotificationItem, convertApiNotificationToUI } from '../../types/notification';
+import {
+  NotificationItem,
+  convertApiNotificationToUI,
+} from '../../types/notification';
 
 interface NotificationsModalProps {
   isOpen: boolean;
@@ -63,10 +70,12 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
       await notificationApi.markAllAsRead();
 
       // Update local state
-      setNotifications(notifications.map(notification => ({
-        ...notification,
-        read: true,
-      })));
+      setNotifications(
+        notifications.map((notification) => ({
+          ...notification,
+          read: true,
+        }))
+      );
     } catch (err) {
       console.error('Error marking all as read:', err);
       setError('Failed to mark notifications as read');
@@ -79,9 +88,13 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
       await notificationApi.markAsRead(id);
 
       // Update local state
-      setNotifications(notifications.map(notification =>
-        notification.id === id ? { ...notification, read: true } : notification
-      ));
+      setNotifications(
+        notifications.map((notification) =>
+          notification.id === id
+            ? { ...notification, read: true }
+            : notification
+        )
+      );
     } catch (err) {
       console.error('Error marking notification as read:', err);
     }
@@ -111,7 +124,7 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
           <button
             className="text-gray-600 hover:text-gray-800 flex items-center gap-2 disabled:opacity-50"
             onClick={handleMarkAllAsRead}
-            disabled={loading || notifications.every(n => n.read)}
+            disabled={loading || notifications.every((n) => n.read)}
           >
             <span className="text-sm">Mark all as Read</span>
             <IoCheckmarkCircleOutline size={20} />
@@ -125,14 +138,17 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
               Loading notifications...
             </div>
           ) : error ? (
-            <div className="px-6 py-8 text-center text-red-500">
-              {error}
-            </div>
+            <div className="px-6 py-8 text-center text-red-500">{error}</div>
           ) : notifications.length === 0 ? (
             <div className="px-6 py-12 text-center text-gray-500 min-h-[200px] flex flex-col justify-center">
-              <IoNotificationsOutline size={48} className="mx-auto mb-4 text-gray-300" />
+              <IoNotificationsOutline
+                size={48}
+                className="mx-auto mb-4 text-gray-300"
+              />
               <p className="text-base">No notifications yet</p>
-              <p className="text-sm text-gray-400 mt-2">You'll see your notifications here when they arrive</p>
+              <p className="text-sm text-gray-400 mt-2">
+                You'll see your notifications here when they arrive
+              </p>
             </div>
           ) : (
             notifications.slice(0, 5).map((notification) => (

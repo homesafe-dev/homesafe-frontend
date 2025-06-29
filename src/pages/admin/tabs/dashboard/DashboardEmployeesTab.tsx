@@ -33,13 +33,13 @@ interface Employee {
   };
 }
 
-interface EmployeeListResponse {
-  data: Employee[];
-  total: number;
-  per_page: number;
-  current_page: number;
-  last_page: number;
-}
+// interface EmployeeListResponse {
+//   data: Employee[];
+//   total: number;
+//   per_page: number;
+//   current_page: number;
+//   last_page: number;
+// }
 
 export default function DashboardEmployeesTab() {
   const navigate = useNavigate();
@@ -56,14 +56,19 @@ export default function DashboardEmployeesTab() {
   };
 
   // Helper function to safely format name
-  const formatName = (firstName: string | null, lastName: string | null): string => {
+  const formatName = (
+    firstName: string | null,
+    lastName: string | null
+  ): string => {
     const first = firstName || 'Unknown';
     const last = lastName || 'User';
     return `${first} ${last}`;
   };
 
   // Helper function to get employee status
-  const getEmployeeStatus = (employee: Employee): { text: string; style: string } => {
+  const getEmployeeStatus = (
+    employee: Employee
+  ): { text: string; style: string } => {
     if (employee.is_verified === 1) {
       return { text: 'Verified', style: 'bg-green-100 text-green-800' };
     } else {
@@ -85,11 +90,11 @@ export default function DashboardEmployeesTab() {
       if (response.status) {
         alert('User blocked successfully');
         // Update the employee list to reflect the change
-        setEmployees(employees.map(emp =>
-          emp.id === userId
-            ? { ...emp, is_blocked: true }
-            : emp
-        ));
+        setEmployees(
+          employees.map((emp) =>
+            emp.id === userId ? { ...emp, is_blocked: true } : emp
+          )
+        );
       } else {
         alert(response.message || 'Failed to block user');
       }
@@ -106,11 +111,11 @@ export default function DashboardEmployeesTab() {
       if (response.status) {
         alert('User unblocked successfully');
         // Update the employee list to reflect the change
-        setEmployees(employees.map(emp =>
-          emp.id === userId
-            ? { ...emp, is_blocked: false }
-            : emp
-        ));
+        setEmployees(
+          employees.map((emp) =>
+            emp.id === userId ? { ...emp, is_blocked: false } : emp
+          )
+        );
       } else {
         alert(response.message || 'Failed to unblock user');
       }
@@ -247,7 +252,10 @@ export default function DashboardEmployeesTab() {
                       <div className="w-8 h-8 rounded-full overflow-hidden relative">
                         <img
                           src={employee.avatar}
-                          alt={formatName(employee.first_name, employee.last_name)}
+                          alt={formatName(
+                            employee.first_name,
+                            employee.last_name
+                          )}
                           className="w-full h-full object-cover"
                         />
                         <div className="absolute w-3 h-3 bg-green-500 rounded-full -top-1 -right-1 border-2 border-white" />
@@ -283,7 +291,9 @@ export default function DashboardEmployeesTab() {
                   {(() => {
                     const status = getEmployeeStatus(employee);
                     return (
-                      <span className={`px-3 py-1 rounded-full text-[13px] ${status.style}`}>
+                      <span
+                        className={`px-3 py-1 rounded-full text-[13px] ${status.style}`}
+                      >
                         {status.text}
                       </span>
                     );
@@ -324,8 +334,18 @@ export default function DashboardEmployeesTab() {
                           className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer"
                           onClick={() => handleUnblockUser(employee.id)}
                         >
-                          <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
+                          <svg
+                            className="w-4 h-4 text-green-500"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"
+                            />
                           </svg>
                           <span className="text-green-600">Unblock User</span>
                         </div>
@@ -334,8 +354,18 @@ export default function DashboardEmployeesTab() {
                           className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer"
                           onClick={() => handleBlockUser(employee.id)}
                         >
-                          <svg className="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                          <svg
+                            className="w-4 h-4 text-red-500"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                            />
                           </svg>
                           <span className="text-red-600">Block User</span>
                         </div>

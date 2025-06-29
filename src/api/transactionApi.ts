@@ -8,7 +8,11 @@ const TRANSACTION_ENDPOINTS = {
 // Transaction filter types
 export interface TransactionFilters {
   limit?: number;
-  type?: 'wallet_deposit' | 'wallet_withdrawal' | 'salary_payment' | 'external_funding';
+  type?:
+    | 'wallet_deposit'
+    | 'wallet_withdrawal'
+    | 'salary_payment'
+    | 'external_funding';
   status?: 'successful' | 'pending' | 'failed';
   payment_method?: 'external_funding' | 'wallet_transfer' | 'bank_transfer';
   wallet_source?: 'top-up' | 'salary' | 'withdrawal';
@@ -63,10 +67,12 @@ const transactionApi = {
    * @param filters - Filter options for transactions
    * @returns Promise with the API response
    */
-  getAllTransactions: async (filters: TransactionFilters = {}): Promise<TransactionResponse> => {
+  getAllTransactions: async (
+    filters: TransactionFilters = {}
+  ): Promise<TransactionResponse> => {
     try {
       const params = new URLSearchParams();
-      
+
       // Add filters to params
       Object.entries(filters).forEach(([key, value]) => {
         if (value !== undefined && value !== null && value !== '') {
@@ -114,7 +120,10 @@ const transactionApi = {
   filterByPaymentMethod: async (
     payment_method: TransactionFilters['payment_method'],
     from_date?: string,
-    additionalFilters: Omit<TransactionFilters, 'payment_method' | 'from_date'> = {}
+    additionalFilters: Omit<
+      TransactionFilters,
+      'payment_method' | 'from_date'
+    > = {}
   ): Promise<TransactionResponse> => {
     return transactionApi.getAllTransactions({
       payment_method,
@@ -135,7 +144,10 @@ const transactionApi = {
     search: string,
     sort_by?: TransactionFilters['sort_by'],
     sort_order?: TransactionFilters['sort_order'],
-    additionalFilters: Omit<TransactionFilters, 'search' | 'sort_by' | 'sort_order'> = {}
+    additionalFilters: Omit<
+      TransactionFilters,
+      'search' | 'sort_by' | 'sort_order'
+    > = {}
   ): Promise<TransactionResponse> => {
     return transactionApi.getAllTransactions({
       search,
@@ -155,7 +167,10 @@ const transactionApi = {
   filterByWalletSource: async (
     wallet_source: TransactionFilters['wallet_source'],
     to_date?: string,
-    additionalFilters: Omit<TransactionFilters, 'wallet_source' | 'to_date'> = {}
+    additionalFilters: Omit<
+      TransactionFilters,
+      'wallet_source' | 'to_date'
+    > = {}
   ): Promise<TransactionResponse> => {
     return transactionApi.getAllTransactions({
       wallet_source,

@@ -67,7 +67,10 @@ const AdminSecurityPage: React.FC = () => {
       // Clear success message after 5 seconds
       setTimeout(() => setSuccess(null), 5000);
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to change password. Please try again.');
+      setError(
+        err.response?.data?.message ||
+          'Failed to change password. Please try again.'
+      );
     } finally {
       setLoading(false);
     }
@@ -133,7 +136,11 @@ const AdminSecurityPage: React.FC = () => {
                   onClick={() => setShowCurrentPassword(!showCurrentPassword)}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                 >
-                  {showCurrentPassword ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
+                  {showCurrentPassword ? (
+                    <FaEyeSlash size={16} />
+                  ) : (
+                    <FaEye size={16} />
+                  )}
                 </button>
               </div>
             </div>
@@ -161,7 +168,11 @@ const AdminSecurityPage: React.FC = () => {
                   onClick={() => setShowNewPassword(!showNewPassword)}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                 >
-                  {showNewPassword ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
+                  {showNewPassword ? (
+                    <FaEyeSlash size={16} />
+                  ) : (
+                    <FaEye size={16} />
+                  )}
                 </button>
               </div>
             </div>
@@ -189,7 +200,11 @@ const AdminSecurityPage: React.FC = () => {
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                 >
-                  {showConfirmPassword ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
+                  {showConfirmPassword ? (
+                    <FaEyeSlash size={16} />
+                  ) : (
+                    <FaEye size={16} />
+                  )}
                 </button>
               </div>
             </div>

@@ -202,15 +202,15 @@ export default function UserDetailsPage() {
                   user.approval_status === 'approved'
                     ? 'bg-green-100 text-green-800'
                     : user.approval_status === 'pending'
-                    ? 'bg-yellow-100 text-yellow-800'
-                    : 'bg-red-100 text-red-800'
+                      ? 'bg-yellow-100 text-yellow-800'
+                      : 'bg-red-100 text-red-800'
                 }`}
               >
                 {user.approval_status === 'approved'
                   ? 'Approved'
                   : user.approval_status === 'pending'
-                  ? 'Pending Approval'
-                  : 'Not Approved'}
+                    ? 'Pending Approval'
+                    : 'Not Approved'}
               </span>
             </div>
           )}

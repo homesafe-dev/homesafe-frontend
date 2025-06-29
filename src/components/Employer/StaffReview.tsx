@@ -29,7 +29,7 @@ const StaffReview: React.FC<StaffReviewProps> = ({
   reviews = [],
   employeeName = 'Staff Member',
   employeeId,
-  onReviewSubmitted
+  onReviewSubmitted,
 }) => {
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -45,7 +45,7 @@ const StaffReview: React.FC<StaffReviewProps> = ({
   };
 
   const hideToast = () => {
-    setToast(prev => ({ ...prev, isVisible: false }));
+    setToast((prev) => ({ ...prev, isVisible: false }));
   };
 
   const handleOpenReviewModal = () => {
@@ -72,7 +72,7 @@ const StaffReview: React.FC<StaffReviewProps> = ({
     try {
       const response = await userApi.createReview(employeeId, {
         rating,
-        comment
+        comment,
       });
 
       if (response.status) {
@@ -88,7 +88,9 @@ const StaffReview: React.FC<StaffReviewProps> = ({
       }
     } catch (error: any) {
       console.error('Error submitting review:', error);
-      const errorMessage = error.response?.data?.message || 'Failed to submit review. Please try again.';
+      const errorMessage =
+        error.response?.data?.message ||
+        'Failed to submit review. Please try again.';
       showToast(errorMessage, 'error');
     } finally {
       setIsSubmitting(false);
@@ -151,19 +153,20 @@ const StaffReview: React.FC<StaffReviewProps> = ({
       </div>
 
       {reviews.map((review) => (
-        <div key={review.id} className="bg-white border border-gray-200 rounded-lg p-4">
+        <div
+          key={review.id}
+          className="bg-white border border-gray-200 rounded-lg p-4"
+        >
           <div className="flex justify-between items-start mb-2">
             <div className="flex items-center space-x-2">
               <div className="flex">{renderStars(review.rating)}</div>
-              <span className="text-sm text-gray-600">
-                ({review.rating}/5)
-              </span>
+              <span className="text-sm text-gray-600">({review.rating}/5)</span>
             </div>
             <span className="text-sm text-gray-500">
               {new Date(review.created_at).toLocaleDateString('en-GB', {
                 day: 'numeric',
                 month: 'long',
-                year: 'numeric'
+                year: 'numeric',
               })}
             </span>
           </div>
@@ -182,7 +185,8 @@ const StaffReview: React.FC<StaffReviewProps> = ({
                 />
               )}
               <p className="text-xs text-gray-500">
-                Reviewed by {review.reviewer
+                Reviewed by{' '}
+                {review.reviewer
                   ? `${review.reviewer.first_name} ${review.reviewer.last_name}`
                   : review.reviewer_name}
               </p>

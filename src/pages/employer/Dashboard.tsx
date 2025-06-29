@@ -71,10 +71,13 @@ const DashboardContent: React.FC = () => {
 
           // Calculate total payroll by summing all employee salaries
           const employees = response.data.data || [];
-          const totalPayrollAmount = employees.reduce((sum: number, employee: any) => {
-            const salary = parseFloat(employee.salary || '0');
-            return sum + salary;
-          }, 0);
+          const totalPayrollAmount = employees.reduce(
+            (sum: number, employee: any) => {
+              const salary = parseFloat(employee.salary || '0');
+              return sum + salary;
+            },
+            0
+          );
           setTotalPayroll(totalPayrollAmount);
         }
       } catch (err) {
@@ -185,7 +188,6 @@ const DashboardContent: React.FC = () => {
             <Link to="/employer/wallet">
               <button
                 className="bg-white text-green-800 h-[42px] py-2 px-4 rounded flex items-center gap-2 text-sm hover:bg-gray-50 cursor-pointer relative z-20"
-
                 style={{ pointerEvents: 'auto' }}
               >
                 <BsCreditCard size={12} />
@@ -202,7 +204,9 @@ const DashboardContent: React.FC = () => {
               <BsPeople className="text-gray-500" size={24} />
             </div>
             <div>
-              <h3 className="text-[20px] font-normal text-[#24292E]">{totalStaff}</h3>
+              <h3 className="text-[20px] font-normal text-[#24292E]">
+                {totalStaff}
+              </h3>
               <p className="text-[#24292E] mt-2 text-[16px]">
                 Total Number of Staff
               </p>
@@ -238,7 +242,8 @@ const DashboardContent: React.FC = () => {
               <div className="mt-12">
                 <p className="text-gray-600 text-sm">Total Staff Payroll</p>
                 <h3 className="text-xl font-medium text-gray-800 mt-2">
-                  ₦{totalPayroll.toLocaleString(undefined, {
+                  ₦
+                  {totalPayroll.toLocaleString(undefined, {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                   })}

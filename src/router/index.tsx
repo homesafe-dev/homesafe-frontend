@@ -477,9 +477,7 @@ export const router = createBrowserRouter([
       },
       {
         path: ':contractId/contract',
-        element: protectEmployeeRoute(
-          <EmployeeContractView />
-        ),
+        element: protectEmployeeRoute(<EmployeeContractView />),
       },
     ],
   },

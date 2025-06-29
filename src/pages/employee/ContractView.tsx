@@ -62,7 +62,9 @@ interface ContractProposal {
 const ContractViewPage: React.FC = () => {
   const { contractId } = useParams<{ contractId: string }>();
   const navigate = useNavigate();
-  const [proposalData, setProposalData] = useState<ContractProposal | null>(null);
+  const [proposalData, setProposalData] = useState<ContractProposal | null>(
+    null
+  );
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [responding, setResponding] = useState<boolean>(false);
@@ -73,7 +75,9 @@ const ContractViewPage: React.FC = () => {
         setLoading(true);
 
         // Use the specific API endpoint for single proposal
-        const response = await contractApi.getSingleProposal(Number(contractId));
+        const response = await contractApi.getSingleProposal(
+          Number(contractId)
+        );
 
         if (response.status && response.data) {
           console.log('Single proposal response:', response.data);
@@ -108,7 +112,10 @@ const ContractViewPage: React.FC = () => {
       setResponding(true);
       setError(null);
 
-      const response = await contractApi.respondToProposal(proposalData.proposal.id, 'decline');
+      const response = await contractApi.respondToProposal(
+        proposalData.proposal.id,
+        'decline'
+      );
 
       if (response.status) {
         // Navigate back to contracts page or show success message
@@ -134,7 +141,10 @@ const ContractViewPage: React.FC = () => {
       setResponding(true);
       setError(null);
 
-      const response = await contractApi.respondToProposal(proposalData.proposal.id, 'accept');
+      const response = await contractApi.respondToProposal(
+        proposalData.proposal.id,
+        'accept'
+      );
 
       if (response.status) {
         // Navigate back to contracts page or show success message
@@ -171,7 +181,12 @@ const ContractViewPage: React.FC = () => {
     );
   }
 
-  if (!proposalData || !proposalData.contract || !proposalData.employer || !proposalData.employee) {
+  if (
+    !proposalData ||
+    !proposalData.contract ||
+    !proposalData.employer ||
+    !proposalData.employee
+  ) {
     return (
       <div className="text-center py-12 text-gray-500">
         No contract data found.
@@ -180,8 +195,12 @@ const ContractViewPage: React.FC = () => {
   }
 
   const { employer, employee, contract } = proposalData;
-  const employerName = employer ? `${employer.first_name || ''} ${employer.last_name || ''}`.trim() : 'Unknown Employer';
-  const employeeName = employee ? `${employee.first_name || ''} ${employee.last_name || ''}`.trim() : 'Unknown Employee';
+  const employerName = employer
+    ? `${employer.first_name || ''} ${employer.last_name || ''}`.trim()
+    : 'Unknown Employer';
+  const employeeName = employee
+    ? `${employee.first_name || ''} ${employee.last_name || ''}`.trim()
+    : 'Unknown Employee';
 
   // Format dates
   const formatDate = (dateString: string) => {
@@ -189,7 +208,7 @@ const ContractViewPage: React.FC = () => {
       return new Date(dateString).toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
-        day: 'numeric'
+        day: 'numeric',
       });
     } catch {
       return dateString;
@@ -215,62 +234,84 @@ const ContractViewPage: React.FC = () => {
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-2xl font-bold text-[#246D51] mb-2">homesafe</h1>
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">Employment Contract Form</h2>
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+              Employment Contract Form
+            </h2>
             <div className="w-full h-0.5 bg-[#246D51] mb-6"></div>
           </div>
 
           {/* Contract Content */}
           <div className="space-y-6 text-gray-700 leading-relaxed">
             <p>
-              Homesafe Technology, a provider of Artisans and {employerName} (Employer) of No 5
-              thompson street, Lagos State and {employeeName} (Employee) of 5 Allen close, Lagos
-              State. This Employment Agreement between:
+              Homesafe Technology, a provider of Artisans and {employerName}{' '}
+              (Employer) of No 5 thompson street, Lagos State and {employeeName}{' '}
+              (Employee) of 5 Allen close, Lagos State. This Employment
+              Agreement between:
             </p>
 
             <p>
-              The Employer and Employee collectively referred to as "the Parties" hereby agree as
-              follows:
+              The Employer and Employee collectively referred to as "the
+              Parties" hereby agree as follows:
             </p>
 
             <div className="space-y-4">
               <div>
-                <h3 className="font-semibold text-gray-800 mb-2">1. Position and Duties</h3>
+                <h3 className="font-semibold text-gray-800 mb-2">
+                  1. Position and Duties
+                </h3>
                 <p>
-                  The Employer hereby employs the Employee in the position of {contract?.position || 'Staff'}. The Employee
-                  agrees to perform all duties and responsibilities associated with the position, as
-                  assigned by the Employer from time to time, with diligence and professionalism.
+                  The Employer hereby employs the Employee in the position of{' '}
+                  {contract?.position || 'Staff'}. The Employee agrees to
+                  perform all duties and responsibilities associated with the
+                  position, as assigned by the Employer from time to time, with
+                  diligence and professionalism.
                 </p>
               </div>
 
               <div>
-                <h3 className="font-semibold text-gray-800 mb-2">2. Term of Employment</h3>
+                <h3 className="font-semibold text-gray-800 mb-2">
+                  2. Term of Employment
+                </h3>
                 <p>
-                  This Agreement shall commence on {contract?.start_date ? formatDate(contract.start_date) : 'TBD'} and shall continue until staff
-                  decides to resign or terminated.
+                  This Agreement shall commence on{' '}
+                  {contract?.start_date
+                    ? formatDate(contract.start_date)
+                    : 'TBD'}{' '}
+                  and shall continue until staff decides to resign or
+                  terminated.
                 </p>
               </div>
 
               <div>
                 <h3 className="font-semibold text-gray-800 mb-2">2b.</h3>
                 <p>
-                  The employment period for this role is {contract?.duration_months || 'TBD'} months and can be renewed or
-                  terminated depending on each party preference. This is done to allow flexibility.
+                  The employment period for this role is{' '}
+                  {contract?.duration_months || 'TBD'} months and can be renewed
+                  or terminated depending on each party preference. This is done
+                  to allow flexibility.
                 </p>
               </div>
 
               <div>
-                <h3 className="font-semibold text-gray-800 mb-2">3. Compensation and Benefits</h3>
+                <h3 className="font-semibold text-gray-800 mb-2">
+                  3. Compensation and Benefits
+                </h3>
                 <p>
-                  The Employee shall be paid a gross salary of [Amount] per [month/year], subject to
-                  applicable taxes and deductions.
+                  The Employee shall be paid a gross salary of [Amount] per
+                  [month/year], subject to applicable taxes and deductions.
                 </p>
               </div>
 
               <div>
-                <h3 className="font-semibold text-gray-800 mb-2">4. Working Hours</h3>
+                <h3 className="font-semibold text-gray-800 mb-2">
+                  4. Working Hours
+                </h3>
                 <p>
-                  The Employee shall work {contract?.working_hours_per_week || 'TBD'} hours per week, from 9:00 am to 4:00 pm,
-                  [{contract?.working_hours_schedule || 'Monday through Friday'}].
+                  The Employee shall work{' '}
+                  {contract?.working_hours_per_week || 'TBD'} hours per week,
+                  from 9:00 am to 4:00 pm, [
+                  {contract?.working_hours_schedule || 'Monday through Friday'}
+                  ].
                 </p>
               </div>
             </div>
@@ -282,31 +323,39 @@ const ContractViewPage: React.FC = () => {
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-2xl font-bold text-[#246D51] mb-2">homesafe</h1>
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">Employment Contract Form</h2>
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+              Employment Contract Form
+            </h2>
             <div className="w-full h-0.5 bg-[#246D51] mb-6"></div>
           </div>
 
           <div className="space-y-6 text-gray-700 leading-relaxed">
             <div>
-              <h3 className="font-semibold text-gray-800 mb-2">5. Termination of Employment</h3>
+              <h3 className="font-semibold text-gray-800 mb-2">
+                5. Termination of Employment
+              </h3>
               <p className="mb-4">
-                This Agreement may be terminated by either party with notice period written notice.
+                This Agreement may be terminated by either party with notice
+                period written notice.
               </p>
               <p>
-                The Employer may terminate this Agreement without notice for cause, including but
-                not limited to gross misconduct or breach of this Agreement.
+                The Employer may terminate this Agreement without notice for
+                cause, including but not limited to gross misconduct or breach
+                of this Agreement.
               </p>
             </div>
 
             <div>
-              <h3 className="font-semibold text-gray-800 mb-2">6. Amendments</h3>
+              <h3 className="font-semibold text-gray-800 mb-2">
+                6. Amendments
+              </h3>
               <p className="mb-4">
-                Any amendments to this Agreement must be made in writing and signed by both
-                Parties.
+                Any amendments to this Agreement must be made in writing and
+                signed by both Parties.
               </p>
               <p>
-                IN WITNESS WHEREOF, the Parties have executed this Agreement as of the date
-                first above written.
+                IN WITNESS WHEREOF, the Parties have executed this Agreement as
+                of the date first above written.
               </p>
             </div>
 
@@ -378,7 +427,10 @@ const ContractViewPage: React.FC = () => {
             // Show status message for declined or other statuses
             <div className="text-center py-4">
               <p className="text-gray-600">
-                Contract status: <span className="font-semibold capitalize">{proposalData.proposal.status}</span>
+                Contract status:{' '}
+                <span className="font-semibold capitalize">
+                  {proposalData.proposal.status}
+                </span>
               </p>
             </div>
           )}

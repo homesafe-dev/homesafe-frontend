@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { IoCheckmarkCircleOutline, IoArrowBack, IoNotificationsOutline } from 'react-icons/io5';
+import {
+  IoCheckmarkCircleOutline,
+  IoArrowBack,
+  IoNotificationsOutline,
+} from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 import notificationApi from '../../api/notificationApi';
-import { NotificationItem, convertApiNotificationToUI } from '../../types/notification';
+import {
+  NotificationItem,
+  convertApiNotificationToUI,
+} from '../../types/notification';
 
 const NotificationsPage: React.FC = () => {
   const navigate = useNavigate();
-  
+
   // State for notifications
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [loading, setLoading] = useState(false);
@@ -19,10 +26,10 @@ const NotificationsPage: React.FC = () => {
   const fetchNotifications = async () => {
     setLoading(true);
     setError(null);
-    
+
     try {
       const response = await notificationApi.getNotifications();
-      
+
       if (response.status && response.data) {
         const uiNotifications = response.data.map(convertApiNotificationToUI);
         setNotifications(uiNotifications);
@@ -41,7 +48,7 @@ const NotificationsPage: React.FC = () => {
   const handleMarkAllAsRead = async () => {
     try {
       await notificationApi.markAllAsRead();
-      
+
       // Update local state
       setNotifications(
         notifications.map((notification) => ({
@@ -59,11 +66,13 @@ const NotificationsPage: React.FC = () => {
   const handleNotificationClick = async (id: string) => {
     try {
       await notificationApi.markAsRead(id);
-      
+
       // Update local state
       setNotifications(
         notifications.map((notification) =>
-          notification.id === id ? { ...notification, read: true } : notification
+          notification.id === id
+            ? { ...notification, read: true }
+            : notification
         )
       );
     } catch (err) {
@@ -76,11 +85,11 @@ const NotificationsPage: React.FC = () => {
   };
 
   // Filter notifications based on active tab
-  const filteredNotifications = notifications.filter(notification => 
+  const filteredNotifications = notifications.filter((notification) =>
     activeTab === 'unread' ? !notification.read : notification.read
   );
 
-  const unreadCount = notifications.filter(n => !n.read).length;
+  const unreadCount = notifications.filter((n) => !n.read).length;
 
   // Fetch notifications on component mount
   useEffect(() => {
@@ -144,7 +153,7 @@ const NotificationsPage: React.FC = () => {
       ) : error ? (
         <div className="text-center py-8 text-red-500">
           {error}
-          <button 
+          <button
             onClick={fetchNotifications}
             className="block mx-auto mt-2 text-blue-600 hover:text-blue-800"
           >
@@ -153,7 +162,10 @@ const NotificationsPage: React.FC = () => {
         </div>
       ) : filteredNotifications.length === 0 ? (
         <div className="text-center py-8 text-gray-500">
-          <IoNotificationsOutline size={48} className="mx-auto mb-4 text-gray-300" />
+          <IoNotificationsOutline
+            size={48}
+            className="mx-auto mb-4 text-gray-300"
+          />
           <p>No {activeTab} notifications</p>
         </div>
       ) : (
@@ -179,7 +191,10 @@ const NotificationsPage: React.FC = () => {
                         className="w-6 h-6 rounded-full object-cover"
                       />
                     ) : (
-                      <IoNotificationsOutline size={20} className="text-gray-500" />
+                      <IoNotificationsOutline
+                        size={20}
+                        className="text-gray-500"
+                      />
                     )}
                   </div>
                   {!notification.read && (
@@ -191,20 +206,28 @@ const NotificationsPage: React.FC = () => {
                 <div className="flex-1">
                   <div className="flex justify-between items-start">
                     <div>
-                      <h3 className={`font-medium ${notification.read ? 'text-gray-600' : 'text-gray-800'}`}>
+                      <h3
+                        className={`font-medium ${notification.read ? 'text-gray-600' : 'text-gray-800'}`}
+                      >
                         {notification.title}
                       </h3>
                       <p className="text-gray-600 text-sm mt-1 line-clamp-2">
                         {notification.message}
                       </p>
                       <div className="flex items-center gap-2 mt-2">
-                        <span className={`px-2 py-1 text-xs rounded-full ${
-                          notification.type === 'system' ? 'bg-red-100 text-red-800' :
-                          notification.type === 'registration' ? 'bg-green-100 text-green-800' :
-                          notification.type === 'medical' ? 'bg-blue-100 text-blue-800' :
-                          notification.type === 'salary' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-gray-100 text-gray-800'
-                        }`}>
+                        <span
+                          className={`px-2 py-1 text-xs rounded-full ${
+                            notification.type === 'system'
+                              ? 'bg-red-100 text-red-800'
+                              : notification.type === 'registration'
+                                ? 'bg-green-100 text-green-800'
+                                : notification.type === 'medical'
+                                  ? 'bg-blue-100 text-blue-800'
+                                  : notification.type === 'salary'
+                                    ? 'bg-yellow-100 text-yellow-800'
+                                    : 'bg-gray-100 text-gray-800'
+                          }`}
+                        >
                           {notification.type}
                         </span>
                       </div>

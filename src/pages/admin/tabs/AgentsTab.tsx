@@ -24,8 +24,6 @@ interface Agent {
   is_blocked?: boolean;
 }
 
-
-
 export default function AgentsTab() {
   const navigate = useNavigate();
   const [agents, setAgents] = useState<Agent[]>([]);
@@ -39,11 +37,11 @@ export default function AgentsTab() {
       if (response.status) {
         alert('User blocked successfully');
         // Update the agent list to reflect the change
-        setAgents(agents.map(agent =>
-          agent.id === userId
-            ? { ...agent, is_blocked: true }
-            : agent
-        ));
+        setAgents(
+          agents.map((agent) =>
+            agent.id === userId ? { ...agent, is_blocked: true } : agent
+          )
+        );
       } else {
         alert(response.message || 'Failed to block user');
       }
@@ -59,11 +57,11 @@ export default function AgentsTab() {
       if (response.status) {
         alert('User unblocked successfully');
         // Update the agent list to reflect the change
-        setAgents(agents.map(agent =>
-          agent.id === userId
-            ? { ...agent, is_blocked: false }
-            : agent
-        ));
+        setAgents(
+          agents.map((agent) =>
+            agent.id === userId ? { ...agent, is_blocked: false } : agent
+          )
+        );
       } else {
         alert(response.message || 'Failed to unblock user');
       }
@@ -101,10 +99,6 @@ export default function AgentsTab() {
   useEffect(() => {
     fetchAgents();
   }, []);
-
-
-
-
 
   return (
     <div className="overflow-x-auto">
@@ -261,9 +255,10 @@ export default function AgentsTab() {
                       },
                       {
                         label: agent.is_blocked ? 'Unblock User' : 'Block User',
-                        onClick: () => agent.is_blocked
-                          ? handleUnblockUser(agent.id)
-                          : handleBlockUser(agent.id),
+                        onClick: () =>
+                          agent.is_blocked
+                            ? handleUnblockUser(agent.id)
+                            : handleBlockUser(agent.id),
                       },
                     ]}
                   />

@@ -12,12 +12,12 @@ interface PaystackPaymentModalProps {
 const PaystackPaymentModal: React.FC<PaystackPaymentModalProps> = ({
   isOpen,
   onClose,
-  onSuccess,
 }) => {
   const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
+  console.log('User:', user);
 
   if (!isOpen) return null;
 
@@ -56,9 +56,9 @@ const PaystackPaymentModal: React.FC<PaystackPaymentModalProps> = ({
     } catch (err: any) {
       console.error('Payment initialization error:', err);
       setError(
-        err.response?.data?.message || 
-        err.message || 
-        'Failed to initialize payment. Please try again.'
+        err.response?.data?.message ||
+          err.message ||
+          'Failed to initialize payment. Please try again.'
       );
     } finally {
       setLoading(false);
@@ -76,7 +76,10 @@ const PaystackPaymentModal: React.FC<PaystackPaymentModalProps> = ({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
-      <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={onClose}></div>
+      <div
+        className="absolute inset-0 bg-black/30 backdrop-blur-sm"
+        onClick={onClose}
+      ></div>
       <div className="bg-white rounded-lg w-full max-w-md relative z-10">
         <div className="p-6">
           <div className="flex justify-between items-center mb-6">
@@ -115,7 +118,8 @@ const PaystackPaymentModal: React.FC<PaystackPaymentModalProps> = ({
 
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
               <p className="text-blue-600 text-sm">
-                You will be redirected to Paystack to complete your payment securely.
+                You will be redirected to Paystack to complete your payment
+                securely.
               </p>
             </div>
           </div>

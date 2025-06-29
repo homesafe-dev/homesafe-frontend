@@ -208,10 +208,15 @@ const AdminCandidateProfile: React.FC = () => {
             phone={employee.phone}
             email={employee.email}
             profileImage={employee.avatar || ArtisanImg}
-            rating={employee.average_rating ? parseFloat(employee.average_rating) :
-              (employee.reviews && employee.reviews.length > 0 ?
-                employee.reviews.reduce((sum, review) => sum + review.rating, 0) / employee.reviews.length :
-                0)
+            rating={
+              employee.average_rating
+                ? parseFloat(employee.average_rating)
+                : employee.reviews && employee.reviews.length > 0
+                  ? employee.reviews.reduce(
+                      (sum, review) => sum + review.rating,
+                      0
+                    ) / employee.reviews.length
+                  : 0
             }
             showAdminActions={true}
             isBlocked={employee.is_blocked}
