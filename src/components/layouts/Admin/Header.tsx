@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { LuBellDot } from 'react-icons/lu';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
-import NotificationsModal, {
-  NotificationItem,
-} from '../../Employer/NotificationsModal';
+import NotificationsModal from '../../common/NotificationsModal';
 import ProfileIcon from '../../../assets/icons/profile.svg';
 import LogoutIcon from '../../../assets/icons/logout.svg';
 import SecurityIcon from '../../../assets/icons/security.svg';
@@ -24,17 +22,6 @@ interface UserProfile {
   [key: string]: any;
 }
 
-type NotificationType =
-  | 'registration'
-  | 'system'
-  | 'other'
-  | 'salary'
-  | 'medical';
-
-interface ExtendedNotificationItem extends Omit<NotificationItem, 'type'> {
-  type: NotificationType;
-}
-
 const Header: React.FC<HeaderProps> = ({
   userEmail: propUserEmail,
   userName: propUserName,
@@ -47,51 +34,7 @@ const Header: React.FC<HeaderProps> = ({
   const [, setLoading] = useState(true);
   // Error state is used in the fetchUserProfile function
   const [, setError] = useState<string | null>(null);
-  const [notifications, setNotifications] = useState<
-    ExtendedNotificationItem[]
-  >([
-    {
-      id: '1',
-      title: 'New Employer Registration',
-      message: 'A new employer has registered on the platform.',
-      date: 'Nov 24',
-      read: false,
-      type: 'registration',
-    },
-    {
-      id: '2',
-      title: 'New Agent Registration',
-      message: 'A new agent has registered on the platform.',
-      date: 'Nov 24',
-      read: false,
-      type: 'registration',
-    },
-    {
-      id: '3',
-      title: 'System Update',
-      message: 'The system will undergo maintenance tonight.',
-      date: 'Nov 24',
-      read: false,
-      type: 'system',
-    },
-  ]);
-
-  const handleMarkAllAsRead = () => {
-    setNotifications(
-      notifications.map((notification) => ({
-        ...notification,
-        read: true,
-      }))
-    );
-  };
-
-  const handleViewNotification = (id: string) => {
-    setNotifications(
-      notifications.map((notification) =>
-        notification.id === id ? { ...notification, read: true } : notification
-      )
-    );
-  };
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleLogout = () => {
     localStorage.removeItem('auth_token');
@@ -117,6 +60,23 @@ const Header: React.FC<HeaderProps> = ({
     };
 
     fetchUserProfile();
+  }, []);
+
+  // Handle click outside dropdown to close it
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, []);
 
   // Use profile data or fallback to props
@@ -147,7 +107,7 @@ const Header: React.FC<HeaderProps> = ({
             </button>
 
             {/* User profile */}
-            <div className="relative">
+            <div className="relative" ref={dropdownRef}>
               <button
                 className="flex items-center space-x-2"
                 onClick={() => setShowDropdown(!showDropdown)}
@@ -218,9 +178,7 @@ const Header: React.FC<HeaderProps> = ({
       <NotificationsModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        notifications={notifications}
-        onMarkAllAsRead={handleMarkAllAsRead}
-        onViewNotification={handleViewNotification}
+        portalType="admin"
       />
     </header>
   );

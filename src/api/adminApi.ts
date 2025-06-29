@@ -2,15 +2,18 @@ import axiosInstance from './axiosConfig';
 
 // Admin API endpoints
 const ADMIN_ENDPOINTS = {
-  EMPLOYER_LIST: '/employer-list',
-  EMPLOYEE_LIST: '/employee-list',
-  AGENT_LIST: '/agent-list', // This might need to be updated based on actual API
+  EMPLOYER_LIST: '/users',
+  EMPLOYEE_LIST: '/users',
+  AGENT_LIST: '/users',
   APPROVE_USER: '/admin/approve-user', // Endpoint to approve a user
   DECLINE_USER: '/admin/decline-user', // Endpoint to decline a user
   UNAPPROVED_USERS: '/admin/unapproved-users', // Endpoint to get unapproved users
-  TRACK_EMPLOYEES: '/employee-list', // Using employee-list for tracking employees
+  TRACK_EMPLOYEES: '/users', // Using unified users endpoint for tracking employees
   BLOCK_USER: '/admin/block-user', // Endpoint to block a user
+  UNBLOCK_USER: '/admin/unblock-user', // Endpoint to unblock a user
   SUSPEND_USER: '/admin/suspend-user', // Endpoint to suspend a user
+  OCCUPATIONS: '/occupations', // Endpoint to get occupations
+  TRANSACTIONS: '/admin/transactions', // Endpoint to get transactions
 };
 
 interface Employee {
@@ -40,7 +43,11 @@ const adminApi = {
   getEmployerList: async (page = 1, limit = 15) => {
     try {
       const response = await axiosInstance.get(ADMIN_ENDPOINTS.EMPLOYER_LIST, {
-        params: { page, limit },
+        params: {
+          role: 'employer',
+          page,
+          limit,
+        },
       });
 
       return response.data;
@@ -59,7 +66,11 @@ const adminApi = {
   getEmployeeList: async (page = 1, limit = 15) => {
     try {
       const response = await axiosInstance.get(ADMIN_ENDPOINTS.EMPLOYEE_LIST, {
-        params: { page, limit },
+        params: {
+          role: 'employee',
+          page,
+          limit,
+        },
       });
 
       return response.data;
@@ -70,20 +81,61 @@ const adminApi = {
   },
 
   /**
+   * Get occupations list from the API
+   * @returns Promise with the API response containing occupations data
+   */
+  getOccupations: async () => {
+    try {
+      const response = await axiosInstance.get(ADMIN_ENDPOINTS.OCCUPATIONS);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching occupations:', error);
+      throw error;
+    }
+  },
+
+  /**
    * Get all agents
    * @param page - Page number for pagination
    * @param limit - Number of items per page
    * @returns Promise with the API response
    */
-  getAgentList: async (page = 1, limit = 15) => {
+  getAgentList: async (page = 1, limit = 20) => {
     try {
       const response = await axiosInstance.get(ADMIN_ENDPOINTS.AGENT_LIST, {
-        params: { page, limit },
+        params: {
+          role: 'agent',
+          page,
+          limit,
+        },
       });
 
       return response.data;
     } catch (error) {
       console.error('Error fetching agent list:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Get all admins
+   * @param page - Page number for pagination
+   * @param limit - Number of items per page
+   * @returns Promise with the API response
+   */
+  getAdminList: async (page = 1, limit = 10) => {
+    try {
+      const response = await axiosInstance.get('/users', {
+        params: {
+          role: 'admin',
+          page,
+          limit,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching admin list:', error);
       throw error;
     }
   },
@@ -153,7 +205,11 @@ const adminApi = {
       const response = await axiosInstance.get(
         ADMIN_ENDPOINTS.TRACK_EMPLOYEES,
         {
-          params: { page, limit },
+          params: {
+            role: 'employee',
+            page,
+            limit,
+          },
         }
       );
 
@@ -176,7 +232,10 @@ const adminApi = {
             : 'No employer assigned',
           gender: employee.gender,
           phone: employee.phone,
-          status: employee.is_verified ? 'Verified' : 'Unverified',
+          is_verified: employee.is_verified,
+          approval_status: employee.approval_status,
+          is_blocked: employee.is_blocked,
+          status: employee.is_verified ? 'Verified' : 'Unverified', // Keep for backward compatibility
         }));
 
         return {
@@ -201,7 +260,11 @@ const adminApi = {
   getEmployeeById: async (employeeId: string | number) => {
     try {
       const response = await axiosInstance.get(ADMIN_ENDPOINTS.EMPLOYEE_LIST, {
-        params: { page: 1, limit: 100 },
+        params: {
+          role: 'employee',
+          page: 1,
+          limit: 100,
+        },
       });
 
       if (
@@ -228,7 +291,19 @@ const adminApi = {
               : 'No employer assigned',
             gender: employee.gender,
             phone: employee.phone,
-            status: employee.is_verified ? 'Verified' : 'Unverified',
+            is_verified: employee.is_verified,
+            approval_status: employee.approval_status,
+            is_blocked: employee.is_blocked,
+            status: employee.is_verified ? 'Verified' : 'Unverified', // Keep for backward compatibility
+            average_rating: employee.average_rating,
+            occupations: employee.occupations || [],
+            reviews: employee.reviews
+              ? employee.reviews.map((review) => ({
+                  ...review,
+                  date: review.created_at, // Map created_at to date for consistency
+                }))
+              : [],
+            user_medicals: employee.user_medicals || [],
           };
 
           return {
@@ -268,6 +343,23 @@ const adminApi = {
   },
 
   /**
+   * Unblock a user
+   * @param userId - The ID of the user to unblock
+   * @returns Promise with the API response
+   */
+  unblockUser: async (userId) => {
+    try {
+      const response = await axiosInstance.post(
+        `${ADMIN_ENDPOINTS.UNBLOCK_USER}/${userId}`
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error unblocking user:', error);
+      throw error;
+    }
+  },
+
+  /**
    * Suspend a user
    * @param userId - The ID of the user to suspend
    * @returns Promise with the API response
@@ -280,6 +372,33 @@ const adminApi = {
       return response.data;
     } catch (error) {
       console.error('Error suspending user:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Get all transactions with filters (Admin)
+   * @param filters - Filter options for transactions
+   * @returns Promise with the API response
+   */
+  getTransactions: async (filters = {}) => {
+    try {
+      const params = new URLSearchParams();
+
+      // Add filters to params
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== '') {
+          params.append(key, value.toString());
+        }
+      });
+
+      const response = await axiosInstance.get(
+        `${ADMIN_ENDPOINTS.TRANSACTIONS}?${params.toString()}`
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching transactions:', error);
       throw error;
     }
   },

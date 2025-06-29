@@ -19,6 +19,7 @@ interface Employee {
   address: string;
   status: number;
   is_verified: number;
+  is_blocked: boolean;
   salary: string;
   profile_description: string | null;
   created_at: string;
@@ -61,6 +62,46 @@ export default function EmployeesTab() {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const handleBlockUser = async (userId: number) => {
+    try {
+      const response = await adminApi.blockUser(userId);
+      if (response.status) {
+        alert('User blocked successfully');
+        // Update the employee list to reflect the change
+        setEmployees(
+          employees.map((emp) =>
+            emp.id === userId ? { ...emp, is_blocked: true } : emp
+          )
+        );
+      } else {
+        alert(response.message || 'Failed to block user');
+      }
+    } catch (error) {
+      console.error('Error blocking user:', error);
+      alert('An error occurred while blocking the user');
+    }
+  };
+
+  const handleUnblockUser = async (userId: number) => {
+    try {
+      const response = await adminApi.unblockUser(userId);
+      if (response.status) {
+        alert('User unblocked successfully');
+        // Update the employee list to reflect the change
+        setEmployees(
+          employees.map((emp) =>
+            emp.id === userId ? { ...emp, is_blocked: false } : emp
+          )
+        );
+      } else {
+        alert(response.message || 'Failed to unblock user');
+      }
+    } catch (error) {
+      console.error('Error unblocking user:', error);
+      alert('An error occurred while unblocking the user');
+    }
+  };
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -211,6 +252,15 @@ export default function EmployeesTab() {
                       {
                         label: 'View Details',
                         onClick: () => navigate(`/admin/user/${employee.id}`),
+                      },
+                      {
+                        label: employee.is_blocked
+                          ? 'Unblock User'
+                          : 'Block User',
+                        onClick: () =>
+                          employee.is_blocked
+                            ? handleUnblockUser(employee.id)
+                            : handleBlockUser(employee.id),
                       },
                     ]}
                   />

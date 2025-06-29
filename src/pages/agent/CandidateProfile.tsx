@@ -14,14 +14,37 @@ import CandidateReview from '../../components/Agent/CandidateReview';
 interface Employee {
   id: number;
   candidate: string;
-  title: string;
+  title: string | null;
   email: string;
-  avatar: string;
+  avatar: string | null;
   date: string;
   placement: string;
   gender: string;
   phone: string;
   status: string;
+  occupation: string;
+  employers: {
+    id: number;
+    name: string;
+  }[];
+  user_medicals: {
+    id: number;
+    medical_file: string;
+    date_uploaded: string;
+  }[];
+  reviews: {
+    id: number;
+    rating: number;
+    comment: string;
+    date: string;
+    reviewer: {
+      first_name: string;
+      last_name: string;
+      title?: string | null;
+      email: string;
+      avatar?: string;
+    };
+  }[];
 }
 
 const CandidateProfile: React.FC = () => {
@@ -127,12 +150,19 @@ const CandidateProfile: React.FC = () => {
             name={employee.candidate}
             location={employee.placement || 'Not assigned'}
             age={0} // Age not available in the API response
-            role={employee.title || 'Domestic Staff'}
-            bio={`${employee.candidate} is a ${employee.gender} domestic staff.`}
+            role={employee.occupation || employee.title || 'Domestic Staff'}
+            bio={`${employee.candidate} is a ${employee.gender} ${employee.occupation || 'domestic staff'} currently placed with ${employee.placement}.`}
             phone={employee.phone}
             email={employee.email}
             profileImage={employee.avatar || ArtisanImg}
-            rating={4.0} // Default rating
+            rating={
+              employee.reviews.length > 0
+                ? employee.reviews.reduce(
+                    (sum: number, review: any) => sum + (review.rating || 0),
+                    0
+                  ) / employee.reviews.length
+                : 4.0
+            }
           />
         </div>
 
@@ -170,7 +200,7 @@ const CandidateProfile: React.FC = () => {
           <div className="p-2">
             {activeTab === 'medical' && (
               <CandidateMedicHistory
-                reportDate="24th November"
+                medicalFiles={employee.user_medicals}
                 candidateName={employee.candidate}
               />
             )}
@@ -189,7 +219,8 @@ const CandidateProfile: React.FC = () => {
                 candidateId={employee.id}
                 candidateName={employee.candidate}
                 gender={employee.gender}
-                bio={`Meet ${employee.candidate}, a ${employee.gender} domestic staff${employee.title ? ` working as a ${employee.title}` : ''}. ${employee.candidate} is dedicated to providing quality service.`}
+                bio={`Meet ${employee.candidate}, a ${employee.gender} ${employee.occupation || 'domestic staff'}${employee.title ? ` working as a ${employee.title}` : ''}. Currently placed with ${employee.placement}. ${employee.candidate} is dedicated to providing quality service.`}
+                reviews={employee.reviews}
               />
             )}
           </div>

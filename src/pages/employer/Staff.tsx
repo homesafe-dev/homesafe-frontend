@@ -182,7 +182,7 @@ const StaffPage: React.FC = () => {
                   >
                     {employee.is_verified === 1 ? 'Verified' : 'Unverified'}
                   </span>
-                  <Link to={`/employer/staff/profile?id=${employee.id}`}>
+                  <Link to={`/employer/staff/profile/${employee.id}`}>
                     <button className="bg-green-200 text-green-800 px-3 py-1 rounded-md text-sm">
                       View Profile
                     </button>

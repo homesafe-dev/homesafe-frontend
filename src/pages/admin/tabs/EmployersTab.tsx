@@ -3,6 +3,7 @@ import { FaUser } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import adminApi from '../../../api/adminApi';
 import DropdownMenu from '../../../components/common/DropdownMenu';
+import CreateUserModal from '../../../components/CreateUserModal';
 
 interface Employer {
   id: number;
@@ -19,6 +20,7 @@ interface Employer {
   address: string;
   status: number;
   is_verified: number;
+  is_blocked: boolean;
   salary: string;
   profile_description: string | null;
   created_at: string;
@@ -30,16 +32,63 @@ export default function EmployersTab() {
   const [employers, setEmployers] = useState<Employer[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+
+  const handleBlockUser = async (userId: number) => {
+    try {
+      const response = await adminApi.blockUser(userId);
+      if (response.status) {
+        alert('User blocked successfully');
+        // Update the employer list to reflect the change
+        setEmployers(
+          employers.map((emp) =>
+            emp.id === userId ? { ...emp, is_blocked: true } : emp
+          )
+        );
+      } else {
+        alert(response.message || 'Failed to block user');
+      }
+    } catch (error) {
+      console.error('Error blocking user:', error);
+      alert('An error occurred while blocking the user');
+    }
+  };
+
+  const handleUnblockUser = async (userId: number) => {
+    try {
+      const response = await adminApi.unblockUser(userId);
+      if (response.status) {
+        alert('User unblocked successfully');
+        // Update the employer list to reflect the change
+        setEmployers(
+          employers.map((emp) =>
+            emp.id === userId ? { ...emp, is_blocked: false } : emp
+          )
+        );
+      } else {
+        alert(response.message || 'Failed to unblock user');
+      }
+    } catch (error) {
+      console.error('Error unblocking user:', error);
+      alert('An error occurred while unblocking the user');
+    }
+  };
 
   useEffect(() => {
     const fetchEmployers = async () => {
       try {
         setIsLoading(true);
+        setError(null);
+
         // Use a larger limit to ensure we get all employers
         const response = await adminApi.getEmployerList(1, 100);
+        console.log('Employers API Response:', response); // Debug log
+
         if (response.status) {
-          // The employers array is in response.data.data
-          setEmployers(response.data.data || []);
+          // Handle the new paginated response structure
+          const employerData = response.data?.data || response.data || [];
+          console.log('Extracted employer data:', employerData); // Debug log
+          setEmployers(employerData);
         } else {
           setError(response.message || 'Failed to fetch employers');
         }
@@ -56,6 +105,10 @@ export default function EmployersTab() {
 
   return (
     <div className="overflow-x-auto">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-semibold">All Employers</h2>
+      </div>
+
       <table className="w-full">
         <thead className="bg-[#C8EDDF80] h-[56px] text-left">
           <tr>
@@ -76,6 +129,9 @@ export default function EmployersTab() {
             </th>
             <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
               Status
+            </th>
+            <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
+              Blocked Status
             </th>
             <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal"></th>
           </tr>
@@ -103,19 +159,22 @@ export default function EmployersTab() {
                 <td className="px-6 py-4">
                   <div className="h-8 bg-gray-200 rounded"></div>
                 </td>
+                <td className="px-6 py-4">
+                  <div className="h-8 bg-gray-200 rounded"></div>
+                </td>
               </tr>
             ))
           ) : error ? (
             // Error state
             <tr>
-              <td colSpan={7} className="px-6 py-4 text-center text-red-500">
+              <td colSpan={8} className="px-6 py-4 text-center text-red-500">
                 {error}
               </td>
             </tr>
           ) : employers.length === 0 ? (
             // Empty state
             <tr>
-              <td colSpan={7} className="px-6 py-4 text-center text-gray-500">
+              <td colSpan={8} className="px-6 py-4 text-center text-gray-500">
                 No employers found
               </td>
             </tr>
@@ -171,12 +230,32 @@ export default function EmployersTab() {
                     {employer.is_verified === 0 ? 'Unverified' : 'Verified'}
                   </span>
                 </td>
+                <td className="px-6 py-4">
+                  <span
+                    className={`px-3 py-1 rounded-full text-[13px] ${
+                      employer.is_blocked
+                        ? 'bg-red-100 text-red-800'
+                        : 'bg-green-100 text-green-800'
+                    }`}
+                  >
+                    {employer.is_blocked ? 'Blocked' : 'Active'}
+                  </span>
+                </td>
                 <td className="px-6 py-4 text-right">
                   <DropdownMenu
                     options={[
                       {
                         label: 'View Details',
                         onClick: () => navigate(`/admin/user/${employer.id}`),
+                      },
+                      {
+                        label: employer.is_blocked
+                          ? 'Unblock User'
+                          : 'Block User',
+                        onClick: () =>
+                          employer.is_blocked
+                            ? handleUnblockUser(employer.id)
+                            : handleBlockUser(employer.id),
                       },
                     ]}
                   />
@@ -186,6 +265,16 @@ export default function EmployersTab() {
           )}
         </tbody>
       </table>
+
+      <CreateUserModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        userType="employer"
+        onSuccess={() => {
+          // Refresh the employers list
+          window.location.reload();
+        }}
+      />
     </div>
   );
 }

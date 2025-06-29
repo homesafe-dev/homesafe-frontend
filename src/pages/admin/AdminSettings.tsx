@@ -2,16 +2,39 @@ import React, { useState, useEffect } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
+import CreateUserModal from '../../components/CreateUserModal';
+import adminApi from '../../api/adminApi';
+import adminSettingsApi from '../../api/adminSettingsApi';
+import { format } from 'date-fns';
 
 interface Admin {
   id: number;
-  full_name: string;
+  first_name: string;
+  last_name: string;
+  title?: string;
+  username?: string;
   email: string;
-  phone_number: string;
-  date_of_birth: string;
-  gender: string;
-  status: string;
+  email_verified_at?: string;
   avatar?: string;
+  gender: string;
+  dob?: string;
+  phone: string;
+  address?: string;
+  status: number;
+  otp_code?: string;
+  otp_expires_at?: string;
+  otp_purpose?: string;
+  is_verified: number;
+  salary?: string;
+  profile_description?: string;
+  created_by?: number;
+  approval_status: string;
+  is_blocked: boolean;
+  fcm_token?: string;
+  password_changed_at?: string;
+  created_at: string;
+  updated_at: string;
+  deleted_at?: string;
 }
 
 const AdminSettings: React.FC = () => {
@@ -22,6 +45,7 @@ const AdminSettings: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [showOptionsFor, setShowOptionsFor] = useState<number | null>(null);
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
   useEffect(() => {
     fetchAdmins();
@@ -30,31 +54,35 @@ const AdminSettings: React.FC = () => {
   const fetchAdmins = async () => {
     try {
       setIsLoading(true);
-      // In a real app, this would be an API call
-      // const response = await adminSettingsApi.getAdmins(currentPage);
+      setError(null);
 
-      // For now, using mock data
-      await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate API delay
+      // Call the real API
+      const response = await adminApi.getAdminList(currentPage, 10);
 
-      const mockAdmins: Admin[] = Array(4)
-        .fill(null)
-        .map((_, index) => ({
-          id: index + 1,
-          full_name: 'Naomi Abiodun John',
-          email: 'name@email.com',
-          phone_number: '07012345678',
-          date_of_birth: '24th Dec 1990',
-          gender: 'Female',
-          status: 'Verified',
-        }));
+      if (response.status && response.data) {
+        // Handle nested data structure
+        const adminsData = response.data.data || response.data;
+        setAdmins(Array.isArray(adminsData) ? adminsData : []);
 
-      setAdmins(mockAdmins);
-      setTotalPages(3); // Mock total pages
-      setIsLoading(false);
-    } catch (err) {
-      setError('Failed to fetch admins');
-      setIsLoading(false);
+        // Set pagination info
+        if (response.data.last_page) {
+          setTotalPages(response.data.last_page);
+        } else {
+          setTotalPages(1);
+        }
+      } else {
+        setAdmins([]);
+        setTotalPages(1);
+      }
+    } catch (err: any) {
+      const errorMessage =
+        err.response?.data?.message || 'Failed to fetch admins';
+      setError(errorMessage);
+      setAdmins([]);
+      setTotalPages(1);
       console.error('Error fetching admins:', err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -80,14 +108,19 @@ const AdminSettings: React.FC = () => {
 
   const handleRemoveAdmin = async (adminId: number) => {
     try {
-      // In a real app, this would be an API call
-      // await adminSettingsApi.deleteAdmin(adminId);
+      // Call the real API to delete the admin
+      await adminSettingsApi.deleteAdmin(adminId);
 
-      // For now, just update the UI
+      // Update the UI by removing the admin from the list
       setAdmins(admins.filter((admin) => admin.id !== adminId));
       setShowOptionsFor(null);
-    } catch (err) {
-      setError('Failed to remove admin');
+
+      // Show success message (optional)
+      console.log('Admin removed successfully');
+    } catch (err: any) {
+      const errorMessage =
+        err.response?.data?.message || 'Failed to remove admin';
+      setError(errorMessage);
       console.error('Error removing admin:', err);
     }
   };
@@ -115,7 +148,7 @@ const AdminSettings: React.FC = () => {
             View All
           </button>
           <button
-            onClick={() => navigate('/admin/create-admin')}
+            onClick={() => setShowCreateModal(true)}
             className="px-4 py-2 bg-[#A5EA91] text-[#174B35] rounded-md flex items-center"
           >
             <span className="mr-1">+</span> Create New Admin
@@ -159,24 +192,40 @@ const AdminSettings: React.FC = () => {
                       {admin.avatar ? (
                         <img
                           src={admin.avatar}
-                          alt={admin.full_name}
+                          alt={`${admin.first_name} ${admin.last_name}`}
                           className="w-full h-full object-cover"
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-gray-500">
-                          {admin.full_name.charAt(0)}
+                          {admin.first_name?.charAt(0) || 'A'}
                         </div>
                       )}
                     </div>
-                    {admin.full_name}
+                    {`${admin.first_name} ${admin.last_name}`}
                   </td>
                   <td className="py-3 px-4">{admin.email}</td>
-                  <td className="py-3 px-4">{admin.phone_number}</td>
-                  <td className="py-3 px-4">{admin.date_of_birth}</td>
-                  <td className="py-3 px-4">{admin.gender}</td>
+                  <td className="py-3 px-4">{admin.phone}</td>
                   <td className="py-3 px-4">
-                    <span className="px-3 py-1 rounded-full text-xs bg-green-100 text-green-700">
-                      {admin.status}
+                    {admin.dob
+                      ? (() => {
+                          try {
+                            return format(new Date(admin.dob), 'MMM dd, yyyy');
+                          } catch {
+                            return admin.dob;
+                          }
+                        })()
+                      : 'N/A'}
+                  </td>
+                  <td className="py-3 px-4 capitalize">{admin.gender}</td>
+                  <td className="py-3 px-4">
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs ${
+                        admin.is_verified
+                          ? 'bg-green-100 text-green-700'
+                          : 'bg-yellow-100 text-yellow-700'
+                      }`}
+                    >
+                      {admin.is_verified ? 'Verified' : 'Unverified'}
                     </span>
                   </td>
                   <td className="py-3 px-4 relative">
@@ -220,9 +269,9 @@ const AdminSettings: React.FC = () => {
             </svg>
           </div>
           <h3 className="text-lg font-medium text-gray-800 mb-1">
-            Nothing Here
+            No Admins Found
           </h3>
-          <p className="text-gray-500">You don't have a review yet</p>
+          <p className="text-gray-500">No admin users have been created yet</p>
         </div>
       )}
 
@@ -260,6 +309,15 @@ const AdminSettings: React.FC = () => {
           </button>
         </div>
       )}
+      <CreateUserModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        userType="admin"
+        onSuccess={() => {
+          // Refresh the admins list
+          fetchAdmins();
+        }}
+      />
     </div>
   );
 };

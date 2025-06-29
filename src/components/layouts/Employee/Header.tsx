@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { LuBellDot } from 'react-icons/lu';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
-import NotificationsModal, {
-  NotificationItem,
-} from '../../Employer/NotificationsModal';
+import NotificationsModal from '../../common/NotificationsModal';
 import ProfileIcon from '../../../assets/icons/profile.svg';
 import LogoutIcon from '../../../assets/icons/logout.svg';
 import KycIcon from '../../../assets/icons/kyc.svg';
@@ -34,52 +32,7 @@ const Header: React.FC<HeaderProps> = () => {
   const [, setLoading] = useState(true);
   // Error state is used in the fetchUserProfile function
   const [, setError] = useState<string | null>(null);
-  const [notifications, setNotifications] = useState<NotificationItem[]>([
-    {
-      id: '1',
-      title: 'Medical Check-up for Cali Foster',
-      message:
-        "It's time for one of your staff medical checkup. A reminder will also be sent to your staff.",
-      date: 'Nov 24',
-      read: false,
-      type: 'medical',
-    },
-    {
-      id: '2',
-      title: 'Salary Advance',
-      message:
-        'A staff of yours has requested for Salary advance, click to view who it is.',
-      date: 'Nov 24',
-      read: false,
-      type: 'salary',
-    },
-    {
-      id: '3',
-      title: 'Medical Check-up for Cali Foster',
-      message:
-        "It's time for one of your staff medical checkup. A reminder will also be sent to your staff.",
-      date: 'Nov 24',
-      read: false,
-      type: 'medical',
-    },
-  ]);
-
-  const handleMarkAllAsRead = () => {
-    setNotifications(
-      notifications.map((notification) => ({
-        ...notification,
-        read: true,
-      }))
-    );
-  };
-
-  const handleViewNotification = (id: string) => {
-    setNotifications(
-      notifications.map((notification) =>
-        notification.id === id ? { ...notification, read: true } : notification
-      )
-    );
-  };
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -101,6 +54,23 @@ const Header: React.FC<HeaderProps> = () => {
     };
 
     fetchUserProfile();
+  }, []);
+
+  // Handle click outside dropdown to close it
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, []);
 
   const handleLogout = () => {
@@ -138,7 +108,7 @@ const Header: React.FC<HeaderProps> = () => {
             </button>
 
             {/* User profile */}
-            <div className="relative">
+            <div className="relative" ref={dropdownRef}>
               <button
                 className="flex items-center space-x-2"
                 onClick={() => setShowDropdown(!showDropdown)}
@@ -221,9 +191,7 @@ const Header: React.FC<HeaderProps> = () => {
       <NotificationsModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        notifications={notifications}
-        onMarkAllAsRead={handleMarkAllAsRead}
-        onViewNotification={handleViewNotification}
+        portalType="employee"
       />
     </header>
   );
