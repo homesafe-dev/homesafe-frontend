@@ -22,6 +22,33 @@ interface Employee {
   gender: string;
   phone: string;
   status: string;
+  is_blocked?: boolean;
+  average_rating?: string | null;
+  occupations?: {
+    id: number;
+    name: string;
+    created_at: string;
+    updated_at: string;
+    pivot: {
+      user_id: number;
+      occupation_id: number;
+    };
+  }[];
+  reviews?: {
+    id: number;
+    reviewer_id: number;
+    user_id: number;
+    rating: number;
+    comment: string;
+    created_at: string;
+    updated_at: string;
+    date: string; // Added by transformation
+  }[];
+  user_medicals?: {
+    id: number;
+    medical_file: string;
+    date_uploaded: string;
+  }[];
 }
 
 const AdminCandidateProfile: React.FC = () => {
@@ -89,13 +116,38 @@ const AdminCandidateProfile: React.FC = () => {
       const response = await adminApi.blockUser(employee.id);
       if (response.status) {
         alert('User blocked successfully');
-        // Optionally navigate back or refresh data
+        // Refresh the employee data to reflect the change
+        const updatedResponse = await adminApi.getEmployeeById(employee.id);
+        if (updatedResponse.status) {
+          setEmployee(updatedResponse.data);
+        }
       } else {
         alert(response.message || 'Failed to block user');
       }
     } catch (error) {
       console.error('Error blocking user:', error);
       alert('An error occurred while blocking the user');
+    }
+  };
+
+  const handleUnblockUser = async () => {
+    if (!employee) return;
+
+    try {
+      const response = await adminApi.unblockUser(employee.id);
+      if (response.status) {
+        alert('User unblocked successfully');
+        // Refresh the employee data to reflect the change
+        const updatedResponse = await adminApi.getEmployeeById(employee.id);
+        if (updatedResponse.status) {
+          setEmployee(updatedResponse.data);
+        }
+      } else {
+        alert(response.message || 'Failed to unblock user');
+      }
+    } catch (error) {
+      console.error('Error unblocking user:', error);
+      alert('An error occurred while unblocking the user');
     }
   };
 
@@ -156,9 +208,20 @@ const AdminCandidateProfile: React.FC = () => {
             phone={employee.phone}
             email={employee.email}
             profileImage={employee.avatar || ArtisanImg}
-            rating={4.0} // Default rating
+            rating={
+              employee.average_rating
+                ? parseFloat(employee.average_rating)
+                : employee.reviews && employee.reviews.length > 0
+                  ? employee.reviews.reduce(
+                      (sum, review) => sum + review.rating,
+                      0
+                    ) / employee.reviews.length
+                  : 0
+            }
             showAdminActions={true}
+            isBlocked={employee.is_blocked}
             onBlockUser={handleBlockUser}
+            onUnblockUser={handleUnblockUser}
             onSuspendUser={handleSuspendUser}
           />
         </div>
@@ -197,7 +260,7 @@ const AdminCandidateProfile: React.FC = () => {
           <div className="p-2">
             {activeTab === 'medical' && (
               <CandidateMedicHistory
-                reportDate="24th November"
+                medicalFiles={employee.user_medicals}
                 candidateName={employee.candidate}
               />
             )}
@@ -217,6 +280,7 @@ const AdminCandidateProfile: React.FC = () => {
                 candidateName={employee.candidate}
                 gender={employee.gender}
                 bio={`Meet ${employee.candidate}, a ${employee.gender} domestic staff${employee.title ? ` working as a ${employee.title}` : ''}. ${employee.candidate} is dedicated to providing quality service.`}
+                reviews={employee.reviews}
               />
             )}
           </div>

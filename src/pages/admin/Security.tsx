@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import userApi from '../../api/userApi';
 
 interface PasswordFormData {
   currentPassword: string;
@@ -13,6 +15,9 @@ const AdminSecurityPage: React.FC = () => {
     newPassword: '',
     confirmPassword: '',
   });
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -23,6 +28,8 @@ const AdminSecurityPage: React.FC = () => {
       ...passwordFormData,
       [name]: value,
     });
+    // Clear error when user starts typing
+    if (error) setError(null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -41,11 +48,12 @@ const AdminSecurityPage: React.FC = () => {
       return;
     }
 
-    // Here you would normally call an API to change the password
     setLoading(true);
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await userApi.changePassword({
+        old_password: passwordFormData.currentPassword,
+        new_password: passwordFormData.newPassword,
+      });
 
       // Reset form and show success message
       setPasswordFormData({
@@ -55,9 +63,14 @@ const AdminSecurityPage: React.FC = () => {
       });
       setShowPasswordForm(false);
       setSuccess('Password changed successfully');
-    } catch (err) {
-      setError('Failed to change password. Please try again.');
-      console.error('Error changing password:', err);
+
+      // Clear success message after 5 seconds
+      setTimeout(() => setSuccess(null), 5000);
+    } catch (err: any) {
+      setError(
+        err.response?.data?.message ||
+          'Failed to change password. Please try again.'
+      );
     } finally {
       setLoading(false);
     }
@@ -107,15 +120,29 @@ const AdminSecurityPage: React.FC = () => {
               >
                 Current Password
               </label>
-              <input
-                type="password"
-                id="currentPassword"
-                name="currentPassword"
-                value={passwordFormData.currentPassword}
-                onChange={handleInputChange}
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500"
-              />
+              <div className="relative">
+                <input
+                  type={showCurrentPassword ? 'text' : 'password'}
+                  id="currentPassword"
+                  name="currentPassword"
+                  value={passwordFormData.currentPassword}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500"
+                  placeholder="Enter current password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  {showCurrentPassword ? (
+                    <FaEyeSlash size={16} />
+                  ) : (
+                    <FaEye size={16} />
+                  )}
+                </button>
+              </div>
             </div>
 
             <div className="mb-4">
@@ -125,15 +152,29 @@ const AdminSecurityPage: React.FC = () => {
               >
                 New Password
               </label>
-              <input
-                type="password"
-                id="newPassword"
-                name="newPassword"
-                value={passwordFormData.newPassword}
-                onChange={handleInputChange}
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500"
-              />
+              <div className="relative">
+                <input
+                  type={showNewPassword ? 'text' : 'password'}
+                  id="newPassword"
+                  name="newPassword"
+                  value={passwordFormData.newPassword}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500"
+                  placeholder="Enter new password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowNewPassword(!showNewPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  {showNewPassword ? (
+                    <FaEyeSlash size={16} />
+                  ) : (
+                    <FaEye size={16} />
+                  )}
+                </button>
+              </div>
             </div>
 
             <div className="mb-4">
@@ -143,15 +184,29 @@ const AdminSecurityPage: React.FC = () => {
               >
                 Confirm New Password
               </label>
-              <input
-                type="password"
-                id="confirmPassword"
-                name="confirmPassword"
-                value={passwordFormData.confirmPassword}
-                onChange={handleInputChange}
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500"
-              />
+              <div className="relative">
+                <input
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  value={passwordFormData.confirmPassword}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500"
+                  placeholder="Confirm new password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  {showConfirmPassword ? (
+                    <FaEyeSlash size={16} />
+                  ) : (
+                    <FaEye size={16} />
+                  )}
+                </button>
+              </div>
             </div>
 
             <div className="flex space-x-4">
@@ -164,6 +219,7 @@ const AdminSecurityPage: React.FC = () => {
                     newPassword: '',
                     confirmPassword: '',
                   });
+                  setError(null);
                 }}
                 className="px-4 py-2 border border-gray-300 rounded-md text-sm hover:bg-gray-50"
               >

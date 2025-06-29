@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FiSearch } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
 import ContractImg from '../../assets/images/Contract.png';
 import TerminateStaffModal from '../../components/Employer/TerminateStaffModal';
 import contractApi from '../../api/contractApi';
@@ -60,6 +61,7 @@ interface Contract {
 interface ContractProposal {
   contract: Contract;
   proposal: Proposal;
+  employer: any;
 }
 
 interface ContractCardProps {
@@ -69,6 +71,7 @@ interface ContractCardProps {
 
 const ContractCard: React.FC<ContractCardProps> = ({ proposal, imageUrl }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   // Add safety checks for the proposal structure
   if (!proposal || !proposal.contract || !proposal.proposal) {
@@ -76,11 +79,11 @@ const ContractCard: React.FC<ContractCardProps> = ({ proposal, imageUrl }) => {
     return null;
   }
 
-  const { contract, proposal: proposalData } = proposal;
+  const { contract, proposal: proposalData, employer } = proposal;
 
-  // Safely access employer name
-  const employerName = contract.employer
-    ? `${contract.employer.first_name || ''} ${contract.employer.last_name || ''}`
+  // Safely access employer name from the top-level employer object
+  const employerName = employer
+    ? `${employer.first_name || ''} ${employer.last_name || ''}`.trim()
     : 'Unknown Employer';
 
   // Safely format dates
@@ -104,10 +107,6 @@ const ContractCard: React.FC<ContractCardProps> = ({ proposal, imageUrl }) => {
   const workingHours = contract.working_hours_per_week || 'Unknown';
   const description = `${position} position. Duration: ${durationMonths} months (${startDate} - ${endDate}). Working days: ${workingDays}/month, ${workingHours} hours/week.`;
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
@@ -117,8 +116,9 @@ const ContractCard: React.FC<ContractCardProps> = ({ proposal, imageUrl }) => {
     setIsModalOpen(false);
   };
 
-  // Only show terminate button for active contracts
-  const isActive = contract.status === 'active' || contract.is_active;
+  const handleViewDetails = () => {
+    navigate(`/employee/${contract.id}/proposal`);
+  };
 
   // Safely get status
   const status = proposalData.status || 'Unknown';
@@ -137,7 +137,7 @@ const ContractCard: React.FC<ContractCardProps> = ({ proposal, imageUrl }) => {
       </h3>
       <p className="text-[13px] text-[#48525B] mb-3">{description}</p>
 
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center mb-3">
         <span
           className={`px-2 py-1 rounded-full text-xs ${
             status === 'pending'
@@ -149,15 +149,24 @@ const ContractCard: React.FC<ContractCardProps> = ({ proposal, imageUrl }) => {
         >
           {status.charAt(0).toUpperCase() + status.slice(1)}
         </span>
+      </div>
 
-        {isActive && (
+      <div className="flex gap-2">
+        <button
+          onClick={handleViewDetails}
+          className="flex-1 flex items-center justify-center rounded-[6px] text-[#24292E] text-sm border border-[#A5EA91] hover:bg-[#A5EA91] hover:text-white transition-colors h-[32px]"
+        >
+          View Details
+        </button>
+
+        {/* {isActive && (
           <button
             onClick={handleOpenModal}
-            className="flex items-center justify-center rounded-[6px] text-white text-sm bg-[#963123] hover:bg-[#7d2a1f] w-[160px] h-[40px]"
+            className="flex-1 flex items-center justify-center rounded-[6px] text-white text-sm bg-[#963123] hover:bg-[#7d2a1f] h-[32px]"
           >
-            Terminate Contract
+            Terminate
           </button>
-        )}
+        )} */}
       </div>
 
       <TerminateStaffModal
@@ -221,9 +230,11 @@ const ContractsPage: React.FC<ContractsPageProps> = ({
 
     const searchLower = searchTerm.toLowerCase();
 
-    // Safely access employer name
-    const employerName = proposal.contract.employer
-      ? `${proposal.contract.employer.first_name || ''} ${proposal.contract.employer.last_name || ''}`.toLowerCase()
+    // Safely access employer name from the top-level employer object
+    const employerName = proposal.employer
+      ? `${proposal.employer.first_name || ''} ${proposal.employer.last_name || ''}`
+          .toLowerCase()
+          .trim()
       : '';
 
     // Safely access position and status

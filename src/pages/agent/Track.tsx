@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
-import { RiDeleteBin6Line } from 'react-icons/ri';
 import { FaUser } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { FaRegUser } from 'react-icons/fa';
@@ -25,6 +24,7 @@ const CandidateTracker = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showOptionsFor, setShowOptionsFor] = useState<number | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -45,6 +45,23 @@ const CandidateTracker = () => {
     };
 
     fetchEmployees();
+  }, []);
+
+  // Handle click outside dropdown to close it
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setShowOptionsFor(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, []);
 
   const toggleOptions = (id: number) => {
@@ -75,10 +92,10 @@ const CandidateTracker = () => {
         <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">{error}</div>
       )}
 
-      <div className="rounded-lg overflow-hidden">
+      <div className="rounded-lg overflow-hidden pb-20">
         {/* Header section with green background */}
 
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto overflow-y-visible">
           <table className="w-full">
             <thead>
               <tr className="bg-[#C8EDDF80] text-[#174B35] text-sm">
@@ -166,8 +183,20 @@ const CandidateTracker = () => {
                         year: 'numeric',
                       })}
                     </td>
-                    <td className="px-4 py-3 text-gray-700">
-                      {employee.placement}
+                    <td className="px-4 py-3">
+                      <span
+                        className={`${
+                          employee.placement.toLowerCase() ===
+                          'no employer assigned'
+                            ? 'text-gray-500 italic'
+                            : 'text-gray-700'
+                        }`}
+                      >
+                        {employee.placement.toLowerCase() ===
+                        'no employer assigned'
+                          ? 'Not on placement'
+                          : employee.placement}
+                      </span>
                     </td>
                     <td className="px-4 py-3 text-gray-700">
                       {employee.gender.charAt(0).toUpperCase() +
@@ -191,32 +220,39 @@ const CandidateTracker = () => {
                       </button>
                     </td>
                     <td className="px-4 py-3 relative">
-                      <button
-                        onClick={() => toggleOptions(employee.id)}
-                        className="text-gray-400 hover:text-gray-600"
+                      <div
+                        ref={
+                          showOptionsFor === employee.id ? dropdownRef : null
+                        }
                       >
-                        <BsThreeDotsVertical />
-                      </button>
+                        <button
+                          onClick={() => toggleOptions(employee.id)}
+                          className="text-gray-400 hover:text-gray-600"
+                        >
+                          <BsThreeDotsVertical />
+                        </button>
 
-                      {showOptionsFor === employee.id && (
-                        <div className="absolute right-8 top-10 bg-white shadow-lg rounded-md py-2 w-48 z-10">
-                          <div
-                            className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer"
-                            onClick={() =>
-                              navigate(
-                                `/agent/candidate-profile/${employee.id}`
-                              )
-                            }
-                          >
-                            <FaRegUser className="text-gray-500" />
-                            <span>View Profile</span>
+                        {showOptionsFor === employee.id && (
+                          <div className="absolute right-0 top-8 bg-white shadow-lg rounded-md py-2 w-48 z-50 border border-gray-200 min-w-max">
+                            <div
+                              className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer"
+                              onClick={() => {
+                                navigate(
+                                  `/agent/candidate-profile/${employee.id}`
+                                );
+                                setShowOptionsFor(null);
+                              }}
+                            >
+                              <FaRegUser className="text-gray-500" />
+                              <span>View Profile</span>
+                            </div>
+                            {/* <div className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer">
+                              <RiDeleteBin6Line className="text-gray-500" />
+                              <span>Remove</span>
+                            </div> */}
                           </div>
-                          <div className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer">
-                            <RiDeleteBin6Line className="text-gray-500" />
-                            <span>Remove</span>
-                          </div>
-                        </div>
-                      )}
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))

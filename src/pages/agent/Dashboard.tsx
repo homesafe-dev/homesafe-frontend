@@ -80,7 +80,11 @@ export default function AgentDashboard() {
               <h2 className="text-[20px] text-[#24292E] font-normal">
                 {isLoading
                   ? '...'
-                  : employees.filter((e) => e.placement).length}
+                  : employees.filter(
+                      (e) =>
+                        e.placement &&
+                        e.placement.toLowerCase() !== 'no employer assigned'
+                    ).length}
               </h2>
               <p className="text-[#24292E] text-[16px]">
                 Candidates on Placement
@@ -114,10 +118,10 @@ export default function AgentDashboard() {
       <div className="">
         <div className="p-6 flex justify-between items-center">
           <h2 className="text-[#24292E] text-[20px] font-semibold">
-            Activities
+            Candidates
           </h2>
           <button
-            onClick={() => navigate('/agent/employees')}
+            onClick={() => navigate('/agent/all-candidates')}
             className="text-[#7B858E] hover:text-gray-900 font-semibold text-[13px]"
           >
             View All
@@ -224,8 +228,20 @@ export default function AgentDashboard() {
                         year: 'numeric',
                       })}
                     </td>
-                    <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
-                      {employee.placement}
+                    <td className="px-6 py-4 text-[13px] font-normal">
+                      <span
+                        className={`${
+                          employee.placement.toLowerCase() ===
+                          'no employer assigned'
+                            ? 'text-gray-500 italic'
+                            : 'text-[#24292E]'
+                        }`}
+                      >
+                        {employee.placement.toLowerCase() ===
+                        'no employer assigned'
+                          ? 'Not on placement'
+                          : employee.placement}
+                      </span>
                     </td>
                     <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
                       {employee.gender.charAt(0).toUpperCase() +

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { FaUser, FaPlus } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
 import adminApi from '../../../../api/adminApi';
+import CreateUserModal from '../../../../components/CreateUserModal';
 
 interface Agent {
   id: number;
@@ -19,23 +19,30 @@ interface Agent {
   address?: string;
   created_at?: string;
   is_verified?: number;
+  is_blocked?: boolean;
 }
 
 export default function DashboardAgentsTab() {
-  const navigate = useNavigate();
   const [agents, setAgents] = useState<Agent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
   useEffect(() => {
     const fetchAgents = async () => {
       try {
         setIsLoading(true);
+        setError(null);
+
         // Use a smaller limit for the dashboard preview
         const response = await adminApi.getAgentList(1, 5);
+        console.log('Dashboard Agents API Response:', response); // Debug log
+
         if (response.status) {
-          // The agents array is in response.data.data
-          setAgents(response.data.data || []);
+          // Handle the new paginated response structure
+          const agentData = response.data?.data || response.data || [];
+          console.log('Extracted dashboard agent data:', agentData); // Debug log
+          setAgents(agentData);
         } else {
           setError(response.message || 'Failed to fetch agents');
         }
@@ -55,7 +62,7 @@ export default function DashboardAgentsTab() {
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Agents</h2>
         <button
-          onClick={() => navigate('/admin/agents')}
+          onClick={() => setShowCreateModal(true)}
           className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md flex items-center"
         >
           <FaPlus className="mr-2" /> Create New Agent
@@ -83,6 +90,9 @@ export default function DashboardAgentsTab() {
             <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
               Status
             </th>
+            <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
+              Blocked Status
+            </th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200">
@@ -108,19 +118,22 @@ export default function DashboardAgentsTab() {
                 <td className="px-6 py-4">
                   <div className="h-8 bg-gray-200 rounded"></div>
                 </td>
+                <td className="px-6 py-4">
+                  <div className="h-8 bg-gray-200 rounded"></div>
+                </td>
               </tr>
             ))
           ) : error ? (
             // Error state
             <tr>
-              <td colSpan={6} className="px-6 py-4 text-center text-red-500">
+              <td colSpan={7} className="px-6 py-4 text-center text-red-500">
                 {error}
               </td>
             </tr>
           ) : agents.length === 0 ? (
             // Empty state
             <tr>
-              <td colSpan={6} className="px-6 py-4 text-center text-gray-500">
+              <td colSpan={7} className="px-6 py-4 text-center text-gray-500">
                 No agents found
               </td>
             </tr>
@@ -179,11 +192,32 @@ export default function DashboardAgentsTab() {
                       : 'Verified'}
                   </span>
                 </td>
+                <td className="px-6 py-4">
+                  <span
+                    className={`px-3 py-1 rounded-full text-[13px] ${
+                      agent.is_blocked
+                        ? 'bg-red-100 text-red-800'
+                        : 'bg-green-100 text-green-800'
+                    }`}
+                  >
+                    {agent.is_blocked ? 'Blocked' : 'Active'}
+                  </span>
+                </td>
               </tr>
             ))
           )}
         </tbody>
       </table>
+
+      <CreateUserModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        userType="agent"
+        onSuccess={() => {
+          // Refresh the agents list
+          window.location.reload();
+        }}
+      />
     </div>
   );
 }

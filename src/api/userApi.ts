@@ -6,7 +6,8 @@ const USER_ENDPOINTS = {
   KYC: '/user-kyc',
   REVIEWS: (userId: number) => `/users/${userId}/reviews`,
   MEDICAL: '/user-medicals',
-  EMPLOYER_LIST: '/employer-list',
+  EMPLOYER_LIST: '/users',
+  CHANGE_PASSWORD: '/change-password',
 };
 
 // User API service
@@ -52,10 +53,10 @@ const userApi = {
 
   /**
    * Submit KYC information
-   * @param kycData - KYC data to submit
+   * @param kycData - KYC data to submit with number and type fields
    * @returns Promise with the API response
    */
-  submitKYC: async (kycData: any) => {
+  submitKYC: async (kycData: { number: number; type: string }) => {
     try {
       const response = await axiosInstance.post(USER_ENDPOINTS.KYC, kycData);
       return response.data;
@@ -166,14 +167,64 @@ const userApi = {
    * @param limit - Number of items per page
    * @returns Promise with the API response containing employer list
    */
-  getEmployerList: async (page = 1, limit = 100) => {
+  getEmployerList: async (page = 1, limit = 10) => {
     try {
       const response = await axiosInstance.get(USER_ENDPOINTS.EMPLOYER_LIST, {
-        params: { page, limit },
+        params: {
+          role: 'employer',
+          page,
+          limit,
+        },
       });
       return response.data;
     } catch (error) {
       console.error('Error fetching employer list:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Change user password
+   * @param passwordData - Object containing old_password and new_password
+   * @returns Promise with the API response
+   */
+  changePassword: async (passwordData: {
+    old_password: string;
+    new_password: string;
+  }) => {
+    try {
+      const response = await axiosInstance.post(
+        USER_ENDPOINTS.CHANGE_PASSWORD,
+        passwordData
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error changing password:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Create a review for a user
+   * @param userId - ID of the user being reviewed
+   * @param reviewData - Object containing rating and comment
+   * @returns Promise with the API response
+   */
+  createReview: async (
+    userId: number,
+    reviewData: {
+      rating: number;
+      comment: string;
+    }
+  ) => {
+    try {
+      const response = await axiosInstance.post(
+        USER_ENDPOINTS.REVIEWS(userId),
+        reviewData
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error creating review:', error);
       throw error;
     }
   },

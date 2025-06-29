@@ -29,7 +29,10 @@ import EmployerForgotPassword from '../components/auth/employer/ForgotPassword';
 import EmployerForgotPasswordOTP from '../components/auth/employer/ForgotPasswordOTP';
 import EmployerResetPassword from '../components/auth/employer/ResetPassword';
 import OnboardingForm from '../components/auth/employer/OnboardingForm';
-import NotificationsPage from '../components/Employer/NotificationsPage';
+import EmployerNotificationsPage from '../components/Employer/NotificationsPage';
+import EmployeeNotificationsPage from '../components/Employee/NotificationsPage';
+import AgentNotificationsPage from '../components/Agent/NotificationsPage';
+import AdminNotificationsPage from '../components/admin/NotificationsPage';
 
 // Dashboard Components
 import EmployerDashboard from '../pages/employer/Dashboard';
@@ -61,6 +64,7 @@ import AdminLayout from '../components/layouts/Admin/Layout';
 import WalletPage from '../pages/employer/WalletPage';
 import WalletHistory from '../pages/employer/WalletHistory';
 import WalletTopUp from '../pages/employer/WalletTopUp';
+import PaymentVerification from '../pages/employer/PaymentVerification';
 import Profile from '../pages/employer/Profile';
 import Security from '../pages/employer/Security';
 import KYCPage from '../pages/employer/KYCPage';
@@ -75,11 +79,14 @@ import EmployeeResources from '../pages/employee/Resources';
 import Medical from '../pages/employer/Medical';
 import ReviewsPage from '../pages/employer/Reviews';
 import Contracts from '../pages/employer/Contracts';
+import EmployerProposalDetails from '../pages/employer/ProposalDetails';
 // Removed unused import: HomesafeForgotPasswordPage
 import Salary from '../pages/employee/Salary';
 import EmployeeMedical from '../pages/employee/Medical';
 import EmployeeReview from '../pages/employee/Review';
 import EmployeeContracts from '../pages/employee/Contracts';
+import EmployeeProposalDetails from '../pages/employee/ProposalDetails';
+import EmployeeContractView from '../pages/employee/ContractView';
 import EmployeeProfilePage from '../pages/employee/Profile';
 import EmployeeSecurityPage from '../pages/employee/Security';
 import EmployeeKYCPage from '../pages/employee/KYCPage';
@@ -237,7 +244,7 @@ export const router = createBrowserRouter([
         path: 'notifications',
         element: protectEmployerRoute(
           <EmployerLayout>
-            <NotificationsPage />
+            <EmployerNotificationsPage />
           </EmployerLayout>
         ),
       },
@@ -266,6 +273,14 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: 'wallet/payment/verify',
+        element: protectEmployerRoute(
+          <EmployerLayout>
+            <PaymentVerification />
+          </EmployerLayout>
+        ),
+      },
+      {
         path: 'artisans',
         element: protectEmployerRoute(
           <EmployerLayout>
@@ -290,7 +305,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: 'staff/profile',
+        path: 'staff/profile/:employeeId',
         element: protectEmployerRoute(
           <EmployerLayout>
             <StaffProfile />
@@ -342,6 +357,14 @@ export const router = createBrowserRouter([
         element: protectEmployerRoute(
           <EmployerLayout>
             <Contracts />
+          </EmployerLayout>
+        ),
+      },
+      {
+        path: ':contractId/proposal',
+        element: protectEmployerRoute(
+          <EmployerLayout>
+            <EmployerProposalDetails />
           </EmployerLayout>
         ),
       },
@@ -397,6 +420,14 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: 'notifications',
+        element: protectEmployeeRoute(
+          <EmployeeLayout>
+            <EmployeeNotificationsPage />
+          </EmployeeLayout>
+        ),
+      },
+      {
         path: 'salary',
         element: protectEmployeeRoute(
           <EmployeeLayout>
@@ -435,6 +466,18 @@ export const router = createBrowserRouter([
             <EmployeeContracts />
           </EmployeeLayout>
         ),
+      },
+      {
+        path: ':contractId/proposal',
+        element: protectEmployeeRoute(
+          <EmployeeLayout>
+            <EmployeeProposalDetails />
+          </EmployeeLayout>
+        ),
+      },
+      {
+        path: ':contractId/contract',
+        element: protectEmployeeRoute(<EmployeeContractView />),
       },
     ],
   },
@@ -523,6 +566,14 @@ export const router = createBrowserRouter([
         element: protectAgentRoute(
           <AgentLayout>
             <AgentKYCPage />
+          </AgentLayout>
+        ),
+      },
+      {
+        path: 'notifications',
+        element: protectAgentRoute(
+          <AgentLayout>
+            <AgentNotificationsPage />
           </AgentLayout>
         ),
       },
@@ -645,6 +696,14 @@ export const router = createBrowserRouter([
         element: protectAdminRoute(
           <AdminLayout>
             <AllAdmins />
+          </AdminLayout>
+        ),
+      },
+      {
+        path: 'notifications',
+        element: protectAdminRoute(
+          <AdminLayout>
+            <AdminNotificationsPage />
           </AdminLayout>
         ),
       },

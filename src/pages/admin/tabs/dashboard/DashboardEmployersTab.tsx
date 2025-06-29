@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { FaUser } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import adminApi from '../../../../api/adminApi';
+import CreateUserModal from '../../../../components/CreateUserModal';
 
 interface Employer {
   id: number;
@@ -18,6 +19,7 @@ interface Employer {
   address: string;
   status: number;
   is_verified: number;
+  is_blocked: boolean;
   salary: string;
   profile_description: string | null;
   created_at: string;
@@ -29,16 +31,23 @@ export default function DashboardEmployersTab() {
   const [employers, setEmployers] = useState<Employer[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
   useEffect(() => {
     const fetchEmployers = async () => {
       try {
         setIsLoading(true);
+        setError(null);
+
         // Use a smaller limit for the dashboard preview
         const response = await adminApi.getEmployerList(1, 5);
+        console.log('Dashboard Employers API Response:', response); // Debug log
+
         if (response.status) {
-          // The employers array is in response.data.data
-          setEmployers(response.data.data || []);
+          // Handle the new paginated response structure
+          const employerData = response.data?.data || response.data || [];
+          console.log('Extracted dashboard employer data:', employerData); // Debug log
+          setEmployers(employerData);
         } else {
           setError(response.message || 'Failed to fetch employers');
         }
@@ -55,6 +64,10 @@ export default function DashboardEmployersTab() {
 
   return (
     <div className="overflow-x-auto">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-semibold">Employers</h2>
+      </div>
+
       <table className="w-full">
         <thead className="bg-[#C8EDDF80] h-[56px] text-left">
           <tr>
@@ -75,6 +88,9 @@ export default function DashboardEmployersTab() {
             </th>
             <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
               Status
+            </th>
+            <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
+              Blocked Status
             </th>
           </tr>
         </thead>
@@ -101,19 +117,22 @@ export default function DashboardEmployersTab() {
                 <td className="px-6 py-4">
                   <div className="h-8 bg-gray-200 rounded"></div>
                 </td>
+                <td className="px-6 py-4">
+                  <div className="h-8 bg-gray-200 rounded"></div>
+                </td>
               </tr>
             ))
           ) : error ? (
             // Error state
             <tr>
-              <td colSpan={6} className="px-6 py-4 text-center text-red-500">
+              <td colSpan={7} className="px-6 py-4 text-center text-red-500">
                 {error}
               </td>
             </tr>
           ) : employers.length === 0 ? (
             // Empty state
             <tr>
-              <td colSpan={6} className="px-6 py-4 text-center text-gray-500">
+              <td colSpan={7} className="px-6 py-4 text-center text-gray-500">
                 No employers found
               </td>
             </tr>
@@ -173,11 +192,32 @@ export default function DashboardEmployersTab() {
                     {employer.is_verified === 0 ? 'Unverified' : 'Verified'}
                   </span>
                 </td>
+                <td className="px-6 py-4">
+                  <span
+                    className={`px-3 py-1 rounded-full text-[13px] ${
+                      employer.is_blocked
+                        ? 'bg-red-100 text-red-800'
+                        : 'bg-green-100 text-green-800'
+                    }`}
+                  >
+                    {employer.is_blocked ? 'Blocked' : 'Active'}
+                  </span>
+                </td>
               </tr>
             ))
           )}
         </tbody>
       </table>
+
+      <CreateUserModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        userType="employer"
+        onSuccess={() => {
+          // Refresh the employers list
+          window.location.reload();
+        }}
+      />
     </div>
   );
 }

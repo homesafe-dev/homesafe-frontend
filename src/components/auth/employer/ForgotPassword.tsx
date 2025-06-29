@@ -22,7 +22,7 @@ const ForgotPassword: React.FC = () => {
       if (response.status) {
         // Store email in sessionStorage for use in OTP verification
         sessionStorage.setItem('resetEmail', email);
-        navigate('/employer/forgot-password/otp');
+        navigate('/forgot-password/otp');
       } else {
         setError(response.message || 'Failed to send OTP. Please try again.');
       }
