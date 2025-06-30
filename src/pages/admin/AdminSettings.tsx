@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
@@ -47,11 +47,7 @@ const AdminSettings: React.FC = () => {
   const [showOptionsFor, setShowOptionsFor] = useState<number | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
 
-  useEffect(() => {
-    fetchAdmins();
-  }, [currentPage]);
-
-  const fetchAdmins = async () => {
+  const fetchAdmins = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
@@ -84,7 +80,11 @@ const AdminSettings: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [currentPage]);
+
+  useEffect(() => {
+    fetchAdmins();
+  }, [fetchAdmins]);
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
