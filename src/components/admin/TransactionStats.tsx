@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import adminApi from '../../api/adminApi';
 
+interface Transaction {
+  status: string;
+  amount: string;
+}
+
 interface TransactionStats {
   total_transactions: number;
   successful_transactions: number;
@@ -25,32 +30,41 @@ const TransactionStats: React.FC = () => {
         const response = await adminApi.getTransactions({ limit: 1000 });
 
         if (response.status && response.data?.data) {
-          const transactions = response.data.data;
+          const transactions = response.data.data as Transaction[];
 
           const calculatedStats: TransactionStats = {
             total_transactions: transactions.length,
             successful_transactions: transactions.filter(
-              (t) => t.status === 'successful'
+              (t: Transaction) => t.status === 'successful'
             ).length,
             pending_transactions: transactions.filter(
-              (t) => t.status === 'pending'
+              (t: Transaction) => t.status === 'pending'
             ).length,
             failed_transactions: transactions.filter(
-              (t) => t.status === 'failed'
+              (t: Transaction) => t.status === 'failed'
             ).length,
             total_amount: transactions.reduce(
-              (sum, t) => sum + parseFloat(t.amount),
+              (sum: number, t: Transaction) => sum + parseFloat(t.amount),
               0
             ),
             successful_amount: transactions
-              .filter((t) => t.status === 'successful')
-              .reduce((sum, t) => sum + parseFloat(t.amount), 0),
+              .filter((t: Transaction) => t.status === 'successful')
+              .reduce(
+                (sum: number, t: Transaction) => sum + parseFloat(t.amount),
+                0
+              ),
             pending_amount: transactions
-              .filter((t) => t.status === 'pending')
-              .reduce((sum, t) => sum + parseFloat(t.amount), 0),
+              .filter((t: Transaction) => t.status === 'pending')
+              .reduce(
+                (sum: number, t: Transaction) => sum + parseFloat(t.amount),
+                0
+              ),
             failed_amount: transactions
-              .filter((t) => t.status === 'failed')
-              .reduce((sum, t) => sum + parseFloat(t.amount), 0),
+              .filter((t: Transaction) => t.status === 'failed')
+              .reduce(
+                (sum: number, t: Transaction) => sum + parseFloat(t.amount),
+                0
+              ),
           };
 
           setStats(calculatedStats);
