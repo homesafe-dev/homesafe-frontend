@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FiSearch } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import artisanApi from '../../api/artisanApi';
+import Avatar from '../../components/common/Avatar';
 
 interface Occupation {
   id: number;
@@ -153,6 +154,8 @@ const ArtisansPage: React.FC = () => {
     return artisan.average_rating || 0;
   };
 
+
+
   // Filter artisans based on search query
   const filteredArtisans = artisans.filter((artisan) => {
     const fullName = `${artisan.first_name} ${artisan.last_name}`.toLowerCase();
@@ -214,16 +217,14 @@ const ArtisansPage: React.FC = () => {
                 key={artisan.id}
                 className="flex flex-col items-center bg-white p-8 shadow"
               >
-                <div className="mb-3 relative">
-                  <img
-                    src={artisan.avatar || 'https://via.placeholder.com/150'}
-                    alt={`${artisan.first_name} ${artisan.last_name}`}
-                    className="w-24 h-24 rounded-full object-cover"
-                  />
-                  <div
-                    className={`absolute top-1 right-1 w-4 h-4 border-2 border-white rounded-full ${
-                      artisan.status === 1 ? 'bg-[#37A379]' : 'bg-gray-400'
-                    }`}
+                <div className="mb-3">
+                  <Avatar
+                    src={artisan.avatar}
+                    firstName={artisan.first_name}
+                    lastName={artisan.last_name}
+                    size="lg"
+                    showStatus={true}
+                    isOnline={artisan.status === 1}
                   />
                 </div>
                 <h3 className="font-medium text-center text-[16px] text-[#24292E] mt-[1rem]">

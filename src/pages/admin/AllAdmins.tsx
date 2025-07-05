@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
+import Avatar from '../../components/common/Avatar';
 
 interface Admin {
   id: number;
@@ -147,18 +148,13 @@ const AllAdmins: React.FC = () => {
                   className="border-b border-gray-200 hover:bg-gray-50"
                 >
                   <td className="py-3 px-4 flex items-center">
-                    <div className="w-8 h-8 rounded-full bg-gray-200 mr-2 overflow-hidden">
-                      {admin.avatar ? (
-                        <img
-                          src={admin.avatar}
-                          alt={admin.full_name}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-gray-500">
-                          {admin.full_name.charAt(0)}
-                        </div>
-                      )}
+                    <div className="mr-2">
+                      <Avatar
+                        src={admin.avatar}
+                        firstName={admin.full_name.split(' ')[0] || ''}
+                        lastName={admin.full_name.split(' ')[1] || ''}
+                        size="sm"
+                      />
                     </div>
                     {admin.full_name}
                   </td>
