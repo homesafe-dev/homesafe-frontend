@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { FiArrowLeft, FiChevronDown } from 'react-icons/fi';
-import ArtisanImg from '../../assets/images/artisans.png';
 import { useNavigate, useLocation } from 'react-router-dom';
 import artisanApi from '../../api/artisanApi';
 import contractApi from '../../api/contractApi';
@@ -105,7 +104,7 @@ const ArtisanProfileView: React.FC = () => {
   };
 
   const hideToast = () => {
-    setToast(prev => ({
+    setToast((prev) => ({
       ...prev,
       isVisible: false,
     }));
@@ -187,7 +186,10 @@ const ArtisanProfileView: React.FC = () => {
         if (response.data && typeof response.data === 'string') {
           showToast(response.data, 'error');
         } else {
-          showToast(response.message || 'Failed to send contract proposal', 'error');
+          showToast(
+            response.message || 'Failed to send contract proposal',
+            'error'
+          );
         }
       }
     } catch (err: any) {
@@ -197,7 +199,10 @@ const ArtisanProfileView: React.FC = () => {
         if (errorData.data && typeof errorData.data === 'string') {
           showToast(errorData.data, 'error');
         } else {
-          showToast(errorData.message || 'Error sending contract proposal', 'error');
+          showToast(
+            errorData.message || 'Error sending contract proposal',
+            'error'
+          );
         }
       } else {
         showToast(err.message || 'Error sending contract proposal', 'error');
@@ -413,8 +418,6 @@ const ArtisanProfileView: React.FC = () => {
               </div>
             </div>
           </div>
-
-
 
           <div className="ml-auto w-[143px]">
             <button

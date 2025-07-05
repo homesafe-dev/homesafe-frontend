@@ -30,20 +30,20 @@ const Avatar: React.FC<AvatarProps> = ({
   const getInitialsColor = (first: string, last: string): string => {
     const colors = [
       'bg-blue-500',
-      'bg-green-500', 
+      'bg-green-500',
       'bg-purple-500',
       'bg-pink-500',
       'bg-indigo-500',
       'bg-yellow-500',
       'bg-red-500',
-      'bg-teal-500'
+      'bg-teal-500',
     ];
-    
+
     const nameString = `${first}${last}`;
     const hash = nameString.split('').reduce((acc, char) => {
       return char.charCodeAt(0) + ((acc << 5) - acc);
     }, 0);
-    
+
     return colors[Math.abs(hash) % colors.length];
   };
 
@@ -52,22 +52,23 @@ const Avatar: React.FC<AvatarProps> = ({
     sm: 'w-8 h-8 text-xs',
     md: 'w-12 h-12 text-sm',
     lg: 'w-24 h-24 text-xl',
-    xl: 'w-32 h-32 text-2xl'
+    xl: 'w-32 h-32 text-2xl',
   };
 
   const statusSizeClasses = {
     sm: 'w-2 h-2',
     md: 'w-3 h-3',
     lg: 'w-4 h-4',
-    xl: 'w-5 h-5'
+    xl: 'w-5 h-5',
   };
 
   // Check if avatar is valid
-  const hasValidAvatar = src && 
-                        src !== '' && 
-                        src !== 'https://via.placeholder.com/150' && 
-                        src !== 'https://via.placeholder.com/100' &&
-                        !src.includes('placeholder');
+  const hasValidAvatar =
+    src &&
+    src !== '' &&
+    src !== 'https://via.placeholder.com/150' &&
+    src !== 'https://via.placeholder.com/100' &&
+    !src.includes('placeholder');
 
   const baseClasses = `${sizeClasses[size]} rounded-full flex items-center justify-center font-semibold ${className}`;
 
@@ -104,7 +105,7 @@ const Avatar: React.FC<AvatarProps> = ({
 
   return (
     <div className="relative">
-      <div 
+      <div
         className={`${baseClasses} text-white ${getInitialsColor(firstName, lastName)}`}
       >
         {getInitials(firstName, lastName)}
