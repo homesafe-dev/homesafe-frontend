@@ -154,8 +154,6 @@ const ArtisansPage: React.FC = () => {
     return artisan.average_rating || 0;
   };
 
-
-
   // Filter artisans based on search query
   const filteredArtisans = artisans.filter((artisan) => {
     const fullName = `${artisan.first_name} ${artisan.last_name}`.toLowerCase();

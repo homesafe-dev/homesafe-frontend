@@ -48,43 +48,43 @@ const AdminSettings: React.FC = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
 
   useEffect(() => {
-    fetchAdmins();
-  }, [currentPage]);
+    const fetchAdmins = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
 
-  const fetchAdmins = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
+        // Call the real API
+        const response = await adminApi.getAdminList(currentPage, 10);
 
-      // Call the real API
-      const response = await adminApi.getAdminList(currentPage, 10);
+        if (response.status && response.data) {
+          // Handle nested data structure
+          const adminsData = response.data.data || response.data;
+          setAdmins(Array.isArray(adminsData) ? adminsData : []);
 
-      if (response.status && response.data) {
-        // Handle nested data structure
-        const adminsData = response.data.data || response.data;
-        setAdmins(Array.isArray(adminsData) ? adminsData : []);
-
-        // Set pagination info
-        if (response.data.last_page) {
-          setTotalPages(response.data.last_page);
+          // Set pagination info
+          if (response.data.last_page) {
+            setTotalPages(response.data.last_page);
+          } else {
+            setTotalPages(1);
+          }
         } else {
+          setAdmins([]);
           setTotalPages(1);
         }
-      } else {
+      } catch (err: any) {
+        const errorMessage =
+          err.response?.data?.message || 'Failed to fetch admins';
+        setError(errorMessage);
         setAdmins([]);
         setTotalPages(1);
+        console.error('Error fetching admins:', err);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (err: any) {
-      const errorMessage =
-        err.response?.data?.message || 'Failed to fetch admins';
-      setError(errorMessage);
-      setAdmins([]);
-      setTotalPages(1);
-      console.error('Error fetching admins:', err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    };
+
+    fetchAdmins();
+  }, [currentPage]);
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
