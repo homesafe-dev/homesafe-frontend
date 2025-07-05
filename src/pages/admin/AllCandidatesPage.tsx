@@ -3,6 +3,7 @@ import { FaUser } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import adminApi from '../../api/adminApi';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import Avatar from '../../components/common/Avatar';
 
 interface User {
   id: number;
@@ -210,21 +211,12 @@ const AllCandidatesPage = () => {
                 users.map((user) => (
                   <tr key={user.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 flex items-center gap-2 text-[13px] text-[#24292E] font-normal">
-                      <div className="flex items-center gap-2 relative">
-                        {user.avatar ? (
-                          <div className="w-8 h-8 rounded-full overflow-hidden relative">
-                            <img
-                              src={user.avatar}
-                              alt={`${user.first_name} ${user.last_name}`}
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                        ) : (
-                          <div className="bg-[#BDBDBD] rounded-full p-2 flex items-center justify-center relative">
-                            <FaUser className="text-white" />
-                          </div>
-                        )}
-                      </div>
+                      <Avatar
+                        src={user.avatar}
+                        firstName={user.first_name}
+                        lastName={user.last_name}
+                        size="sm"
+                      />
                       {`${user.first_name} ${user.last_name}`}
                     </td>
                     <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
