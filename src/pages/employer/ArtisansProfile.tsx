@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { FiArrowLeft, FiChevronDown } from 'react-icons/fi';
-import ArtisanImg from '../../assets/images/artisans.png';
 import { useNavigate, useLocation } from 'react-router-dom';
 import artisanApi from '../../api/artisanApi';
 import contractApi from '../../api/contractApi';
 import { calculateAge, extractLocation } from '../../utils/dateUtils';
+import Avatar from '../../components/common/Avatar';
+import Toast from '../../components/common/Toast';
 
 interface Occupation {
   id: number;
@@ -63,7 +64,17 @@ const ArtisanProfileView: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState<boolean>(false);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  // Toast state
+  const [toast, setToast] = useState<{
+    message: string;
+    type: 'success' | 'error' | 'info';
+    isVisible: boolean;
+  }>({
+    message: '',
+    type: 'info',
+    isVisible: false,
+  });
 
   // Contract form data
   const [formData, setFormData] = useState<ContractFormData>({
@@ -82,6 +93,22 @@ const ArtisanProfileView: React.FC = () => {
   // Extract artisan ID from URL query parameters
   const queryParams = new URLSearchParams(location.search);
   const artisanId = queryParams.get('id');
+
+  // Toast helper functions
+  const showToast = (message: string, type: 'success' | 'error' | 'info') => {
+    setToast({
+      message,
+      type,
+      isVisible: true,
+    });
+  };
+
+  const hideToast = () => {
+    setToast((prev) => ({
+      ...prev,
+      isVisible: false,
+    }));
+  };
 
   useEffect(() => {
     const fetchArtisanDetails = async () => {
@@ -131,7 +158,6 @@ const ArtisanProfileView: React.FC = () => {
     try {
       setSubmitting(true);
       setError(null);
-      setSuccessMessage(null);
 
       // Prepare the proposal data
       const proposalData = {
@@ -150,14 +176,20 @@ const ArtisanProfileView: React.FC = () => {
       const response = await contractApi.sendProposal(proposalData);
 
       if (response.status) {
-        setSuccessMessage('Contract proposal sent successfully!');
-        // Optionally navigate to contracts page or show a success modal
+        showToast('Contract proposal sent successfully!', 'success');
+        // Optionally navigate to contracts page after a delay
+        setTimeout(() => {
+          navigate('/employer/contracts');
+        }, 2000);
       } else {
         // Handle error response with data field
         if (response.data && typeof response.data === 'string') {
-          setError(response.data);
+          showToast(response.data, 'error');
         } else {
-          setError(response.message || 'Failed to send contract proposal');
+          showToast(
+            response.message || 'Failed to send contract proposal',
+            'error'
+          );
         }
       }
     } catch (err: any) {
@@ -165,12 +197,15 @@ const ArtisanProfileView: React.FC = () => {
       if (err.response && err.response.data) {
         const errorData = err.response.data;
         if (errorData.data && typeof errorData.data === 'string') {
-          setError(errorData.data);
+          showToast(errorData.data, 'error');
         } else {
-          setError(errorData.message || 'Error sending contract proposal');
+          showToast(
+            errorData.message || 'Error sending contract proposal',
+            'error'
+          );
         }
       } else {
-        setError(err.message || 'Error sending contract proposal');
+        showToast(err.message || 'Error sending contract proposal', 'error');
       }
       console.error('Error sending contract proposal:', err);
     } finally {
@@ -203,20 +238,14 @@ const ArtisanProfileView: React.FC = () => {
           <div className="flex flex-col lg:flex-row gap-8 bg-white shadow-sm p-8 rounded-[16px]">
             {/* Profile section */}
             <div className="w-full lg:w-1/2 border-r border-[#BDC2C7] p-6 flex flex-col items-center relative">
-              <div className="relative mb-4">
-                <img
-                  src={artisan.avatar || ArtisanImg}
-                  alt={`${artisan.first_name} ${artisan.last_name}`}
-                  className="rounded-full w-24 h-24 object-cover"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src =
-                      'https://via.placeholder.com/100';
-                  }}
-                />
-                <div
-                  className={`absolute top-1 right-1 w-4 h-4 border-2 border-white rounded-full ${
-                    artisan.status === 1 ? 'bg-[#37A379]' : 'bg-gray-400'
-                  }`}
+              <div className="mb-4">
+                <Avatar
+                  src={artisan.avatar}
+                  firstName={artisan.first_name}
+                  lastName={artisan.last_name}
+                  size="lg"
+                  showStatus={true}
+                  isOnline={artisan.status === 1}
                 />
               </div>
 
@@ -390,19 +419,6 @@ const ArtisanProfileView: React.FC = () => {
             </div>
           </div>
 
-          {/* Success or Error message */}
-          {(successMessage || (error && !loading)) && (
-            <div
-              className={`px-4 py-3 rounded mb-4 mt-4 ${
-                successMessage
-                  ? 'bg-green-100 border border-green-400 text-green-700'
-                  : 'bg-red-100 border border-red-400 text-red-700'
-              }`}
-            >
-              {successMessage || error}
-            </div>
-          )}
-
           <div className="ml-auto w-[143px]">
             <button
               onClick={handleSubmitProposal}
@@ -425,6 +441,15 @@ const ArtisanProfileView: React.FC = () => {
           No artisan found with the provided ID.
         </div>
       )}
+
+      {/* Toast Notification */}
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.isVisible}
+        onClose={hideToast}
+        duration={4000}
+      />
     </div>
   );
 };
