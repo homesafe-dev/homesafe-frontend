@@ -23,7 +23,7 @@ interface Employee {
   phone: string;
   status: string;
   is_blocked?: boolean;
-  average_rating?: string | null;
+  average_rating?: number | null;
   occupations?: {
     id: number;
     name: string;
@@ -210,7 +210,7 @@ const AdminCandidateProfile: React.FC = () => {
             profileImage={employee.avatar || ArtisanImg}
             rating={
               employee.average_rating
-                ? parseFloat(employee.average_rating)
+                ? parseFloat(employee.average_rating.toString())
                 : employee.reviews && employee.reviews.length > 0
                   ? employee.reviews.reduce(
                       (sum, review) => sum + review.rating,
