@@ -52,13 +52,13 @@ const AdminSettings: React.FC = () => {
       setIsLoading(true);
       setError(null);
 
-        // Call the real API
-        const response = await adminApi.getAdminList(currentPage, 10);
+      // Call the real API
+      const response = await adminApi.getAdminList(currentPage, 10);
 
-        if (response.status && response.data) {
-          // Handle nested data structure
-          const adminsData = response.data.data || response.data;
-          setAdmins(Array.isArray(adminsData) ? adminsData : []);
+      if (response.status && response.data) {
+        // Handle nested data structure
+        const adminsData = response.data.data || response.data;
+        setAdmins(Array.isArray(adminsData) ? adminsData : []);
 
         // Set pagination info
         if (response.data.last_page) {
