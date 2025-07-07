@@ -62,7 +62,7 @@ const SignupPasswordPage: React.FC = () => {
             <img
               src={signupImg1}
               alt="Top signup image"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover object-[center_10%]"
             />
             <div className="absolute inset-0 bg-[#1D2125D9]" />
           </div>
