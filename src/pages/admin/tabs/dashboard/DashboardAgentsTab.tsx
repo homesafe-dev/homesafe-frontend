@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FaUser, FaPlus } from 'react-icons/fa';
 import adminApi from '../../../../api/adminApi';
 import CreateUserModal from '../../../../components/CreateUserModal';
@@ -23,6 +24,7 @@ interface Agent {
 }
 
 export default function DashboardAgentsTab() {
+  const navigate = useNavigate();
   const [agents, setAgents] = useState<Agent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

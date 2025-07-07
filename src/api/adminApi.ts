@@ -30,6 +30,12 @@ interface Employee {
   gender: string;
   phone: string;
   is_verified: boolean;
+  approval_status?: string;
+  is_blocked?: boolean;
+  average_rating?: number;
+  occupations?: any[];
+  reviews?: any[];
+  user_medicals?: any[];
 }
 
 // Admin API service
@@ -347,7 +353,7 @@ const adminApi = {
    * @param userId - The ID of the user to unblock
    * @returns Promise with the API response
    */
-  unblockUser: async (userId) => {
+  unblockUser: async (userId: string | number) => {
     try {
       const response = await axiosInstance.post(
         `${ADMIN_ENDPOINTS.UNBLOCK_USER}/${userId}`
