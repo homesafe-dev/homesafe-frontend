@@ -9,7 +9,7 @@ const WALLET_ENDPOINTS = {
   INITIALIZE_WITHDRAWAL: '/wallet/initialize-withdrawal',
   TRANSFER: '/wallet/transfer',
   INITIALIZE_PAYMENT: 'wallet/initialize-payment',
-  VERIFY_PAYMENT: '/verify-payment',
+  VERIFY_PAYMENT: '/wallet/verify-payment',
 };
 
 // Wallet API service

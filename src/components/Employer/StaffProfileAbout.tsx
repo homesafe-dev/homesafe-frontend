@@ -3,6 +3,7 @@ import TerminateStaffModal from './TerminateStaffModal';
 import TerminateContractConfirmation from './TerminateConfirmation';
 import contractApi from '../../api/contractApi';
 import Toast from '../common/Toast';
+import Avatar from '../common/Avatar';
 
 interface StaffProfileAboutProps {
   name: string;
@@ -107,14 +108,15 @@ const StaffProfileAbout: React.FC<StaffProfileAboutProps> = ({
 
   return (
     <div className="flex flex-col items-center bg-white rounded-lg p-4 h-full">
-      <div className="mb-4 relative">
-        <img
+      <div className="mb-4">
+        <Avatar
           src={profileImage}
-          alt={name}
-          className="rounded-full w-24 h-24 object-cover border-4 border-white"
-        />
-        <div
-          className={`absolute top-1 right-1 w-4 h-4 border-2 border-white rounded-full ${isOnline ? 'bg-[#37A379]' : 'bg-gray-400'}`}
+          firstName={name.split(' ')[0] || ''}
+          lastName={name.split(' ')[1] || ''}
+          size="lg"
+          showStatus={true}
+          isOnline={isOnline}
+          className="border-4 border-white"
         />
       </div>
 
