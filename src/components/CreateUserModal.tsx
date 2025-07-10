@@ -196,8 +196,8 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({
 
         <div className="mb-4 p-4 bg-blue-50 border border-blue-200 text-blue-700 rounded">
           <p className="text-sm">
-            <strong>Note:</strong> A default password will be generated for the user.
-            They can change it after their first login.
+            <strong>Note:</strong> A default password will be generated for the
+            user. They can change it after their first login.
           </p>
         </div>
 
@@ -259,8 +259,6 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
             />
           </div>
-
-
 
           {/* Remove salary fields for all user types as per requirements */}
 
