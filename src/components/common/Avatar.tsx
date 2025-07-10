@@ -62,6 +62,13 @@ const Avatar: React.FC<AvatarProps> = ({
     xl: 'w-5 h-5',
   };
 
+  const statusPositionClasses = {
+    sm: '-top-0.5 -right-0.5',
+    md: '-top-0.5 -right-0.5',
+    lg: 'top-1 right-1',
+    xl: 'top-1 right-1',
+  };
+
   // Check if avatar is valid
   const hasValidAvatar =
     src &&
@@ -94,7 +101,7 @@ const Avatar: React.FC<AvatarProps> = ({
         />
         {showStatus && (
           <div
-            className={`absolute top-0 right-0 ${statusSizeClasses[size]} border-2 border-white rounded-full ${
+            className={`absolute ${statusPositionClasses[size]} ${statusSizeClasses[size]} border-2 border-white rounded-full ${
               isOnline ? 'bg-green-500' : 'bg-gray-400'
             }`}
           />
@@ -112,7 +119,7 @@ const Avatar: React.FC<AvatarProps> = ({
       </div>
       {showStatus && (
         <div
-          className={`absolute top-0 right-0 ${statusSizeClasses[size]} border-2 border-white rounded-full ${
+          className={`absolute ${statusPositionClasses[size]} ${statusSizeClasses[size]} border-2 border-white rounded-full ${
             isOnline ? 'bg-green-500' : 'bg-gray-400'
           }`}
         />
