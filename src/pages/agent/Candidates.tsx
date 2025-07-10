@@ -367,8 +367,8 @@ const CandidatesPage: React.FC = () => {
           {/* Password Note */}
           <div className="mb-4 p-4 bg-blue-50 border border-blue-200 text-blue-700 rounded">
             <p className="text-sm">
-              <strong>Note:</strong> A default password will be generated for the candidate.
-              They can change it after their first login.
+              <strong>Note:</strong> A default password will be generated for
+              the candidate. They can change it after their first login.
             </p>
           </div>
 

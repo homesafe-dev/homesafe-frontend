@@ -8,6 +8,7 @@ const USER_ENDPOINTS = {
   MEDICAL: '/user-medicals',
   EMPLOYER_LIST: '/users',
   CHANGE_PASSWORD: '/change-password',
+  SALARY: (userId: number) => `/profile/${userId}/salary`,
 };
 
 // User API service
@@ -225,6 +226,32 @@ const userApi = {
       return response.data;
     } catch (error) {
       console.error('Error creating review:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Update user salary
+   * @param userId - ID of the user whose salary is being updated
+   * @param salaryData - Object containing salary, change_reason, and effective_date
+   * @returns Promise with the API response
+   */
+  updateSalary: async (
+    userId: number,
+    salaryData: {
+      salary: number;
+      change_reason: string;
+      effective_date: string;
+    }
+  ) => {
+    try {
+      const response = await axiosInstance.patch(
+        USER_ENDPOINTS.SALARY(userId),
+        salaryData
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error updating salary:', error);
       throw error;
     }
   },

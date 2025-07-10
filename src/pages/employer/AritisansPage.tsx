@@ -61,7 +61,8 @@ const ArtisansPage: React.FC = () => {
   const [salaryFilter, setSalaryFilter] = useState<string>('');
   const [jobTypeFilter, setJobTypeFilter] = useState<string>('');
   const [showSalaryDropdown, setShowSalaryDropdown] = useState<boolean>(false);
-  const [showJobTypeDropdown, setShowJobTypeDropdown] = useState<boolean>(false);
+  const [showJobTypeDropdown, setShowJobTypeDropdown] =
+    useState<boolean>(false);
 
   // Available job types (occupations)
   const [availableJobTypes, setAvailableJobTypes] = useState<string[]>([]);
@@ -107,7 +108,10 @@ const ArtisansPage: React.FC = () => {
           artisanData.forEach((artisan: Artisan) => {
             if (artisan.occupations && artisan.occupations.length > 0) {
               artisan.occupations.forEach((occupation) => {
-                jobTypes.add(occupation.name.charAt(0).toUpperCase() + occupation.name.slice(1));
+                jobTypes.add(
+                  occupation.name.charAt(0).toUpperCase() +
+                    occupation.name.slice(1)
+                );
               });
             }
           });
@@ -177,7 +181,10 @@ const ArtisansPage: React.FC = () => {
   };
 
   // Format location and age display
-  const getLocationAgeDisplay = (address: string | null, dob: string | null): string => {
+  const getLocationAgeDisplay = (
+    address: string | null,
+    dob: string | null
+  ): string => {
     const location = extractLocation(address);
     const age = getAge(dob);
 
@@ -235,11 +242,11 @@ const ArtisansPage: React.FC = () => {
     const query = searchQuery.toLowerCase();
 
     // Search filter
-    const matchesSearch = !searchQuery || (
+    const matchesSearch =
+      !searchQuery ||
       fullName.includes(query) ||
       occupation.includes(query) ||
-      location.includes(query)
-    );
+      location.includes(query);
 
     // Salary filter
     const salary = parseFloat(artisan.salary) || 0;
@@ -264,11 +271,14 @@ const ArtisansPage: React.FC = () => {
     }
 
     // Job type filter
-    const matchesJobType = !jobTypeFilter || (
-      artisan.occupations && artisan.occupations.some(occ =>
-        (occ.name.charAt(0).toUpperCase() + occ.name.slice(1)) === jobTypeFilter
-      )
-    );
+    const matchesJobType =
+      !jobTypeFilter ||
+      (artisan.occupations &&
+        artisan.occupations.some(
+          (occ) =>
+            occ.name.charAt(0).toUpperCase() + occ.name.slice(1) ===
+            jobTypeFilter
+        ));
 
     return matchesSearch && matchesSalary && matchesJobType;
   });
@@ -278,9 +288,7 @@ const ArtisansPage: React.FC = () => {
       {/* Main Content */}
       <div className="px-6 py-6">
         <div className="flex justify-between items-start mb-4">
-          <h1 className="text-xl font-semibold text-[#24292E]">
-            Artisans
-          </h1>
+          <h1 className="text-xl font-semibold text-[#24292E]">Artisans</h1>
 
           <div className="flex gap-4 items-center">
             {/* Salary Filter */}
@@ -292,8 +300,14 @@ const ArtisansPage: React.FC = () => {
                 }}
                 className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-50 min-w-[140px] justify-between"
               >
-                <span>{salaryFilter ? getSalaryLabel(salaryFilter) : 'Filter by Salary'}</span>
-                <FiChevronDown className={`transition-transform ${showSalaryDropdown ? 'rotate-180' : ''}`} />
+                <span>
+                  {salaryFilter
+                    ? getSalaryLabel(salaryFilter)
+                    : 'Filter by Salary'}
+                </span>
+                <FiChevronDown
+                  className={`transition-transform ${showSalaryDropdown ? 'rotate-180' : ''}`}
+                />
               </button>
               {showSalaryDropdown && (
                 <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg z-10">
@@ -356,7 +370,9 @@ const ArtisansPage: React.FC = () => {
                 className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-50 min-w-[140px] justify-between"
               >
                 <span>{jobTypeFilter || 'Filter by Job Type'}</span>
-                <FiChevronDown className={`transition-transform ${showJobTypeDropdown ? 'rotate-180' : ''}`} />
+                <FiChevronDown
+                  className={`transition-transform ${showJobTypeDropdown ? 'rotate-180' : ''}`}
+                />
               </button>
               {showJobTypeDropdown && (
                 <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto">

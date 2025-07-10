@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaArrowLeft } from 'react-icons/fa';
+import { FaArrowLeft, FaEdit } from 'react-icons/fa';
 import userApi from '../../api/userApi';
 import { useNavigate } from 'react-router-dom';
 
@@ -38,7 +38,7 @@ const EmployeeProfilePage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   // userProfile state is used to store the full user data, but we extract specific fields to formData
-  const [, setUserProfile] = useState<UserProfile | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [formData, setFormData] = useState<ProfileFormData>({
     firstName: '',
     lastName: '',
@@ -49,6 +49,35 @@ const EmployeeProfilePage: React.FC = () => {
     address: '',
     profileDescription: '',
   });
+
+  // Salary update modal states
+  const [showSalaryModal, setShowSalaryModal] = useState(false);
+  const [salaryData, setSalaryData] = useState({
+    salary: '',
+    change_reason: '',
+    effective_date: '',
+  });
+  const [salaryLoading, setSalaryLoading] = useState(false);
+
+  // Toast notification states
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastType, setToastType] = useState<'success' | 'error'>('success');
+
+  // Show toast notification
+  const showToastNotification = (
+    message: string,
+    type: 'success' | 'error'
+  ) => {
+    setToastMessage(message);
+    setToastType(type);
+    setShowToast(true);
+
+    // Auto-hide after 4 seconds
+    setTimeout(() => {
+      setShowToast(false);
+    }, 4000);
+  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -74,6 +103,52 @@ const EmployeeProfilePage: React.FC = () => {
       ...formData,
       [name]: value,
     });
+  };
+
+  const handleSalaryInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setSalaryData({
+      ...salaryData,
+      [name]: value,
+    });
+  };
+
+  const handleSalaryUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!userProfile) return;
+
+    try {
+      setSalaryLoading(true);
+      setError(null);
+
+      const response = await userApi.updateSalary(userProfile.id, {
+        salary: parseFloat(salaryData.salary),
+        change_reason: salaryData.change_reason,
+        effective_date: salaryData.effective_date,
+      });
+
+      if (response.status) {
+        // Update the user profile with new salary
+        setUserProfile((prev) =>
+          prev ? { ...prev, salary: response.data.salary.toString() } : null
+        );
+        setShowSalaryModal(false);
+        setSalaryData({ salary: '', change_reason: '', effective_date: '' });
+        showToastNotification('Salary updated successfully!', 'success');
+      } else {
+        showToastNotification(
+          response.message || 'Failed to update salary',
+          'error'
+        );
+      }
+    } catch (err) {
+      showToastNotification('Error updating salary', 'error');
+      console.error('Error updating salary:', err);
+    } finally {
+      setSalaryLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -372,6 +447,121 @@ const EmployeeProfilePage: React.FC = () => {
         </form>
       </div>
 
+      {/* Salary Section */}
+      <div className="bg-white rounded-lg shadow p-8 max-w-4xl mb-6">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-semibold text-gray-900">
+            Salary Information
+          </h3>
+          <button
+            onClick={() => setShowSalaryModal(true)}
+            className="flex items-center px-4 py-2 bg-[#A5EA91] text-[#24292E] rounded-md hover:bg-green-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+          >
+            <FaEdit className="mr-2" />
+            Update Salary
+          </button>
+        </div>
+
+        <div className="bg-gray-50 p-4 rounded-lg">
+          <div className="flex justify-between items-center">
+            <span className="text-sm font-medium text-gray-600">
+              Current Salary:
+            </span>
+            <span className="text-lg font-bold text-gray-900">
+              ₦
+              {userProfile?.salary
+                ? parseFloat(userProfile.salary).toLocaleString()
+                : '0'}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Salary Update Modal */}
+      {showSalaryModal && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="absolute inset-0 bg-black/30 backdrop-blur-sm"></div>
+          <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4 relative z-10">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">
+                Update Salary
+              </h3>
+              <button
+                onClick={() => setShowSalaryModal(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleSalaryUpdate}>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    New Salary (₦)
+                  </label>
+                  <input
+                    type="number"
+                    name="salary"
+                    value={salaryData.salary}
+                    onChange={handleSalaryInputChange}
+                    placeholder="e.g. 50000"
+                    required
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Reason for Change
+                  </label>
+                  <textarea
+                    name="change_reason"
+                    value={salaryData.change_reason}
+                    onChange={handleSalaryInputChange}
+                    placeholder="e.g. Annual raise, Promotion, Performance bonus"
+                    required
+                    rows={3}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Effective Date
+                  </label>
+                  <input
+                    type="date"
+                    name="effective_date"
+                    value={salaryData.effective_date}
+                    onChange={handleSalaryInputChange}
+                    required
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500"
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end space-x-3 mt-6">
+                <button
+                  type="button"
+                  onClick={() => setShowSalaryModal(false)}
+                  className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={salaryLoading}
+                  className="px-4 py-2 bg-[#A5EA91] text-[#24292E] rounded-md hover:bg-green-300 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-50"
+                >
+                  {salaryLoading ? 'Updating...' : 'Update Salary'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       <div className="flex justify-end max-w-4xl">
         <button
           onClick={handleSubmit}
@@ -381,6 +571,27 @@ const EmployeeProfilePage: React.FC = () => {
           Save Changes
         </button>
       </div>
+
+      {/* Toast Notification */}
+      {showToast && (
+        <div
+          className={`fixed top-4 right-4 z-50 px-6 py-4 rounded-lg shadow-lg transform transition-all duration-300 ease-in-out ${
+            toastType === 'success'
+              ? 'bg-green-500 text-white'
+              : 'bg-red-500 text-white'
+          }`}
+        >
+          <div className="flex items-center justify-between">
+            <span className="font-medium">{toastMessage}</span>
+            <button
+              onClick={() => setShowToast(false)}
+              className="ml-4 text-white hover:text-gray-200"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -218,7 +218,9 @@ const AdminTrack = () => {
                     <td className="px-4 py-3 flex items-center gap-3">
                       <Avatar
                         src={employee.avatar}
-                        firstName={employee.candidate?.split(' ')[0] || 'Unknown'}
+                        firstName={
+                          employee.candidate?.split(' ')[0] || 'Unknown'
+                        }
                         lastName={employee.candidate?.split(' ')[1] || 'User'}
                         size="sm"
                         showStatus={false}
