@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { FaArrowLeft, FaEye } from 'react-icons/fa';
+import { FaArrowLeft } from 'react-icons/fa';
 import adminApi from '../../api/adminApi';
 import ApproveUserModal from '../../components/admin/ApproveUserModal';
 import DeclineUserModal from '../../components/admin/DeclineUserModal';
@@ -25,10 +25,11 @@ interface UserDetails {
   profile_description: string | null;
   created_at: string;
   updated_at: string;
-  bank_verification_number?: string;
   occupation?: string;
-  passport?: string;
-  bank_statement?: string;
+  occupations?: Array<{
+    id: number;
+    name: string;
+  }>;
 }
 
 export default function UserDetailsPage() {
@@ -39,6 +40,15 @@ export default function UserDetailsPage() {
   const [error, setError] = useState<string | null>(null);
   const [showApproveModal, setShowApproveModal] = useState(false);
   const [showDeclineModal, setShowDeclineModal] = useState(false);
+  const [userType, setUserType] = useState<'employee' | 'employer' | 'agent' | null>(null);
+
+  // Helper function to get user's occupations
+  const getUserOccupations = (user: UserDetails): string => {
+    if (user.occupations && user.occupations.length > 0) {
+      return user.occupations.map(occ => occ.name.charAt(0).toUpperCase() + occ.name.slice(1)).join(', ');
+    }
+    return 'No occupation';
+  };
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -61,6 +71,7 @@ export default function UserDetailsPage() {
           );
           if (employeeData) {
             setUser(employeeData);
+            setUserType('employee');
             setLoading(false);
             return;
           }
@@ -79,6 +90,7 @@ export default function UserDetailsPage() {
           );
           if (employerData) {
             setUser(employerData);
+            setUserType('employer');
             setLoading(false);
             return;
           }
@@ -97,6 +109,7 @@ export default function UserDetailsPage() {
           );
           if (agentData) {
             setUser(agentData);
+            setUserType('agent');
             setLoading(false);
             return;
           }
@@ -238,18 +251,6 @@ export default function UserDetailsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
             <div>
-              <h3 className="text-sm font-medium text-gray-500">
-                Facial Capturing
-              </h3>
-              <div className="flex justify-between items-center mt-1">
-                <p className="text-sm text-gray-900">Camera photo</p>
-                <button className="text-gray-500 hover:text-gray-700">
-                  <FaEye />
-                </button>
-              </div>
-            </div>
-
-            <div>
               <h3 className="text-sm font-medium text-gray-500">Title</h3>
               <p className="mt-1 text-sm text-gray-900">{user.title || 'Mr'}</p>
             </div>
@@ -268,7 +269,9 @@ export default function UserDetailsPage() {
               <h3 className="text-sm font-medium text-gray-500">Email</h3>
               <p className="mt-1 text-sm text-gray-900">{user.email}</p>
             </div>
+          </div>
 
+          <div className="space-y-4">
             <div>
               <h3 className="text-sm font-medium text-gray-500">
                 Phone Number
@@ -282,76 +285,45 @@ export default function UserDetailsPage() {
               </h3>
               <p className="mt-1 text-sm text-gray-900">{user.address}</p>
             </div>
-          </div>
-
-          <div className="space-y-4">
-            <div>
-              <h3 className="text-sm font-medium text-gray-500">
-                Bank Verification Number
-              </h3>
-              <p className="mt-1 text-sm text-gray-900">
-                {user.bank_verification_number || '0123456789'}
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-sm font-medium text-gray-500">
-                Photo of you
-              </h3>
-              <div className="flex justify-between items-center mt-1">
-                <p className="text-sm text-gray-900">Jpeg</p>
-                <button className="text-gray-500 hover:text-gray-700">
-                  <FaEye />
-                </button>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-sm font-medium text-gray-500">Occupation</h3>
-              <p className="mt-1 text-sm text-gray-900">
-                {user.occupation || 'Bank Manager'}
-              </p>
-            </div>
 
             <div>
               <h3 className="text-sm font-medium text-gray-500">
                 Date of Birth
               </h3>
               <p className="mt-1 text-sm text-gray-900">
-                {new Date(user.dob).toLocaleDateString('en-US', {
+                {user.dob ? new Date(user.dob).toLocaleDateString('en-US', {
                   month: 'long',
                   day: 'numeric',
                   year: 'numeric',
-                })}
+                }) : 'Not provided'}
               </p>
             </div>
 
             <div>
-              <h3 className="text-sm font-medium text-gray-500">
-                Means of Identification
-              </h3>
-              <div className="flex justify-between items-center mt-1">
-                <p className="text-sm text-gray-900">
-                  {user.passport || 'Passport'}
-                </p>
-                <button className="text-gray-500 hover:text-gray-700">
-                  <FaEye />
-                </button>
-              </div>
+              <h3 className="text-sm font-medium text-gray-500">Gender</h3>
+              <p className="mt-1 text-sm text-gray-900 capitalize">{user.gender || 'Not specified'}</p>
             </div>
 
-            <div>
-              <h3 className="text-sm font-medium text-gray-500">
-                Proof of Address (E.g Utility bill, Bank statement)
-              </h3>
-              <div className="flex justify-between items-center mt-1">
-                <p className="text-sm text-gray-900">
-                  {user.bank_statement || 'Bank Statement'}
+            {userType === 'employee' && (
+              <div>
+                <h3 className="text-sm font-medium text-gray-500">Occupation</h3>
+                <p className="mt-1 text-sm text-gray-900">
+                  {getUserOccupations(user)}
                 </p>
-                <button className="text-gray-500 hover:text-gray-700">
-                  <FaEye />
-                </button>
               </div>
+            )}
+
+            <div>
+              <h3 className="text-sm font-medium text-gray-500">Verification Status</h3>
+              <p className="mt-1">
+                <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                  user.is_verified === 1
+                    ? 'bg-green-100 text-green-800'
+                    : 'bg-red-100 text-red-800'
+                }`}>
+                  {user.is_verified === 1 ? 'Verified' : 'Unverified'}
+                </span>
+              </p>
             </div>
           </div>
         </div>

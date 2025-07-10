@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
-import { FaUser } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { FaRegUser } from 'react-icons/fa';
 import adminApi from '../../api/adminApi';
+import Avatar from '../../components/common/Avatar';
 
 interface Employee {
   id: number;
@@ -216,21 +216,13 @@ const AdminTrack = () => {
                     className="border-b border-gray-100 hover:bg-gray-50"
                   >
                     <td className="px-4 py-3 flex items-center gap-3">
-                      {employee.avatar ? (
-                        <div className="w-8 h-8 rounded-full overflow-hidden relative">
-                          <img
-                            src={employee.avatar}
-                            alt={employee.candidate || 'Employee'}
-                            className="w-full h-full object-cover"
-                          />
-                          <div className="absolute w-3 h-3 bg-green-500 rounded-full -top-1 -right-1 border-2 border-white" />
-                        </div>
-                      ) : (
-                        <div className="bg-gray-200 rounded-full p-2 flex items-center justify-center relative">
-                          <FaUser className="text-white" />
-                          <div className="absolute w-3 h-3 bg-green-500 rounded-full -top-1 -right-1 border-2 border-white" />
-                        </div>
-                      )}
+                      <Avatar
+                        src={employee.avatar}
+                        firstName={employee.candidate?.split(' ')[0] || 'Unknown'}
+                        lastName={employee.candidate?.split(' ')[1] || 'User'}
+                        size="sm"
+                        showStatus={false}
+                      />
                       <span>{employee.candidate || 'Unknown Candidate'}</span>
                     </td>
                     <td className="px-4 py-3 text-gray-700">
