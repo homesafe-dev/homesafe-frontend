@@ -3,6 +3,7 @@ import { LuBellDot } from 'react-icons/lu';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import NotificationsModal from '../../common/NotificationsModal';
+import EnvironmentIndicator from '../../common/EnvironmentIndicator';
 import ProfileIcon from '../../../assets/icons/profile.svg';
 import LogoutIcon from '../../../assets/icons/logout.svg';
 import SecurityIcon from '../../../assets/icons/security.svg';
@@ -90,10 +91,11 @@ const Header: React.FC<HeaderProps> = ({
     <header className="bg-white shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex justify-between items-center">
-          <div className="flex items-center">
+          <div className="flex items-center space-x-4">
             <span className="text-xl font-semibold text-gray-800">
               Welcome, {userName}
             </span>
+            <EnvironmentIndicator />
           </div>
 
           {/* Right side - User info and controls */}
