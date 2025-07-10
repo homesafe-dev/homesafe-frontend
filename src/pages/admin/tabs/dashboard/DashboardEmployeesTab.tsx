@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
-import { FaUser, FaPlus } from 'react-icons/fa';
-import { BsThreeDotsVertical } from 'react-icons/bs';
-import { FaRegUser } from 'react-icons/fa';
+import { FaPlus } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import adminApi from '../../../../api/adminApi';
 import CreateUserModal from '../../../../components/CreateUserModal';
+import Avatar from '../../../../components/common/Avatar';
 
 interface Employee {
   id: number;
@@ -47,8 +46,6 @@ export default function DashboardEmployeesTab() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [showOptionsFor, setShowOptionsFor] = useState<number | null>(null);
-
   // Helper function to safely format gender
   const formatGender = (gender: string | null): string => {
     if (!gender || typeof gender !== 'string') return 'N/A';
@@ -74,56 +71,6 @@ export default function DashboardEmployeesTab() {
     } else {
       return { text: 'Unverified', style: 'bg-red-100 text-red-800' };
     }
-  };
-
-  const toggleOptions = (id: number) => {
-    if (showOptionsFor === id) {
-      setShowOptionsFor(null);
-    } else {
-      setShowOptionsFor(id);
-    }
-  };
-
-  const handleBlockUser = async (userId: number) => {
-    try {
-      const response = await adminApi.blockUser(userId);
-      if (response.status) {
-        alert('User blocked successfully');
-        // Update the employee list to reflect the change
-        setEmployees(
-          employees.map((emp) =>
-            emp.id === userId ? { ...emp, is_blocked: true } : emp
-          )
-        );
-      } else {
-        alert(response.message || 'Failed to block user');
-      }
-    } catch (error) {
-      console.error('Error blocking user:', error);
-      alert('An error occurred while blocking the user');
-    }
-    setShowOptionsFor(null);
-  };
-
-  const handleUnblockUser = async (userId: number) => {
-    try {
-      const response = await adminApi.unblockUser(userId);
-      if (response.status) {
-        alert('User unblocked successfully');
-        // Update the employee list to reflect the change
-        setEmployees(
-          employees.map((emp) =>
-            emp.id === userId ? { ...emp, is_blocked: false } : emp
-          )
-        );
-      } else {
-        alert(response.message || 'Failed to unblock user');
-      }
-    } catch (error) {
-      console.error('Error unblocking user:', error);
-      alert('An error occurred while unblocking the user');
-    }
-    setShowOptionsFor(null);
   };
 
   useEffect(() => {
@@ -191,9 +138,6 @@ export default function DashboardEmployeesTab() {
             <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
               Blocked Status
             </th>
-            <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
-              Actions
-            </th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200">
@@ -227,14 +171,14 @@ export default function DashboardEmployeesTab() {
           ) : error ? (
             // Error state
             <tr>
-              <td colSpan={8} className="px-6 py-4 text-center text-red-500">
+              <td colSpan={7} className="px-6 py-4 text-center text-red-500">
                 {error}
               </td>
             </tr>
           ) : employees.length === 0 ? (
             // Empty state
             <tr>
-              <td colSpan={8} className="px-6 py-4 text-center text-gray-500">
+              <td colSpan={7} className="px-6 py-4 text-center text-gray-500">
                 No employees found
               </td>
             </tr>
@@ -247,26 +191,13 @@ export default function DashboardEmployeesTab() {
                 onClick={() => navigate(`/admin/user/${employee.id}`)}
               >
                 <td className="px-6 py-4 flex items-center gap-2 text-[13px] text-[#24292E] font-normal">
-                  <div className="flex items-center gap-2 relative">
-                    {employee.avatar ? (
-                      <div className="w-8 h-8 rounded-full overflow-hidden relative">
-                        <img
-                          src={employee.avatar}
-                          alt={formatName(
-                            employee.first_name,
-                            employee.last_name
-                          )}
-                          className="w-full h-full object-cover"
-                        />
-                        <div className="absolute w-3 h-3 bg-green-500 rounded-full -top-1 -right-1 border-2 border-white" />
-                      </div>
-                    ) : (
-                      <div className="bg-[#BDBDBD] rounded-full p-2 flex items-center justify-center relative">
-                        <FaUser className="text-white" />
-                        <div className="absolute w-3 h-3 bg-green-500 rounded-full -top-1 -right-1 border-2 border-white" />
-                      </div>
-                    )}
-                  </div>
+                  <Avatar
+                    src={employee.avatar}
+                    firstName={employee.first_name || 'Unknown'}
+                    lastName={employee.last_name || 'User'}
+                    size="sm"
+                    showStatus={false}
+                  />
                   {formatName(employee.first_name, employee.last_name)}
                 </td>
                 <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
@@ -309,69 +240,6 @@ export default function DashboardEmployeesTab() {
                   >
                     {employee.is_blocked ? 'Blocked' : 'Active'}
                   </span>
-                </td>
-                <td className="px-6 py-4 relative">
-                  <button
-                    onClick={() => toggleOptions(employee.id)}
-                    className="text-gray-400 hover:text-gray-600"
-                  >
-                    <BsThreeDotsVertical />
-                  </button>
-                  {showOptionsFor === employee.id && (
-                    <div className="absolute right-8 top-10 bg-white shadow-lg rounded-md py-2 w-48 z-10">
-                      <div
-                        className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer"
-                        onClick={() => {
-                          navigate(`/admin/candidate-profile/${employee.id}`);
-                          setShowOptionsFor(null);
-                        }}
-                      >
-                        <FaRegUser className="text-gray-500" />
-                        <span>View Profile</span>
-                      </div>
-                      {employee.is_blocked ? (
-                        <div
-                          className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer"
-                          onClick={() => handleUnblockUser(employee.id)}
-                        >
-                          <svg
-                            className="w-4 h-4 text-green-500"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"
-                            />
-                          </svg>
-                          <span className="text-green-600">Unblock User</span>
-                        </div>
-                      ) : (
-                        <div
-                          className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer"
-                          onClick={() => handleBlockUser(employee.id)}
-                        >
-                          <svg
-                            className="w-4 h-4 text-red-500"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                            />
-                          </svg>
-                          <span className="text-red-600">Block User</span>
-                        </div>
-                      )}
-                    </div>
-                  )}
                 </td>
               </tr>
             ))

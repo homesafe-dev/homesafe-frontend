@@ -11,7 +11,7 @@ export interface UserRegistrationData {
   last_name: string;
   email: string;
   phone: string;
-  password: string;
+  password?: string;
   salary: number;
   role: 'agent' | 'employee' | 'employer' | 'admin';
   occupations: number[];

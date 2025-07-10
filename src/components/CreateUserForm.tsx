@@ -42,8 +42,6 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
     last_name: '',
     email: '',
     phone: '',
-    password: '',
-    confirmPassword: '',
     salary: 0,
     occupations: [] as number[],
     agent_id: '',
@@ -94,12 +92,6 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
     setSuccess(null);
 
     // Validation
-    if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
-      setIsLoading(false);
-      return;
-    }
-
     if (userType === 'employee' && formData.occupations.length === 0) {
       setError('Please select at least one occupation');
       setIsLoading(false);
@@ -116,12 +108,15 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
     }
 
     try {
+      // Generate a default password (users can change it later)
+      const defaultPassword = `${formData.first_name.toLowerCase()}${new Date().getFullYear()}`;
+
       const userData: UserRegistrationData = {
         first_name: formData.first_name,
         last_name: formData.last_name,
         email: formData.email,
         phone: formData.phone,
-        password: formData.password,
+        password: defaultPassword,
         salary: formData.salary,
         role: userType,
         occupations:
@@ -240,34 +235,11 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Password *
-              </label>
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleInputChange}
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Confirm Password *
-              </label>
-              <input
-                type="password"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleInputChange}
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              />
-            </div>
+          <div className="mb-4 p-4 bg-blue-50 border border-blue-200 text-blue-700 rounded">
+            <p className="text-sm">
+              <strong>Note:</strong> A default password will be generated for the user.
+              They can change it after their first login.
+            </p>
           </div>
 
           {/* Remove salary fields for all user types as per requirements */}

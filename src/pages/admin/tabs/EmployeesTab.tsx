@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { FaUser } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import adminApi from '../../../api/adminApi';
 import DropdownMenu from '../../../components/common/DropdownMenu';
+import Avatar from '../../../components/common/Avatar';
 
 interface Employee {
   id: number;
@@ -199,23 +199,13 @@ export default function EmployeesTab() {
             employees.map((employee) => (
               <tr key={employee.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 flex items-center gap-2 text-[13px] text-[#24292E] font-normal">
-                  <div className="flex items-center gap-2 relative">
-                    {employee.avatar ? (
-                      <div className="w-8 h-8 rounded-full overflow-hidden relative">
-                        <img
-                          src={employee.avatar}
-                          alt={`${employee.first_name} ${employee.last_name}`}
-                          className="w-full h-full object-cover"
-                        />
-                        <div className="absolute w-3 h-3 bg-green-500 rounded-full -top-1 -right-1 border-2 border-white" />
-                      </div>
-                    ) : (
-                      <div className="bg-[#BDBDBD] rounded-full p-2 flex items-center justify-center relative">
-                        <FaUser className="text-white" />
-                        <div className="absolute w-3 h-3 bg-green-500 rounded-full -top-1 -right-1 border-2 border-white" />
-                      </div>
-                    )}
-                  </div>
+                  <Avatar
+                    src={employee.avatar}
+                    firstName={employee.first_name}
+                    lastName={employee.last_name}
+                    size="sm"
+                    showStatus={false}
+                  />
                   {`${employee.first_name} ${employee.last_name}`}
                 </td>
                 <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
