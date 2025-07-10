@@ -18,7 +18,9 @@ const environmentApi = {
    */
   getAppEnvironment: async (): Promise<EnvironmentResponse> => {
     try {
-      const response = await axiosInstance.get(ENVIRONMENT_ENDPOINTS.APP_ENVIRONMENT);
+      const response = await axiosInstance.get(
+        ENVIRONMENT_ENDPOINTS.APP_ENVIRONMENT
+      );
       return response.data;
     } catch (error) {
       console.error('Error fetching app environment:', error);
