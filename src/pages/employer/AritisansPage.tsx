@@ -440,10 +440,17 @@ const ArtisansPage: React.FC = () => {
                   artisan.is_employed ? 'opacity-60 grayscale' : ''
                 }`}
               >
-                {/* Hired Badge */}
+                {/* Hired Badge - moved to left side */}
                 {artisan.is_employed && (
-                  <div className="absolute top-4 right-4 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-medium">
+                  <div className="absolute top-4 left-4 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-medium">
                     HIRED
+                  </div>
+                )}
+
+                {/* Verified Star - in right section where hired used to be */}
+                {artisan.status === 1 && (
+                  <div className="absolute top-4 right-4 text-green-500 text-lg">
+                    ★
                   </div>
                 )}
 
@@ -453,7 +460,7 @@ const ArtisansPage: React.FC = () => {
                     firstName={artisan.first_name}
                     lastName={artisan.last_name}
                     size="lg"
-                    showStatus={true}
+                    showStatus={false}
                     isOnline={artisan.status === 1}
                   />
                 </div>

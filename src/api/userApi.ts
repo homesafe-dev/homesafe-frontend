@@ -57,7 +57,7 @@ const userApi = {
    * @param kycData - KYC data to submit with number and type fields
    * @returns Promise with the API response
    */
-  submitKYC: async (kycData: { number: number; type: string }) => {
+  submitKYC: async (kycData: { number: string | number; type: string }) => {
     try {
       const response = await axiosInstance.post(USER_ENDPOINTS.KYC, kycData);
       return response.data;
