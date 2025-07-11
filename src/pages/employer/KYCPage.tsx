@@ -101,7 +101,7 @@ const KYCPage: React.FC = () => {
 
       // Create payload for KYC API
       const kycPayload = {
-        number: parseInt(formData.ninNumber),
+        number: formData.ninNumber,
         type: formData.idType,
       };
 
@@ -159,7 +159,7 @@ const KYCPage: React.FC = () => {
         <div className="bg-red-50 text-red-600 p-4 rounded-lg text-center mb-6">
           {error}
         </div>
-      ) : userProfile?.is_verified === 1 ? (
+      ) : userProfile?.status === 1 ? (
         <div className="bg-white rounded-lg border-2 border-gray-300 shadow-sm p-12 max-w-3xl">
           {/* Header Section */}
           <div className="mb-8">
@@ -227,7 +227,7 @@ const KYCPage: React.FC = () => {
                   ID Verification
                 </h2>
                 <p className="text-sm text-orange-600">
-                  Please use NIN number 1000000001 for verification
+                  Please use 1000000001 for NIN number & JZ426633988976CH for V-NIN verification
                 </p>
               </div>
             </div>
@@ -275,7 +275,7 @@ const KYCPage: React.FC = () => {
                   <option value="nin">
                     National Identification Number (NIN)
                   </option>
-                  <option value="virtual_nin">Virtual NIN</option>
+                  <option value="v_nin">Virtual NIN</option>
                 </select>
               </div>
 
