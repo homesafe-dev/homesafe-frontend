@@ -227,7 +227,8 @@ const EmployeeKYCPage: React.FC = () => {
                   ID Verification
                 </h2>
                 <p className="text-sm text-orange-600">
-                  Please use 1000000001 for NIN number & JZ426633988976CH for V-NIN verification
+                  Please use 1000000001 for NIN number & JZ426633988976CH for
+                  V-NIN verification
                 </p>
               </div>
             </div>
