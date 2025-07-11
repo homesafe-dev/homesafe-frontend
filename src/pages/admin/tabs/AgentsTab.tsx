@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { FaUser, FaPlus } from 'react-icons/fa';
+import { FaPlus } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import adminApi from '../../../api/adminApi';
 import DropdownMenu from '../../../components/common/DropdownMenu';
 import CreateUserModal from '../../../components/CreateUserModal';
+import Avatar from '../../../components/common/Avatar';
 
 interface Agent {
   id: number;
@@ -189,23 +190,13 @@ export default function AgentsTab() {
             agents.map((agent) => (
               <tr key={agent.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 flex items-center gap-2 text-[13px] text-[#24292E] font-normal">
-                  <div className="flex items-center gap-2 relative">
-                    {agent.avatar ? (
-                      <div className="w-8 h-8 rounded-full overflow-hidden relative">
-                        <img
-                          src={agent.avatar}
-                          alt={`${agent.first_name} ${agent.last_name}`}
-                          className="w-full h-full object-cover"
-                        />
-                        <div className="absolute w-3 h-3 bg-green-500 rounded-full -top-1 -right-1 border-2 border-white" />
-                      </div>
-                    ) : (
-                      <div className="bg-[#BDBDBD] rounded-full p-2 flex items-center justify-center relative">
-                        <FaUser className="text-white" />
-                        <div className="absolute w-3 h-3 bg-green-500 rounded-full -top-1 -right-1 border-2 border-white" />
-                      </div>
-                    )}
-                  </div>
+                  <Avatar
+                    src={agent.avatar}
+                    firstName={agent.first_name}
+                    lastName={agent.last_name}
+                    size="sm"
+                    showStatus={false}
+                  />
                   {`${agent.first_name} ${agent.last_name}`}
                 </td>
                 <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">

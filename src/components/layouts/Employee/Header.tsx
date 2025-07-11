@@ -3,6 +3,7 @@ import { LuBellDot } from 'react-icons/lu';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import NotificationsModal from '../../common/NotificationsModal';
+import EnvironmentIndicator from '../../common/EnvironmentIndicator';
 import ProfileIcon from '../../../assets/icons/profile.svg';
 import LogoutIcon from '../../../assets/icons/logout.svg';
 import KycIcon from '../../../assets/icons/kyc.svg';
@@ -96,7 +97,12 @@ const Header: React.FC<HeaderProps> = () => {
   return (
     <header className="bg-white shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <div className="flex justify-end items-center">
+        <div className="flex justify-between items-center">
+          {/* Left side - Environment indicator */}
+          <div className="flex items-center">
+            <EnvironmentIndicator />
+          </div>
+
           {/* Right side - User info and controls */}
           <div className="flex items-center space-x-4">
             {/* Notification bell */}

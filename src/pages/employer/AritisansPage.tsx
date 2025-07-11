@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FiSearch } from 'react-icons/fi';
+import { FiSearch, FiChevronDown } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import artisanApi from '../../api/artisanApi';
 import Avatar from '../../components/common/Avatar';
@@ -30,11 +30,11 @@ interface Artisan {
   username: string | null;
   email: string;
   email_verified_at: string;
-  avatar: string;
-  gender: string;
-  dob: string;
+  avatar: string | null;
+  gender: string | null;
+  dob: string | null;
   phone: string;
-  address: string;
+  address: string | null;
   status: number;
   is_verified: number;
   salary: string;
@@ -42,8 +42,10 @@ interface Artisan {
   created_at: string;
   updated_at: string;
   average_rating: number | null;
+  is_employed: boolean;
   occupations: Occupation[];
   reviews: Review[];
+  active_contract: any;
 }
 
 const ArtisansPage: React.FC = () => {
@@ -54,6 +56,32 @@ const ArtisansPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [itemsPerPage] = useState<number>(15);
+
+  // Filter states
+  const [salaryFilter, setSalaryFilter] = useState<string>('');
+  const [jobTypeFilter, setJobTypeFilter] = useState<string>('');
+  const [showSalaryDropdown, setShowSalaryDropdown] = useState<boolean>(false);
+  const [showJobTypeDropdown, setShowJobTypeDropdown] =
+    useState<boolean>(false);
+
+  // Available job types (occupations)
+  const [availableJobTypes, setAvailableJobTypes] = useState<string[]>([]);
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.dropdown-container')) {
+        setShowSalaryDropdown(false);
+        setShowJobTypeDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     const fetchArtisans = async () => {
@@ -74,6 +102,20 @@ const ArtisansPage: React.FC = () => {
 
           setArtisans(artisanData);
           setTotalPages(response.data?.last_page || 1);
+
+          // Extract unique job types from artisans
+          const jobTypes = new Set<string>();
+          artisanData.forEach((artisan: Artisan) => {
+            if (artisan.occupations && artisan.occupations.length > 0) {
+              artisan.occupations.forEach((occupation) => {
+                jobTypes.add(
+                  occupation.name.charAt(0).toUpperCase() +
+                    occupation.name.slice(1)
+                );
+              });
+            }
+          });
+          setAvailableJobTypes(Array.from(jobTypes).sort());
         } else {
           setError(response.message || 'Failed to load artisans');
         }
@@ -104,8 +146,8 @@ const ArtisansPage: React.FC = () => {
   };
 
   // Function to extract location from address
-  const extractLocation = (address: string | null): string => {
-    if (!address) return 'Unknown';
+  const extractLocation = (address: string | null): string | null => {
+    if (!address) return null;
 
     // Try to extract city from address
     const parts = address.split(',');
@@ -119,8 +161,8 @@ const ArtisansPage: React.FC = () => {
   };
 
   // Calculate age from date of birth
-  const getAge = (dob: string | null): number => {
-    if (!dob) return 0;
+  const getAge = (dob: string | null): string | null => {
+    if (!dob) return null;
 
     const birthDate = new Date(dob);
     const today = new Date();
@@ -135,7 +177,26 @@ const ArtisansPage: React.FC = () => {
       age--;
     }
 
-    return age;
+    return `${age} yrs old`;
+  };
+
+  // Format location and age display
+  const getLocationAgeDisplay = (
+    address: string | null,
+    dob: string | null
+  ): string => {
+    const location = extractLocation(address);
+    const age = getAge(dob);
+
+    if (location && age) {
+      return `${location} | ${age}`;
+    } else if (location) {
+      return location;
+    } else if (age) {
+      return age;
+    }
+
+    return '';
   };
 
   // Get occupation name or default to "Professional"
@@ -154,41 +215,203 @@ const ArtisansPage: React.FC = () => {
     return artisan.average_rating || 0;
   };
 
-  // Filter artisans based on search query
+  // Get salary filter label
+  const getSalaryLabel = (filter: string): string => {
+    switch (filter) {
+      case 'under-50k':
+        return 'Under ₦50,000';
+      case '50k-100k':
+        return '₦50,000 - ₦100,000';
+      case '100k-200k':
+        return '₦100,000 - ₦200,000';
+      case 'over-200k':
+        return 'Over ₦200,000';
+      default:
+        return 'Filter by Salary';
+    }
+  };
+
+  // Filter artisans based on search query, salary, and job type
   const filteredArtisans = artisans.filter((artisan) => {
     const fullName = `${artisan.first_name} ${artisan.last_name}`.toLowerCase();
     const occupation =
       artisan.occupations && artisan.occupations.length > 0
         ? artisan.occupations[0].name.toLowerCase()
         : '';
-    const location = extractLocation(artisan.address).toLowerCase();
+    const location = extractLocation(artisan.address)?.toLowerCase() || '';
     const query = searchQuery.toLowerCase();
 
-    return (
+    // Search filter
+    const matchesSearch =
+      !searchQuery ||
       fullName.includes(query) ||
       occupation.includes(query) ||
-      location.includes(query)
-    );
+      location.includes(query);
+
+    // Salary filter
+    const salary = parseFloat(artisan.salary) || 0;
+    let matchesSalary = true;
+    if (salaryFilter) {
+      switch (salaryFilter) {
+        case 'under-50k':
+          matchesSalary = salary < 50000;
+          break;
+        case '50k-100k':
+          matchesSalary = salary >= 50000 && salary <= 100000;
+          break;
+        case '100k-200k':
+          matchesSalary = salary > 100000 && salary <= 200000;
+          break;
+        case 'over-200k':
+          matchesSalary = salary > 200000;
+          break;
+        default:
+          matchesSalary = true;
+      }
+    }
+
+    // Job type filter
+    const matchesJobType =
+      !jobTypeFilter ||
+      (artisan.occupations &&
+        artisan.occupations.some(
+          (occ) =>
+            occ.name.charAt(0).toUpperCase() + occ.name.slice(1) ===
+            jobTypeFilter
+        ));
+
+    return matchesSearch && matchesSalary && matchesJobType;
   });
 
   return (
     <div className="min-h-screen">
       {/* Main Content */}
       <div className="px-6 py-6">
-        <div className="flex justify-between">
-          <h1 className="text-xl font-semibold text-[#24292E] mb-4">
-            Artisans
-          </h1>
+        <div className="flex justify-between items-start mb-4">
+          <h1 className="text-xl font-semibold text-[#24292E]">Artisans</h1>
 
-          <div className="relative mb-6 w-[335px] h-[42px] max-w-md ml-auto">
-            <FiSearch className="absolute left-3 top-3 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search by name, occupation or location"
-              className="w-full pl-10 pr-4 py-2 border border-gray-100 rounded-[16px] text-[16px] text-[#5A6672] focus:outline-none focus:ring-1 focus:ring-green-500"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
+          <div className="flex gap-4 items-center">
+            {/* Salary Filter */}
+            <div className="relative dropdown-container">
+              <button
+                onClick={() => {
+                  setShowSalaryDropdown(!showSalaryDropdown);
+                  setShowJobTypeDropdown(false);
+                }}
+                className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-50 min-w-[140px] justify-between"
+              >
+                <span>
+                  {salaryFilter
+                    ? getSalaryLabel(salaryFilter)
+                    : 'Filter by Salary'}
+                </span>
+                <FiChevronDown
+                  className={`transition-transform ${showSalaryDropdown ? 'rotate-180' : ''}`}
+                />
+              </button>
+              {showSalaryDropdown && (
+                <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+                  <button
+                    onClick={() => {
+                      setSalaryFilter('');
+                      setShowSalaryDropdown(false);
+                    }}
+                    className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 first:rounded-t-lg"
+                  >
+                    All Salaries
+                  </button>
+                  <button
+                    onClick={() => {
+                      setSalaryFilter('under-50k');
+                      setShowSalaryDropdown(false);
+                    }}
+                    className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50"
+                  >
+                    Under ₦50,000
+                  </button>
+                  <button
+                    onClick={() => {
+                      setSalaryFilter('50k-100k');
+                      setShowSalaryDropdown(false);
+                    }}
+                    className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50"
+                  >
+                    ₦50,000 - ₦100,000
+                  </button>
+                  <button
+                    onClick={() => {
+                      setSalaryFilter('100k-200k');
+                      setShowSalaryDropdown(false);
+                    }}
+                    className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50"
+                  >
+                    ₦100,000 - ₦200,000
+                  </button>
+                  <button
+                    onClick={() => {
+                      setSalaryFilter('over-200k');
+                      setShowSalaryDropdown(false);
+                    }}
+                    className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 last:rounded-b-lg"
+                  >
+                    Over ₦200,000
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Job Type Filter */}
+            <div className="relative dropdown-container">
+              <button
+                onClick={() => {
+                  setShowJobTypeDropdown(!showJobTypeDropdown);
+                  setShowSalaryDropdown(false);
+                }}
+                className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-50 min-w-[140px] justify-between"
+              >
+                <span>{jobTypeFilter || 'Filter by Job Type'}</span>
+                <FiChevronDown
+                  className={`transition-transform ${showJobTypeDropdown ? 'rotate-180' : ''}`}
+                />
+              </button>
+              {showJobTypeDropdown && (
+                <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto">
+                  <button
+                    onClick={() => {
+                      setJobTypeFilter('');
+                      setShowJobTypeDropdown(false);
+                    }}
+                    className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 first:rounded-t-lg"
+                  >
+                    All Job Types
+                  </button>
+                  {availableJobTypes.map((jobType) => (
+                    <button
+                      key={jobType}
+                      onClick={() => {
+                        setJobTypeFilter(jobType);
+                        setShowJobTypeDropdown(false);
+                      }}
+                      className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 last:rounded-b-lg"
+                    >
+                      {jobType}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Search Input */}
+            <div className="relative w-[335px] h-[42px]">
+              <FiSearch className="absolute left-3 top-3 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search by name, occupation or location"
+                className="w-full pl-10 pr-4 py-2 border border-gray-100 rounded-[16px] text-[16px] text-[#5A6672] focus:outline-none focus:ring-1 focus:ring-green-500"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
           </div>
         </div>
 
@@ -213,25 +436,42 @@ const ArtisansPage: React.FC = () => {
             {filteredArtisans.map((artisan) => (
               <div
                 key={artisan.id}
-                className="flex flex-col items-center bg-white p-8 shadow"
+                className={`flex flex-col items-center bg-white p-8 shadow relative ${
+                  artisan.is_employed ? 'opacity-60 grayscale' : ''
+                }`}
               >
+                {/* Hired Badge - moved to left side */}
+                {artisan.is_employed && (
+                  <div className="absolute top-4 left-4 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-medium">
+                    HIRED
+                  </div>
+                )}
+
+                {/* Verified Star - in right section where hired used to be */}
+                {artisan.status === 1 && (
+                  <div className="absolute top-4 right-4 text-green-500 text-lg">
+                    ★
+                  </div>
+                )}
+
                 <div className="mb-3">
                   <Avatar
                     src={artisan.avatar}
                     firstName={artisan.first_name}
                     lastName={artisan.last_name}
                     size="lg"
-                    showStatus={true}
+                    showStatus={false}
                     isOnline={artisan.status === 1}
                   />
                 </div>
                 <h3 className="font-medium text-center text-[16px] text-[#24292E] mt-[1rem]">
                   {artisan.first_name} {artisan.last_name}
                 </h3>
-                <p className="text-sm text-gray-500 mb-1 mt-[0.5rem]">
-                  {extractLocation(artisan.address)} | {getAge(artisan.dob)} yrs
-                  old
-                </p>
+                {getLocationAgeDisplay(artisan.address, artisan.dob) && (
+                  <p className="text-sm text-gray-500 mb-1 mt-[0.5rem]">
+                    {getLocationAgeDisplay(artisan.address, artisan.dob)}
+                  </p>
+                )}
                 <div className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs mb-2 mt-[0.5rem]">
                   {getOccupation(artisan)}
                 </div>
@@ -242,7 +482,14 @@ const ArtisansPage: React.FC = () => {
                   to={`/employer/artisan/profile?id=${artisan.id}`}
                   className="w-full"
                 >
-                  <button className="bg-[#A5EA91] hover:bg-green-300 text-[#24292E] px-4 py-2 rounded-md text-sm transition-colors w-full text-center mt-[1rem] cursor-pointer">
+                  <button
+                    className={`px-4 py-2 rounded-md text-sm transition-colors w-full text-center mt-[1rem] cursor-pointer ${
+                      artisan.is_employed
+                        ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
+                        : 'bg-[#A5EA91] hover:bg-green-300 text-[#24292E]'
+                    }`}
+                    disabled={artisan.is_employed}
+                  >
                     View Profile
                   </button>
                 </Link>
