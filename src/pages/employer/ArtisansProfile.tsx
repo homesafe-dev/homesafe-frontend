@@ -431,7 +431,7 @@ const ArtisanProfileView: React.FC = () => {
                   Processing...
                 </div>
               ) : (
-                'Hire Me'
+                'Send Proposal'
               )}
             </button>
           </div>

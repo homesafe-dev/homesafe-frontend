@@ -19,7 +19,6 @@ interface CandidateFormData {
   dob: string;
   gender: string;
   occupation: number;
-  password: string;
   salary: string;
   photo: File | null;
 }
@@ -63,7 +62,6 @@ const CandidatesPage: React.FC = () => {
     dob: '',
     gender: '',
     occupation: 0,
-    password: 'passw0rd', // Default password
     salary: '100000', // Default salary
     photo: null,
   });
@@ -96,12 +94,15 @@ const CandidatesPage: React.FC = () => {
     setSuccess(null);
 
     try {
+      // Generate a default password (users can change it later)
+      const defaultPassword = `${formData.first_name.toLowerCase()}${new Date().getFullYear()}`;
+
       // Prepare the data for API
       const candidateData = {
         email: formData.email,
         first_name: formData.first_name,
         last_name: formData.last_name,
-        password: formData.password,
+        password: defaultPassword,
         dob: formData.dob,
         address: formData.address,
         salary: formData.salary,
@@ -363,22 +364,12 @@ const CandidatesPage: React.FC = () => {
             />
           </div>
 
-          {/* Password */}
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              className="w-full h-[50px] px-3 py-2 border border-[#DEE0E3] rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-700"
-              value={formData.password}
-              onChange={handleInputChange}
-              required
-            />
+          {/* Password Note */}
+          <div className="mb-4 p-4 bg-blue-50 border border-blue-200 text-blue-700 rounded">
+            <p className="text-sm">
+              <strong>Note:</strong> A default password will be generated for
+              the candidate. They can change it after their first login.
+            </p>
           </div>
 
           {/* Home Address */}
