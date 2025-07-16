@@ -173,8 +173,7 @@ export default function IncomingRequestsTab() {
                   />
                   {user.first_name && user.last_name
                     ? `${user.first_name} ${user.last_name}`
-                    : user.email
-                  }
+                    : user.email}
                 </td>
                 <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
                   {new Date(user.created_at).toLocaleDateString('en-US', {
@@ -189,8 +188,7 @@ export default function IncomingRequestsTab() {
                 <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
                   {user.gender
                     ? user.gender.charAt(0).toUpperCase() + user.gender.slice(1)
-                    : 'Not specified'
-                  }
+                    : 'Not specified'}
                 </td>
                 <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
                   {user.phone || 'Not provided'}
