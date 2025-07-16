@@ -301,7 +301,7 @@ const OnboardingForm: React.FC = () => {
                     onChange={() => handleRadioChange('agent')}
                   />
                   <label htmlFor="agent" className="ml-2 text-sm text-gray-700">
-                    An Employee
+                    An Artisan
                   </label>
                 </div>
               </div>
