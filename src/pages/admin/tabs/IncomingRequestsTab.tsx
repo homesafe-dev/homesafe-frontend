@@ -8,17 +8,17 @@ import Avatar from '../../../components/common/Avatar';
 
 interface User {
   id: number;
-  first_name: string;
-  last_name: string;
-  title: string;
+  first_name: string | null;
+  last_name: string | null;
+  title: string | null;
   username: string | null;
   email: string;
-  email_verified_at: string;
-  avatar: string;
-  gender: string;
-  dob: string;
-  phone: string;
-  address: string;
+  email_verified_at: string | null;
+  avatar: string | null;
+  gender: string | null;
+  dob: string | null;
+  phone: string | null;
+  address: string | null;
   status: number;
   is_verified: number;
   salary: string;
@@ -167,11 +167,14 @@ export default function IncomingRequestsTab() {
                 <td className="px-6 py-4 flex items-center gap-2 text-[13px] text-[#24292E] font-normal">
                   <Avatar
                     src={user.avatar}
-                    firstName={user.first_name}
-                    lastName={user.last_name}
+                    firstName={user.first_name || ''}
+                    lastName={user.last_name || ''}
                     size="sm"
                   />
-                  {`${user.first_name} ${user.last_name}`}
+                  {user.first_name && user.last_name
+                    ? `${user.first_name} ${user.last_name}`
+                    : user.email
+                  }
                 </td>
                 <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
                   {new Date(user.created_at).toLocaleDateString('en-US', {
@@ -184,10 +187,13 @@ export default function IncomingRequestsTab() {
                   {user.address ? user.address.split(',')[0] : 'Lagos'}
                 </td>
                 <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
-                  {user.gender.charAt(0).toUpperCase() + user.gender.slice(1)}
+                  {user.gender
+                    ? user.gender.charAt(0).toUpperCase() + user.gender.slice(1)
+                    : 'Not specified'
+                  }
                 </td>
                 <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
-                  {user.phone}
+                  {user.phone || 'Not provided'}
                 </td>
                 <td className="px-6 py-4">
                   <span className="px-3 py-1 rounded-full text-[13px] bg-red-100 text-red-800">
