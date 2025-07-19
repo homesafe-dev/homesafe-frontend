@@ -240,7 +240,9 @@ const EmployeeProfilePage: React.FC = () => {
           onClick={() => navigate(-1)}
         >
           <FaArrowLeft className="mr-2" />
-          <span className="text-base sm:text-lg font-medium">Employee Profile</span>
+          <span className="text-base sm:text-lg font-medium">
+            Employee Profile
+          </span>
         </button>
       </div>
 

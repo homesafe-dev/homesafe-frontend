@@ -190,7 +190,10 @@ const AdminCandidateProfile: React.FC = () => {
   return (
     <div className="rounded-lg">
       <div className="p-3 sm:p-4 border-b border-gray-100">
-        <button className="flex items-center text-gray-600 text-sm sm:text-base" onClick={goBack}>
+        <button
+          className="flex items-center text-gray-600 text-sm sm:text-base"
+          onClick={goBack}
+        >
           <FaArrowLeft className="mr-2" />
           <span>{candidateName}'s Profile</span>
         </button>

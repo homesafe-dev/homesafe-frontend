@@ -182,7 +182,9 @@ const DashboardContent: React.FC = () => {
                   ? formatCurrency(userProfile.wallet.current_balance)
                   : '₦ 0.00'}
               </h3>
-              <p className="text-[#24292E] mt-2 text-[14px] sm:text-[16px]">Wallet Balance</p>
+              <p className="text-[#24292E] mt-2 text-[14px] sm:text-[16px]">
+                Wallet Balance
+              </p>
             </div>
           </div>
         </div>
@@ -194,7 +196,9 @@ const DashboardContent: React.FC = () => {
               <BsBook className="text-gray-500" size={20} />
             </div>
             <div className="min-w-0 flex-1">
-              <h3 className="text-[18px] sm:text-[20px] font-normal text-[#24292E]">0</h3>
+              <h3 className="text-[18px] sm:text-[20px] font-normal text-[#24292E]">
+                0
+              </h3>
               <p className="text-[#24292E] mt-2 text-[14px] sm:text-[16px]">
                 Educational Resources
               </p>
@@ -205,13 +209,17 @@ const DashboardContent: React.FC = () => {
 
       {/* Bottom Card - Salary Advance */}
       <div className="mb-8">
-        <h2 className="text-lg font-medium text-gray-700 mb-4 sm:mb-6">Activities</h2>
+        <h2 className="text-lg font-medium text-gray-700 mb-4 sm:mb-6">
+          Activities
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
           <div className="bg-[#F1F1F1] p-4 sm:p-6 rounded-lg shadow min-h-[140px] sm:min-h-[180px] relative">
             <div className="absolute top-4 right-4 sm:top-6 sm:right-6 w-[80px] h-[80px] sm:w-[100px] sm:h-[100px] bg-white rounded-full"></div>
             <div className="mt-8 sm:mt-12">
               <p className="text-gray-600 text-sm">Available Advance</p>
-              <h3 className="text-lg sm:text-xl font-medium text-gray-800 mt-2">₦ 0.00</h3>
+              <h3 className="text-lg sm:text-xl font-medium text-gray-800 mt-2">
+                ₦ 0.00
+              </h3>
             </div>
           </div>
         </div>
@@ -239,16 +247,32 @@ const DashboardContent: React.FC = () => {
             {transactionsError}
           </div>
         ) : (
-          <div className="overflow-x-auto overflow-y-visible" style={{ marginLeft: '-1rem', marginRight: '-1rem' }}>
+          <div
+            className="overflow-x-auto overflow-y-visible"
+            style={{ marginLeft: '-1rem', marginRight: '-1rem' }}
+          >
             <div style={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
-              <table className="w-full bg-green-50 rounded-lg overflow-hidden" style={{ minWidth: '800px' }}>
+              <table
+                className="w-full bg-green-50 rounded-lg overflow-hidden"
+                style={{ minWidth: '800px' }}
+              >
                 <thead className="text-left text-gray-600 text-sm">
                   <tr>
-                    <th className="py-4 px-6 font-medium whitespace-nowrap">Transaction ID</th>
-                    <th className="py-4 px-6 font-medium whitespace-nowrap">Type</th>
-                    <th className="py-4 px-6 font-medium whitespace-nowrap">Description</th>
-                    <th className="py-4 px-6 font-medium whitespace-nowrap">Amount</th>
-                    <th className="py-4 px-6 font-medium whitespace-nowrap">Status</th>
+                    <th className="py-4 px-6 font-medium whitespace-nowrap">
+                      Transaction ID
+                    </th>
+                    <th className="py-4 px-6 font-medium whitespace-nowrap">
+                      Type
+                    </th>
+                    <th className="py-4 px-6 font-medium whitespace-nowrap">
+                      Description
+                    </th>
+                    <th className="py-4 px-6 font-medium whitespace-nowrap">
+                      Amount
+                    </th>
+                    <th className="py-4 px-6 font-medium whitespace-nowrap">
+                      Status
+                    </th>
                     <th className="py-4 px-6 font-medium whitespace-nowrap"></th>
                   </tr>
                 </thead>
@@ -269,7 +293,9 @@ const DashboardContent: React.FC = () => {
                         <td className="py-4 px-6 capitalize whitespace-nowrap">
                           {transaction.type}
                         </td>
-                        <td className="py-4 px-6 whitespace-nowrap">{transaction.description}</td>
+                        <td className="py-4 px-6 whitespace-nowrap">
+                          {transaction.description}
+                        </td>
                         <td className="py-4 px-6 whitespace-nowrap">
                           ₦{' '}
                           {parseFloat(

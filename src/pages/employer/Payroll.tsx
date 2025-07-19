@@ -68,7 +68,9 @@ const PayrollPage: React.FC = () => {
   return (
     <div className="w-full max-w-7xl mx-auto p-3 sm:p-4 lg:p-6">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 sm:mb-6 gap-4">
-        <h1 className="text-lg sm:text-[20px] font-semibold text-[#24292E]">Payroll</h1>
+        <h1 className="text-lg sm:text-[20px] font-semibold text-[#24292E]">
+          Payroll
+        </h1>
         {/* <button
           className="bg-[#A5EA91] text-[#24292E] font-semibold w-full sm:w-[211px] h-[38px] px-4 py-2 rounded-md text-xs sm:text-[13px] flex items-center justify-center gap-2"
           onClick={handleOpenCreateModal}

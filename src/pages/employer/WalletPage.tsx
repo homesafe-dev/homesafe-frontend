@@ -154,7 +154,10 @@ const WalletPage: React.FC = () => {
                 : '••••••••'}
             </h2>
             <div className="flex flex-col sm:flex-row gap-2">
-              <Link to="/employer/wallet/top-up" className="flex-1 sm:flex-none">
+              <Link
+                to="/employer/wallet/top-up"
+                className="flex-1 sm:flex-none"
+              >
                 <button className="w-full sm:w-auto bg-white text-[#246D51] px-3 sm:px-4 py-2 rounded-md flex items-center justify-center text-xs sm:text-sm">
                   <FaPlus className="mr-2" size={12} /> Top-up
                 </button>
@@ -175,7 +178,9 @@ const WalletPage: React.FC = () => {
       {/* Transaction History */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3 sm:p-4">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-2">
-          <h2 className="text-base sm:text-lg font-medium">Transaction History</h2>
+          <h2 className="text-base sm:text-lg font-medium">
+            Transaction History
+          </h2>
           <Link to="/employer/wallet-history">
             <button className="text-xs sm:text-sm text-blue-600 hover:text-blue-800 self-start sm:self-auto">
               View All
@@ -196,12 +201,24 @@ const WalletPage: React.FC = () => {
             <table className="w-full text-xs sm:text-sm min-w-[600px]">
               <thead>
                 <tr className="text-left text-gray-500 border-b border-gray-200">
-                  <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">Transaction Type</th>
-                  <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">Transaction ID</th>
-                  <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">Status</th>
-                  <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">Amount</th>
-                  <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">Description</th>
-                  <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">Source</th>
+                  <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">
+                    Transaction Type
+                  </th>
+                  <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">
+                    Transaction ID
+                  </th>
+                  <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">
+                    Status
+                  </th>
+                  <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">
+                    Amount
+                  </th>
+                  <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">
+                    Description
+                  </th>
+                  <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">
+                    Source
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -246,8 +263,12 @@ const WalletPage: React.FC = () => {
                           maximumFractionDigits: 2,
                         })}
                       </td>
-                      <td className="py-2 sm:py-3 px-2 text-xs sm:text-sm">{transaction.description}</td>
-                      <td className="py-2 sm:py-3 px-2 text-xs sm:text-sm">{transaction.source}</td>
+                      <td className="py-2 sm:py-3 px-2 text-xs sm:text-sm">
+                        {transaction.description}
+                      </td>
+                      <td className="py-2 sm:py-3 px-2 text-xs sm:text-sm">
+                        {transaction.source}
+                      </td>
                     </tr>
                   ))
                 ) : (

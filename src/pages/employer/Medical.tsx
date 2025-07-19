@@ -39,7 +39,9 @@ const MedicalReportCard: React.FC<MedicalReportCardProps> = ({ record }) => {
           className="w-full h-32 sm:h-40 object-cover rounded-lg"
         />
       </div>
-      <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2">Medical Record</h3>
+      <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2">
+        Medical Record
+      </h3>
       <p className="text-gray-600 text-xs sm:text-sm mb-3 sm:mb-4">
         Uploaded on {formatDate(record.date_uploaded)}
       </p>
@@ -173,7 +175,9 @@ const Medical: React.FC = () => {
   return (
     <div className="container mx-auto px-3 sm:px-4 py-6 sm:py-8">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 sm:mb-8 gap-4">
-        <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">Medical Report</h1>
+        <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">
+          Medical Report
+        </h1>
         <div className="relative w-full sm:w-auto">
           <input
             type="text"
@@ -182,7 +186,10 @@ const Medical: React.FC = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full sm:w-[320px] lg:w-[480px] pl-10 pr-4 py-2 border border-gray-100 rounded-[16px] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm sm:text-base"
           />
-          <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+          <FiSearch
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+            size={16}
+          />
         </div>
       </div>
 

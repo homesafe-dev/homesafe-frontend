@@ -77,7 +77,9 @@ const AllPayrollPage: React.FC = () => {
           size={18}
           onClick={handleBack}
         />
-        <h1 className="text-lg sm:text-[20px] font-semibold text-[#24292E]">See All</h1>
+        <h1 className="text-lg sm:text-[20px] font-semibold text-[#24292E]">
+          See All
+        </h1>
       </div>
 
       <div className="mb-6 sm:mb-8">

@@ -57,9 +57,15 @@ const CandidateReview: React.FC<CandidateReviewProps> = ({
     return (
       <div className="flex flex-col items-center justify-center p-6 sm:p-8 text-center">
         <div className="bg-gray-100 p-3 sm:p-4 rounded-lg mb-3 sm:mb-4">
-          <img src={NoReviewImg} alt="No reviews" className="w-16 h-16 sm:w-auto sm:h-auto" />
+          <img
+            src={NoReviewImg}
+            alt="No reviews"
+            className="w-16 h-16 sm:w-auto sm:h-auto"
+          />
         </div>
-        <h3 className="font-medium text-gray-700 mb-1 text-sm sm:text-base">No Reviews Yet</h3>
+        <h3 className="font-medium text-gray-700 mb-1 text-sm sm:text-base">
+          No Reviews Yet
+        </h3>
         <p className="text-xs sm:text-sm text-gray-500">
           No reviews have been submitted for {candidateName} yet.
         </p>
@@ -108,7 +114,9 @@ const CandidateReview: React.FC<CandidateReviewProps> = ({
             </div>
 
             {review.comment && (
-              <p className="text-gray-700 text-xs sm:text-sm mb-2 leading-relaxed">{review.comment}</p>
+              <p className="text-gray-700 text-xs sm:text-sm mb-2 leading-relaxed">
+                {review.comment}
+              </p>
             )}
 
             {(review.reviewer || review.reviewer_name) && (

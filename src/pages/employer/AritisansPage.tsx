@@ -288,7 +288,9 @@ const ArtisansPage: React.FC = () => {
       {/* Main Content */}
       <div className="px-3 sm:px-4 lg:px-6 py-4 sm:py-6">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4 gap-4">
-          <h1 className="text-lg sm:text-xl font-semibold text-[#24292E]">Artisans</h1>
+          <h1 className="text-lg sm:text-xl font-semibold text-[#24292E]">
+            Artisans
+          </h1>
 
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 items-stretch sm:items-center">
             {/* Salary Filter */}
@@ -370,7 +372,9 @@ const ArtisansPage: React.FC = () => {
                 }}
                 className="flex items-center gap-2 px-3 sm:px-4 py-2 border border-gray-200 rounded-lg text-xs sm:text-sm text-gray-700 hover:bg-gray-50 w-full sm:min-w-[140px] justify-between"
               >
-                <span className="truncate">{jobTypeFilter || 'Filter by Job Type'}</span>
+                <span className="truncate">
+                  {jobTypeFilter || 'Filter by Job Type'}
+                </span>
                 <FiChevronDown
                   className={`transition-transform flex-shrink-0 ${showJobTypeDropdown ? 'rotate-180' : ''}`}
                   size={14}
@@ -405,7 +409,10 @@ const ArtisansPage: React.FC = () => {
 
             {/* Search Input */}
             <div className="relative w-full sm:w-[280px] lg:w-[335px] h-[38px] sm:h-[42px]">
-              <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+              <FiSearch
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                size={16}
+              />
               <input
                 type="text"
                 placeholder="Search by name, occupation or location"

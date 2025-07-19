@@ -64,13 +64,21 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
           <p className="text-xs text-gray-500">{date}</p>
         </div>
       </div>
-      <p className="text-xs sm:text-sm text-gray-600 mb-3 line-clamp-3">{comment}</p>
+      <p className="text-xs sm:text-sm text-gray-600 mb-3 line-clamp-3">
+        {comment}
+      </p>
       <div className="flex">
         {[...Array(5)].map((_, index) =>
           index < rating ? (
-            <AiFillStar key={index} className="text-[#EFAE73] text-sm sm:text-base" />
+            <AiFillStar
+              key={index}
+              className="text-[#EFAE73] text-sm sm:text-base"
+            />
           ) : (
-            <AiOutlineStar key={index} className="text-[#EFAE73] text-sm sm:text-base" />
+            <AiOutlineStar
+              key={index}
+              className="text-[#EFAE73] text-sm sm:text-base"
+            />
           )
         )}
       </div>

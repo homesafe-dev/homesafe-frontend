@@ -21,7 +21,9 @@ const CandidateWorkSchedule: React.FC<CandidateWorkScheduleProps> = ({
         <div className="space-y-4 sm:space-y-6">
           {/* Placement Section */}
           <div>
-            <h3 className="text-gray-700 font-medium mb-2 text-sm sm:text-base">Placement:</h3>
+            <h3 className="text-gray-700 font-medium mb-2 text-sm sm:text-base">
+              Placement:
+            </h3>
             <p className="text-gray-600 text-sm sm:text-base">
               {hasPlacement ? placement : 'No placement assigned'}
             </p>
@@ -30,14 +32,18 @@ const CandidateWorkSchedule: React.FC<CandidateWorkScheduleProps> = ({
 
           {/* Position Section */}
           <div>
-            <h3 className="text-gray-700 font-medium mb-2 text-sm sm:text-base">Position:</h3>
+            <h3 className="text-gray-700 font-medium mb-2 text-sm sm:text-base">
+              Position:
+            </h3>
             <p className="text-gray-600 text-sm sm:text-base">{position}</p>
             <div className="border-b border-gray-200 my-3 sm:my-4"></div>
           </div>
 
           {/* Work Schedule Section */}
           <div>
-            <h3 className="text-gray-700 font-medium mb-2 text-sm sm:text-base">Work Schedule:</h3>
+            <h3 className="text-gray-700 font-medium mb-2 text-sm sm:text-base">
+              Work Schedule:
+            </h3>
             <p className="text-gray-600 text-sm sm:text-base">
               {hasPlacement
                 ? '5 days in a week'

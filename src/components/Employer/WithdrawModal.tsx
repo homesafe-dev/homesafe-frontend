@@ -100,7 +100,9 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
       <div className="bg-white rounded-lg w-full max-w-md relative z-10 max-h-[90vh] overflow-y-auto">
         <div className="p-4 sm:p-6">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl sm:text-2xl font-medium text-gray-800">Withdraw</h2>
+            <h2 className="text-xl sm:text-2xl font-medium text-gray-800">
+              Withdraw
+            </h2>
             <button
               onClick={handleClose}
               className="rounded-full p-1 hover:bg-gray-100"

@@ -116,7 +116,9 @@ const ContractCard: React.FC<ContractCardProps> = ({ proposal, imageUrl }) => {
       <h3 className="font-semibold text-sm sm:text-[16px] text-[#24292E] mb-2">
         {employeeName}
       </h3>
-      <p className="text-xs sm:text-[13px] text-[#48525B] mb-2 sm:mb-3 leading-relaxed">{description}</p>
+      <p className="text-xs sm:text-[13px] text-[#48525B] mb-2 sm:mb-3 leading-relaxed">
+        {description}
+      </p>
       <div className="flex justify-between items-center mb-2 sm:mb-3">
         <span
           className={`px-2 py-1 rounded-full text-xs ${
@@ -221,7 +223,9 @@ const ContractsPage: React.FC<ContractsPageProps> = ({
   return (
     <div className="rounded-md p-3 sm:p-4 lg:p-6">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 sm:mb-6 gap-4">
-        <h2 className="text-lg sm:text-xl font-semibold text-[#24292E]">{title}</h2>
+        <h2 className="text-lg sm:text-xl font-semibold text-[#24292E]">
+          {title}
+        </h2>
         <div className="relative w-full sm:w-auto">
           <input
             type="text"
@@ -230,7 +234,10 @@ const ContractsPage: React.FC<ContractsPageProps> = ({
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+          <FiSearch
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+            size={16}
+          />
         </div>
       </div>
 

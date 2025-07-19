@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { LuBellDot } from 'react-icons/lu';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
-import { HiOutlineMenu, HiOutlineX } from 'react-icons/hi';
+import { HiOutlineMenu } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
 import NotificationsModal from '../../common/NotificationsModal';
 import EnvironmentIndicator from '../../common/EnvironmentIndicator';
@@ -146,7 +146,9 @@ const Header: React.FC<HeaderProps> = ({
 
                 {/* User email with dropdown */}
                 <div className="flex items-center text-gray-700 min-w-0">
-                  <span className="text-xs sm:text-sm truncate max-w-[120px] sm:max-w-none">{userEmail}</span>
+                  <span className="text-xs sm:text-sm truncate max-w-[120px] sm:max-w-none">
+                    {userEmail}
+                  </span>
                   <MdOutlineKeyboardArrowDown
                     size={16}
                     className="text-gray-500 flex-shrink-0 ml-1"

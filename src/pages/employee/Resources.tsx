@@ -267,8 +267,15 @@ const ResourcesPage: React.FC = () => {
                         </>
                       )}
 
-                      {[paginationMeta.current_page - 1, paginationMeta.current_page, paginationMeta.current_page + 1]
-                        .filter(page => page >= 1 && page <= paginationMeta.last_page)
+                      {[
+                        paginationMeta.current_page - 1,
+                        paginationMeta.current_page,
+                        paginationMeta.current_page + 1,
+                      ]
+                        .filter(
+                          (page) =>
+                            page >= 1 && page <= paginationMeta.last_page
+                        )
                         .map((page) => (
                           <button
                             key={page}
@@ -283,13 +290,17 @@ const ResourcesPage: React.FC = () => {
                           </button>
                         ))}
 
-                      {paginationMeta.current_page < paginationMeta.last_page - 1 && (
+                      {paginationMeta.current_page <
+                        paginationMeta.last_page - 1 && (
                         <>
-                          {paginationMeta.current_page < paginationMeta.last_page - 2 && (
+                          {paginationMeta.current_page <
+                            paginationMeta.last_page - 2 && (
                             <span className="px-1 text-gray-500">...</span>
                           )}
                           <button
-                            onClick={() => handlePageChange(paginationMeta.last_page)}
+                            onClick={() =>
+                              handlePageChange(paginationMeta.last_page)
+                            }
                             className="px-2 sm:px-3 py-1 rounded text-sm bg-gray-200 text-gray-700 hover:bg-gray-300"
                           >
                             {paginationMeta.last_page}

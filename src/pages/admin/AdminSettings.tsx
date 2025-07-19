@@ -186,12 +186,24 @@ const AdminSettings: React.FC = () => {
           <table className="w-full text-xs sm:text-sm min-w-[700px]">
             <thead>
               <tr className="text-left text-gray-700 bg-[#C8EDDF80]">
-                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">Full Name</th>
-                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">Email</th>
-                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">Phone Number</th>
-                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">Date of Birth</th>
-                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">Gender</th>
-                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">Status</th>
+                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                  Full Name
+                </th>
+                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                  Email
+                </th>
+                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                  Phone Number
+                </th>
+                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                  Date of Birth
+                </th>
+                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                  Gender
+                </th>
+                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                  Status
+                </th>
                 <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm"></th>
               </tr>
             </thead>
@@ -234,7 +246,9 @@ const AdminSettings: React.FC = () => {
                         })()
                       : 'N/A'}
                   </td>
-                  <td className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm capitalize">{admin.gender}</td>
+                  <td className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm capitalize">
+                    {admin.gender}
+                  </td>
                   <td className="py-2 sm:py-3 px-2 sm:px-4">
                     <span
                       className={`px-2 sm:px-3 py-1 rounded-full text-[10px] sm:text-xs ${

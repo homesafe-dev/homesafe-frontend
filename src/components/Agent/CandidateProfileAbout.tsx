@@ -72,18 +72,26 @@ const CandidateProfileAbout: React.FC<CandidateProfileAboutProps> = ({
       </div>
 
       <div className="w-full">
-        <h3 className="text-[#246D51] font-semibold text-sm sm:text-[16px] mb-2">About</h3>
-        <p className="text-xs sm:text-[13px] text-[#48525B] mb-4 sm:mb-6 leading-relaxed">{bio}</p>
+        <h3 className="text-[#246D51] font-semibold text-sm sm:text-[16px] mb-2">
+          About
+        </h3>
+        <p className="text-xs sm:text-[13px] text-[#48525B] mb-4 sm:mb-6 leading-relaxed">
+          {bio}
+        </p>
 
         <h3 className="text-[#246D51] font-semibold text-sm sm:text-[16px] mb-2">
           Contact Details
         </h3>
-        <p className="text-xs sm:text-[13px] text-[#246D51] break-all">{phone}</p>
+        <p className="text-xs sm:text-[13px] text-[#246D51] break-all">
+          {phone}
+        </p>
 
         <h3 className="text-[#246D51] font-semibold text-sm sm:text-[16px] mt-3 sm:mt-4 mb-2">
           Email
         </h3>
-        <p className="text-xs sm:text-[13px] text-[#246D51] break-all">{email}</p>
+        <p className="text-xs sm:text-[13px] text-[#246D51] break-all">
+          {email}
+        </p>
 
         {showAdminActions && (
           <div className="mt-4 sm:mt-6 flex gap-2">

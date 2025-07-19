@@ -233,7 +233,9 @@ const ContractViewPage: React.FC = () => {
         <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8">
           {/* Header */}
           <div className="text-center mb-6 sm:mb-8">
-            <h1 className="text-xl sm:text-2xl font-bold text-[#246D51] mb-2">homesafe</h1>
+            <h1 className="text-xl sm:text-2xl font-bold text-[#246D51] mb-2">
+              homesafe
+            </h1>
             <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
               Employment Contract Form
             </h2>

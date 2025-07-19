@@ -203,7 +203,9 @@ export default function AgentsTab() {
                   <span className="truncate">{agent.email || 'N/A'}</span>
                 </td>
                 <td className="px-3 sm:px-6 py-3 sm:py-4 text-[11px] sm:text-[13px] text-[#24292E] font-normal">
-                  <span className="truncate">{agent.address ? agent.address.split(',')[0] : 'Lagos'}</span>
+                  <span className="truncate">
+                    {agent.address ? agent.address.split(',')[0] : 'Lagos'}
+                  </span>
                 </td>
                 <td className="px-3 sm:px-6 py-3 sm:py-4 text-[11px] sm:text-[13px] text-[#24292E] font-normal">
                   {agent.total_employees !== undefined

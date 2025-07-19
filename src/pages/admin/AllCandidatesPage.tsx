@@ -81,7 +81,9 @@ const AllCandidatesPage = () => {
     <div className="p-0">
       {/* Header */}
       <div className="mb-6 sm:mb-8">
-        <h2 className="text-[#24292E] text-[18px] sm:text-[20px] font-semibold">Candidates</h2>
+        <h2 className="text-[#24292E] text-[18px] sm:text-[20px] font-semibold">
+          Candidates
+        </h2>
         <p className="text-gray-600 text-sm mt-1">
           Here are all your candidates
         </p>
@@ -89,7 +91,9 @@ const AllCandidatesPage = () => {
 
       {/* Error Message */}
       {error && (
-        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded text-sm">{error}</div>
+        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded text-sm">
+          {error}
+        </div>
       )}
 
       {/* Main Content */}
