@@ -79,25 +79,25 @@ const EmployeeSecurityPage: React.FC = () => {
   };
 
   return (
-    <div className="w-[85%]">
-      <div className="mb-8">
+    <div className="w-full max-w-4xl mx-auto px-4 sm:px-0">
+      <div className="mb-6 sm:mb-8">
         <button
           className="flex items-center text-gray-600 hover:text-gray-800"
           onClick={() => navigate(-1)}
         >
           <FaArrowLeft className="mr-2" />
-          <span className="text-gray-800">Security</span>
+          <span className="text-gray-800 text-sm sm:text-base">Security</span>
         </button>
       </div>
 
       {/* Success Message */}
       {success && (
-        <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-md">
-          <p className="text-green-800 text-sm">{success}</p>
+        <div className="mb-4 p-3 sm:p-4 bg-green-50 border border-green-200 rounded-md">
+          <p className="text-green-800 text-xs sm:text-sm">{success}</p>
         </div>
       )}
 
-      <div className="mt-8 border border-[#E7E9EF] rounded-[4px] p-6">
+      <div className="mt-6 sm:mt-8 border border-[#E7E9EF] rounded-[4px] p-4 sm:p-6">
         <h2 className="text-base font-medium text-gray-700 mb-1">
           Change Password
         </h2>

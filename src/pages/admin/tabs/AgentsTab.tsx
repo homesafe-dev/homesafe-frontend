@@ -103,41 +103,41 @@ export default function AgentsTab() {
 
   return (
     <div className="overflow-x-auto">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Agents</h2>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3 sm:gap-0">
+        <h2 className="text-lg sm:text-xl font-semibold">Agents</h2>
         <button
           onClick={() => setShowCreateModal(true)}
-          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md flex items-center"
+          className="bg-green-600 hover:bg-green-700 text-white px-3 sm:px-4 py-2 rounded-md flex items-center text-sm sm:text-base"
         >
-          <FaPlus className="mr-2" /> Create New Agent
+          <FaPlus className="mr-1 sm:mr-2" size={14} /> Create New Agent
         </button>
       </div>
 
-      <table className="w-full">
-        <thead className="bg-[#C8EDDF80] h-[56px] text-left">
+      <table className="w-full min-w-[900px]">
+        <thead className="bg-[#C8EDDF80] h-[48px] sm:h-[56px] text-left">
           <tr>
-            <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
+            <th className="px-3 sm:px-6 py-3 text-[11px] sm:text-[13px] text-[#174B35] font-normal">
               Full Name
             </th>
-            <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
+            <th className="px-3 sm:px-6 py-3 text-[11px] sm:text-[13px] text-[#174B35] font-normal">
               Email
             </th>
-            <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
+            <th className="px-3 sm:px-6 py-3 text-[11px] sm:text-[13px] text-[#174B35] font-normal">
               Location
             </th>
-            <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
+            <th className="px-3 sm:px-6 py-3 text-[11px] sm:text-[13px] text-[#174B35] font-normal">
               Total Employees
             </th>
-            <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
+            <th className="px-3 sm:px-6 py-3 text-[11px] sm:text-[13px] text-[#174B35] font-normal">
               Phone Number
             </th>
-            <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
+            <th className="px-3 sm:px-6 py-3 text-[11px] sm:text-[13px] text-[#174B35] font-normal">
               Status
             </th>
-            <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
+            <th className="px-3 sm:px-6 py-3 text-[11px] sm:text-[13px] text-[#174B35] font-normal">
               Blocked Status
             </th>
-            <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal"></th>
+            <th className="px-3 sm:px-6 py-3 text-[11px] sm:text-[13px] text-[#174B35] font-normal"></th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200">
@@ -145,29 +145,29 @@ export default function AgentsTab() {
             // Loading state - show skeleton rows
             [...Array(3)].map((_, index) => (
               <tr key={index} className="hover:bg-gray-50 animate-pulse">
-                <td className="px-6 py-4">
-                  <div className="h-8 bg-gray-200 rounded"></div>
+                <td className="px-3 sm:px-6 py-3 sm:py-4">
+                  <div className="h-6 sm:h-8 bg-gray-200 rounded"></div>
                 </td>
-                <td className="px-6 py-4">
-                  <div className="h-8 bg-gray-200 rounded"></div>
+                <td className="px-3 sm:px-6 py-3 sm:py-4">
+                  <div className="h-6 sm:h-8 bg-gray-200 rounded"></div>
                 </td>
-                <td className="px-6 py-4">
-                  <div className="h-8 bg-gray-200 rounded"></div>
+                <td className="px-3 sm:px-6 py-3 sm:py-4">
+                  <div className="h-6 sm:h-8 bg-gray-200 rounded"></div>
                 </td>
-                <td className="px-6 py-4">
-                  <div className="h-8 bg-gray-200 rounded"></div>
+                <td className="px-3 sm:px-6 py-3 sm:py-4">
+                  <div className="h-6 sm:h-8 bg-gray-200 rounded"></div>
                 </td>
-                <td className="px-6 py-4">
-                  <div className="h-8 bg-gray-200 rounded"></div>
+                <td className="px-3 sm:px-6 py-3 sm:py-4">
+                  <div className="h-6 sm:h-8 bg-gray-200 rounded"></div>
                 </td>
-                <td className="px-6 py-4">
-                  <div className="h-8 bg-gray-200 rounded"></div>
+                <td className="px-3 sm:px-6 py-3 sm:py-4">
+                  <div className="h-6 sm:h-8 bg-gray-200 rounded"></div>
                 </td>
-                <td className="px-6 py-4">
-                  <div className="h-8 bg-gray-200 rounded"></div>
+                <td className="px-3 sm:px-6 py-3 sm:py-4">
+                  <div className="h-6 sm:h-8 bg-gray-200 rounded"></div>
                 </td>
-                <td className="px-6 py-4">
-                  <div className="h-8 bg-gray-200 rounded"></div>
+                <td className="px-3 sm:px-6 py-3 sm:py-4">
+                  <div className="h-6 sm:h-8 bg-gray-200 rounded"></div>
                 </td>
               </tr>
             ))
@@ -189,7 +189,7 @@ export default function AgentsTab() {
             // Data loaded successfully
             agents.map((agent) => (
               <tr key={agent.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 flex items-center gap-2 text-[13px] text-[#24292E] font-normal">
+                <td className="px-3 sm:px-6 py-3 sm:py-4 flex items-center gap-2 text-[11px] sm:text-[13px] text-[#24292E] font-normal">
                   <Avatar
                     src={agent.avatar}
                     firstName={agent.first_name}
@@ -197,25 +197,25 @@ export default function AgentsTab() {
                     size="sm"
                     showStatus={false}
                   />
-                  {`${agent.first_name} ${agent.last_name}`}
+                  <span className="truncate">{`${agent.first_name} ${agent.last_name}`}</span>
                 </td>
-                <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
-                  {agent.email || 'N/A'}
+                <td className="px-3 sm:px-6 py-3 sm:py-4 text-[11px] sm:text-[13px] text-[#24292E] font-normal">
+                  <span className="truncate">{agent.email || 'N/A'}</span>
                 </td>
-                <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
-                  {agent.address ? agent.address.split(',')[0] : 'Lagos'}
+                <td className="px-3 sm:px-6 py-3 sm:py-4 text-[11px] sm:text-[13px] text-[#24292E] font-normal">
+                  <span className="truncate">{agent.address ? agent.address.split(',')[0] : 'Lagos'}</span>
                 </td>
-                <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
+                <td className="px-3 sm:px-6 py-3 sm:py-4 text-[11px] sm:text-[13px] text-[#24292E] font-normal">
                   {agent.total_employees !== undefined
                     ? agent.total_employees
                     : 'N/A'}
                 </td>
-                <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
-                  {agent.phone || 'N/A'}
+                <td className="px-3 sm:px-6 py-3 sm:py-4 text-[11px] sm:text-[13px] text-[#24292E] font-normal">
+                  <span className="truncate">{agent.phone || 'N/A'}</span>
                 </td>
-                <td className="px-6 py-4">
+                <td className="px-3 sm:px-6 py-3 sm:py-4">
                   <span
-                    className={`px-3 py-1 rounded-full text-[13px] ${
+                    className={`px-2 sm:px-3 py-1 rounded-full text-[10px] sm:text-[13px] ${
                       agent.status === 'not verified'
                         ? 'bg-red-100 text-red-800'
                         : 'bg-green-100 text-green-800'
@@ -226,9 +226,9 @@ export default function AgentsTab() {
                       : 'Verified'}
                   </span>
                 </td>
-                <td className="px-6 py-4">
+                <td className="px-3 sm:px-6 py-3 sm:py-4">
                   <span
-                    className={`px-3 py-1 rounded-full text-[13px] ${
+                    className={`px-2 sm:px-3 py-1 rounded-full text-[10px] sm:text-[13px] ${
                       agent.is_blocked
                         ? 'bg-red-100 text-red-800'
                         : 'bg-green-100 text-green-800'
@@ -237,7 +237,7 @@ export default function AgentsTab() {
                     {agent.is_blocked ? 'Blocked' : 'Active'}
                   </span>
                 </td>
-                <td className="px-6 py-4 text-right">
+                <td className="px-3 sm:px-6 py-3 sm:py-4 text-right">
                   <DropdownMenu
                     options={[
                       {

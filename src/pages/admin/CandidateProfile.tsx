@@ -189,16 +189,16 @@ const AdminCandidateProfile: React.FC = () => {
 
   return (
     <div className="rounded-lg">
-      <div className="p-4 border-b border-gray-100">
-        <button className="flex items-center text-gray-600" onClick={goBack}>
+      <div className="p-3 sm:p-4 border-b border-gray-100">
+        <button className="flex items-center text-gray-600 text-sm sm:text-base" onClick={goBack}>
           <FaArrowLeft className="mr-2" />
           <span>{candidateName}'s Profile</span>
         </button>
       </div>
 
-      <div className="flex flex-row gap-8">
+      <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
         {/* Left panel */}
-        <div className="w-1/3 border-r bg-white border-gray-100 p-6 shadow-md">
+        <div className="w-full lg:w-1/3 lg:border-r bg-white border-gray-100 p-4 sm:p-6 shadow-md">
           <CandidateProfileAbout
             name={employee.candidate}
             location={employee.placement || 'Not assigned'}
@@ -227,29 +227,29 @@ const AdminCandidateProfile: React.FC = () => {
         </div>
 
         {/* Right panel */}
-        <div className="w-2/3">
+        <div className="w-full lg:w-2/3">
           {/* Tabs */}
-          <div className="flex">
+          <div className="flex overflow-x-auto">
             <button
-              className={`px-4 py-3 ${activeTab === 'medical' ? 'text-green-600 border-b-2 border-green-600' : 'text-gray-600'}`}
+              className={`px-3 sm:px-4 py-3 text-sm whitespace-nowrap ${activeTab === 'medical' ? 'text-green-600 border-b-2 border-green-600' : 'text-gray-600'}`}
               onClick={() => setActiveTab('medical')}
             >
               Medical History
             </button>
             <button
-              className={`px-4 py-3 ${activeTab === 'educational' ? 'text-green-600 border-b-2 border-green-600' : 'text-gray-600'}`}
+              className={`px-3 sm:px-4 py-3 text-sm whitespace-nowrap ${activeTab === 'educational' ? 'text-green-600 border-b-2 border-green-600' : 'text-gray-600'}`}
               onClick={() => setActiveTab('educational')}
             >
               Educational Resources
             </button>
             <button
-              className={`px-4 py-3 ${activeTab === 'schedule' ? 'text-green-600 border-b-2 border-green-600' : 'text-gray-600'}`}
+              className={`px-3 sm:px-4 py-3 text-sm whitespace-nowrap ${activeTab === 'schedule' ? 'text-green-600 border-b-2 border-green-600' : 'text-gray-600'}`}
               onClick={() => setActiveTab('schedule')}
             >
               Work Schedule
             </button>
             <button
-              className={`px-4 py-3 ${activeTab === 'reviews' ? 'text-green-600 border-b-2 border-green-600' : 'text-gray-600'}`}
+              className={`px-3 sm:px-4 py-3 text-sm whitespace-nowrap ${activeTab === 'reviews' ? 'text-green-600 border-b-2 border-green-600' : 'text-gray-600'}`}
               onClick={() => setActiveTab('reviews')}
             >
               Reviews

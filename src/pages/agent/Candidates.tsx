@@ -137,45 +137,45 @@ const CandidatesPage: React.FC = () => {
   };
 
   return (
-    <div className="w-[85%]">
-      <div className="mb-6">
+    <div className="w-full max-w-4xl mx-auto px-4 sm:px-0">
+      <div className="mb-4 sm:mb-6">
         <button
           className="flex items-center text-gray-600 hover:text-gray-800"
           onClick={() => navigate('/agent/all-candidates')}
         >
           <FaArrowLeft className="mr-2" />
-          <span className="text-gray-800">Back to Candidates</span>
+          <span className="text-gray-800 text-sm sm:text-base">Back to Candidates</span>
         </button>
       </div>
 
-      <div className="text-2xl font-semibold mb-6">Add Candidate</div>
+      <div className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6">Add Candidate</div>
 
       {/* Success and Error Messages */}
       {success && (
-        <div className="mb-4 p-3 bg-green-100 text-green-700 rounded">
+        <div className="mb-4 p-3 bg-green-100 text-green-700 rounded text-sm">
           {success}
         </div>
       )}
 
       {error && (
-        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">{error}</div>
+        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded text-sm">{error}</div>
       )}
 
       {/* Form */}
-      <form className="mt-6 bg-white p-8" onSubmit={handleSubmit}>
-        <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+      <form className="mt-4 sm:mt-6 bg-white p-4 sm:p-6 lg:p-8 rounded-lg shadow-sm" onSubmit={handleSubmit}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 sm:gap-x-6 gap-y-4">
           {/* Title */}
           <div>
             <label
               htmlFor="title"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
             >
               Title
             </label>
             <div className="relative">
               <select
                 id="title"
-                className="appearance-none w-full h-[50px] px-3 py-2 border border-[#DEE0E3] rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 bg-white text-gray-700"
+                className="appearance-none w-full h-[44px] sm:h-[50px] px-3 py-2 border border-[#DEE0E3] rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 bg-white text-gray-700 text-sm"
                 value={formData.title}
                 onChange={handleInputChange}
               >
@@ -186,7 +186,7 @@ const CandidatesPage: React.FC = () => {
                 <option value="Dr">Dr</option>
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
-                <FaChevronDown />
+                <FaChevronDown size={12} />
               </div>
             </div>
           </div>
@@ -195,14 +195,14 @@ const CandidatesPage: React.FC = () => {
           <div>
             <label
               htmlFor="gender"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
             >
               Gender
             </label>
             <div className="relative">
               <select
                 id="gender"
-                className="appearance-none w-full h-[50px] px-3 py-2 border border-[#DEE0E3] rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 bg-white text-gray-700"
+                className="appearance-none w-full h-[44px] sm:h-[50px] px-3 py-2 border border-[#DEE0E3] rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 bg-white text-gray-700 text-sm"
                 value={formData.gender}
                 onChange={handleInputChange}
               >
@@ -212,7 +212,7 @@ const CandidatesPage: React.FC = () => {
                 <option value="other">Other</option>
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
-                <FaChevronDown />
+                <FaChevronDown size={12} />
               </div>
             </div>
           </div>

@@ -19,17 +19,17 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
   date,
 }) => {
   return (
-    <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+    <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm border border-gray-200">
       <div className="flex items-center mb-3">
         {reviewerAvatar ? (
           <img
             src={reviewerAvatar}
             alt={reviewerName}
-            className="w-10 h-10 rounded-full mr-3 object-cover"
+            className="w-8 h-8 sm:w-10 sm:h-10 rounded-full mr-2 sm:mr-3 object-cover"
           />
         ) : (
-          <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center mr-3">
-            <span className="text-white font-medium">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-300 flex items-center justify-center mr-2 sm:mr-3">
+            <span className="text-white font-medium text-xs sm:text-sm">
               {reviewerName
                 .split(' ')
                 .map((name) => name[0])
@@ -37,20 +37,20 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
             </span>
           </div>
         )}
-        <div>
-          <h3 className="font-semibold text-[#24292E] text-[16px]">
+        <div className="flex-1 min-w-0">
+          <h3 className="font-semibold text-[#24292E] text-[14px] sm:text-[16px] truncate">
             {reviewerName}
           </h3>
           <p className="text-xs text-gray-500">{date}</p>
         </div>
       </div>
-      <p className="text-sm text-gray-600 mb-3">{comment}</p>
+      <p className="text-xs sm:text-sm text-gray-600 mb-3 break-words">{comment}</p>
       <div className="flex">
         {[...Array(5)].map((_, index) =>
           index < rating ? (
-            <AiFillStar key={index} className="text-[#EFAE73]" />
+            <AiFillStar key={index} className="text-[#EFAE73] w-4 h-4 sm:w-5 sm:h-5" />
           ) : (
-            <AiOutlineStar key={index} className="text-[#EFAE73]" />
+            <AiOutlineStar key={index} className="text-[#EFAE73] w-4 h-4 sm:w-5 sm:h-5" />
           )
         )}
       </div>
@@ -158,19 +158,19 @@ const Reviews: React.FC = () => {
   };
 
   return (
-    <div className="bg-white rounded-lg p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-semibold">All Reviews</h1>
+    <div className="bg-white rounded-lg p-4 sm:p-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 sm:gap-0">
+        <h1 className="text-xl sm:text-2xl font-semibold">All Reviews</h1>
 
         {/* Search and Filter Controls */}
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
           <div className="relative">
             <input
               type="text"
               placeholder="Search reviews..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="border border-gray-300 rounded-md px-3 py-2 text-sm w-64"
+              className="border border-gray-300 rounded-md px-3 py-2 text-sm w-full sm:w-64"
             />
           </div>
 
@@ -197,7 +197,7 @@ const Reviews: React.FC = () => {
       <div className="mb-6">
         <div className="inline-flex border border-gray-200 rounded-md overflow-hidden">
           <button
-            className={`px-6 py-2 ${
+            className={`px-4 sm:px-6 py-2 text-sm ${
               activeTab === 'employers'
                 ? 'bg-[#C8EDDF80] text-green-800'
                 : 'text-gray-600 hover:bg-gray-50'
@@ -207,7 +207,7 @@ const Reviews: React.FC = () => {
             Employers
           </button>
           <button
-            className={`px-6 py-2 border-l border-r border-gray-200 ${
+            className={`px-4 sm:px-6 py-2 text-sm border-l border-r border-gray-200 ${
               activeTab === 'agents'
                 ? 'bg-[#C8EDDF80] text-green-800'
                 : 'text-gray-600 hover:bg-gray-50'
@@ -217,7 +217,7 @@ const Reviews: React.FC = () => {
             Agents
           </button>
           <button
-            className={`px-6 py-2 ${
+            className={`px-4 sm:px-6 py-2 text-sm ${
               activeTab === 'employees'
                 ? 'bg-[#C8EDDF80] text-green-800'
                 : 'text-gray-600 hover:bg-gray-50'

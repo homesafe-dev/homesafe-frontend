@@ -46,38 +46,39 @@ export default function AgentDashboard() {
   return (
     <div className="p-0">
       {/* Header */}
-      <div className="flex justify-end items-center mb-8">
+      <div className="flex justify-end items-center mb-6 sm:mb-8">
         {/* <h1 className="text-[16px] text-[#24292E]">Hello John</h1> */}
-        <button className="bg-[#EFAE73] h-[42px] text-[16px] text-[#24292E] px-4 py-2 w-[165px] rounded-[59px]">
-          Ruby Subscription
+        <button className="bg-[#EFAE73] h-[36px] sm:h-[42px] text-[14px] sm:text-[16px] text-[#24292E] px-3 sm:px-4 py-2 w-[140px] sm:w-[165px] rounded-[59px]">
+          <span className="hidden sm:inline">Ruby Subscription</span>
+          <span className="sm:hidden">Ruby Sub</span>
         </button>
       </div>
 
       {/* Statistics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-white shadow rounded-lg p-6 h-[208px] flex items-center">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-[#E8F5E9] rounded-full flex items-center justify-center">
-              <BsPeople className="text-gray-500" size={24} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
+        <div className="bg-white shadow rounded-lg p-4 sm:p-6 h-[160px] sm:h-[208px] flex items-center">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#E8F5E9] rounded-full flex items-center justify-center flex-shrink-0">
+              <BsPeople className="text-gray-500" size={20} />
             </div>
-            <div>
-              <h2 className="text-[20px] text-[#24292E] font-normal">
+            <div className="min-w-0 flex-1">
+              <h2 className="text-[18px] sm:text-[20px] text-[#24292E] font-normal">
                 {isLoading ? '...' : employees.length}
               </h2>
-              <p className="text-[#24292E] text-[16px]">
+              <p className="text-[#24292E] text-[14px] sm:text-[16px] leading-tight">
                 Total Number of Candidates
               </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white shadow rounded-lg p-6 h-[208px] flex items-center">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-[#E8E9F5] rounded-full flex items-center justify-center">
-              <BsPeople className="text-gray-500" size={24} />
+        <div className="bg-white shadow rounded-lg p-4 sm:p-6 h-[160px] sm:h-[208px] flex items-center">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#E8E9F5] rounded-full flex items-center justify-center flex-shrink-0">
+              <BsPeople className="text-gray-500" size={20} />
             </div>
-            <div>
-              <h2 className="text-[20px] text-[#24292E] font-normal">
+            <div className="min-w-0 flex-1">
+              <h2 className="text-[18px] sm:text-[20px] text-[#24292E] font-normal">
                 {isLoading
                   ? '...'
                   : employees.filter(
@@ -86,27 +87,27 @@ export default function AgentDashboard() {
                         e.placement.toLowerCase() !== 'no employer assigned'
                     ).length}
               </h2>
-              <p className="text-[#24292E] text-[16px]">
+              <p className="text-[#24292E] text-[14px] sm:text-[16px] leading-tight">
                 Candidates on Placement
               </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white shadow rounded-lg p-6 h-[208px] flex items-center">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-[#F5E8E9] rounded-full flex items-center justify-center">
-              <BsPeople className="text-gray-500" size={24} />
+        <div className="bg-white shadow rounded-lg p-4 sm:p-6 h-[160px] sm:h-[208px] flex items-center sm:col-span-2 lg:col-span-1">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#F5E8E9] rounded-full flex items-center justify-center flex-shrink-0">
+              <BsPeople className="text-gray-500" size={20} />
             </div>
-            <div>
-              <h2 className="text-[20px] text-[#24292E] font-normal">
+            <div className="min-w-0 flex-1">
+              <h2 className="text-[18px] sm:text-[20px] text-[#24292E] font-normal">
                 {isLoading
                   ? '...'
                   : employees.filter(
                       (e) => e.status.toLowerCase() === 'terminated'
                     ).length}
               </h2>
-              <p className="text-[#24292E] text-[16px]">
+              <p className="text-[#24292E] text-[14px] sm:text-[16px] leading-tight">
                 Candidates terminated
               </p>
             </div>
@@ -116,42 +117,43 @@ export default function AgentDashboard() {
 
       {/* Activities Section */}
       <div className="">
-        <div className="p-6 flex justify-between items-center">
-          <h2 className="text-[#24292E] text-[20px] font-semibold">
+        <div className="p-4 sm:p-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+          <h2 className="text-[#24292E] text-[18px] sm:text-[20px] font-semibold">
             Candidates
           </h2>
           <button
             onClick={() => navigate('/agent/all-candidates')}
-            className="text-[#7B858E] hover:text-gray-900 font-semibold text-[13px]"
+            className="text-[#7B858E] hover:text-gray-900 font-semibold text-[12px] sm:text-[13px] self-start sm:self-auto"
           >
             View All
           </button>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-[#C8EDDF80] h-[56px] text-left">
-              <tr>
-                <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
-                  New Candidate
-                </th>
-                <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
-                  Date
-                </th>
-                <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
-                  Placement
-                </th>
-                <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
-                  Gender
-                </th>
-                <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
-                  Phone Number
-                </th>
-                <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
-                  Status
-                </th>
-              </tr>
-            </thead>
+        <div className="overflow-x-auto overflow-y-visible" style={{ marginLeft: '-1rem', marginRight: '-1rem' }}>
+          <div style={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
+            <table className="w-full" style={{ minWidth: '700px' }}>
+              <thead className="bg-[#C8EDDF80] h-[56px] text-left">
+                <tr>
+                  <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal whitespace-nowrap">
+                    New Candidate
+                  </th>
+                  <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal whitespace-nowrap">
+                    Date
+                  </th>
+                  <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal whitespace-nowrap">
+                    Placement
+                  </th>
+                  <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal whitespace-nowrap">
+                    Gender
+                  </th>
+                  <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal whitespace-nowrap">
+                    Phone Number
+                  </th>
+                  <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal whitespace-nowrap">
+                    Status
+                  </th>
+                </tr>
+              </thead>
             <tbody className="divide-y divide-gray-200">
               {isLoading ? (
                 // Loading state - show skeleton rows
@@ -201,7 +203,7 @@ export default function AgentDashboard() {
                 // Data loaded successfully
                 employees.map((employee) => (
                   <tr key={employee.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 flex items-center gap-2 text-[13px] text-[#24292E] font-normal">
+                    <td className="px-6 py-4 flex items-center gap-2 text-[13px] text-[#24292E] font-normal whitespace-nowrap">
                       <div className="flex items-center gap-2 relative">
                         {employee.avatar ? (
                           <div className="w-8 h-8 rounded-full overflow-hidden relative">
@@ -221,14 +223,14 @@ export default function AgentDashboard() {
                       </div>
                       {employee.candidate}
                     </td>
-                    <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
+                    <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal whitespace-nowrap">
                       {new Date(employee.date).toLocaleDateString('en-US', {
                         day: 'numeric',
                         month: 'short',
                         year: 'numeric',
                       })}
                     </td>
-                    <td className="px-6 py-4 text-[13px] font-normal">
+                    <td className="px-6 py-4 text-[13px] font-normal whitespace-nowrap">
                       <span
                         className={`${
                           employee.placement.toLowerCase() ===
@@ -243,14 +245,14 @@ export default function AgentDashboard() {
                           : employee.placement}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
+                    <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal whitespace-nowrap">
                       {employee.gender.charAt(0).toUpperCase() +
                         employee.gender.slice(1)}
                     </td>
-                    <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
+                    <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal whitespace-nowrap">
                       {employee.phone}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-4 whitespace-nowrap">
                       <span
                         className={`px-3 py-1 rounded-full text-[13px] ${
                           employee.status.toLowerCase().includes('not') ||
@@ -269,6 +271,7 @@ export default function AgentDashboard() {
               )}
             </tbody>
           </table>
+          </div>
         </div>
       </div>
     </div>

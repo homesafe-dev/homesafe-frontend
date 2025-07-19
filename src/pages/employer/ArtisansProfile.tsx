@@ -214,7 +214,7 @@ const ArtisanProfileView: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen p-3 sm:p-4 lg:p-6">
       {loading ? (
         <div className="flex justify-center items-center h-40">
           <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-500"></div>
@@ -225,20 +225,20 @@ const ArtisanProfileView: React.FC = () => {
         </div>
       ) : artisan ? (
         <>
-          <div className="flex items-center mb-8">
+          <div className="flex items-center mb-6 sm:mb-8">
             <button
               onClick={goBack}
-              className="flex items-center text-semibold text-[20px] text-[#24292E] hover:text-gray-900"
+              className="flex items-center text-semibold text-lg sm:text-[20px] text-[#24292E] hover:text-gray-900"
             >
-              <FiArrowLeft className="mr-2" />
+              <FiArrowLeft className="mr-2" size={18} />
               <span>{artisan.first_name}'s Profile</span>
             </button>
           </div>
 
-          <div className="flex flex-col lg:flex-row gap-8 bg-white shadow-sm p-8 rounded-[16px]">
+          <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 bg-white shadow-sm p-4 sm:p-6 lg:p-8 rounded-[16px]">
             {/* Profile section */}
-            <div className="w-full lg:w-1/2 border-r border-[#BDC2C7] p-6 flex flex-col items-center relative">
-              <div className="mb-4">
+            <div className="w-full lg:w-1/2 lg:border-r border-[#BDC2C7] p-3 sm:p-4 lg:p-6 flex flex-col items-center relative">
+              <div className="mb-3 sm:mb-4">
                 <Avatar
                   src={artisan.avatar}
                   firstName={artisan.first_name}
@@ -249,26 +249,26 @@ const ArtisanProfileView: React.FC = () => {
                 />
               </div>
 
-              <h2 className="text-[16px] text-gray-700 mt-[1rem] font-medium">
+              <h2 className="text-sm sm:text-[16px] text-gray-700 mt-3 sm:mt-[1rem] font-medium">
                 {artisan.first_name} {artisan.last_name}
               </h2>
-              <p className="text-[13px] mt-[0.5rem] text-[#24292E] mb-2">
+              <p className="text-xs sm:text-[13px] mt-2 sm:mt-[0.5rem] text-[#24292E] mb-2">
                 {extractLocation(artisan.address)} | {calculateAge(artisan.dob)}{' '}
                 yrs old
               </p>
 
-              <div className="bg-[#C8EDDF80] mt-[0.5rem] text-[#48525B] px-3 py-1 rounded-[8px] text-[13px] mb-2">
+              <div className="bg-[#C8EDDF80] mt-2 sm:mt-[0.5rem] text-[#48525B] px-2 sm:px-3 py-1 rounded-[8px] text-xs sm:text-[13px] mb-2">
                 {artisan.occupations && artisan.occupations.length > 0
                   ? artisan.occupations[0].name.charAt(0).toUpperCase() +
                     artisan.occupations[0].name.slice(1)
                   : 'Professional'}
               </div>
 
-              <div className="flex mb-6">
+              <div className="flex mb-4 sm:mb-6">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <span
                     key={star}
-                    className={`text-yellow-400 mt-[0.5rem] ${
+                    className={`text-yellow-400 mt-2 sm:mt-[0.5rem] text-sm sm:text-base ${
                       star <= (artisan.average_rating || 0)
                         ? 'opacity-100'
                         : 'opacity-30'
@@ -279,16 +279,16 @@ const ArtisanProfileView: React.FC = () => {
                 ))}
               </div>
 
-              <div className="mb-6 w-full">
-                <h3 className="text-[#246D51] text-[16px] font-semibold mb-2">
+              <div className="mb-4 sm:mb-6 w-full">
+                <h3 className="text-[#246D51] text-sm sm:text-[16px] font-semibold mb-2">
                   About me
                 </h3>
                 {artisan.profile_description ? (
-                  <p className="text-[13px] text-[#48525B]">
+                  <p className="text-xs sm:text-[13px] text-[#48525B] leading-relaxed">
                     {artisan.profile_description}
                   </p>
                 ) : (
-                  <p className="text-[13px] text-[#48525B]">
+                  <p className="text-xs sm:text-[13px] text-[#48525B] leading-relaxed">
                     Meet {artisan.first_name} {artisan.last_name}, a passionate{' '}
                     {artisan.occupations && artisan.occupations.length > 0
                       ? artisan.occupations[0].name
@@ -307,15 +307,15 @@ const ArtisanProfileView: React.FC = () => {
             </div>
 
             {/* Employment Form */}
-            <div className="w-full lg:w-1/2 ">
-              <h3 className="text-[#246D51] text-[16px] font-semibold mb-6">
+            <div className="w-full lg:w-1/2">
+              <h3 className="text-[#246D51] text-sm sm:text-[16px] font-semibold mb-4 sm:mb-6">
                 Employment Form
               </h3>
 
-              <div className="space-y-6 border border-gray-100 p-8 rounded-[16px]">
+              <div className="space-y-4 sm:space-y-6 border border-gray-100 p-4 sm:p-6 lg:p-8 rounded-[16px]">
                 {/* Employment Start Date */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-600 mb-2">
+                  <label className="block text-xs sm:text-sm font-medium text-gray-600 mb-2">
                     Employment Start Date
                   </label>
                   <div className="relative">
@@ -323,7 +323,7 @@ const ArtisanProfileView: React.FC = () => {
                       type="date"
                       name="start_date"
                       placeholder="MM/DD/YYYY"
-                      className="w-full border h-[50px] border-gray-100 rounded p-3 pr-10 focus:outline-none focus:ring-1 focus:ring-gray-400"
+                      className="w-full border h-[42px] sm:h-[50px] border-gray-100 rounded p-2 sm:p-3 pr-8 sm:pr-10 focus:outline-none focus:ring-1 focus:ring-gray-400 text-sm sm:text-base"
                       value={formData.start_date}
                       onChange={handleInputChange}
                     />
@@ -332,13 +332,13 @@ const ArtisanProfileView: React.FC = () => {
 
                 {/* Employment Period */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-600 mb-2">
+                  <label className="block text-xs sm:text-sm font-medium text-gray-600 mb-2">
                     Employment Period
                   </label>
                   <div className="relative">
                     <select
                       name="duration_months"
-                      className="appearance-none w-full border h-[50px] border-gray-100 rounded p-3 pr-10 focus:outline-none focus:ring-1 focus:ring-gray-400"
+                      className="appearance-none w-full border h-[42px] sm:h-[50px] border-gray-100 rounded p-2 sm:p-3 pr-8 sm:pr-10 focus:outline-none focus:ring-1 focus:ring-gray-400 text-sm sm:text-base"
                       value={formData.duration_months}
                       onChange={handleInputChange}
                     >
@@ -349,19 +349,19 @@ const ArtisanProfileView: React.FC = () => {
                       <option value="24">24 months</option>
                       <option value="36">36 months</option>
                     </select>
-                    <FiChevronDown className="absolute right-3 top-3 text-gray-400" />
+                    <FiChevronDown className="absolute right-2 sm:right-3 top-3 text-gray-400" size={16} />
                   </div>
                 </div>
 
                 {/* Working Hours - Start */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-600 mb-2">
-                    Working Hours
+                  <label className="block text-xs sm:text-sm font-medium text-gray-600 mb-2">
+                    Working Hours (Start)
                   </label>
                   <div className="relative">
                     <select
                       name="working_hours_start"
-                      className="appearance-none w-full border h-[50px] border-gray-100 rounded p-3 pr-10 focus:outline-none focus:ring-1 focus:ring-gray-400"
+                      className="appearance-none w-full border h-[42px] sm:h-[50px] border-gray-100 rounded p-2 sm:p-3 pr-8 sm:pr-10 focus:outline-none focus:ring-1 focus:ring-gray-400 text-sm sm:text-base"
                       value={formData.working_hours_start}
                       onChange={handleInputChange}
                     >
@@ -372,19 +372,19 @@ const ArtisanProfileView: React.FC = () => {
                       <option value="11:00">11:00 AM</option>
                       <option value="12:00">12:00 PM</option>
                     </select>
-                    <FiChevronDown className="absolute right-3 top-3 text-gray-400" />
+                    <FiChevronDown className="absolute right-2 sm:right-3 top-3 text-gray-400" size={16} />
                   </div>
                 </div>
 
                 {/* Working Hours - End */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-600 mb-2">
-                    Working Hours
+                  <label className="block text-xs sm:text-sm font-medium text-gray-600 mb-2">
+                    Working Hours (End)
                   </label>
                   <div className="relative">
                     <select
                       name="working_hours_end"
-                      className="appearance-none w-full border h-[50px] border-gray-100 rounded p-3 pr-10 focus:outline-none focus:ring-1 focus:ring-gray-400"
+                      className="appearance-none w-full border h-[42px] sm:h-[50px] border-gray-100 rounded p-2 sm:p-3 pr-8 sm:pr-10 focus:outline-none focus:ring-1 focus:ring-gray-400 text-sm sm:text-base"
                       value={formData.working_hours_end}
                       onChange={handleInputChange}
                     >
@@ -395,7 +395,7 @@ const ArtisanProfileView: React.FC = () => {
                       <option value="19:00">7:00 PM</option>
                       <option value="20:00">8:00 PM</option>
                     </select>
-                    <FiChevronDown className="absolute right-3 top-3 text-gray-400" />
+                    <FiChevronDown className="absolute right-2 sm:right-3 top-3 text-gray-400" size={16} />
                   </div>
                 </div>
 
@@ -419,16 +419,17 @@ const ArtisanProfileView: React.FC = () => {
             </div>
           </div>
 
-          <div className="ml-auto w-[143px]">
+          <div className="flex justify-center sm:justify-end mt-4 sm:mt-6">
             <button
               onClick={handleSubmitProposal}
               disabled={submitting || !formData.start_date}
-              className="bg-[#A5EA91] hover:bg-green-500 text-green-800 py-2 rounded-md text-sm ml-auto mt-[1rem] transition-colors w-[143px] h-[42px] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-[#A5EA91] hover:bg-green-500 text-green-800 py-2 sm:py-2 px-6 sm:px-4 rounded-md text-sm transition-colors w-full sm:w-[143px] h-[42px] disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {submitting ? (
                 <div className="flex items-center justify-center">
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-green-700 mr-2"></div>
-                  Processing...
+                  <span className="hidden sm:inline">Processing...</span>
+                  <span className="sm:hidden">Sending...</span>
                 </div>
               ) : (
                 'Send Proposal'

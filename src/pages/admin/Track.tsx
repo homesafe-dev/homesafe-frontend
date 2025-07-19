@@ -123,10 +123,10 @@ const AdminTrack = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto">
-      <h2 className="text-xl font-semibold mb-4">Track</h2>
-      <div className="flex justify-between items-center mt-[2rem]">
-        <p className="text-gray-600 mb-6">Here are all your employees</p>
+    <div className="max-w-6xl mx-auto px-4 sm:px-0">
+      <h2 className="text-lg sm:text-xl font-semibold mb-4">Track</h2>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-4 sm:mt-[2rem] gap-3 sm:gap-0">
+        <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">Here are all your employees</p>
         <div className="text-sm text-gray-600">
           <span
             className="cursor-pointer hover:text-green-700"
@@ -139,26 +139,26 @@ const AdminTrack = () => {
 
       {/* Error Message */}
       {error && (
-        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">{error}</div>
+        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded text-sm">{error}</div>
       )}
 
       <div className="rounded-lg overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full">
+          <table className="w-full min-w-[800px]">
             <thead>
-              <tr className="bg-[#C8EDDF80] text-[#174B35] text-sm">
-                <th className="px-4 py-3 text-left font-medium">Candidate</th>
-                <th className="px-4 py-3 text-left font-medium">Date</th>
-                <th className="px-4 py-3 text-left font-medium">Placement</th>
-                <th className="px-4 py-3 text-left font-medium">Gender</th>
-                <th className="px-4 py-3 text-left font-medium">
+              <tr className="bg-[#C8EDDF80] text-[#174B35] text-xs sm:text-sm">
+                <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-medium min-w-[120px]">Candidate</th>
+                <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-medium min-w-[100px]">Date</th>
+                <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-medium min-w-[140px]">Placement</th>
+                <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-medium min-w-[80px]">Gender</th>
+                <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-medium min-w-[120px]">
                   Phone Number
                 </th>
-                <th className="px-4 py-3 text-left font-medium">Status</th>
-                <th className="px-4 py-3 text-left font-medium">
+                <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-medium min-w-[80px]">Status</th>
+                <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-medium min-w-[100px]">
                   Blocked Status
                 </th>
-                <th className="px-4 py-3 text-left font-medium w-12"></th>
+                <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-medium min-w-[40px]"></th>
               </tr>
             </thead>
             <tbody className="">
@@ -169,31 +169,31 @@ const AdminTrack = () => {
                     key={index}
                     className="border-b border-gray-100 animate-pulse"
                   >
-                    <td className="px-4 py-3">
+                    <td className="px-2 sm:px-4 py-3">
                       <div className="flex items-center">
                         <div className="w-8 h-8 bg-gray-200 rounded-full mr-3"></div>
                         <div className="h-4 bg-gray-200 rounded w-24"></div>
                       </div>
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-2 sm:px-4 py-3">
                       <div className="h-4 bg-gray-200 rounded w-24"></div>
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-2 sm:px-4 py-3">
                       <div className="h-4 bg-gray-200 rounded w-32"></div>
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-2 sm:px-4 py-3">
                       <div className="h-4 bg-gray-200 rounded w-16"></div>
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-2 sm:px-4 py-3">
                       <div className="h-4 bg-gray-200 rounded w-24"></div>
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-2 sm:px-4 py-3">
                       <div className="h-6 bg-gray-200 rounded w-20"></div>
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-2 sm:px-4 py-3">
                       <div className="h-6 bg-gray-200 rounded w-20"></div>
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-2 sm:px-4 py-3">
                       <div className="h-4 bg-gray-200 rounded w-4"></div>
                     </td>
                   </tr>
@@ -215,7 +215,7 @@ const AdminTrack = () => {
                     key={employee.id}
                     className="border-b border-gray-100 hover:bg-gray-50"
                   >
-                    <td className="px-4 py-3 flex items-center gap-3">
+                    <td className="px-2 sm:px-4 py-3 flex items-center gap-3">
                       <Avatar
                         src={employee.avatar}
                         firstName={
@@ -225,25 +225,25 @@ const AdminTrack = () => {
                         size="sm"
                         showStatus={false}
                       />
-                      <span>{employee.candidate || 'Unknown Candidate'}</span>
+                      <span className="text-sm">{employee.candidate || 'Unknown Candidate'}</span>
                     </td>
-                    <td className="px-4 py-3 text-gray-700">
+                    <td className="px-2 sm:px-4 py-3 text-gray-700 text-sm">
                       {new Date(employee.date).toLocaleDateString('en-US', {
                         day: 'numeric',
                         month: 'short',
                         year: 'numeric',
                       })}
                     </td>
-                    <td className="px-4 py-3 text-gray-700">
+                    <td className="px-2 sm:px-4 py-3 text-gray-700 text-sm">
                       {employee.placement || 'No placement assigned'}
                     </td>
-                    <td className="px-4 py-3 text-gray-700">
+                    <td className="px-2 sm:px-4 py-3 text-gray-700 text-sm">
                       {formatGender(employee.gender)}
                     </td>
-                    <td className="px-4 py-3 text-gray-700">
+                    <td className="px-2 sm:px-4 py-3 text-gray-700 text-sm">
                       {employee.phone || 'N/A'}
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-2 sm:px-4 py-3">
                       {(() => {
                         const status = getEmployeeStatus(employee);
                         return (
@@ -255,7 +255,7 @@ const AdminTrack = () => {
                         );
                       })()}
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-2 sm:px-4 py-3">
                       <span
                         className={`px-3 py-1 rounded-full text-[13px] ${
                           employee.is_blocked
@@ -266,7 +266,7 @@ const AdminTrack = () => {
                         {employee.is_blocked ? 'Blocked' : 'Active'}
                       </span>
                     </td>
-                    <td className="px-4 py-3 relative">
+                    <td className="px-2 sm:px-4 py-3 relative">
                       <button
                         onClick={() => toggleOptions(employee.id)}
                         className="text-gray-400 hover:text-gray-600"

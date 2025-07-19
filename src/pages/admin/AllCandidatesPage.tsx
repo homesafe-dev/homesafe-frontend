@@ -80,8 +80,8 @@ const AllCandidatesPage = () => {
   return (
     <div className="p-0">
       {/* Header */}
-      <div className="mb-8">
-        <h2 className="text-[#24292E] text-[20px] font-semibold">Candidates</h2>
+      <div className="mb-6 sm:mb-8">
+        <h2 className="text-[#24292E] text-[18px] sm:text-[20px] font-semibold">Candidates</h2>
         <p className="text-gray-600 text-sm mt-1">
           Here are all your candidates
         </p>
@@ -89,14 +89,14 @@ const AllCandidatesPage = () => {
 
       {/* Error Message */}
       {error && (
-        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">{error}</div>
+        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded text-sm">{error}</div>
       )}
 
       {/* Main Content */}
       <div className="bg-white shadow rounded-lg">
         {/* Tabs */}
-        <div className="px-6 pt-6 mb-4">
-          <div className="flex space-x-4">
+        <div className="px-4 sm:px-6 pt-4 sm:pt-6 mb-4">
+          <div className="flex flex-wrap gap-2 sm:space-x-4 sm:gap-0">
             <button
               className={`py-2 px-4 text-sm font-medium rounded ${
                 activeTab === 'employers'

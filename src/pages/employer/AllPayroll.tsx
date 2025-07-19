@@ -70,24 +70,24 @@ const AllPayrollPage: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto">
+    <div className="w-full max-w-7xl mx-auto p-3 sm:p-4 lg:p-6">
       <div className="flex items-center mb-1">
         <IoArrowBack
           className="text-gray-600 mr-2 cursor-pointer"
-          size={20}
+          size={18}
           onClick={handleBack}
         />
-        <h1 className="text-[20px] font-semibold text-[#24292E]">See All</h1>
+        <h1 className="text-lg sm:text-[20px] font-semibold text-[#24292E]">See All</h1>
       </div>
 
-      <div className="mb-8">
-        <div className="flex justify-between items-center mb-2 mt-8">
-          <h2 className="text-xl font-semibold text-[#24292E]">
+      <div className="mb-6 sm:mb-8">
+        <div className="flex justify-between items-center mb-2 mt-6 sm:mt-8">
+          <h2 className="text-lg sm:text-xl font-semibold text-[#24292E]">
             Payroll History
           </h2>
         </div>
 
-        <div className="w-full mt-[1rem]">
+        <div className="w-full mt-4 overflow-x-auto">
           {loading ? (
             <div className="flex justify-center items-center h-40">
               <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-500"></div>
@@ -99,29 +99,29 @@ const AllPayrollPage: React.FC = () => {
           ) : (
             <>
               {/* Table Header */}
-              <div className="grid grid-cols-6 bg-[#C8EDDF80] rounded-t-lg">
-                <div className="p-3 text-sm font-medium text-gray-600">
+              <div className="grid grid-cols-6 bg-[#C8EDDF80] rounded-t-lg min-w-[700px]">
+                <div className="p-2 sm:p-3 text-xs sm:text-sm font-medium text-gray-600">
                   Staff
                 </div>
-                <div className="p-3 text-sm font-medium text-gray-600">
+                <div className="p-2 sm:p-3 text-xs sm:text-sm font-medium text-gray-600">
                   Position
                 </div>
-                <div className="p-3 text-sm font-medium text-gray-600">
+                <div className="p-2 sm:p-3 text-xs sm:text-sm font-medium text-gray-600">
                   Amount
                 </div>
-                <div className="p-3 text-sm font-medium text-gray-600">
+                <div className="p-2 sm:p-3 text-xs sm:text-sm font-medium text-gray-600">
                   Payment Date
                 </div>
-                <div className="p-3 text-sm font-medium text-gray-600">
+                <div className="p-2 sm:p-3 text-xs sm:text-sm font-medium text-gray-600">
                   Advance Salary
                 </div>
-                <div className="p-3 text-sm font-medium text-gray-600">
+                <div className="p-2 sm:p-3 text-xs sm:text-sm font-medium text-gray-600">
                   Status
                 </div>
               </div>
 
               {/* Table Body */}
-              <div className="bg-white">
+              <div className="bg-white min-w-[700px]">
                 {payrollEntries.length > 0 ? (
                   payrollEntries.map((entry, index) => (
                     <div
