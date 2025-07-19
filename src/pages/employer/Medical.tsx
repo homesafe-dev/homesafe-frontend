@@ -31,25 +31,25 @@ const MedicalReportCard: React.FC<MedicalReportCardProps> = ({ record }) => {
   const fileUrl = `http://192.227.190.166${record.medical_file}`;
 
   return (
-    <div className="bg-white rounded-lg p-4 shadow-sm">
-      <div className="mb-4">
+    <div className="bg-white rounded-lg p-3 sm:p-4 shadow-sm">
+      <div className="mb-3 sm:mb-4">
         <img
           src={MedicalImg}
           alt="Medical Report"
-          className="w-full h-40 object-cover rounded-lg"
+          className="w-full h-32 sm:h-40 object-cover rounded-lg"
         />
       </div>
-      <h3 className="text-lg font-medium text-gray-900 mb-2">Medical Record</h3>
-      <p className="text-gray-600 text-sm mb-4">
+      <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2">Medical Record</h3>
+      <p className="text-gray-600 text-xs sm:text-sm mb-3 sm:mb-4">
         Uploaded on {formatDate(record.date_uploaded)}
       </p>
       <a
         href={fileUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center justify-center text-[#6C7A89] text-sm font-medium border border-[#DCDEE5] w-[88px] h-[32px] rounded-[6px]"
+        className="inline-flex items-center justify-center text-[#6C7A89] text-xs sm:text-sm font-medium border border-[#DCDEE5] w-full sm:w-[88px] h-[32px] rounded-[6px] hover:bg-gray-50 transition-colors"
       >
-        <AiOutlineEye className="mr-2" />
+        <AiOutlineEye className="mr-1 sm:mr-2" size={14} />
         View
       </a>
     </div>
@@ -171,33 +171,35 @@ const Medical: React.FC = () => {
   });
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl font-semibold text-gray-900">Medical Report</h1>
-        <div className="relative">
+    <div className="container mx-auto px-3 sm:px-4 py-6 sm:py-8">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 sm:mb-8 gap-4">
+        <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">Medical Report</h1>
+        <div className="relative w-full sm:w-auto">
           <input
             type="text"
             placeholder="Search by date"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 pr-4 py-2 w-[480px] border border-gray-100 rounded-[16px] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+            className="w-full sm:w-[320px] lg:w-[480px] pl-10 pr-4 py-2 border border-gray-100 rounded-[16px] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm sm:text-base"
           />
-          <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
         </div>
       </div>
 
       {/* Upload Medical Record Section */}
-      <div className="bg-white rounded-lg p-6 shadow-sm mb-8">
-        <h2 className="text-lg font-medium text-gray-900 mb-4">
+      <div className="bg-white rounded-lg p-4 sm:p-6 shadow-sm mb-6 sm:mb-8">
+        <h2 className="text-base sm:text-lg font-medium text-gray-900 mb-3 sm:mb-4">
           Upload Medical Record
         </h2>
 
-        <div className="mb-4">
-          <label className="w-full h-[50px] flex items-center px-3 py-2 border border-[#DEE0E3] rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 bg-white text-gray-400 text-sm cursor-pointer">
-            <IoCloudUploadOutline className="mr-2" />
-            {selectedFile
-              ? selectedFile.name
-              : 'Upload or drop a medical file (.png, .jpg, .pdf)'}
+        <div className="mb-3 sm:mb-4">
+          <label className="w-full h-[42px] sm:h-[50px] flex items-center px-3 py-2 border border-[#DEE0E3] rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 bg-white text-gray-400 text-xs sm:text-sm cursor-pointer">
+            <IoCloudUploadOutline className="mr-2" size={16} />
+            <span className="truncate">
+              {selectedFile
+                ? selectedFile.name
+                : 'Upload or drop a medical file (.png, .jpg, .pdf)'}
+            </span>
             <input
               type="file"
               ref={fileInputRef}
@@ -211,7 +213,7 @@ const Medical: React.FC = () => {
         <button
           onClick={handleUpload}
           disabled={isUploading || !selectedFile}
-          className={`px-4 py-2 rounded-md text-sm font-medium ${
+          className={`w-full sm:w-auto px-4 py-2 rounded-md text-xs sm:text-sm font-medium ${
             !selectedFile
               ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
               : 'bg-green-500 text-white hover:bg-green-600 transition-colors'
@@ -221,11 +223,11 @@ const Medical: React.FC = () => {
         </button>
 
         {errorMessage && (
-          <p className="mt-2 text-sm text-red-600">{errorMessage}</p>
+          <p className="mt-2 text-xs sm:text-sm text-red-600">{errorMessage}</p>
         )}
 
         {uploadSuccess && (
-          <p className="mt-2 text-sm text-green-600">
+          <p className="mt-2 text-xs sm:text-sm text-green-600">
             Medical record uploaded successfully!
           </p>
         )}
@@ -249,7 +251,7 @@ const Medical: React.FC = () => {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
           {filteredRecords.map((record) => (
             <MedicalReportCard key={record.id} record={record} />
           ))}

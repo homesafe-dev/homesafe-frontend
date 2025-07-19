@@ -66,11 +66,11 @@ const PayrollPage: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-[20px] font-semibold text-[#24292E]">Payroll</h1>
+    <div className="w-full max-w-7xl mx-auto p-3 sm:p-4 lg:p-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 sm:mb-6 gap-4">
+        <h1 className="text-lg sm:text-[20px] font-semibold text-[#24292E]">Payroll</h1>
         {/* <button
-          className="bg-[#A5EA91] text-[#24292E] font-semibold w-[211px] h-[38px] px-4 py-2 rounded-md text-[13px] flex items-center gap-2"
+          className="bg-[#A5EA91] text-[#24292E] font-semibold w-full sm:w-[211px] h-[38px] px-4 py-2 rounded-md text-xs sm:text-[13px] flex items-center justify-center gap-2"
           onClick={handleOpenCreateModal}
         >
           <FaPlus size={12} />
@@ -78,20 +78,19 @@ const PayrollPage: React.FC = () => {
         </button> */}
       </div>
 
-      <div className="mb-8">
-        <div className="flex justify-between items-center mb-2">
-          <h2 className="text-xl font-semibold text-[#24292E]">
+      <div className="mb-6 sm:mb-8">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-2 gap-2">
+          <h2 className="text-lg sm:text-xl font-semibold text-[#24292E]">
             Payroll History
           </h2>
           <Link to="/employer/payroll/all">
-            {' '}
-            <button className="text-[#24292E] fonnt-semibold text-[13px]">
+            <button className="text-[#24292E] font-semibold text-xs sm:text-[13px] text-left sm:text-right">
               View All
             </button>
           </Link>
         </div>
 
-        <div className="w-full mt-[1rem]">
+        <div className="w-full mt-4 overflow-x-auto">
           {loading ? (
             <div className="flex justify-center items-center h-40">
               <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-500"></div>
@@ -102,59 +101,59 @@ const PayrollPage: React.FC = () => {
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-6 bg-[#C8EDDF80] rounded-t-lg">
-                <div className="p-3 text-sm font-medium text-gray-600">
+              <div className="grid grid-cols-6 bg-[#C8EDDF80] rounded-t-lg min-w-[700px]">
+                <div className="p-2 sm:p-3 text-xs sm:text-sm font-medium text-gray-600">
                   Staff
                 </div>
-                <div className="p-3 text-sm font-medium text-gray-600">
+                <div className="p-2 sm:p-3 text-xs sm:text-sm font-medium text-gray-600">
                   Position
                 </div>
-                <div className="p-3 text-sm font-medium text-gray-600">
+                <div className="p-2 sm:p-3 text-xs sm:text-sm font-medium text-gray-600">
                   Amount
                 </div>
-                <div className="p-3 text-sm font-medium text-gray-600">
+                <div className="p-2 sm:p-3 text-xs sm:text-sm font-medium text-gray-600">
                   Payment Date
                 </div>
-                <div className="p-3 text-sm font-medium text-gray-600">
+                <div className="p-2 sm:p-3 text-xs sm:text-sm font-medium text-gray-600">
                   Advance Salary
                 </div>
-                <div className="p-3 text-sm font-medium text-gray-600">
+                <div className="p-2 sm:p-3 text-xs sm:text-sm font-medium text-gray-600">
                   Status
                 </div>
               </div>
 
-              <div className="bg-white">
+              <div className="bg-white min-w-[700px]">
                 {payrollEntries.length > 0 ? (
                   payrollEntries.map((entry, index) => (
                     <div
                       key={entry.id || index}
                       className="grid grid-cols-6 border-b border-[#DEE0E3]"
                     >
-                      <div className="p-3 text-sm text-gray-800">
+                      <div className="p-2 sm:p-3 text-xs sm:text-sm text-gray-800 truncate">
                         {entry.employee_name || 'N/A'}
                       </div>
-                      <div className="p-3 text-sm text-gray-800">
+                      <div className="p-2 sm:p-3 text-xs sm:text-sm text-gray-800 truncate">
                         {entry.position || 'N/A'}
                       </div>
-                      <div className="p-3 text-sm text-gray-800">
+                      <div className="p-2 sm:p-3 text-xs sm:text-sm text-gray-800">
                         ₦{' '}
                         {typeof entry.amount === 'number'
                           ? entry.amount.toLocaleString()
                           : entry.amount}
                       </div>
-                      <div className="p-3 text-sm text-gray-800">
+                      <div className="p-2 sm:p-3 text-xs sm:text-sm text-gray-800">
                         {entry.payment_date || 'N/A'}
                       </div>
-                      <div className="p-3 text-sm text-gray-800">
+                      <div className="p-2 sm:p-3 text-xs sm:text-sm text-gray-800">
                         {entry.advanced_salary
                           ? typeof entry.advanced_salary === 'number'
                             ? `₦ ${entry.advanced_salary.toLocaleString()}`
                             : entry.advanced_salary
                           : '-'}
                       </div>
-                      <div className="p-3">
+                      <div className="p-2 sm:p-3">
                         <span
-                          className={`px-3 py-1 rounded-md text-sm ${
+                          className={`px-2 sm:px-3 py-1 rounded-md text-xs sm:text-sm ${
                             entry.status?.toLowerCase() === 'active'
                               ? 'bg-[#C8EDDF80] text-green-800'
                               : entry.status?.toLowerCase() === 'pending'
@@ -168,14 +167,14 @@ const PayrollPage: React.FC = () => {
                     </div>
                   ))
                 ) : (
-                  <div className="py-8 text-center text-gray-500">
+                  <div className="py-8 text-center text-gray-500 text-sm">
                     No payroll entries found
                   </div>
                 )}
               </div>
 
               {totalPages > 1 && (
-                <div className="flex justify-end items-center gap-4 mt-6">
+                <div className="flex justify-center sm:justify-end items-center gap-2 sm:gap-4 mt-4 sm:mt-6 overflow-x-auto">
                   <button
                     className="p-2"
                     onClick={() => handlePageChange(currentPage - 1)}

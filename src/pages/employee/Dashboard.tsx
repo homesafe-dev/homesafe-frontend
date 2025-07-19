@@ -98,16 +98,16 @@ const DashboardContent: React.FC = () => {
   }
 
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6">
       <h1 className="text-[16px] font-normal text-[#24292E] mb-6">
         Hello {userProfile?.first_name || 'User'}
       </h1>
 
       {/* Top 3 Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8">
         {/* Salary Card */}
-        <div className="bg-[#174B35] text-white p-6 rounded-lg shadow relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-[180px] h-[180px] opacity-10">
+        <div className="bg-[#174B35] text-white p-4 sm:p-6 rounded-lg shadow relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-[120px] h-[120px] sm:w-[180px] sm:h-[180px] opacity-10">
             <svg width="100%" height="100%" viewBox="0 0 100 100">
               <line
                 x1="40"
@@ -151,9 +151,9 @@ const DashboardContent: React.FC = () => {
               />
             </svg>
           </div>
-          <div className="mb-6">
+          <div className="mb-4 sm:mb-6">
             <p className="text-white/80 text-sm mb-2">Monthly Salary</p>
-            <h2 className="text-2xl font-semibold">
+            <h2 className="text-xl sm:text-2xl font-semibold">
               {userProfile?.salary
                 ? formatCurrency(userProfile.salary)
                 : '₦ 0.00'}
@@ -161,40 +161,41 @@ const DashboardContent: React.FC = () => {
           </div>
           <div className="flex gap-4">
             <Link to="/employee/salary">
-              <button className="bg-white text-[#246D51] h-[42px] py-2 px-4 rounded flex items-center gap-2 text-sm">
+              <button className="bg-white text-[#246D51] h-[42px] py-2 px-3 sm:px-4 rounded flex items-center gap-2 text-sm">
                 <FaEye size={12} />
-                View Details
+                <span className="hidden sm:inline">View Details</span>
+                <span className="sm:hidden">View</span>
               </button>
             </Link>
           </div>
         </div>
 
         {/* Wallet Balance Card */}
-        <div className="bg-[#E7E3F6] p-6 rounded-lg shadow">
-          <div className="flex items-center gap-6">
-            <div className="bg-[#C8EDDF80] p-4 rounded-full">
-              <FaPlus className="text-gray-500" size={24} />
+        <div className="bg-[#E7E3F6] p-4 sm:p-6 rounded-lg shadow">
+          <div className="flex items-center gap-4 sm:gap-6">
+            <div className="bg-[#C8EDDF80] p-3 sm:p-4 rounded-full flex-shrink-0">
+              <FaPlus className="text-gray-500" size={20} />
             </div>
-            <div>
-              <h3 className="text-[20px] font-normal text-[#24292E]">
+            <div className="min-w-0 flex-1">
+              <h3 className="text-[18px] sm:text-[20px] font-normal text-[#24292E] truncate">
                 {userProfile?.wallet?.current_balance
                   ? formatCurrency(userProfile.wallet.current_balance)
                   : '₦ 0.00'}
               </h3>
-              <p className="text-[#24292E] mt-2 text-[16px]">Wallet Balance</p>
+              <p className="text-[#24292E] mt-2 text-[14px] sm:text-[16px]">Wallet Balance</p>
             </div>
           </div>
         </div>
 
         {/* Educational Resources Card */}
-        <div className="bg-[#E9E3E3] p-6 rounded-lg shadow">
-          <div className="flex items-center gap-6">
-            <div className="bg-[#EFAE7333] p-4 rounded-full">
-              <BsBook className="text-gray-500" size={24} />
+        <div className="bg-[#E9E3E3] p-4 sm:p-6 rounded-lg shadow sm:col-span-2 lg:col-span-1">
+          <div className="flex items-center gap-4 sm:gap-6">
+            <div className="bg-[#EFAE7333] p-3 sm:p-4 rounded-full flex-shrink-0">
+              <BsBook className="text-gray-500" size={20} />
             </div>
-            <div>
-              <h3 className="text-[20px] font-normal text-[#24292E]">0</h3>
-              <p className="text-[#24292E] mt-2 text-[16px]">
+            <div className="min-w-0 flex-1">
+              <h3 className="text-[18px] sm:text-[20px] font-normal text-[#24292E]">0</h3>
+              <p className="text-[#24292E] mt-2 text-[14px] sm:text-[16px]">
                 Educational Resources
               </p>
             </div>
@@ -204,13 +205,13 @@ const DashboardContent: React.FC = () => {
 
       {/* Bottom Card - Salary Advance */}
       <div className="mb-8">
-        <h2 className="text-lg font-medium text-gray-700 mb-6">Activities</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-[#F1F1F1] p-6 rounded-lg shadow min-h-[180px] relative">
-            <div className="absolute top-6 right-6 w-[100px] h-[100px] bg-white rounded-full"></div>
-            <div className="mt-12">
+        <h2 className="text-lg font-medium text-gray-700 mb-4 sm:mb-6">Activities</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+          <div className="bg-[#F1F1F1] p-4 sm:p-6 rounded-lg shadow min-h-[140px] sm:min-h-[180px] relative">
+            <div className="absolute top-4 right-4 sm:top-6 sm:right-6 w-[80px] h-[80px] sm:w-[100px] sm:h-[100px] bg-white rounded-full"></div>
+            <div className="mt-8 sm:mt-12">
               <p className="text-gray-600 text-sm">Available Advance</p>
-              <h3 className="text-xl font-medium text-gray-800 mt-2">₦ 0.00</h3>
+              <h3 className="text-lg sm:text-xl font-medium text-gray-800 mt-2">₦ 0.00</h3>
             </div>
           </div>
         </div>
@@ -218,12 +219,12 @@ const DashboardContent: React.FC = () => {
 
       {/* Transaction History Section */}
       <div className="mt-8">
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 sm:mb-6 gap-2">
           <h2 className="text-lg font-medium text-gray-700">
             Transaction History
           </h2>
           <Link to="/employee/salary">
-            <button className="text-[#7B858E] text-sm hover:underline">
+            <button className="text-[#7B858E] text-sm hover:underline self-start sm:self-auto">
               View All
             </button>
           </Link>
@@ -238,80 +239,82 @@ const DashboardContent: React.FC = () => {
             {transactionsError}
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full bg-green-50 rounded-lg overflow-hidden">
-              <thead className="text-left text-gray-600 text-sm">
-                <tr>
-                  <th className="py-4 px-6 font-medium">Transaction ID</th>
-                  <th className="py-4 px-6 font-medium">Type</th>
-                  <th className="py-4 px-6 font-medium">Description</th>
-                  <th className="py-4 px-6 font-medium">Amount</th>
-                  <th className="py-4 px-6 font-medium">Status</th>
-                  <th className="py-4 px-6 font-medium"></th>
-                </tr>
-              </thead>
-              <tbody className="bg-white">
-                {transactions.length > 0 ? (
-                  transactions.map((transaction) => (
-                    <tr
-                      key={transaction.id}
-                      className="border-b border-gray-100"
-                    >
-                      <td className="py-4 px-6">
-                        {transaction.transaction.reference_code.substring(
-                          0,
-                          10
-                        )}
-                        ...
-                      </td>
-                      <td className="py-4 px-6 capitalize">
-                        {transaction.type}
-                      </td>
-                      <td className="py-4 px-6">{transaction.description}</td>
-                      <td className="py-4 px-6">
-                        ₦{' '}
-                        {parseFloat(
-                          transaction.transaction.amount
-                        ).toLocaleString(undefined, {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })}
-                      </td>
-                      <td className="py-4 px-6">
-                        <span
-                          className={`px-3 py-1 rounded-full text-xs ${
-                            transaction.transaction.status === 'successful'
-                              ? 'bg-green-100 text-green-700'
-                              : transaction.transaction.status === 'pending'
-                                ? 'bg-yellow-100 text-yellow-700'
-                                : 'bg-red-100 text-red-700'
-                          }`}
-                        >
-                          {transaction.transaction.status
-                            .charAt(0)
-                            .toUpperCase() +
-                            transaction.transaction.status.slice(1)}
-                        </span>
-                      </td>
-                      <td className="py-4 px-6">
-                        <button className="text-gray-500 hover:text-gray-700">
-                          <FaEllipsisV size={16} />
-                        </button>
+          <div className="overflow-x-auto overflow-y-visible" style={{ marginLeft: '-1rem', marginRight: '-1rem' }}>
+            <div style={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
+              <table className="w-full bg-green-50 rounded-lg overflow-hidden" style={{ minWidth: '800px' }}>
+                <thead className="text-left text-gray-600 text-sm">
+                  <tr>
+                    <th className="py-4 px-6 font-medium whitespace-nowrap">Transaction ID</th>
+                    <th className="py-4 px-6 font-medium whitespace-nowrap">Type</th>
+                    <th className="py-4 px-6 font-medium whitespace-nowrap">Description</th>
+                    <th className="py-4 px-6 font-medium whitespace-nowrap">Amount</th>
+                    <th className="py-4 px-6 font-medium whitespace-nowrap">Status</th>
+                    <th className="py-4 px-6 font-medium whitespace-nowrap"></th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white">
+                  {transactions.length > 0 ? (
+                    transactions.map((transaction) => (
+                      <tr
+                        key={transaction.id}
+                        className="border-b border-gray-100"
+                      >
+                        <td className="py-4 px-6 whitespace-nowrap">
+                          {transaction.transaction.reference_code.substring(
+                            0,
+                            10
+                          )}
+                          ...
+                        </td>
+                        <td className="py-4 px-6 capitalize whitespace-nowrap">
+                          {transaction.type}
+                        </td>
+                        <td className="py-4 px-6 whitespace-nowrap">{transaction.description}</td>
+                        <td className="py-4 px-6 whitespace-nowrap">
+                          ₦{' '}
+                          {parseFloat(
+                            transaction.transaction.amount
+                          ).toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}
+                        </td>
+                        <td className="py-4 px-6 whitespace-nowrap">
+                          <span
+                            className={`px-3 py-1 rounded-full text-xs ${
+                              transaction.transaction.status === 'successful'
+                                ? 'bg-green-100 text-green-700'
+                                : transaction.transaction.status === 'pending'
+                                  ? 'bg-yellow-100 text-yellow-700'
+                                  : 'bg-red-100 text-red-700'
+                            }`}
+                          >
+                            {transaction.transaction.status
+                              .charAt(0)
+                              .toUpperCase() +
+                              transaction.transaction.status.slice(1)}
+                          </span>
+                        </td>
+                        <td className="py-4 px-6 whitespace-nowrap">
+                          <button className="text-gray-500 hover:text-gray-700">
+                            <FaEllipsisV size={16} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td
+                        colSpan={6}
+                        className="py-8 px-6 text-center text-gray-500"
+                      >
+                        No transactions found
                       </td>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td
-                      colSpan={6}
-                      className="py-8 px-6 text-center text-gray-500"
-                    >
-                      No transactions found
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
       </div>

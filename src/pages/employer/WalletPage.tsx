@@ -86,14 +86,14 @@ const WalletPage: React.FC = () => {
   }, [currentPage, itemsPerPage]);
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
-      <h1 className="text-[20px] font-semibold text-[#24292E] leading-[100%] tracking-[0%] align-middle mb-6">
+    <div className="p-3 sm:p-4 lg:p-6 max-w-6xl mx-auto">
+      <h1 className="text-[18px] sm:text-[20px] font-semibold text-[#24292E] leading-[100%] tracking-[0%] align-middle mb-4 sm:mb-6">
         Wallet
       </h1>
 
-      <div className="flex gap-4 mb-8 justify-center">
+      <div className="flex flex-col lg:flex-row gap-4 mb-6 sm:mb-8 justify-center">
         {/* Balance Card */}
-        <div className="bg-[#174B35] rounded-lg p-5 pt-8 text-white flex-1 max-w-md relative overflow-hidden">
+        <div className="bg-[#174B35] rounded-lg p-4 sm:p-5 pt-6 sm:pt-8 text-white flex-1 max-w-md relative overflow-hidden">
           <div className="absolute top-0 right-0 w-[180px] h-[180px] opacity-10">
             <svg width="100%" height="100%" viewBox="0 0 100 100">
               <line
@@ -139,29 +139,28 @@ const WalletPage: React.FC = () => {
             </svg>
           </div>
           <div className="relative z-10">
-            <div className="flex justify-between items-center mb-4">
-              <span className="text-sm">Current Balance</span>
+            <div className="flex justify-between items-center mb-3 sm:mb-4">
+              <span className="text-xs sm:text-sm">Current Balance</span>
               <button
                 onClick={() => setShowBalance(!showBalance)}
-                className="text-white"
+                className="text-white p-1"
               >
-                <FaEye />
+                <FaEye size={16} />
               </button>
             </div>
-            <h2 className="text-2xl font-bold mb-6">
+            <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">
               {showBalance
                 ? `₦ ${parseFloat(walletBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
                 : '••••••••'}
             </h2>
-            <div className="flex gap-2">
-              <Link to="/employer/wallet/top-up">
-                {' '}
-                <button className="bg-white text-[#246D51] px-4 py-2 rounded-md flex items-center text-sm">
-                  <FaPlus className="mr-2" /> Top-up
+            <div className="flex flex-col sm:flex-row gap-2">
+              <Link to="/employer/wallet/top-up" className="flex-1 sm:flex-none">
+                <button className="w-full sm:w-auto bg-white text-[#246D51] px-3 sm:px-4 py-2 rounded-md flex items-center justify-center text-xs sm:text-sm">
+                  <FaPlus className="mr-2" size={12} /> Top-up
                 </button>
               </Link>
               <button
-                className="bg-white text-green-800 px-4 py-2 rounded-md flex items-center text-sm"
+                className="w-full sm:w-auto bg-white text-green-800 px-3 sm:px-4 py-2 rounded-md flex items-center justify-center text-xs sm:text-sm"
                 onClick={handleOpenWithdrawModal}
               >
                 Withdraw
@@ -174,13 +173,13 @@ const WalletPage: React.FC = () => {
       </div>
 
       {/* Transaction History */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-medium">Transaction History</h2>
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3 sm:p-4">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-2">
+          <h2 className="text-base sm:text-lg font-medium">Transaction History</h2>
           <Link to="/employer/wallet-history">
-            <button className="text-sm text-blue-600 hover:text-blue-800">
+            <button className="text-xs sm:text-sm text-blue-600 hover:text-blue-800 self-start sm:self-auto">
               View All
-            </button>{' '}
+            </button>
           </Link>
         </div>
 
@@ -194,15 +193,15 @@ const WalletPage: React.FC = () => {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full text-xs sm:text-sm min-w-[600px]">
               <thead>
                 <tr className="text-left text-gray-500 border-b border-gray-200">
-                  <th className="py-3 px-2 bg-[#C8EDDF80]">Transaction Type</th>
-                  <th className="py-3 px-2 bg-[#C8EDDF80]">Transaction ID</th>
-                  <th className="py-3 px-2 bg-[#C8EDDF80]">Status</th>
-                  <th className="py-3 px-2 bg-[#C8EDDF80]">Amount</th>
-                  <th className="py-3 px-2 bg-[#C8EDDF80]">Description</th>
-                  <th className="py-3 px-2 bg-[#C8EDDF80]">Source</th>
+                  <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">Transaction Type</th>
+                  <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">Transaction ID</th>
+                  <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">Status</th>
+                  <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">Amount</th>
+                  <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">Description</th>
+                  <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">Source</th>
                 </tr>
               </thead>
               <tbody>
@@ -212,19 +211,19 @@ const WalletPage: React.FC = () => {
                       key={transaction.id}
                       className="border-b border-gray-200 hover:bg-gray-50"
                     >
-                      <td className="py-3 px-2 capitalize">
+                      <td className="py-2 sm:py-3 px-2 capitalize text-xs sm:text-sm">
                         {transaction.type}
                       </td>
-                      <td className="py-3 px-2">
+                      <td className="py-2 sm:py-3 px-2 text-xs sm:text-sm">
                         {transaction.transaction.reference_code.substring(
                           0,
                           10
                         )}
                         ...
                       </td>
-                      <td className="py-3 px-2">
+                      <td className="py-2 sm:py-3 px-2">
                         <span
-                          className={`px-3 py-1 rounded-full text-xs ${
+                          className={`px-2 sm:px-3 py-1 rounded-full text-xs ${
                             transaction.transaction.status === 'successful'
                               ? 'bg-green-100 text-green-700'
                               : transaction.transaction.status === 'pending'
@@ -238,7 +237,7 @@ const WalletPage: React.FC = () => {
                             transaction.transaction.status.slice(1)}
                         </span>
                       </td>
-                      <td className="py-3 px-2">
+                      <td className="py-2 sm:py-3 px-2 text-xs sm:text-sm">
                         ₦{' '}
                         {parseFloat(
                           transaction.transaction.amount
@@ -247,8 +246,8 @@ const WalletPage: React.FC = () => {
                           maximumFractionDigits: 2,
                         })}
                       </td>
-                      <td className="py-3 px-2">{transaction.description}</td>
-                      <td className="py-3 px-2">{transaction.source}</td>
+                      <td className="py-2 sm:py-3 px-2 text-xs sm:text-sm">{transaction.description}</td>
+                      <td className="py-2 sm:py-3 px-2 text-xs sm:text-sm">{transaction.source}</td>
                     </tr>
                   ))
                 ) : (
@@ -269,17 +268,18 @@ const WalletPage: React.FC = () => {
         {/* Pagination controls can be added here if needed */}
         {!loading && !error && totalPages > 1 && (
           <div className="flex justify-center mt-4">
-            <div className="flex space-x-2">
+            <div className="flex space-x-1 sm:space-x-2">
               <button
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
-                className={`px-3 py-1 rounded ${
+                className={`px-2 sm:px-3 py-1 rounded text-xs sm:text-sm ${
                   currentPage === 1
                     ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                     : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                 }`}
               >
-                Previous
+                <span className="hidden sm:inline">Previous</span>
+                <span className="sm:hidden">Prev</span>
               </button>
 
               {/* Page numbers */}
@@ -313,7 +313,7 @@ const WalletPage: React.FC = () => {
                   setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                 }
                 disabled={currentPage === totalPages}
-                className={`px-3 py-1 rounded ${
+                className={`px-2 sm:px-3 py-1 rounded text-xs sm:text-sm ${
                   currentPage === totalPages
                     ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                     : 'bg-gray-200 text-gray-700 hover:bg-gray-300'

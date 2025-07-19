@@ -11,6 +11,7 @@ interface SidebarItemProps {
   text: string;
   path: string;
   isActive?: boolean;
+  onClick?: () => void;
 }
 
 const SidebarItem: React.FC<SidebarItemProps> = ({
@@ -18,9 +19,10 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
   text,
   path,
   isActive = false,
+  onClick,
 }) => {
   return (
-    <Link to={path} className="text-decoration-none">
+    <Link to={path} className="text-decoration-none" onClick={onClick}>
       <div
         className={`flex items-center gap-3 py-3 px-4 cursor-pointer hover:bg-gray-100 rounded-md ${isActive ? 'bg-[#C8EDDF80]' : ''}`}
       >
@@ -31,7 +33,11 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
   );
 };
 
-const Sidebar: React.FC = () => {
+interface SidebarProps {
+  onItemClick?: () => void;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
   const location = useLocation();
 
   const sidebarItems = [
@@ -63,12 +69,15 @@ const Sidebar: React.FC = () => {
   ];
 
   return (
-    <div className="w-64 h-screen bg-white border-r border-gray-200 flex flex-col">
+    <div
+      id="agent-sidebar"
+      className="w-64 h-screen bg-white border-r border-gray-200 flex flex-col"
+    >
       {/* Logo Container */}
       <img
         src={HomesafeLogo}
         alt="homesafe logo"
-        className="w-[178px] mx-auto mt-[3rem]  mb-[3rem]"
+        className="w-[140px] sm:w-[178px] mx-auto mt-[2rem] sm:mt-[3rem] mb-[2rem] sm:mb-[3rem]"
       />
 
       {/* Navigation Items */}
@@ -80,6 +89,7 @@ const Sidebar: React.FC = () => {
             text={item.name}
             path={item.path}
             isActive={location.pathname === item.path}
+            onClick={onItemClick}
           />
         ))}
       </div>

@@ -286,27 +286,28 @@ const ArtisansPage: React.FC = () => {
   return (
     <div className="min-h-screen">
       {/* Main Content */}
-      <div className="px-6 py-6">
-        <div className="flex justify-between items-start mb-4">
-          <h1 className="text-xl font-semibold text-[#24292E]">Artisans</h1>
+      <div className="px-3 sm:px-4 lg:px-6 py-4 sm:py-6">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4 gap-4">
+          <h1 className="text-lg sm:text-xl font-semibold text-[#24292E]">Artisans</h1>
 
-          <div className="flex gap-4 items-center">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 items-stretch sm:items-center">
             {/* Salary Filter */}
-            <div className="relative dropdown-container">
+            <div className="relative dropdown-container w-full sm:w-auto">
               <button
                 onClick={() => {
                   setShowSalaryDropdown(!showSalaryDropdown);
                   setShowJobTypeDropdown(false);
                 }}
-                className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-50 min-w-[140px] justify-between"
+                className="flex items-center gap-2 px-3 sm:px-4 py-2 border border-gray-200 rounded-lg text-xs sm:text-sm text-gray-700 hover:bg-gray-50 w-full sm:min-w-[140px] justify-between"
               >
-                <span>
+                <span className="truncate">
                   {salaryFilter
                     ? getSalaryLabel(salaryFilter)
                     : 'Filter by Salary'}
                 </span>
                 <FiChevronDown
-                  className={`transition-transform ${showSalaryDropdown ? 'rotate-180' : ''}`}
+                  className={`transition-transform flex-shrink-0 ${showSalaryDropdown ? 'rotate-180' : ''}`}
+                  size={14}
                 />
               </button>
               {showSalaryDropdown && (
@@ -316,7 +317,7 @@ const ArtisansPage: React.FC = () => {
                       setSalaryFilter('');
                       setShowSalaryDropdown(false);
                     }}
-                    className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 first:rounded-t-lg"
+                    className="w-full px-3 sm:px-4 py-2 text-left text-xs sm:text-sm hover:bg-gray-50 first:rounded-t-lg"
                   >
                     All Salaries
                   </button>
@@ -325,7 +326,7 @@ const ArtisansPage: React.FC = () => {
                       setSalaryFilter('under-50k');
                       setShowSalaryDropdown(false);
                     }}
-                    className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50"
+                    className="w-full px-3 sm:px-4 py-2 text-left text-xs sm:text-sm hover:bg-gray-50"
                   >
                     Under ₦50,000
                   </button>
@@ -334,7 +335,7 @@ const ArtisansPage: React.FC = () => {
                       setSalaryFilter('50k-100k');
                       setShowSalaryDropdown(false);
                     }}
-                    className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50"
+                    className="w-full px-3 sm:px-4 py-2 text-left text-xs sm:text-sm hover:bg-gray-50"
                   >
                     ₦50,000 - ₦100,000
                   </button>
@@ -361,17 +362,18 @@ const ArtisansPage: React.FC = () => {
             </div>
 
             {/* Job Type Filter */}
-            <div className="relative dropdown-container">
+            <div className="relative dropdown-container w-full sm:w-auto">
               <button
                 onClick={() => {
                   setShowJobTypeDropdown(!showJobTypeDropdown);
                   setShowSalaryDropdown(false);
                 }}
-                className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-50 min-w-[140px] justify-between"
+                className="flex items-center gap-2 px-3 sm:px-4 py-2 border border-gray-200 rounded-lg text-xs sm:text-sm text-gray-700 hover:bg-gray-50 w-full sm:min-w-[140px] justify-between"
               >
-                <span>{jobTypeFilter || 'Filter by Job Type'}</span>
+                <span className="truncate">{jobTypeFilter || 'Filter by Job Type'}</span>
                 <FiChevronDown
-                  className={`transition-transform ${showJobTypeDropdown ? 'rotate-180' : ''}`}
+                  className={`transition-transform flex-shrink-0 ${showJobTypeDropdown ? 'rotate-180' : ''}`}
+                  size={14}
                 />
               </button>
               {showJobTypeDropdown && (
@@ -381,7 +383,7 @@ const ArtisansPage: React.FC = () => {
                       setJobTypeFilter('');
                       setShowJobTypeDropdown(false);
                     }}
-                    className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 first:rounded-t-lg"
+                    className="w-full px-3 sm:px-4 py-2 text-left text-xs sm:text-sm hover:bg-gray-50 first:rounded-t-lg"
                   >
                     All Job Types
                   </button>
@@ -392,7 +394,7 @@ const ArtisansPage: React.FC = () => {
                         setJobTypeFilter(jobType);
                         setShowJobTypeDropdown(false);
                       }}
-                      className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 last:rounded-b-lg"
+                      className="w-full px-3 sm:px-4 py-2 text-left text-xs sm:text-sm hover:bg-gray-50 last:rounded-b-lg"
                     >
                       {jobType}
                     </button>
@@ -402,12 +404,12 @@ const ArtisansPage: React.FC = () => {
             </div>
 
             {/* Search Input */}
-            <div className="relative w-[335px] h-[42px]">
-              <FiSearch className="absolute left-3 top-3 text-gray-400" />
+            <div className="relative w-full sm:w-[280px] lg:w-[335px] h-[38px] sm:h-[42px]">
+              <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
               <input
                 type="text"
                 placeholder="Search by name, occupation or location"
-                className="w-full pl-10 pr-4 py-2 border border-gray-100 rounded-[16px] text-[16px] text-[#5A6672] focus:outline-none focus:ring-1 focus:ring-green-500"
+                className="w-full pl-9 sm:pl-10 pr-4 py-2 border border-gray-100 rounded-[16px] text-sm sm:text-[16px] text-[#5A6672] focus:outline-none focus:ring-1 focus:ring-green-500"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -415,7 +417,7 @@ const ArtisansPage: React.FC = () => {
           </div>
         </div>
 
-        <p className="text-[13px] text-[#24292E] mb-6">
+        <p className="text-xs sm:text-[13px] text-[#24292E] mb-4 sm:mb-6">
           List of available artisans
         </p>
 
@@ -432,29 +434,29 @@ const ArtisansPage: React.FC = () => {
             No artisans found matching your search criteria.
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 sm:gap-x-6 lg:gap-x-8 gap-y-4 sm:gap-y-6">
             {filteredArtisans.map((artisan) => (
               <div
                 key={artisan.id}
-                className={`flex flex-col items-center bg-white p-8 shadow relative ${
+                className={`flex flex-col items-center bg-white p-4 sm:p-6 lg:p-8 shadow relative ${
                   artisan.is_employed ? 'opacity-60 grayscale' : ''
                 }`}
               >
                 {/* Hired Badge - moved to left side */}
                 {artisan.is_employed && (
-                  <div className="absolute top-4 left-4 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-medium">
+                  <div className="absolute top-2 sm:top-4 left-2 sm:left-4 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-medium">
                     HIRED
                   </div>
                 )}
 
                 {/* Verified Star - in right section where hired used to be */}
                 {artisan.status === 1 && (
-                  <div className="absolute top-4 right-4 text-green-500 text-lg">
+                  <div className="absolute top-2 sm:top-4 right-2 sm:right-4 text-green-500 text-base sm:text-lg">
                     ★
                   </div>
                 )}
 
-                <div className="mb-3">
+                <div className="mb-2 sm:mb-3">
                   <Avatar
                     src={artisan.avatar}
                     firstName={artisan.first_name}
@@ -464,18 +466,18 @@ const ArtisansPage: React.FC = () => {
                     isOnline={artisan.status === 1}
                   />
                 </div>
-                <h3 className="font-medium text-center text-[16px] text-[#24292E] mt-[1rem]">
+                <h3 className="font-medium text-center text-sm sm:text-[16px] text-[#24292E] mt-2 sm:mt-[1rem]">
                   {artisan.first_name} {artisan.last_name}
                 </h3>
                 {getLocationAgeDisplay(artisan.address, artisan.dob) && (
-                  <p className="text-sm text-gray-500 mb-1 mt-[0.5rem]">
+                  <p className="text-xs sm:text-sm text-gray-500 mb-1 mt-2 sm:mt-[0.5rem]">
                     {getLocationAgeDisplay(artisan.address, artisan.dob)}
                   </p>
                 )}
-                <div className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs mb-2 mt-[0.5rem]">
+                <div className="bg-green-100 text-green-700 px-2 sm:px-3 py-1 rounded-full text-xs mb-2 mt-2 sm:mt-[0.5rem]">
                   {getOccupation(artisan)}
                 </div>
-                <div className="flex mb-3">
+                <div className="flex mb-2 sm:mb-3">
                   {renderStars(getRating(artisan))}
                 </div>
                 <Link
@@ -483,7 +485,7 @@ const ArtisansPage: React.FC = () => {
                   className="w-full"
                 >
                   <button
-                    className={`px-4 py-2 rounded-md text-sm transition-colors w-full text-center mt-[1rem] cursor-pointer ${
+                    className={`px-3 sm:px-4 py-2 rounded-md text-xs sm:text-sm transition-colors w-full text-center mt-2 sm:mt-[1rem] cursor-pointer ${
                       artisan.is_employed
                         ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
                         : 'bg-[#A5EA91] hover:bg-green-300 text-[#24292E]'

@@ -73,11 +73,11 @@ const CandidateTracker = () => {
   };
 
   return (
-    <div className=" max-w-6xl mx-auto">
-      <h2 className="text-xl font-semibold mb-4">Track</h2>
-      <div className="flex justify-between items-center mt-[2rem]">
-        <p className="text-gray-600 mb-6">Here are all your candidates</p>
-        <div className="text-sm text-gray-600">
+    <div className="max-w-6xl mx-auto px-4 sm:px-0">
+      <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Track</h2>
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-4 sm:mt-[2rem] gap-2">
+        <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">Here are all your candidates</p>
+        <div className="text-xs sm:text-sm text-gray-600">
           <span
             className="cursor-pointer hover:text-green-700"
             onClick={() => navigate('/agent/all-candidates')}
@@ -89,27 +89,28 @@ const CandidateTracker = () => {
 
       {/* Error Message */}
       {error && (
-        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">{error}</div>
+        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded text-sm">{error}</div>
       )}
 
-      <div className="rounded-lg overflow-hidden pb-20">
+      <div className="rounded-lg overflow-hidden pb-12 sm:pb-20">
         {/* Header section with green background */}
 
-        <div className="overflow-x-auto overflow-y-visible">
-          <table className="w-full">
-            <thead>
-              <tr className="bg-[#C8EDDF80] text-[#174B35] text-sm">
-                <th className="px-4 py-3 text-left font-medium">Candidate</th>
-                <th className="px-4 py-3 text-left font-medium">Date</th>
-                <th className="px-4 py-3 text-left font-medium">Placement</th>
-                <th className="px-4 py-3 text-left font-medium">Gender</th>
-                <th className="px-4 py-3 text-left font-medium">
-                  Phone Number
-                </th>
-                <th className="px-4 py-3 text-left font-medium">Status</th>
-                <th className="px-4 py-3 text-left font-medium w-12"></th>
-              </tr>
-            </thead>
+        <div className="overflow-x-auto overflow-y-visible" style={{ marginLeft: '-1rem', marginRight: '-1rem' }}>
+          <div style={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
+            <table className="w-full" style={{ minWidth: '700px' }}>
+              <thead>
+                <tr className="bg-[#C8EDDF80] text-[#174B35] text-sm">
+                  <th className="px-4 py-3 text-left font-medium whitespace-nowrap">Candidate</th>
+                  <th className="px-4 py-3 text-left font-medium whitespace-nowrap">Date</th>
+                  <th className="px-4 py-3 text-left font-medium whitespace-nowrap">Placement</th>
+                  <th className="px-4 py-3 text-left font-medium whitespace-nowrap">Gender</th>
+                  <th className="px-4 py-3 text-left font-medium whitespace-nowrap">
+                    Phone Number
+                  </th>
+                  <th className="px-4 py-3 text-left font-medium whitespace-nowrap">Status</th>
+                  <th className="px-4 py-3 text-left font-medium w-12 whitespace-nowrap"></th>
+                </tr>
+              </thead>
             <tbody className="">
               {isLoading ? (
                 // Loading state - show skeleton rows
@@ -158,7 +159,7 @@ const CandidateTracker = () => {
                     key={employee.id}
                     className="border-b border-gray-100 hover:bg-gray-50"
                   >
-                    <td className="px-4 py-3 flex items-center gap-3">
+                    <td className="px-4 py-3 flex items-center gap-3 whitespace-nowrap">
                       {employee.avatar ? (
                         <div className="w-8 h-8 rounded-full overflow-hidden relative">
                           <img
@@ -176,14 +177,14 @@ const CandidateTracker = () => {
                       )}
                       <span>{employee.candidate}</span>
                     </td>
-                    <td className="px-4 py-3 text-gray-700">
+                    <td className="px-4 py-3 text-gray-700 whitespace-nowrap">
                       {new Date(employee.date).toLocaleDateString('en-US', {
                         day: 'numeric',
                         month: 'short',
                         year: 'numeric',
                       })}
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3 whitespace-nowrap">
                       <span
                         className={`${
                           employee.placement.toLowerCase() ===
@@ -198,14 +199,14 @@ const CandidateTracker = () => {
                           : employee.placement}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-gray-700">
+                    <td className="px-4 py-3 text-gray-700 whitespace-nowrap">
                       {employee.gender.charAt(0).toUpperCase() +
                         employee.gender.slice(1)}
                     </td>
-                    <td className="px-4 py-3 text-gray-700">
+                    <td className="px-4 py-3 text-gray-700 whitespace-nowrap">
                       {employee.phone}
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3 whitespace-nowrap">
                       <button
                         className={`px-3 py-1 rounded-full text-[13px] ${
                           employee.status.toLowerCase().includes('not') ||
@@ -259,6 +260,7 @@ const CandidateTracker = () => {
               )}
             </tbody>
           </table>
+          </div>
         </div>
       </div>
     </div>

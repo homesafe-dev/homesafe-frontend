@@ -54,56 +54,58 @@ const AllCandidatesPage = () => {
   };
 
   return (
-    <div className="">
+    <div className="px-4 sm:px-0">
       {/* Header */}
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-[24px] text-[#24292E] font-semibold">Candidates</h1>
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-3">
+        <h1 className="text-[20px] sm:text-[24px] text-[#24292E] font-semibold">Candidates</h1>
         <button
-          className="bg-[#A5EA91] text-[#174B35] px-4 py-2 rounded-[8px] flex items-center gap-2"
+          className="bg-[#A5EA91] text-[#174B35] px-3 sm:px-4 py-2 rounded-[8px] flex items-center justify-center gap-2 text-sm sm:text-base w-full sm:w-auto"
           onClick={() => navigate('/agent/add-candidate')}
         >
           <span>+</span>
-          Add New Candidate
+          <span className="hidden sm:inline">Add New Candidate</span>
+          <span className="sm:hidden">Add Candidate</span>
         </button>
       </div>
 
       {/* Error Message */}
       {error && (
-        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">{error}</div>
+        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded text-sm">{error}</div>
       )}
 
       {/* Subheader */}
-      <div className="flex justify-between items-center mb-6">
-        <p className="text-[#24292E] text-[16px]">
+      <div className="flex justify-between items-center mb-4 sm:mb-6">
+        <p className="text-[#24292E] text-[14px] sm:text-[16px]">
           Here are all your candidates
         </p>
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead className="bg-[#C8EDDF80] h-[56px] text-left">
-            <tr>
-              <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
-                Candidate
-              </th>
-              <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
-                Date
-              </th>
-              <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
-                Placement
-              </th>
-              <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
-                Gender
-              </th>
-              <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
-                Phone Number
-              </th>
-              <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
-                Status
-              </th>
-            </tr>
-          </thead>
+      <div className="overflow-x-auto overflow-y-visible" style={{ marginLeft: '-1rem', marginRight: '-1rem' }}>
+        <div style={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
+          <table className="w-full" style={{ minWidth: '700px' }}>
+            <thead className="bg-[#C8EDDF80] h-[56px] text-left">
+              <tr>
+                <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal whitespace-nowrap">
+                  Candidate
+                </th>
+                <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal whitespace-nowrap">
+                  Date
+                </th>
+                <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal whitespace-nowrap">
+                  Placement
+                </th>
+                <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal whitespace-nowrap">
+                  Gender
+                </th>
+                <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal whitespace-nowrap">
+                  Phone Number
+                </th>
+                <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal whitespace-nowrap">
+                  Status
+                </th>
+              </tr>
+            </thead>
           <tbody className="divide-y divide-gray-200">
             {isLoading ? (
               // Loading state - show skeleton rows
@@ -140,7 +142,7 @@ const AllCandidatesPage = () => {
               // Data loaded successfully
               employees.map((employee) => (
                 <tr key={employee.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 flex items-center gap-2 text-[13px] text-[#24292E] font-normal">
+                  <td className="px-6 py-4 flex items-center gap-2 text-[13px] text-[#24292E] font-normal whitespace-nowrap">
                     <Avatar
                       src={employee.avatar}
                       firstName={employee.candidate.split(' ')[0] || ''}
@@ -151,24 +153,24 @@ const AllCandidatesPage = () => {
                     />
                     {employee.candidate}
                   </td>
-                  <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
+                  <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal whitespace-nowrap">
                     {new Date(employee.date).toLocaleDateString('en-US', {
                       day: 'numeric',
                       month: 'short',
                       year: 'numeric',
                     })}
                   </td>
-                  <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
+                  <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal whitespace-nowrap">
                     {employee.placement}
                   </td>
-                  <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
+                  <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal whitespace-nowrap">
                     {employee.gender.charAt(0).toUpperCase() +
                       employee.gender.slice(1)}
                   </td>
-                  <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
+                  <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal whitespace-nowrap">
                     {employee.phone}
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-4 whitespace-nowrap">
                     <span
                       className={`px-3 py-1 rounded-full text-[13px] ${
                         employee.status.toLowerCase().includes('not') ||
@@ -187,11 +189,12 @@ const AllCandidatesPage = () => {
             )}
           </tbody>
         </table>
+        </div>
       </div>
 
       {/* Pagination */}
       {!isLoading && employees.length > 0 && (
-        <div className="flex justify-end items-center gap-2 mt-4">
+        <div className="flex justify-center sm:justify-end items-center gap-2 mt-4">
           <button
             className="p-2 rounded-full w-[40px] h-[40px] hover:bg-gray-100"
             onClick={() => handlePageChange(Math.max(1, currentPage - 1))}

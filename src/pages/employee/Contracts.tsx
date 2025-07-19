@@ -124,18 +124,20 @@ const ContractCard: React.FC<ContractCardProps> = ({ proposal, imageUrl }) => {
   const status = proposalData.status || 'Unknown';
 
   return (
-    <div className="bg-white p-4 rounded-md border border-gray-100">
+    <div className="bg-white p-3 sm:p-4 rounded-md border border-gray-100">
       <div className="mb-3">
         <img
           src={imageUrl}
           alt="Contract document"
-          className="w-full h-[174px] object-cover rounded-sm"
+          className="w-full h-[140px] sm:h-[174px] object-cover rounded-sm"
         />
       </div>
-      <h3 className="font-semibold text-[16px] text-[#24292E] mb-2">
+      <h3 className="font-semibold text-[14px] sm:text-[16px] text-[#24292E] mb-2 truncate">
         {employerName}
       </h3>
-      <p className="text-[13px] text-[#48525B] mb-3">{description}</p>
+      <p className="text-[12px] sm:text-[13px] text-[#48525B] mb-3 line-clamp-3 sm:line-clamp-none">
+        {description}
+      </p>
 
       <div className="flex justify-between items-center mb-3">
         <span
@@ -154,9 +156,10 @@ const ContractCard: React.FC<ContractCardProps> = ({ proposal, imageUrl }) => {
       <div className="flex gap-2">
         <button
           onClick={handleViewDetails}
-          className="flex-1 flex items-center justify-center rounded-[6px] text-[#24292E] text-sm border border-[#A5EA91] hover:bg-[#A5EA91] hover:text-white transition-colors h-[32px]"
+          className="flex-1 flex items-center justify-center rounded-[6px] text-[#24292E] text-xs sm:text-sm border border-[#A5EA91] hover:bg-[#A5EA91] hover:text-white transition-colors h-[32px]"
         >
-          View Details
+          <span className="hidden sm:inline">View Details</span>
+          <span className="sm:hidden">View</span>
         </button>
 
         {/* {isActive && (
@@ -250,13 +253,13 @@ const ContractsPage: React.FC<ContractsPageProps> = ({
 
   return (
     <div className="rounded-md">
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-4">
         <h2 className="text-xl font-semibold text-[#24292E]">{title}</h2>
-        <div className="relative">
+        <div className="relative w-full sm:w-auto">
           <input
             type="text"
             placeholder="Search by employer, position, status"
-            className="pl-8 pr-4 py-2 border border-gray-100 rounded-[16px] text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-[480px]"
+            className="pl-8 pr-4 py-2 border border-gray-100 rounded-[16px] text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-[320px] md:w-[480px]"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -279,7 +282,7 @@ const ContractsPage: React.FC<ContractsPageProps> = ({
             : 'No contract proposals found.'}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
           {filteredProposals.map((contractProposal) => (
             <ContractCard
               key={contractProposal.proposal.id}
