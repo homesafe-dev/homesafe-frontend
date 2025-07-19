@@ -26,8 +26,14 @@ const MedicalHistory: React.FC<MedicalHistoryProps> = ({
   if (medicalFiles.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center p-6 sm:p-8 text-center">
-        <img src={MedicalImg} alt="medical" className="mb-3 sm:mb-4 opacity-50 w-16 h-16 sm:w-auto sm:h-auto" />
-        <h3 className="font-medium text-gray-800 mb-2 text-sm sm:text-base">No Medical Records</h3>
+        <img
+          src={MedicalImg}
+          alt="medical"
+          className="mb-3 sm:mb-4 opacity-50 w-16 h-16 sm:w-auto sm:h-auto"
+        />
+        <h3 className="font-medium text-gray-800 mb-2 text-sm sm:text-base">
+          No Medical Records
+        </h3>
         <p className="text-xs sm:text-sm text-gray-600">
           No medical reports have been uploaded for {employeeName} yet.
         </p>
@@ -42,9 +48,15 @@ const MedicalHistory: React.FC<MedicalHistoryProps> = ({
           key={medical.id}
           className="flex flex-col sm:flex-row sm:items-center justify-start p-3 sm:p-4 border border-gray-200 rounded-lg gap-3 sm:gap-4"
         >
-          <img src={MedicalImg} alt="medical" className="w-16 h-16 sm:w-auto sm:h-auto flex-shrink-0" />
+          <img
+            src={MedicalImg}
+            alt="medical"
+            className="w-16 h-16 sm:w-auto sm:h-auto flex-shrink-0"
+          />
           <div className="flex-1">
-            <h3 className="font-medium text-gray-800 text-sm sm:text-base">Medical Report</h3>
+            <h3 className="font-medium text-gray-800 text-sm sm:text-base">
+              Medical Report
+            </h3>
             <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
               {employeeName}'s medical report uploaded on{' '}
               {new Date(medical.date_uploaded).toLocaleDateString('en-GB', {

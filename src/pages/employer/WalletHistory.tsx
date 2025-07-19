@@ -54,7 +54,9 @@ const WalletHistory: React.FC = () => {
           size={18}
           onClick={handleBack}
         />
-        <h1 className="text-[18px] sm:text-[20px] font-semibold text-[#24292E]">See All</h1>
+        <h1 className="text-[18px] sm:text-[20px] font-semibold text-[#24292E]">
+          See All
+        </h1>
       </div>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-[14px] sm:text-[16px] text-[#24292E] font-semibold mt-[1rem]">
@@ -75,12 +77,24 @@ const WalletHistory: React.FC = () => {
           <table className="w-full text-xs sm:text-sm min-w-[600px]">
             <thead>
               <tr className="text-left text-gray-500 border-b border-gray-200">
-                <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">Transaction Type</th>
-                <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">Transaction ID</th>
-                <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">Status</th>
-                <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">Amount</th>
-                <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">Description</th>
-                <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">Source</th>
+                <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">
+                  Transaction Type
+                </th>
+                <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">
+                  Transaction ID
+                </th>
+                <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">
+                  Status
+                </th>
+                <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">
+                  Amount
+                </th>
+                <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">
+                  Description
+                </th>
+                <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">
+                  Source
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -90,7 +104,9 @@ const WalletHistory: React.FC = () => {
                     key={transaction.id}
                     className="border-b border-gray-200 hover:bg-gray-50"
                   >
-                    <td className="py-2 sm:py-3 px-2 capitalize text-xs sm:text-sm">{transaction.type}</td>
+                    <td className="py-2 sm:py-3 px-2 capitalize text-xs sm:text-sm">
+                      {transaction.type}
+                    </td>
                     <td className="py-2 sm:py-3 px-2 text-xs sm:text-sm">
                       {transaction.transaction.reference_code.substring(0, 10)}
                       ...
@@ -120,8 +136,12 @@ const WalletHistory: React.FC = () => {
                         maximumFractionDigits: 2,
                       })}
                     </td>
-                    <td className="py-2 sm:py-3 px-2 text-xs sm:text-sm">{transaction.description}</td>
-                    <td className="py-2 sm:py-3 px-2 text-xs sm:text-sm">{transaction.source}</td>
+                    <td className="py-2 sm:py-3 px-2 text-xs sm:text-sm">
+                      {transaction.description}
+                    </td>
+                    <td className="py-2 sm:py-3 px-2 text-xs sm:text-sm">
+                      {transaction.source}
+                    </td>
                   </tr>
                 ))
               ) : (

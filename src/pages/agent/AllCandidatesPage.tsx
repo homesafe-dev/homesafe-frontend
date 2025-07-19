@@ -57,7 +57,9 @@ const AllCandidatesPage = () => {
     <div className="px-4 sm:px-0">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-3">
-        <h1 className="text-[20px] sm:text-[24px] text-[#24292E] font-semibold">Candidates</h1>
+        <h1 className="text-[20px] sm:text-[24px] text-[#24292E] font-semibold">
+          Candidates
+        </h1>
         <button
           className="bg-[#A5EA91] text-[#174B35] px-3 sm:px-4 py-2 rounded-[8px] flex items-center justify-center gap-2 text-sm sm:text-base w-full sm:w-auto"
           onClick={() => navigate('/agent/add-candidate')}
@@ -70,7 +72,9 @@ const AllCandidatesPage = () => {
 
       {/* Error Message */}
       {error && (
-        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded text-sm">{error}</div>
+        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded text-sm">
+          {error}
+        </div>
       )}
 
       {/* Subheader */}
@@ -81,7 +85,10 @@ const AllCandidatesPage = () => {
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto overflow-y-visible" style={{ marginLeft: '-1rem', marginRight: '-1rem' }}>
+      <div
+        className="overflow-x-auto overflow-y-visible"
+        style={{ marginLeft: '-1rem', marginRight: '-1rem' }}
+      >
         <div style={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
           <table className="w-full" style={{ minWidth: '700px' }}>
             <thead className="bg-[#C8EDDF80] h-[56px] text-left">
@@ -106,89 +113,92 @@ const AllCandidatesPage = () => {
                 </th>
               </tr>
             </thead>
-          <tbody className="divide-y divide-gray-200">
-            {isLoading ? (
-              // Loading state - show skeleton rows
-              [...Array(3)].map((_, index) => (
-                <tr key={index} className="hover:bg-gray-50 animate-pulse">
-                  <td className="px-6 py-4">
-                    <div className="h-8 bg-gray-200 rounded"></div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="h-8 bg-gray-200 rounded"></div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="h-8 bg-gray-200 rounded"></div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="h-8 bg-gray-200 rounded"></div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="h-8 bg-gray-200 rounded"></div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="h-8 bg-gray-200 rounded"></div>
-                  </td>
-                </tr>
-              ))
-            ) : employees.length === 0 ? (
-              // Empty state
-              <tr>
-                <td colSpan={6} className="px-6 py-4 text-center text-gray-500">
-                  No candidates found
-                </td>
-              </tr>
-            ) : (
-              // Data loaded successfully
-              employees.map((employee) => (
-                <tr key={employee.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 flex items-center gap-2 text-[13px] text-[#24292E] font-normal whitespace-nowrap">
-                    <Avatar
-                      src={employee.avatar}
-                      firstName={employee.candidate.split(' ')[0] || ''}
-                      lastName={employee.candidate.split(' ')[1] || ''}
-                      size="sm"
-                      showStatus={true}
-                      isOnline={true}
-                    />
-                    {employee.candidate}
-                  </td>
-                  <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal whitespace-nowrap">
-                    {new Date(employee.date).toLocaleDateString('en-US', {
-                      day: 'numeric',
-                      month: 'short',
-                      year: 'numeric',
-                    })}
-                  </td>
-                  <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal whitespace-nowrap">
-                    {employee.placement}
-                  </td>
-                  <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal whitespace-nowrap">
-                    {employee.gender.charAt(0).toUpperCase() +
-                      employee.gender.slice(1)}
-                  </td>
-                  <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal whitespace-nowrap">
-                    {employee.phone}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span
-                      className={`px-3 py-1 rounded-full text-[13px] ${
-                        employee.status.toLowerCase().includes('not') ||
-                        employee.status.toLowerCase() === 'unverified'
-                          ? 'bg-red-100 text-red-800'
-                          : 'bg-green-100 text-green-800'
-                      }`}
-                    >
-                      {employee.status.toLowerCase().includes('not')
-                        ? 'Unverified'
-                        : 'Verified'}
-                    </span>
+            <tbody className="divide-y divide-gray-200">
+              {isLoading ? (
+                // Loading state - show skeleton rows
+                [...Array(3)].map((_, index) => (
+                  <tr key={index} className="hover:bg-gray-50 animate-pulse">
+                    <td className="px-6 py-4">
+                      <div className="h-8 bg-gray-200 rounded"></div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="h-8 bg-gray-200 rounded"></div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="h-8 bg-gray-200 rounded"></div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="h-8 bg-gray-200 rounded"></div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="h-8 bg-gray-200 rounded"></div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="h-8 bg-gray-200 rounded"></div>
+                    </td>
+                  </tr>
+                ))
+              ) : employees.length === 0 ? (
+                // Empty state
+                <tr>
+                  <td
+                    colSpan={6}
+                    className="px-6 py-4 text-center text-gray-500"
+                  >
+                    No candidates found
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                // Data loaded successfully
+                employees.map((employee) => (
+                  <tr key={employee.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 flex items-center gap-2 text-[13px] text-[#24292E] font-normal whitespace-nowrap">
+                      <Avatar
+                        src={employee.avatar}
+                        firstName={employee.candidate.split(' ')[0] || ''}
+                        lastName={employee.candidate.split(' ')[1] || ''}
+                        size="sm"
+                        showStatus={true}
+                        isOnline={true}
+                      />
+                      {employee.candidate}
+                    </td>
+                    <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal whitespace-nowrap">
+                      {new Date(employee.date).toLocaleDateString('en-US', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric',
+                      })}
+                    </td>
+                    <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal whitespace-nowrap">
+                      {employee.placement}
+                    </td>
+                    <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal whitespace-nowrap">
+                      {employee.gender.charAt(0).toUpperCase() +
+                        employee.gender.slice(1)}
+                    </td>
+                    <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal whitespace-nowrap">
+                      {employee.phone}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span
+                        className={`px-3 py-1 rounded-full text-[13px] ${
+                          employee.status.toLowerCase().includes('not') ||
+                          employee.status.toLowerCase() === 'unverified'
+                            ? 'bg-red-100 text-red-800'
+                            : 'bg-green-100 text-green-800'
+                        }`}
+                      >
+                        {employee.status.toLowerCase().includes('not')
+                          ? 'Unverified'
+                          : 'Verified'}
+                      </span>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
 

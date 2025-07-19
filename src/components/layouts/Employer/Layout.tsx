@@ -28,8 +28,12 @@ export default function Layout({ children }: EmployerLayoutProps) {
         const sidebar = document.getElementById('employer-sidebar');
         const menuButton = document.getElementById('mobile-menu-button');
 
-        if (sidebar && !sidebar.contains(event.target as Node) &&
-            menuButton && !menuButton.contains(event.target as Node)) {
+        if (
+          sidebar &&
+          !sidebar.contains(event.target as Node) &&
+          menuButton &&
+          !menuButton.contains(event.target as Node)
+        ) {
           setIsSidebarOpen(false);
         }
       }
@@ -54,19 +58,20 @@ export default function Layout({ children }: EmployerLayoutProps) {
       )}
 
       {/* Sidebar */}
-      <div className={`
+      <div
+        className={`
         ${isMobile ? 'fixed' : 'relative'}
         ${isMobile && !isSidebarOpen ? '-translate-x-full' : 'translate-x-0'}
         transition-transform duration-300 ease-in-out z-50 lg:translate-x-0
-      `}>
-        <Sidebar onItemClick={isMobile ? () => setIsSidebarOpen(false) : undefined} />
+      `}
+      >
+        <Sidebar
+          onItemClick={isMobile ? () => setIsSidebarOpen(false) : undefined}
+        />
       </div>
 
       <div className="flex-1 flex flex-col overflow-hidden">
-        <Header
-          onMenuToggle={toggleSidebar}
-          isMobile={isMobile}
-        />
+        <Header onMenuToggle={toggleSidebar} isMobile={isMobile} />
         <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 p-3 sm:p-4 lg:p-6">
           {children}
         </main>

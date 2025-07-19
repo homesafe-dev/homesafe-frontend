@@ -165,17 +165,32 @@ const Salary: React.FC = () => {
           {error}
         </div>
       ) : (
-        <div className="overflow-x-auto overflow-y-visible" style={{ marginLeft: '-1rem', marginRight: '-1rem' }}>
+        <div
+          className="overflow-x-auto overflow-y-visible"
+          style={{ marginLeft: '-1rem', marginRight: '-1rem' }}
+        >
           <div style={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
             <table className="w-full text-sm" style={{ minWidth: '800px' }}>
               <thead>
                 <tr className="text-left text-gray-500 border-b border-gray-200">
-                  <th className="py-3 px-2 bg-[#E7F6F0] whitespace-nowrap">Transaction Type</th>
-                  <th className="py-3 px-2 bg-[#E7F6F0] whitespace-nowrap">Transaction ID</th>
-                  <th className="py-3 px-2 bg-[#E7F6F0] whitespace-nowrap">Date</th>
-                  <th className="py-3 px-2 bg-[#E7F6F0] whitespace-nowrap">Amount</th>
-                  <th className="py-3 px-2 bg-[#E7F6F0] whitespace-nowrap">Description</th>
-                  <th className="py-3 px-2 bg-[#E7F6F0] whitespace-nowrap">From/To</th>
+                  <th className="py-3 px-2 bg-[#E7F6F0] whitespace-nowrap">
+                    Transaction Type
+                  </th>
+                  <th className="py-3 px-2 bg-[#E7F6F0] whitespace-nowrap">
+                    Transaction ID
+                  </th>
+                  <th className="py-3 px-2 bg-[#E7F6F0] whitespace-nowrap">
+                    Date
+                  </th>
+                  <th className="py-3 px-2 bg-[#E7F6F0] whitespace-nowrap">
+                    Amount
+                  </th>
+                  <th className="py-3 px-2 bg-[#E7F6F0] whitespace-nowrap">
+                    Description
+                  </th>
+                  <th className="py-3 px-2 bg-[#E7F6F0] whitespace-nowrap">
+                    From/To
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -185,14 +200,24 @@ const Salary: React.FC = () => {
                       key={index}
                       className="border-b border-gray-200 hover:bg-gray-50"
                     >
-                      <td className="py-3 px-2 whitespace-nowrap">{transaction.type}</td>
-                      <td className="py-3 px-2 whitespace-nowrap">{transaction.id}</td>
-                      <td className="py-3 px-2 whitespace-nowrap">{transaction.date}</td>
+                      <td className="py-3 px-2 whitespace-nowrap">
+                        {transaction.type}
+                      </td>
+                      <td className="py-3 px-2 whitespace-nowrap">
+                        {transaction.id}
+                      </td>
+                      <td className="py-3 px-2 whitespace-nowrap">
+                        {transaction.date}
+                      </td>
                       <td className="py-3 px-2 whitespace-nowrap">
                         ₦ {transaction.amount.toLocaleString()}
                       </td>
-                      <td className="py-3 px-2 whitespace-nowrap">{transaction.description}</td>
-                      <td className="py-3 px-2 whitespace-nowrap">{transaction.from}</td>
+                      <td className="py-3 px-2 whitespace-nowrap">
+                        {transaction.description}
+                      </td>
+                      <td className="py-3 px-2 whitespace-nowrap">
+                        {transaction.from}
+                      </td>
                     </tr>
                   ))
                 ) : (

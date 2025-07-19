@@ -217,7 +217,9 @@ const DashboardContent: React.FC = () => {
 
       {/* Activities Section */}
       <div className="mb-6 sm:mb-8">
-        <h2 className="text-lg font-medium text-gray-700 mb-4 sm:mb-6">Activities</h2>
+        <h2 className="text-lg font-medium text-gray-700 mb-4 sm:mb-6">
+          Activities
+        </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {/* Educational Resources Card */}
           <div className="bg-[#E7E3F6] p-4 sm:p-6 rounded-lg shadow min-h-[140px] sm:min-h-[180px]">
@@ -226,7 +228,9 @@ const DashboardContent: React.FC = () => {
                 <p className="text-gray-600 text-xs sm:text-sm">
                   Staff on Educational Resources
                 </p>
-                <h3 className="text-lg sm:text-xl font-medium text-gray-800 mt-1 sm:mt-2">None</h3>
+                <h3 className="text-lg sm:text-xl font-medium text-gray-800 mt-1 sm:mt-2">
+                  None
+                </h3>
                 {/* <button className="flex items-center gap-2 mt-6 bg-white border border-gray-300 text-gray-600 py-2 px-4 rounded-md text-sm">
                   <BsCreditCard size={12} />
                   Recommend Resources
@@ -240,7 +244,9 @@ const DashboardContent: React.FC = () => {
           <div className="bg-[#E9E3E3] p-4 sm:p-6 rounded-lg shadow min-h-[140px] sm:min-h-[180px]">
             <div className="flex justify-between">
               <div className="mt-6 sm:mt-12">
-                <p className="text-gray-600 text-xs sm:text-sm">Total Staff Payroll</p>
+                <p className="text-gray-600 text-xs sm:text-sm">
+                  Total Staff Payroll
+                </p>
                 <h3 className="text-lg sm:text-xl font-medium text-gray-800 mt-1 sm:mt-2">
                   ₦
                   {totalPayroll.toLocaleString(undefined, {
@@ -285,11 +291,21 @@ const DashboardContent: React.FC = () => {
             <table className="min-w-full bg-green-50 rounded-lg overflow-hidden">
               <thead className="text-left text-gray-600 text-xs sm:text-sm">
                 <tr>
-                  <th className="py-3 sm:py-4 px-3 sm:px-6 font-medium">Transaction ID</th>
-                  <th className="py-3 sm:py-4 px-3 sm:px-6 font-medium">Type</th>
-                  <th className="py-3 sm:py-4 px-3 sm:px-6 font-medium hidden sm:table-cell">Description</th>
-                  <th className="py-3 sm:py-4 px-3 sm:px-6 font-medium">Amount</th>
-                  <th className="py-3 sm:py-4 px-3 sm:px-6 font-medium">Status</th>
+                  <th className="py-3 sm:py-4 px-3 sm:px-6 font-medium">
+                    Transaction ID
+                  </th>
+                  <th className="py-3 sm:py-4 px-3 sm:px-6 font-medium">
+                    Type
+                  </th>
+                  <th className="py-3 sm:py-4 px-3 sm:px-6 font-medium hidden sm:table-cell">
+                    Description
+                  </th>
+                  <th className="py-3 sm:py-4 px-3 sm:px-6 font-medium">
+                    Amount
+                  </th>
+                  <th className="py-3 sm:py-4 px-3 sm:px-6 font-medium">
+                    Status
+                  </th>
                   <th className="py-3 sm:py-4 px-3 sm:px-6 font-medium"></th>
                 </tr>
               </thead>
@@ -301,16 +317,15 @@ const DashboardContent: React.FC = () => {
                       className="border-b border-gray-100"
                     >
                       <td className="py-3 sm:py-4 px-3 sm:px-6 text-xs sm:text-sm">
-                        {transaction.transaction.reference_code.substring(
-                          0,
-                          8
-                        )}
+                        {transaction.transaction.reference_code.substring(0, 8)}
                         ...
                       </td>
                       <td className="py-3 sm:py-4 px-3 sm:px-6 capitalize text-xs sm:text-sm">
                         {transaction.type}
                       </td>
-                      <td className="py-3 sm:py-4 px-3 sm:px-6 hidden sm:table-cell text-xs sm:text-sm">{transaction.description}</td>
+                      <td className="py-3 sm:py-4 px-3 sm:px-6 hidden sm:table-cell text-xs sm:text-sm">
+                        {transaction.description}
+                      </td>
                       <td className="py-3 sm:py-4 px-3 sm:px-6 text-xs sm:text-sm">
                         ₦{' '}
                         {parseFloat(

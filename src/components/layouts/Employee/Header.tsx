@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { LuBellDot } from 'react-icons/lu';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
-import { HiOutlineMenu, HiOutlineX } from 'react-icons/hi';
+import { HiOutlineMenu } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
 import NotificationsModal from '../../common/NotificationsModal';
 import EnvironmentIndicator from '../../common/EnvironmentIndicator';
@@ -27,10 +27,7 @@ interface UserProfile {
   [key: string]: any;
 }
 
-const Header: React.FC<HeaderProps> = ({
-  onMenuToggle,
-  isMobile = false,
-}) => {
+const Header: React.FC<HeaderProps> = ({ onMenuToggle, isMobile = false }) => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -145,7 +142,9 @@ const Header: React.FC<HeaderProps> = ({
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <span className="text-xs sm:text-sm">{getUserInitials()}</span>
+                    <span className="text-xs sm:text-sm">
+                      {getUserInitials()}
+                    </span>
                   )}
                 </div>
 

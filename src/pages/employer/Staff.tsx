@@ -109,8 +109,12 @@ const StaffPage: React.FC = () => {
     <div className="rounded-lg w-full mx-auto p-3 sm:p-4 lg:p-6">
       <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h1 className="text-xl sm:text-2xl font-semibold text-gray-800">My Staff</h1>
-          <p className="text-sm sm:text-base text-gray-600 mt-1 sm:mt-2">Here are the names of your staff</p>
+          <h1 className="text-xl sm:text-2xl font-semibold text-gray-800">
+            My Staff
+          </h1>
+          <p className="text-sm sm:text-base text-gray-600 mt-1 sm:mt-2">
+            Here are the names of your staff
+          </p>
         </div>
 
         {/* Search Bar */}
@@ -122,7 +126,10 @@ const StaffPage: React.FC = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={14} />
+          <FaSearch
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+            size={14}
+          />
         </div>
       </div>
 
@@ -170,9 +177,15 @@ const StaffPage: React.FC = () => {
                       {employee.first_name} {employee.last_name}
                     </span>
                   </div>
-                  <div className="text-xs sm:text-sm truncate">{extractLocation(employee.address)}</div>
-                  <div className="text-xs sm:text-sm truncate">{employee.email}</div>
-                  <div className="text-xs sm:text-sm">{calculateAge(employee.dob)}</div>
+                  <div className="text-xs sm:text-sm truncate">
+                    {extractLocation(employee.address)}
+                  </div>
+                  <div className="text-xs sm:text-sm truncate">
+                    {employee.email}
+                  </div>
+                  <div className="text-xs sm:text-sm">
+                    {calculateAge(employee.dob)}
+                  </div>
                   <div className="flex justify-between items-center gap-2">
                     <span
                       className={`px-2 sm:px-3 py-1 rounded-full text-xs ${

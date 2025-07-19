@@ -170,14 +170,20 @@ export default function EmployersTab() {
           ) : error ? (
             // Error state
             <tr>
-              <td colSpan={8} className="px-3 sm:px-6 py-4 text-center text-red-500 text-sm">
+              <td
+                colSpan={8}
+                className="px-3 sm:px-6 py-4 text-center text-red-500 text-sm"
+              >
                 {error}
               </td>
             </tr>
           ) : employers.length === 0 ? (
             // Empty state
             <tr>
-              <td colSpan={8} className="px-3 sm:px-6 py-4 text-center text-gray-500 text-sm">
+              <td
+                colSpan={8}
+                className="px-3 sm:px-6 py-4 text-center text-gray-500 text-sm"
+              >
                 No employers found
               </td>
             </tr>
@@ -203,7 +209,11 @@ export default function EmployersTab() {
                   })}
                 </td>
                 <td className="px-3 sm:px-6 py-3 sm:py-4 text-[11px] sm:text-[13px] text-[#24292E] font-normal">
-                  <span className="truncate">{employer.address ? employer.address.split(',')[0] : 'Lagos'}</span>
+                  <span className="truncate">
+                    {employer.address
+                      ? employer.address.split(',')[0]
+                      : 'Lagos'}
+                  </span>
                 </td>
                 <td className="px-3 sm:px-6 py-3 sm:py-4 text-[11px] sm:text-[13px] text-[#24292E] font-normal">
                   {employer.gender.charAt(0).toUpperCase() +

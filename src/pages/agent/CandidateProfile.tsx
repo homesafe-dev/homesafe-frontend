@@ -139,7 +139,9 @@ const CandidateProfile: React.FC = () => {
       <div className="p-3 sm:p-4 border-b border-gray-100">
         <button className="flex items-center text-gray-600" onClick={goBack}>
           <FaArrowLeft className="mr-2" />
-          <span className="text-sm sm:text-base">{candidateName}'s Profile</span>
+          <span className="text-sm sm:text-base">
+            {candidateName}'s Profile
+          </span>
         </button>
       </div>
 

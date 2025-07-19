@@ -144,11 +144,15 @@ const CandidatesPage: React.FC = () => {
           onClick={() => navigate('/agent/all-candidates')}
         >
           <FaArrowLeft className="mr-2" />
-          <span className="text-gray-800 text-sm sm:text-base">Back to Candidates</span>
+          <span className="text-gray-800 text-sm sm:text-base">
+            Back to Candidates
+          </span>
         </button>
       </div>
 
-      <div className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6">Add Candidate</div>
+      <div className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6">
+        Add Candidate
+      </div>
 
       {/* Success and Error Messages */}
       {success && (
@@ -158,11 +162,16 @@ const CandidatesPage: React.FC = () => {
       )}
 
       {error && (
-        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded text-sm">{error}</div>
+        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded text-sm">
+          {error}
+        </div>
       )}
 
       {/* Form */}
-      <form className="mt-4 sm:mt-6 bg-white p-4 sm:p-6 lg:p-8 rounded-lg shadow-sm" onSubmit={handleSubmit}>
+      <form
+        className="mt-4 sm:mt-6 bg-white p-4 sm:p-6 lg:p-8 rounded-lg shadow-sm"
+        onSubmit={handleSubmit}
+      >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 sm:gap-x-6 gap-y-4">
           {/* Title */}
           <div>

@@ -126,7 +126,9 @@ const AdminTrack = () => {
     <div className="max-w-6xl mx-auto px-4 sm:px-0">
       <h2 className="text-lg sm:text-xl font-semibold mb-4">Track</h2>
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-4 sm:mt-[2rem] gap-3 sm:gap-0">
-        <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">Here are all your employees</p>
+        <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">
+          Here are all your employees
+        </p>
         <div className="text-sm text-gray-600">
           <span
             className="cursor-pointer hover:text-green-700"
@@ -139,7 +141,9 @@ const AdminTrack = () => {
 
       {/* Error Message */}
       {error && (
-        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded text-sm">{error}</div>
+        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded text-sm">
+          {error}
+        </div>
       )}
 
       <div className="rounded-lg overflow-hidden">
@@ -147,14 +151,24 @@ const AdminTrack = () => {
           <table className="w-full min-w-[800px]">
             <thead>
               <tr className="bg-[#C8EDDF80] text-[#174B35] text-xs sm:text-sm">
-                <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-medium min-w-[120px]">Candidate</th>
-                <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-medium min-w-[100px]">Date</th>
-                <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-medium min-w-[140px]">Placement</th>
-                <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-medium min-w-[80px]">Gender</th>
+                <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-medium min-w-[120px]">
+                  Candidate
+                </th>
+                <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-medium min-w-[100px]">
+                  Date
+                </th>
+                <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-medium min-w-[140px]">
+                  Placement
+                </th>
+                <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-medium min-w-[80px]">
+                  Gender
+                </th>
                 <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-medium min-w-[120px]">
                   Phone Number
                 </th>
-                <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-medium min-w-[80px]">Status</th>
+                <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-medium min-w-[80px]">
+                  Status
+                </th>
                 <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-medium min-w-[100px]">
                   Blocked Status
                 </th>
@@ -225,7 +239,9 @@ const AdminTrack = () => {
                         size="sm"
                         showStatus={false}
                       />
-                      <span className="text-sm">{employee.candidate || 'Unknown Candidate'}</span>
+                      <span className="text-sm">
+                        {employee.candidate || 'Unknown Candidate'}
+                      </span>
                     </td>
                     <td className="px-2 sm:px-4 py-3 text-gray-700 text-sm">
                       {new Date(employee.date).toLocaleDateString('en-US', {

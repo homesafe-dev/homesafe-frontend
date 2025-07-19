@@ -172,7 +172,9 @@ const EmployeeKYCPage: React.FC = () => {
           <div className="mb-6 sm:mb-8">
             <div className="flex items-center mb-4">
               <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-100 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
-                <span className="text-green-600 font-semibold text-sm sm:text-base">✅</span>
+                <span className="text-green-600 font-semibold text-sm sm:text-base">
+                  ✅
+                </span>
               </div>
               <div className="min-w-0">
                 <h2 className="text-base sm:text-lg font-semibold text-gray-800">

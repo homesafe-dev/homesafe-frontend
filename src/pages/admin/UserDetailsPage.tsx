@@ -255,23 +255,33 @@ export default function UserDetailsPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
           <div className="space-y-3 sm:space-y-4">
             <div>
-              <h3 className="text-xs sm:text-sm font-medium text-gray-500">Title</h3>
+              <h3 className="text-xs sm:text-sm font-medium text-gray-500">
+                Title
+              </h3>
               <p className="mt-1 text-sm text-gray-900">{user.title || 'Mr'}</p>
             </div>
 
             <div>
-              <h3 className="text-xs sm:text-sm font-medium text-gray-500">First Name</h3>
+              <h3 className="text-xs sm:text-sm font-medium text-gray-500">
+                First Name
+              </h3>
               <p className="mt-1 text-sm text-gray-900">{user.first_name}</p>
             </div>
 
             <div>
-              <h3 className="text-xs sm:text-sm font-medium text-gray-500">Last Name</h3>
+              <h3 className="text-xs sm:text-sm font-medium text-gray-500">
+                Last Name
+              </h3>
               <p className="mt-1 text-sm text-gray-900">{user.last_name}</p>
             </div>
 
             <div>
-              <h3 className="text-xs sm:text-sm font-medium text-gray-500">Email</h3>
-              <p className="mt-1 text-sm text-gray-900 break-all">{user.email}</p>
+              <h3 className="text-xs sm:text-sm font-medium text-gray-500">
+                Email
+              </h3>
+              <p className="mt-1 text-sm text-gray-900 break-all">
+                {user.email}
+              </p>
             </div>
 
             <div>
@@ -298,7 +308,9 @@ export default function UserDetailsPage() {
               <h3 className="text-xs sm:text-sm font-medium text-gray-500">
                 Home Address
               </h3>
-              <p className="mt-1 text-sm text-gray-900 break-words">{user.address}</p>
+              <p className="mt-1 text-sm text-gray-900 break-words">
+                {user.address}
+              </p>
             </div>
 
             <div>
@@ -317,7 +329,9 @@ export default function UserDetailsPage() {
             </div>
 
             <div>
-              <h3 className="text-xs sm:text-sm font-medium text-gray-500">Gender</h3>
+              <h3 className="text-xs sm:text-sm font-medium text-gray-500">
+                Gender
+              </h3>
               <p className="mt-1 text-sm text-gray-900 capitalize">
                 {user.gender || 'Not specified'}
               </p>

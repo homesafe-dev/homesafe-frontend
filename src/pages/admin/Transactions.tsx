@@ -160,7 +160,9 @@ const Transactions: React.FC = () => {
 
       {/* Transaction History header with View All */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
-        <h2 className="text-lg sm:text-xl font-semibold">Transaction History</h2>
+        <h2 className="text-lg sm:text-xl font-semibold">
+          Transaction History
+        </h2>
         <button
           className="text-sm text-gray-600 hover:text-gray-800 self-start sm:self-auto"
           onClick={() => navigate('/admin/all-transactions')}
@@ -215,14 +217,30 @@ const Transactions: React.FC = () => {
           <table className="w-full text-xs sm:text-sm min-w-[800px]">
             <thead>
               <tr className="text-left text-gray-700 bg-[#C8EDDF80]">
-                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">Name</th>
-                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">Transaction Type</th>
-                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">Transaction ID</th>
-                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">Date</th>
-                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">Amount</th>
-                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">Payment Method</th>
-                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">Description</th>
-                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">Status</th>
+                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                  Name
+                </th>
+                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                  Transaction Type
+                </th>
+                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                  Transaction ID
+                </th>
+                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                  Date
+                </th>
+                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                  Amount
+                </th>
+                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                  Payment Method
+                </th>
+                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                  Description
+                </th>
+                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                  Status
+                </th>
                 <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm"></th>
               </tr>
             </thead>
@@ -244,7 +262,9 @@ const Transactions: React.FC = () => {
                       <span className="truncate block">{transaction.type}</span>
                     </td>
                     <td className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
-                      <span className="truncate block">{transaction.reference_code}</span>
+                      <span className="truncate block">
+                        {transaction.reference_code}
+                      </span>
                     </td>
                     <td className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
                       {format(new Date(transaction.created_at), 'MMM dd, yyyy')}

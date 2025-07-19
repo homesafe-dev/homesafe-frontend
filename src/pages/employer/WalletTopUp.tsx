@@ -18,7 +18,9 @@ const WalletTopUp: React.FC = () => {
     <div className="bg-white w-full h-full p-4 sm:p-6 lg:p-8">
       <div className="flex items-center mb-6 sm:mb-8">
         <IoIosArrowBack className="text-gray-600 mr-2" size={20} />
-        <h2 className="text-gray-800 font-medium text-lg sm:text-xl">Wallet Top Up</h2>
+        <h2 className="text-gray-800 font-medium text-lg sm:text-xl">
+          Wallet Top Up
+        </h2>
       </div>
 
       <div className="mb-6 sm:mb-8">

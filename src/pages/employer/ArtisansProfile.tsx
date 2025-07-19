@@ -349,7 +349,10 @@ const ArtisanProfileView: React.FC = () => {
                       <option value="24">24 months</option>
                       <option value="36">36 months</option>
                     </select>
-                    <FiChevronDown className="absolute right-2 sm:right-3 top-3 text-gray-400" size={16} />
+                    <FiChevronDown
+                      className="absolute right-2 sm:right-3 top-3 text-gray-400"
+                      size={16}
+                    />
                   </div>
                 </div>
 
@@ -372,7 +375,10 @@ const ArtisanProfileView: React.FC = () => {
                       <option value="11:00">11:00 AM</option>
                       <option value="12:00">12:00 PM</option>
                     </select>
-                    <FiChevronDown className="absolute right-2 sm:right-3 top-3 text-gray-400" size={16} />
+                    <FiChevronDown
+                      className="absolute right-2 sm:right-3 top-3 text-gray-400"
+                      size={16}
+                    />
                   </div>
                 </div>
 
@@ -395,7 +401,10 @@ const ArtisanProfileView: React.FC = () => {
                       <option value="19:00">7:00 PM</option>
                       <option value="20:00">8:00 PM</option>
                     </select>
-                    <FiChevronDown className="absolute right-2 sm:right-3 top-3 text-gray-400" size={16} />
+                    <FiChevronDown
+                      className="absolute right-2 sm:right-3 top-3 text-gray-400"
+                      size={16}
+                    />
                   </div>
                 </div>
 

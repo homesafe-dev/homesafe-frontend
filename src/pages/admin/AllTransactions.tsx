@@ -184,7 +184,9 @@ const AllTransactions: React.FC = () => {
           size={18}
           onClick={handleBack}
         />
-        <h1 className="text-[18px] sm:text-[20px] font-semibold text-[#24292E]">See All</h1>
+        <h1 className="text-[18px] sm:text-[20px] font-semibold text-[#24292E]">
+          See All
+        </h1>
       </div>
 
       {/* Filter section */}
@@ -242,7 +244,9 @@ const AllTransactions: React.FC = () => {
 
           {/* Date Range Row */}
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-start sm:items-center">
-            <span className="text-gray-600 text-sm whitespace-nowrap">Date Range:</span>
+            <span className="text-gray-600 text-sm whitespace-nowrap">
+              Date Range:
+            </span>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-2 flex-1">
               <input
                 type="date"
@@ -250,7 +254,9 @@ const AllTransactions: React.FC = () => {
                 onChange={(e) => setStartDate(e.target.value)}
                 className="border border-gray-300 rounded-md px-3 py-2 text-sm flex-1"
               />
-              <span className="hidden sm:block text-gray-400 self-center">to</span>
+              <span className="hidden sm:block text-gray-400 self-center">
+                to
+              </span>
               <input
                 type="date"
                 value={endDate}
@@ -323,14 +329,30 @@ const AllTransactions: React.FC = () => {
                 <table className="w-full text-sm min-w-[1000px]">
                   <thead>
                     <tr className="text-left text-gray-700 bg-[#C8EDDF80]">
-                      <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">Name</th>
-                      <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">Transaction Type</th>
-                      <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">Transaction ID</th>
-                      <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">Date</th>
-                      <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">Amount</th>
-                      <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">Payment Method</th>
-                      <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">Description</th>
-                      <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">Status</th>
+                      <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                        Name
+                      </th>
+                      <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                        Transaction Type
+                      </th>
+                      <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                        Transaction ID
+                      </th>
+                      <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                        Date
+                      </th>
+                      <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                        Amount
+                      </th>
+                      <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                        Payment Method
+                      </th>
+                      <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                        Description
+                      </th>
+                      <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                        Status
+                      </th>
                       <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm"></th>
                     </tr>
                   </thead>
@@ -349,10 +371,14 @@ const AllTransactions: React.FC = () => {
                             </span>
                           </td>
                           <td className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
-                            <span className="truncate block">{transaction.type}</span>
+                            <span className="truncate block">
+                              {transaction.type}
+                            </span>
                           </td>
                           <td className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
-                            <span className="truncate block">{transaction.reference_code}</span>
+                            <span className="truncate block">
+                              {transaction.reference_code}
+                            </span>
                           </td>
                           <td className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
                             {format(

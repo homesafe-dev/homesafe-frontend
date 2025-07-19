@@ -158,7 +158,9 @@ const StaffProfile: React.FC = () => {
           onClick={() => navigate(-1)}
         >
           <FaArrowLeft className="mr-2" size={16} />
-          <span className="text-sm sm:text-base">{employee.first_name}'s Profile</span>
+          <span className="text-sm sm:text-base">
+            {employee.first_name}'s Profile
+          </span>
         </button>
       </div>
 

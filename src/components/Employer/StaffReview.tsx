@@ -114,9 +114,15 @@ const StaffReview: React.FC<StaffReviewProps> = ({
     return (
       <div className="flex flex-col items-center justify-center p-3 sm:p-4 h-48 sm:h-64">
         <div className="bg-gray-100 p-3 sm:p-4 rounded-lg mb-3 sm:mb-4 mt-8 sm:mt-[5rem]">
-          <img src={NoLoanImg} alt="" className="w-16 h-16 sm:w-auto sm:h-auto" />
+          <img
+            src={NoLoanImg}
+            alt=""
+            className="w-16 h-16 sm:w-auto sm:h-auto"
+          />
         </div>
-        <h3 className="font-medium text-gray-700 mb-1 text-sm sm:text-base">No Reviews Yet</h3>
+        <h3 className="font-medium text-gray-700 mb-1 text-sm sm:text-base">
+          No Reviews Yet
+        </h3>
         <p className="text-xs sm:text-sm text-gray-500 text-center">
           <button
             className="font-semibold hover:text-gray-700 transition-colors"
@@ -160,7 +166,9 @@ const StaffReview: React.FC<StaffReviewProps> = ({
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2 gap-2">
             <div className="flex items-center space-x-2">
               <div className="flex">{renderStars(review.rating)}</div>
-              <span className="text-xs sm:text-sm text-gray-600">({review.rating}/5)</span>
+              <span className="text-xs sm:text-sm text-gray-600">
+                ({review.rating}/5)
+              </span>
             </div>
             <span className="text-xs sm:text-sm text-gray-500">
               {new Date(review.created_at).toLocaleDateString('en-GB', {
@@ -172,7 +180,9 @@ const StaffReview: React.FC<StaffReviewProps> = ({
           </div>
 
           {review.comment && (
-            <p className="text-gray-700 text-xs sm:text-sm leading-relaxed">{review.comment}</p>
+            <p className="text-gray-700 text-xs sm:text-sm leading-relaxed">
+              {review.comment}
+            </p>
           )}
 
           {(review.reviewer || review.reviewer_name) && (
