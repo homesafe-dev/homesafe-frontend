@@ -23,6 +23,7 @@ export interface RegistrationData {
   gender: string;
   is_employer?: boolean;
   facial_image?: string;
+  occupation?: number;
 }
 
 export interface BiometricLoginData {
