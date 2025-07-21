@@ -59,6 +59,7 @@ const authApi = {
           gender: string;
           is_employer?: boolean;
           facial_image?: string;
+          occupation?: number;
         }
       | FormData
   ) => {

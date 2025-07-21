@@ -3,6 +3,12 @@ import signupImg1 from '../../../assets/images/signupImg1.png';
 import signupImg2 from '../../../assets/images/signupImg2.png';
 import { useNavigate, Link } from 'react-router-dom';
 import HomesafeLogo from '../../../assets/images/HomesafeLogo.png';
+import adminApi from '../../../api/adminApi';
+
+interface Occupation {
+  id: number;
+  name: string;
+}
 
 const OnboardingForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -14,10 +20,13 @@ const OnboardingForm: React.FC = () => {
     homeAddress: '',
     userType: 'employer',
     gender: 'male', // Default value
+    occupation: 0, // Add occupation field as number (ID)
   });
   const [password, setPassword] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [occupations, setOccupations] = useState<Occupation[]>([]);
+  const [loadingOccupations, setLoadingOccupations] = useState<boolean>(false);
   // We don't need the auth context for this component anymore
   const navigate = useNavigate();
 
@@ -38,6 +47,25 @@ const OnboardingForm: React.FC = () => {
     }));
 
     setPassword(storedPassword);
+
+    // Fetch occupations
+    const fetchOccupations = async () => {
+      try {
+        setLoadingOccupations(true);
+        const response = await adminApi.getOccupations();
+        if (response.status && response.data) {
+          setOccupations(response.data);
+        } else {
+          console.error('Failed to fetch occupations:', response.message);
+        }
+      } catch (err) {
+        console.error('Error fetching occupations:', err);
+      } finally {
+        setLoadingOccupations(false);
+      }
+    };
+
+    fetchOccupations();
   }, [navigate]);
 
   const handleChange = (
@@ -64,10 +92,24 @@ const OnboardingForm: React.FC = () => {
     }));
   };
 
+  const handleOccupationChange = (occupationId: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      occupation: occupationId,
+    }));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setErrorMessage(null);
+
+    // Validation for employees/agents - they need to select an occupation
+    if (formData.userType === 'agent' && !formData.occupation) {
+      setErrorMessage('Please select an occupation');
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
       const registrationData = {
@@ -79,6 +121,7 @@ const OnboardingForm: React.FC = () => {
         address: formData.homeAddress,
         gender: formData.gender,
         is_employer: formData.userType === 'employer' ? true : false,
+        occupation: formData.occupation, // Add occupation to registration data
       };
 
       // Store registration data in sessionStorage for the facial capture page
@@ -356,6 +399,37 @@ const OnboardingForm: React.FC = () => {
                 </div>
               </div>
             </div>
+
+            {/* Occupation field - only show for agents/employees */}
+            {formData.userType === 'agent' && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Occupation *
+                </label>
+                {loadingOccupations ? (
+                  <div className="text-sm text-gray-500">
+                    Loading occupations...
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 gap-2 max-h-32 overflow-y-auto border border-gray-300 rounded-md p-3">
+                    {occupations.map((occupation) => (
+                      <label key={occupation.id} className="flex items-center">
+                        <input
+                          type="radio"
+                          name="occupation"
+                          checked={formData.occupation === occupation.id}
+                          onChange={() => handleOccupationChange(occupation.id)}
+                          className="mr-2 h-4 w-4 text-green-500 focus:ring-green-500"
+                        />
+                        <span className="text-sm text-gray-700">
+                          {occupation.name}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
 
             <button
               type="submit"

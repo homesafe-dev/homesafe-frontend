@@ -26,7 +26,6 @@ const contractApi = {
     working_hours_schedule: string;
     start_date: string;
     duration_months: number;
-    position?: string;
   }) => {
     try {
       const response = await axiosInstance.post(
