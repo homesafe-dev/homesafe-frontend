@@ -124,6 +124,11 @@ const FacialCapturePage: React.FC = () => {
       const isEmployer = registrationData.is_employer === true;
       formData.append('is_employer', isEmployer ? '1' : '0');
 
+      // Add occupation if it exists
+      if (registrationData.occupation) {
+        formData.append('occupation', registrationData.occupation.toString());
+      }
+
       // Add the image file as 'avatar'
       formData.append('avatar', selectedImage);
 
