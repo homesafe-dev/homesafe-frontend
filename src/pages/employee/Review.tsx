@@ -39,17 +39,17 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
   date,
 }) => {
   return (
-    <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+    <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm border border-gray-200">
       <div className="flex items-center mb-3">
         {reviewerAvatar ? (
           <img
             src={reviewerAvatar}
             alt={reviewerName}
-            className="w-10 h-10 rounded-full mr-3 object-cover"
+            className="w-8 h-8 sm:w-10 sm:h-10 rounded-full mr-3 object-cover flex-shrink-0"
           />
         ) : (
-          <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center mr-3">
-            <span className="text-white font-medium">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-300 flex items-center justify-center mr-3 flex-shrink-0">
+            <span className="text-white font-medium text-xs sm:text-sm">
               {reviewerName
                 .split(' ')
                 .map((name) => name[0])
@@ -57,20 +57,28 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
             </span>
           </div>
         )}
-        <div>
-          <h3 className="font-semibold text-[#24292E] text-[16px]">
+        <div className="min-w-0 flex-1">
+          <h3 className="font-semibold text-[#24292E] text-[14px] sm:text-[16px] truncate">
             {reviewerName}
           </h3>
           <p className="text-xs text-gray-500">{date}</p>
         </div>
       </div>
-      <p className="text-sm text-gray-600 mb-3">{comment}</p>
+      <p className="text-xs sm:text-sm text-gray-600 mb-3 line-clamp-3">
+        {comment}
+      </p>
       <div className="flex">
         {[...Array(5)].map((_, index) =>
           index < rating ? (
-            <AiFillStar key={index} className="text-[#EFAE73]" />
+            <AiFillStar
+              key={index}
+              className="text-[#EFAE73] text-sm sm:text-base"
+            />
           ) : (
-            <AiOutlineStar key={index} className="text-[#EFAE73]" />
+            <AiOutlineStar
+              key={index}
+              className="text-[#EFAE73] text-sm sm:text-base"
+            />
           )
         )}
       </div>
@@ -177,18 +185,18 @@ const ReviewsPage: React.FC<ReviewsPageProps> = ({
   };
 
   return (
-    <div className="bg-gray-50 p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold">{title}</h2>
-        <div className="flex items-center">
+    <div className="bg-gray-50 p-4 sm:p-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-6 gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+          <h2 className="text-lg sm:text-xl font-semibold">{title}</h2>
           {!loading && !error && (
-            <div className="flex items-center mr-4">
-              <span className="text-lg font-medium mr-2">
+            <div className="flex items-center">
+              <span className="text-base sm:text-lg font-medium mr-2">
                 {!isNaN(parseFloat(averageRating))
                   ? parseFloat(averageRating).toFixed(1)
                   : '0.0'}
               </span>
-              <div className="flex">
+              <div className="flex mr-2">
                 {[...Array(5)].map((_, index) => {
                   const ratingValue = !isNaN(parseFloat(averageRating))
                     ? parseFloat(averageRating)
@@ -196,28 +204,28 @@ const ReviewsPage: React.FC<ReviewsPageProps> = ({
                   return (
                     <AiFillStar
                       key={index}
-                      className={
+                      className={`text-sm sm:text-base ${
                         index < Math.round(ratingValue)
                           ? 'text-[#EFAE73]'
                           : 'text-gray-300'
-                      }
+                      }`}
                     />
                   );
                 })}
               </div>
-              <span className="text-sm text-gray-500 ml-2">
+              <span className="text-xs sm:text-sm text-gray-500">
                 ({reviews.length} reviews)
               </span>
             </div>
           )}
-          <button
-            onClick={() => setIsReviewModalOpen(true)}
-            className="flex items-center gap-2 bg-[#A5EA91] text-[#24292E] px-4 py-2 rounded-[8px] hover:bg-[#95ddb1] transition-colors"
-          >
-            <AiOutlineStar className="text-[#24292E]" />
-            Click to Review an Employer
-          </button>
         </div>
+        <button
+          onClick={() => setIsReviewModalOpen(true)}
+          className="flex items-center justify-center gap-2 bg-[#A5EA91] text-[#24292E] px-3 sm:px-4 py-2 rounded-[8px] hover:bg-[#95ddb1] transition-colors text-sm sm:text-base w-full sm:w-auto"
+        >
+          <AiOutlineStar className="text-[#24292E] flex-shrink-0" />
+          <span className="truncate">Click to Review an Employer</span>
+        </button>
       </div>
 
       <EmployerReview
@@ -226,30 +234,30 @@ const ReviewsPage: React.FC<ReviewsPageProps> = ({
         onReviewSubmitted={handleReviewSubmitted}
       />
 
-      <p className="mb-6 text-[#24292E] text-[16px]">
+      <p className="mb-4 sm:mb-6 text-[#24292E] text-[14px] sm:text-[16px]">
         Here are the reviews from your employers
       </p>
 
       {loading && (
-        <div className="flex justify-center items-center py-12">
+        <div className="flex justify-center items-center py-8 sm:py-12">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
         </div>
       )}
 
       {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 text-sm">
           {error}
         </div>
       )}
 
       {!loading && !error && reviews.length === 0 && (
-        <div className="text-center py-12 text-gray-500">
+        <div className="text-center py-8 sm:py-12 text-gray-500 text-sm sm:text-base">
           No reviews available
         </div>
       )}
 
       {!loading && !error && reviews.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
           {reviews.map((review) => (
             <ReviewCard
               key={review.id}

@@ -16,29 +16,35 @@ const CandidateWorkSchedule: React.FC<CandidateWorkScheduleProps> = ({
     placement && !placement.toLowerCase().includes('no employer');
 
   return (
-    <div className="p-6">
-      <div className="bg-white rounded-lg p-4">
-        <div className="space-y-6">
+    <div className="p-3 sm:p-6">
+      <div className="bg-white rounded-lg p-3 sm:p-4">
+        <div className="space-y-4 sm:space-y-6">
           {/* Placement Section */}
           <div>
-            <h3 className="text-gray-700 font-medium mb-2">Placement:</h3>
-            <p className="text-gray-600">
+            <h3 className="text-gray-700 font-medium mb-2 text-sm sm:text-base">
+              Placement:
+            </h3>
+            <p className="text-gray-600 text-sm sm:text-base">
               {hasPlacement ? placement : 'No placement assigned'}
             </p>
-            <div className="border-b border-gray-200 my-4"></div>
+            <div className="border-b border-gray-200 my-3 sm:my-4"></div>
           </div>
 
           {/* Position Section */}
           <div>
-            <h3 className="text-gray-700 font-medium mb-2">Position:</h3>
-            <p className="text-gray-600">{position}</p>
-            <div className="border-b border-gray-200 my-4"></div>
+            <h3 className="text-gray-700 font-medium mb-2 text-sm sm:text-base">
+              Position:
+            </h3>
+            <p className="text-gray-600 text-sm sm:text-base">{position}</p>
+            <div className="border-b border-gray-200 my-3 sm:my-4"></div>
           </div>
 
           {/* Work Schedule Section */}
           <div>
-            <h3 className="text-gray-700 font-medium mb-2">Work Schedule:</h3>
-            <p className="text-gray-600">
+            <h3 className="text-gray-700 font-medium mb-2 text-sm sm:text-base">
+              Work Schedule:
+            </h3>
+            <p className="text-gray-600 text-sm sm:text-base">
               {hasPlacement
                 ? '5 days in a week'
                 : 'Not applicable (no placement)'}

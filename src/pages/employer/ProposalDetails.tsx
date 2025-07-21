@@ -161,57 +161,57 @@ const EmployerProposalDetailsPage: React.FC = () => {
   const rating = 4; // Default rating
 
   return (
-    <div className="rounded-md">
-      <div className="mb-6">
+    <div className="rounded-md p-3 sm:p-4 lg:p-6">
+      <div className="mb-4 sm:mb-6">
         <button
           onClick={() => navigate('/employer/contracts')}
-          className="text-[#246D51] hover:text-[#1a5a3e] text-sm mb-4"
+          className="text-[#246D51] hover:text-[#1a5a3e] text-sm mb-4 flex items-center"
         >
           ← Back to All Contracts
         </button>
-        <h2 className="text-xl font-semibold text-[#24292E]">
+        <h2 className="text-lg sm:text-xl font-semibold text-[#24292E]">
           Contract Details
         </h2>
       </div>
 
       <div className="flex justify-center">
-        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100 w-full max-w-md">
+        <div className="bg-white rounded-lg p-4 sm:p-6 shadow-sm border border-gray-100 w-full max-w-md">
           <div className="flex flex-col items-center">
             {/* Profile Image */}
-            <div className="mb-4 relative">
+            <div className="mb-3 sm:mb-4 relative">
               {employee.avatar ? (
                 <img
                   src={employee.avatar}
                   alt={employeeName}
-                  className="rounded-full w-24 h-24 object-cover border-4 border-white shadow-sm"
+                  className="rounded-full w-20 h-20 sm:w-24 sm:h-24 object-cover border-4 border-white shadow-sm"
                 />
               ) : (
-                <div className="rounded-full w-24 h-24 bg-gray-300 flex items-center justify-center border-4 border-white shadow-sm">
-                  <span className="text-white text-xl font-semibold">
+                <div className="rounded-full w-20 h-20 sm:w-24 sm:h-24 bg-gray-300 flex items-center justify-center border-4 border-white shadow-sm">
+                  <span className="text-white text-lg sm:text-xl font-semibold">
                     {employee.first_name.charAt(0)}
                     {employee.last_name.charAt(0)}
                   </span>
                 </div>
               )}
-              <div className="absolute top-1 right-1 w-4 h-4 border-2 border-white rounded-full bg-[#37A379]" />
+              <div className="absolute top-1 right-1 w-3 h-3 sm:w-4 sm:h-4 border-2 border-white rounded-full bg-[#37A379]" />
             </div>
 
             {/* Name */}
-            <h2 className="text-[16px] text-gray-700 mt-[0.5rem] font-medium">
+            <h2 className="text-sm sm:text-[16px] text-gray-700 mt-2 sm:mt-[0.5rem] font-medium text-center">
               {employeeName}
             </h2>
 
             {/* Position Badge */}
-            <div className="bg-[#C8EDDF80] mt-[0.5rem] text-[#48525B] w-auto px-3 py-1 rounded-[8px] text-[13px] mb-2">
+            <div className="bg-[#C8EDDF80] mt-2 sm:mt-[0.5rem] text-[#48525B] w-auto px-2 sm:px-3 py-1 rounded-[8px] text-xs sm:text-[13px] mb-2">
               {contract.position}
             </div>
 
             {/* Rating */}
-            <div className="flex mb-6">
+            <div className="flex mb-4 sm:mb-6">
               {[1, 2, 3, 4, 5].map((star) => (
                 <span
                   key={star}
-                  className={`text-[#EFAE73] ${star <= rating ? 'opacity-100' : 'opacity-30'}`}
+                  className={`text-[#EFAE73] text-sm sm:text-base ${star <= rating ? 'opacity-100' : 'opacity-30'}`}
                 >
                   ★
                 </span>
@@ -220,10 +220,10 @@ const EmployerProposalDetailsPage: React.FC = () => {
 
             {/* About me section */}
             <div className="w-full">
-              <h3 className="text-[#246D51] font-semibold text-[16px] mb-2">
+              <h3 className="text-[#246D51] font-semibold text-sm sm:text-[16px] mb-2">
                 About me
               </h3>
-              <p className="text-[13px] text-[#48525B] mb-6">
+              <p className="text-xs sm:text-[13px] text-[#48525B] mb-4 sm:mb-6 leading-relaxed">
                 Meet {employee.first_name}, a dedicated professional with
                 experience in {contract.position}. With a commitment to
                 excellence and reliability, {employee.first_name} brings passion
@@ -232,27 +232,27 @@ const EmployerProposalDetailsPage: React.FC = () => {
               </p>
 
               {/* Contact Details */}
-              <h3 className="text-[#246D51] font-semibold text-[16px] mb-2">
+              <h3 className="text-[#246D51] font-semibold text-sm sm:text-[16px] mb-2">
                 Contact Details
               </h3>
-              <p className="text-[13px] text-[#246D51] mb-4">
+              <p className="text-xs sm:text-[13px] text-[#246D51] mb-3 sm:mb-4 break-all">
                 {employee.phone}
               </p>
 
               {/* Email */}
-              <h3 className="text-[#246D51] font-semibold text-[16px] mb-2">
+              <h3 className="text-[#246D51] font-semibold text-sm sm:text-[16px] mb-2">
                 Email
               </h3>
-              <p className="text-[13px] text-[#246D51] mb-6">
+              <p className="text-xs sm:text-[13px] text-[#246D51] mb-4 sm:mb-6 break-all">
                 {employee.email}
               </p>
 
               {/* Terminate Contract Button */}
-              <div className="mt-4">
+              <div className="mt-3 sm:mt-4">
                 <button
                   onClick={() => setShowConfirmation(true)}
                   disabled={terminating}
-                  className="text-white rounded-md py-2 text-sm w-full h-[34px] bg-[#dc3545] hover:bg-[#c82333] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="text-white rounded-md py-2 text-xs sm:text-sm w-full h-[34px] bg-[#dc3545] hover:bg-[#c82333] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {terminating ? 'Terminating...' : 'Terminate Contract'}
                 </button>

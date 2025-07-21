@@ -15,39 +15,41 @@ const WalletTopUp: React.FC = () => {
   };
 
   return (
-    <div className="bg-white w-full h-full p-8">
-      <div className="flex items-center mb-8">
-        <IoIosArrowBack className="text-gray-600 mr-2" />
-        <h2 className="text-gray-800 font-medium">Wallet Top Up</h2>
+    <div className="bg-white w-full h-full p-4 sm:p-6 lg:p-8">
+      <div className="flex items-center mb-6 sm:mb-8">
+        <IoIosArrowBack className="text-gray-600 mr-2" size={20} />
+        <h2 className="text-gray-800 font-medium text-lg sm:text-xl">
+          Wallet Top Up
+        </h2>
       </div>
 
-      <div className="mb-8">
-        <p className="text-gray-600 text-sm">
+      <div className="mb-6 sm:mb-8">
+        <p className="text-gray-600 text-sm sm:text-base">
           Top up your wallet securely with Paystack
         </p>
       </div>
 
-      <div className="space-y-4 w-[470px]">
+      <div className="space-y-4 w-full max-w-[470px]">
         <div
-          className="flex items-center justify-between border border-gray-200 rounded-lg p-4 cursor-pointer hover:bg-gray-50 hover:border-green-300 transition-colors"
+          className="flex items-center justify-between border border-gray-200 rounded-lg p-3 sm:p-4 cursor-pointer hover:bg-gray-50 hover:border-green-300 transition-colors"
           onClick={handleOpenModal}
         >
           <div className="flex items-center">
-            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4">
-              <FaCreditCard className="text-green-600" size={20} />
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-lg flex items-center justify-center mr-3 sm:mr-4">
+              <FaCreditCard className="text-green-600" size={16} />
             </div>
             <div>
-              <span className="text-gray-800 font-medium block">
+              <span className="text-gray-800 font-medium block text-sm sm:text-base">
                 Pay with Paystack
               </span>
-              <span className="text-gray-500 text-sm">
+              <span className="text-gray-500 text-xs sm:text-sm">
                 Secure payment with cards, bank transfer & more
               </span>
             </div>
           </div>
           <div className="text-green-600">
             <svg
-              className="w-6 h-6"
+              className="w-5 h-5 sm:w-6 sm:h-6"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -63,11 +65,11 @@ const WalletTopUp: React.FC = () => {
         </div>
       </div>
 
-      <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-4 w-[470px]">
+      <div className="mt-6 sm:mt-8 bg-blue-50 border border-blue-200 rounded-lg p-3 sm:p-4 w-full max-w-[470px]">
         <div className="flex items-start">
           <div className="flex-shrink-0">
             <svg
-              className="w-5 h-5 text-blue-600 mt-0.5"
+              className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 mt-0.5"
               fill="currentColor"
               viewBox="0 0 20 20"
             >
@@ -78,11 +80,11 @@ const WalletTopUp: React.FC = () => {
               />
             </svg>
           </div>
-          <div className="ml-3">
-            <h4 className="text-blue-800 font-medium text-sm">
+          <div className="ml-2 sm:ml-3">
+            <h4 className="text-blue-800 font-medium text-xs sm:text-sm">
               Secure Payment
             </h4>
-            <p className="text-blue-700 text-sm mt-1">
+            <p className="text-blue-700 text-xs sm:text-sm mt-1">
               Your payment is processed securely through Paystack. We support
               all major cards, bank transfers, and mobile money.
             </p>

@@ -120,30 +120,31 @@ const Salary: React.FC = () => {
       <div className="flex items-center mb-1">
         <h1 className="text-[20px] font-semibold text-[#24292E]">Salary</h1>
       </div>
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-3">
         <h2 className="text-[16px] text-[#24292E] font-semibold mt-[1rem]">
           Transaction History
         </h2>
         {pagination.last_page > 1 && (
-          <div className="flex space-x-2">
+          <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={() => fetchTransactions(pagination.current_page - 1)}
               disabled={pagination.current_page === 1}
-              className={`px-3 py-1 rounded ${
+              className={`px-2 sm:px-3 py-1 rounded text-sm ${
                 pagination.current_page === 1
                   ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
                   : 'bg-[#A5EA91] text-gray-700 hover:bg-green-200'
               }`}
             >
-              Previous
+              <span className="hidden sm:inline">Previous</span>
+              <span className="sm:hidden">Prev</span>
             </button>
-            <span className="px-3 py-1">
+            <span className="px-2 sm:px-3 py-1 text-sm whitespace-nowrap">
               Page {pagination.current_page} of {pagination.last_page}
             </span>
             <button
               onClick={() => fetchTransactions(pagination.current_page + 1)}
               disabled={pagination.current_page === pagination.last_page}
-              className={`px-3 py-1 rounded ${
+              className={`px-2 sm:px-3 py-1 rounded text-sm ${
                 pagination.current_page === pagination.last_page
                   ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
                   : 'bg-[#A5EA91] text-gray-700 hover:bg-green-200'
@@ -164,44 +165,71 @@ const Salary: React.FC = () => {
           {error}
         </div>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="text-left text-gray-500 border-b border-gray-200">
-                <th className="py-3 px-2 bg-[#E7F6F0]">Transaction Type</th>
-                <th className="py-3 px-2 bg-[#E7F6F0]">Transaction ID</th>
-                <th className="py-3 px-2 bg-[#E7F6F0]">Date</th>
-                <th className="py-3 px-2 bg-[#E7F6F0]">Amount</th>
-                <th className="py-3 px-2 bg-[#E7F6F0]">Description</th>
-                <th className="py-3 px-2 bg-[#E7F6F0]">From/To</th>
-              </tr>
-            </thead>
-            <tbody>
-              {transactions.length > 0 ? (
-                transactions.map((transaction, index) => (
-                  <tr
-                    key={index}
-                    className="border-b border-gray-200 hover:bg-gray-50"
-                  >
-                    <td className="py-3 px-2">{transaction.type}</td>
-                    <td className="py-3 px-2">{transaction.id}</td>
-                    <td className="py-3 px-2">{transaction.date}</td>
-                    <td className="py-3 px-2">
-                      ₦ {transaction.amount.toLocaleString()}
-                    </td>
-                    <td className="py-3 px-2">{transaction.description}</td>
-                    <td className="py-3 px-2">{transaction.from}</td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={6} className="py-4 text-center text-gray-500">
-                    No transactions found
-                  </td>
+        <div
+          className="overflow-x-auto overflow-y-visible"
+          style={{ marginLeft: '-1rem', marginRight: '-1rem' }}
+        >
+          <div style={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
+            <table className="w-full text-sm" style={{ minWidth: '800px' }}>
+              <thead>
+                <tr className="text-left text-gray-500 border-b border-gray-200">
+                  <th className="py-3 px-2 bg-[#E7F6F0] whitespace-nowrap">
+                    Transaction Type
+                  </th>
+                  <th className="py-3 px-2 bg-[#E7F6F0] whitespace-nowrap">
+                    Transaction ID
+                  </th>
+                  <th className="py-3 px-2 bg-[#E7F6F0] whitespace-nowrap">
+                    Date
+                  </th>
+                  <th className="py-3 px-2 bg-[#E7F6F0] whitespace-nowrap">
+                    Amount
+                  </th>
+                  <th className="py-3 px-2 bg-[#E7F6F0] whitespace-nowrap">
+                    Description
+                  </th>
+                  <th className="py-3 px-2 bg-[#E7F6F0] whitespace-nowrap">
+                    From/To
+                  </th>
                 </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {transactions.length > 0 ? (
+                  transactions.map((transaction, index) => (
+                    <tr
+                      key={index}
+                      className="border-b border-gray-200 hover:bg-gray-50"
+                    >
+                      <td className="py-3 px-2 whitespace-nowrap">
+                        {transaction.type}
+                      </td>
+                      <td className="py-3 px-2 whitespace-nowrap">
+                        {transaction.id}
+                      </td>
+                      <td className="py-3 px-2 whitespace-nowrap">
+                        {transaction.date}
+                      </td>
+                      <td className="py-3 px-2 whitespace-nowrap">
+                        ₦ {transaction.amount.toLocaleString()}
+                      </td>
+                      <td className="py-3 px-2 whitespace-nowrap">
+                        {transaction.description}
+                      </td>
+                      <td className="py-3 px-2 whitespace-nowrap">
+                        {transaction.from}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={6} className="py-4 text-center text-gray-500">
+                      No transactions found
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>

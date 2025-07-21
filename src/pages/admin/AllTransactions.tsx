@@ -177,113 +177,115 @@ const AllTransactions: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto">
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-0">
       <div className="flex items-center mb-1">
         <IoArrowBack
           className="text-gray-600 mr-2 cursor-pointer"
-          size={20}
+          size={18}
           onClick={handleBack}
         />
-        <h1 className="text-[20px] font-semibold text-[#24292E]">See All</h1>
+        <h1 className="text-[18px] sm:text-[20px] font-semibold text-[#24292E]">
+          See All
+        </h1>
       </div>
 
       {/* Filter section */}
-      <div className="flex justify-end mb-6 mt-4">
-        <div className="flex items-center gap-4 flex-wrap">
+      <div className="mb-6 mt-4">
+        <div className="flex flex-col space-y-4">
           {/* Search Input */}
-          <div className="relative">
+          <div>
             <input
               type="text"
               placeholder="Search transactions..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="border border-gray-300 rounded-md px-3 py-2 text-sm w-64"
+              className="border border-gray-300 rounded-md px-3 py-2 text-sm w-full"
             />
           </div>
 
-          {/* Status Filter */}
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="border border-gray-300 rounded-md px-3 py-2 text-sm"
-          >
-            <option value="">All Status</option>
-            <option value="successful">Successful</option>
-            <option value="pending">Pending</option>
-            <option value="failed">Failed</option>
-          </select>
+          {/* Filters Row */}
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+            {/* Status Filter */}
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="border border-gray-300 rounded-md px-3 py-2 text-sm flex-1"
+            >
+              <option value="">All Status</option>
+              <option value="successful">Successful</option>
+              <option value="pending">Pending</option>
+              <option value="failed">Failed</option>
+            </select>
 
-          {/* Payment Method Filter */}
-          <select
-            value={paymentMethodFilter}
-            onChange={(e) => setPaymentMethodFilter(e.target.value)}
-            className="border border-gray-300 rounded-md px-3 py-2 text-sm"
-          >
-            <option value="">All Payment Methods</option>
-            <option value="external_funding">External Funding</option>
-            <option value="wallet_transfer">Wallet Transfer</option>
-            <option value="bank_transfer">Bank Transfer</option>
-          </select>
+            {/* Payment Method Filter */}
+            <select
+              value={paymentMethodFilter}
+              onChange={(e) => setPaymentMethodFilter(e.target.value)}
+              className="border border-gray-300 rounded-md px-3 py-2 text-sm flex-1"
+            >
+              <option value="">All Payment Methods</option>
+              <option value="external_funding">External Funding</option>
+              <option value="wallet_transfer">Wallet Transfer</option>
+              <option value="bank_transfer">Bank Transfer</option>
+            </select>
 
-          {/* Wallet Source Filter */}
-          <select
-            value={walletSourceFilter}
-            onChange={(e) => setWalletSourceFilter(e.target.value)}
-            className="border border-gray-300 rounded-md px-3 py-2 text-sm"
-          >
-            <option value="">All Sources</option>
-            <option value="top-up">Top-up</option>
-            <option value="salary">Salary</option>
-            <option value="withdrawal">Withdrawal</option>
-          </select>
-
-          <div className="flex items-center gap-2">
-            <span className="text-gray-600">Date Range</span>
-            <div className="flex items-center gap-2">
-              <div className="relative">
-                <input
-                  type="date"
-                  placeholder="Start Date"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                  className="border border-gray-300 rounded-md px-3 py-2 text-sm"
-                />
-              </div>
-              <span>-</span>
-              <div className="relative">
-                <input
-                  type="date"
-                  placeholder="End Date"
-                  value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                  className="border border-gray-300 rounded-md px-3 py-2 text-sm"
-                />
-              </div>
-            </div>
+            {/* Wallet Source Filter */}
+            <select
+              value={walletSourceFilter}
+              onChange={(e) => setWalletSourceFilter(e.target.value)}
+              className="border border-gray-300 rounded-md px-3 py-2 text-sm flex-1"
+            >
+              <option value="">All Sources</option>
+              <option value="top-up">Top-up</option>
+              <option value="salary">Salary</option>
+              <option value="withdrawal">Withdrawal</option>
+            </select>
           </div>
 
-          {/* Clear Filters Button */}
-          <button
-            onClick={clearFilters}
-            className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 border border-gray-300 rounded-md hover:bg-gray-50"
-          >
-            Clear Filters
-          </button>
+          {/* Date Range Row */}
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-start sm:items-center">
+            <span className="text-gray-600 text-sm whitespace-nowrap">
+              Date Range:
+            </span>
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-2 flex-1">
+              <input
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                className="border border-gray-300 rounded-md px-3 py-2 text-sm flex-1"
+              />
+              <span className="hidden sm:block text-gray-400 self-center">
+                to
+              </span>
+              <input
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                className="border border-gray-300 rounded-md px-3 py-2 text-sm flex-1"
+              />
+            </div>
+            <button
+              onClick={clearFilters}
+              className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 border border-gray-300 rounded-md hover:bg-gray-50 whitespace-nowrap"
+            >
+              Clear Filters
+            </button>
+          </div>
         </div>
       </div>
 
-      <div className="mb-8">
+      <div className="mb-6 sm:mb-8">
         <div className="flex justify-between items-center mb-2">
-          <h2 className="text-xl font-semibold text-[#24292E]">
+          <h2 className="text-lg sm:text-xl font-semibold text-[#24292E]">
             All Transactions
           </h2>
         </div>
 
         {/* Tabs with border around all */}
         <div className="mb-6">
-          <div className="inline-flex border border-gray-200 rounded-md overflow-hidden">
+          <div className="flex flex-col sm:flex-row border border-gray-200 rounded-md overflow-hidden">
             <button
-              className={`px-4 py-2 ${
+              className={`px-3 sm:px-4 py-2 text-sm flex-1 ${
                 activeTab === 'top-up'
                   ? 'bg-[#C8EDDF80] text-green-800'
                   : 'text-gray-600 hover:bg-gray-50'
@@ -293,7 +295,7 @@ const AllTransactions: React.FC = () => {
               Wallets Top-up
             </button>
             <button
-              className={`px-4 py-2 border-l border-r border-gray-200 ${
+              className={`px-3 sm:px-4 py-2 text-sm flex-1 border-t sm:border-t-0 sm:border-l border-gray-200 ${
                 activeTab === 'salaries'
                   ? 'bg-[#C8EDDF80] text-green-800'
                   : 'text-gray-600 hover:bg-gray-50'
@@ -303,7 +305,7 @@ const AllTransactions: React.FC = () => {
               Salaries
             </button>
             <button
-              className={`px-4 py-2 ${
+              className={`px-3 sm:px-4 py-2 text-sm flex-1 border-t sm:border-t-0 sm:border-l border-gray-200 ${
                 activeTab === 'withdrawals'
                   ? 'bg-[#C8EDDF80] text-green-800'
                   : 'text-gray-600 hover:bg-gray-50'
@@ -324,18 +326,34 @@ const AllTransactions: React.FC = () => {
             <>
               {/* Transactions Table */}
               <div className="overflow-x-auto">
-                <table className="w-full text-sm">
+                <table className="w-full text-sm min-w-[1000px]">
                   <thead>
                     <tr className="text-left text-gray-700 bg-[#C8EDDF80]">
-                      <th className="py-3 px-4">Name</th>
-                      <th className="py-3 px-4">Transaction Type</th>
-                      <th className="py-3 px-4">Transaction ID</th>
-                      <th className="py-3 px-4">Date</th>
-                      <th className="py-3 px-4">Amount</th>
-                      <th className="py-3 px-4">Payment Method</th>
-                      <th className="py-3 px-4">Description</th>
-                      <th className="py-3 px-4">Status</th>
-                      <th className="py-3 px-4"></th>
+                      <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                        Name
+                      </th>
+                      <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                        Transaction Type
+                      </th>
+                      <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                        Transaction ID
+                      </th>
+                      <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                        Date
+                      </th>
+                      <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                        Amount
+                      </th>
+                      <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                        Payment Method
+                      </th>
+                      <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                        Description
+                      </th>
+                      <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                        Status
+                      </th>
+                      <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm"></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -345,36 +363,46 @@ const AllTransactions: React.FC = () => {
                           key={transaction.id}
                           className="border-b border-gray-200 hover:bg-gray-50"
                         >
-                          <td className="py-3 px-4">
-                            {transaction.user
-                              ? `${transaction.user.first_name} ${transaction.user.last_name}`
-                              : 'N/A'}
+                          <td className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                            <span className="truncate block">
+                              {transaction.user
+                                ? `${transaction.user.first_name} ${transaction.user.last_name}`
+                                : 'N/A'}
+                            </span>
                           </td>
-                          <td className="py-3 px-4">{transaction.type}</td>
-                          <td className="py-3 px-4">
-                            {transaction.reference_code}
+                          <td className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                            <span className="truncate block">
+                              {transaction.type}
+                            </span>
                           </td>
-                          <td className="py-3 px-4">
+                          <td className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                            <span className="truncate block">
+                              {transaction.reference_code}
+                            </span>
+                          </td>
+                          <td className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
                             {format(
                               new Date(transaction.created_at),
                               'MMM dd, yyyy'
                             )}
                           </td>
-                          <td className="py-3 px-4">
+                          <td className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm font-medium">
                             ₦{parseFloat(transaction.amount).toLocaleString()}
                           </td>
-                          <td className="py-3 px-4">
-                            <span className="capitalize">
+                          <td className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                            <span className="capitalize truncate block">
                               {transaction.payment_method?.replace('_', ' ')}
                             </span>
                           </td>
-                          <td className="py-3 px-4">
-                            {transaction.wallet_transaction?.description ||
-                              transaction.type}
+                          <td className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                            <span className="truncate block">
+                              {transaction.wallet_transaction?.description ||
+                                transaction.type}
+                            </span>
                           </td>
-                          <td className="py-3 px-4">
+                          <td className="py-2 sm:py-3 px-2 sm:px-4">
                             <span
-                              className={`px-3 py-1 rounded-full text-xs ${
+                              className={`px-2 sm:px-3 py-1 rounded-full text-[10px] sm:text-xs ${
                                 transaction.status.toLowerCase() ===
                                 'successful'
                                   ? 'bg-green-100 text-green-700'
@@ -387,20 +415,20 @@ const AllTransactions: React.FC = () => {
                               {transaction.status}
                             </span>
                           </td>
-                          <td className="py-3 px-4 relative">
+                          <td className="py-2 sm:py-3 px-2 sm:px-4 relative">
                             <button
                               onClick={() => toggleOptions(transaction.id)}
                               className="text-gray-400 hover:text-gray-600"
                             >
-                              <BsThreeDotsVertical />
+                              <BsThreeDotsVertical size={14} />
                             </button>
 
                             {showOptionsFor === transaction.id && (
                               <div className="absolute right-8 top-10 bg-white shadow-lg rounded-md py-2 w-48 z-10">
-                                <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                                <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm">
                                   View Details
                                 </div>
-                                <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                                <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm">
                                   Download Receipt
                                 </div>
                               </div>
@@ -424,48 +452,59 @@ const AllTransactions: React.FC = () => {
 
               {/* Pagination */}
               {totalPages > 1 && (
-                <div className="flex justify-end items-center gap-4 mt-6">
+                <div className="flex justify-center sm:justify-end items-center gap-2 sm:gap-4 mt-6">
                   <button
-                    className="p-2"
+                    className="p-1.5 sm:p-2"
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
                   >
                     <FaChevronLeft
-                      size={14}
-                      className={
+                      size={12}
+                      className={`sm:w-3.5 sm:h-3.5 ${
                         currentPage === 1 ? 'text-gray-300' : 'text-gray-500'
-                      }
+                      }`}
                     />
                   </button>
 
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                    (page) => (
+                  {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+                    let page;
+                    if (totalPages <= 5) {
+                      page = i + 1;
+                    } else if (currentPage <= 3) {
+                      page = i + 1;
+                    } else if (currentPage >= totalPages - 2) {
+                      page = totalPages - 4 + i;
+                    } else {
+                      page = currentPage - 2 + i;
+                    }
+
+                    return (
                       <button
                         key={page}
-                        className={`w-8 h-8 flex items-center justify-center rounded-md ${
+                        className={`w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-md text-sm ${
                           currentPage === page
                             ? 'bg-[#00000014] text-[#000000DE] font-medium'
-                            : 'text-[#000000DE]'
+                            : 'text-[#000000DE] hover:bg-gray-100'
                         }`}
                         onClick={() => handlePageChange(page)}
                       >
                         {page}
                       </button>
-                    )
-                  )}
+                    );
+                  })}
 
                   <button
-                    className="p-2"
+                    className="p-1.5 sm:p-2"
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
                   >
                     <FaChevronRight
-                      size={14}
-                      className={
+                      size={12}
+                      className={`sm:w-3.5 sm:h-3.5 ${
                         currentPage === totalPages
                           ? 'text-gray-300'
                           : 'text-[#000000DE]'
-                      }
+                      }`}
                     />
                   </button>
                 </div>

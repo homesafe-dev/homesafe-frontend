@@ -47,17 +47,19 @@ const WalletHistory: React.FC = () => {
   };
 
   return (
-    <div className="bg-white rounded-lg border-gray-200">
+    <div className="bg-white rounded-lg border-gray-200 p-3 sm:p-4 lg:p-6">
       <div className="flex items-center mb-1">
         <IoArrowBack
           className="text-gray-600 mr-2 cursor-pointer"
-          size={20}
+          size={18}
           onClick={handleBack}
         />
-        <h1 className="text-[20px] font-semibold text-[#24292E]">See All</h1>
+        <h1 className="text-[18px] sm:text-[20px] font-semibold text-[#24292E]">
+          See All
+        </h1>
       </div>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-[16px] text-[#24292E] font-semibold mt-[1rem]">
+        <h2 className="text-[14px] sm:text-[16px] text-[#24292E] font-semibold mt-[1rem]">
           Transaction History
         </h2>
       </div>
@@ -72,15 +74,27 @@ const WalletHistory: React.FC = () => {
         </div>
       ) : (
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full text-xs sm:text-sm min-w-[600px]">
             <thead>
               <tr className="text-left text-gray-500 border-b border-gray-200">
-                <th className="py-3 px-2 bg-[#C8EDDF80]">Transaction Type</th>
-                <th className="py-3 px-2 bg-[#C8EDDF80]">Transaction ID</th>
-                <th className="py-3 px-2 bg-[#C8EDDF80]">Status</th>
-                <th className="py-3 px-2 bg-[#C8EDDF80]">Amount</th>
-                <th className="py-3 px-2 bg-[#C8EDDF80]">Description</th>
-                <th className="py-3 px-2 bg-[#C8EDDF80]">Source</th>
+                <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">
+                  Transaction Type
+                </th>
+                <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">
+                  Transaction ID
+                </th>
+                <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">
+                  Status
+                </th>
+                <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">
+                  Amount
+                </th>
+                <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">
+                  Description
+                </th>
+                <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">
+                  Source
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -90,14 +104,16 @@ const WalletHistory: React.FC = () => {
                     key={transaction.id}
                     className="border-b border-gray-200 hover:bg-gray-50"
                   >
-                    <td className="py-3 px-2 capitalize">{transaction.type}</td>
-                    <td className="py-3 px-2">
+                    <td className="py-2 sm:py-3 px-2 capitalize text-xs sm:text-sm">
+                      {transaction.type}
+                    </td>
+                    <td className="py-2 sm:py-3 px-2 text-xs sm:text-sm">
                       {transaction.transaction.reference_code.substring(0, 10)}
                       ...
                     </td>
-                    <td className="py-3 px-2">
+                    <td className="py-2 sm:py-3 px-2">
                       <span
-                        className={`px-3 py-1 rounded-full text-xs ${
+                        className={`px-2 sm:px-3 py-1 rounded-full text-xs ${
                           transaction.transaction.status === 'successful'
                             ? 'bg-green-100 text-green-700'
                             : transaction.transaction.status === 'pending'
@@ -111,7 +127,7 @@ const WalletHistory: React.FC = () => {
                           transaction.transaction.status.slice(1)}
                       </span>
                     </td>
-                    <td className="py-3 px-2">
+                    <td className="py-2 sm:py-3 px-2 text-xs sm:text-sm">
                       ₦{' '}
                       {parseFloat(
                         transaction.transaction.amount
@@ -120,8 +136,12 @@ const WalletHistory: React.FC = () => {
                         maximumFractionDigits: 2,
                       })}
                     </td>
-                    <td className="py-3 px-2">{transaction.description}</td>
-                    <td className="py-3 px-2">{transaction.source}</td>
+                    <td className="py-2 sm:py-3 px-2 text-xs sm:text-sm">
+                      {transaction.description}
+                    </td>
+                    <td className="py-2 sm:py-3 px-2 text-xs sm:text-sm">
+                      {transaction.source}
+                    </td>
                   </tr>
                 ))
               ) : (
@@ -140,11 +160,11 @@ const WalletHistory: React.FC = () => {
       )}
 
       {!loading && !error && totalPages > 0 && (
-        <div className="flex justify-end items-center gap-2 mt-4 pb-4 pr-4">
+        <div className="flex justify-center sm:justify-end items-center gap-1 sm:gap-2 mt-4 pb-4 pr-0 sm:pr-4">
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className="p-2 rounded-full hover:bg-gray-100 disabled:opacity-50"
+            className="p-1 sm:p-2 rounded-full hover:bg-gray-100 disabled:opacity-50 text-sm"
           >
             &lt;
           </button>
@@ -154,7 +174,7 @@ const WalletHistory: React.FC = () => {
               <button
                 key={pageNum}
                 onClick={() => handlePageChange(pageNum)}
-                className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm ${
                   currentPage === pageNum ? 'bg-gray-200' : 'hover:bg-gray-100'
                 }`}
               >

@@ -107,8 +107,8 @@ const StaffProfileAbout: React.FC<StaffProfileAboutProps> = ({
   };
 
   return (
-    <div className="flex flex-col items-center bg-white rounded-lg p-4 h-full">
-      <div className="mb-4">
+    <div className="flex flex-col items-center bg-white rounded-lg p-3 sm:p-4 h-full">
+      <div className="mb-3 sm:mb-4">
         <Avatar
           src={profileImage}
           firstName={name.split(' ')[0] || ''}
@@ -120,22 +120,22 @@ const StaffProfileAbout: React.FC<StaffProfileAboutProps> = ({
         />
       </div>
 
-      <h2 className="text-[16px] text-gray-700 mt-[0.5rem] font-medium">
+      <h2 className="text-sm sm:text-[16px] text-gray-700 mt-2 sm:mt-[0.5rem] font-medium text-center">
         {name}
       </h2>
-      <p className="text-[13px] mt-[0.5rem] text-[#24292E] mb-2">
+      <p className="text-xs sm:text-[13px] mt-2 sm:mt-[0.5rem] text-[#24292E] mb-2 text-center">
         {location} | {age} yrs old
       </p>
 
-      <div className="bg-[#C8EDDF80] mt-[0.5rem] text-[#48525B] w-[64px] h-[26px] flex items-center justify-center px-3 py-1 rounded-[8px] text-[13px] mb-2">
+      <div className="bg-[#C8EDDF80] mt-2 sm:mt-[0.5rem] text-[#48525B] min-w-[64px] h-[26px] flex items-center justify-center px-2 sm:px-3 py-1 rounded-[8px] text-xs sm:text-[13px] mb-2">
         {role}
       </div>
 
-      <div className="flex mb-6">
+      <div className="flex mb-4 sm:mb-6">
         {[1, 2, 3, 4, 5].map((star) => (
           <span
             key={star}
-            className={`text-[#EFAE73] mt-[0.5rem] ${star <= 4 ? 'opacity-100' : 'opacity-30'}`}
+            className={`text-[#EFAE73] mt-2 sm:mt-[0.5rem] text-sm sm:text-base ${star <= 4 ? 'opacity-100' : 'opacity-30'}`}
           >
             ★
           </span>
@@ -143,30 +143,36 @@ const StaffProfileAbout: React.FC<StaffProfileAboutProps> = ({
       </div>
 
       <div className="w-full">
-        <h3 className="text-[#246D51] font-semibold text-[16px] mb-2">
+        <h3 className="text-[#246D51] font-semibold text-sm sm:text-[16px] mb-2">
           About me
         </h3>
-        <p className="text-[13px] text-[#48525B] mb-6">{bio}</p>
+        <p className="text-xs sm:text-[13px] text-[#48525B] mb-4 sm:mb-6 leading-relaxed">
+          {bio}
+        </p>
 
-        <h3 className="text-[#246D51] font-semibold text-[16px] mb-2">
+        <h3 className="text-[#246D51] font-semibold text-sm sm:text-[16px] mb-2">
           Contact Details
         </h3>
-        <p className="text-[13px] text-[#246D51]">{phone}</p>
+        <p className="text-xs sm:text-[13px] text-[#246D51] break-all">
+          {phone}
+        </p>
 
-        <h3 className="text-[#246D51] font-semibold text-[16px] mt-4 mb-2">
+        <h3 className="text-[#246D51] font-semibold text-sm sm:text-[16px] mt-3 sm:mt-4 mb-2">
           Email
         </h3>
-        <p className="text-[13px] text-[#246D51]">{email}</p>
+        <p className="text-xs sm:text-[13px] text-[#246D51] break-all">
+          {email}
+        </p>
 
-        <div className="mt-4">
+        <div className="mt-3 sm:mt-4">
           <button
-            className="text-white rounded-md py-2 text-sm w-[117px] h-[34px] bg-[#993018] hover:bg-[#7d2a1f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="text-white rounded-md py-2 text-xs sm:text-sm w-full sm:w-[117px] h-[34px] bg-[#993018] hover:bg-[#7d2a1f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={handleOpenTerminateModal}
             disabled={isTerminating || !contractId}
           >
             {isTerminating ? (
               <div className="flex items-center justify-center">
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-1"></div>
+                <div className="animate-spin rounded-full h-3 w-3 sm:h-4 sm:w-4 border-b-2 border-white mr-1"></div>
                 <span className="text-xs">Terminating...</span>
               </div>
             ) : (

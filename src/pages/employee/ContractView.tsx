@@ -216,28 +216,30 @@ const ContractViewPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 py-8">
+    <div className="min-h-screen bg-gray-100 py-4 sm:py-8">
       {/* Back Button */}
-      <div className="max-w-4xl mx-auto px-4 mb-6">
+      <div className="max-w-4xl mx-auto px-4 mb-4 sm:mb-6">
         <button
           onClick={handleBack}
-          className="flex items-center text-gray-600 hover:text-gray-800 transition-colors"
+          className="flex items-center text-gray-600 hover:text-gray-800 transition-colors text-sm sm:text-base"
         >
-          <IoArrowBack className="mr-2" size={20} />
-          Back
+          <IoArrowBack className="mr-2" size={16} />
+          <span className="sm:inline">Back</span>
         </button>
       </div>
 
       {/* Contract Document */}
       <div className="max-w-4xl mx-auto px-4">
-        <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
+        <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8">
           {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold text-[#246D51] mb-2">homesafe</h1>
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+          <div className="text-center mb-6 sm:mb-8">
+            <h1 className="text-xl sm:text-2xl font-bold text-[#246D51] mb-2">
+              homesafe
+            </h1>
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
               Employment Contract Form
             </h2>
-            <div className="w-full h-0.5 bg-[#246D51] mb-6"></div>
+            <div className="w-full h-0.5 bg-[#246D51] mb-4 sm:mb-6"></div>
           </div>
 
           {/* Contract Content */}

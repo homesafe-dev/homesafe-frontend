@@ -179,43 +179,43 @@ export default function UserDetailsPage() {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500"></div>
+        <div className="animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-t-2 border-b-2 border-green-500"></div>
       </div>
     );
   }
 
   if (error || !user) {
     return (
-      <div className="p-6">
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+      <div className="p-4 sm:p-6">
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded text-sm">
           {error || 'User not found'}
         </div>
         <button
           onClick={() => navigate(-1)}
-          className="mt-4 flex items-center text-gray-600 hover:text-gray-900"
+          className="mt-4 flex items-center text-gray-600 hover:text-gray-900 text-sm"
         >
-          <FaArrowLeft className="mr-2" /> Go Back
+          <FaArrowLeft className="mr-2" size={14} /> Go Back
         </button>
       </div>
     );
   }
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <div className="flex items-center space-x-4">
+    <div className="p-4 sm:p-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 sm:gap-0">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center text-gray-600 hover:text-gray-900"
+            className="flex items-center text-gray-600 hover:text-gray-900 text-sm"
           >
-            <FaArrowLeft className="mr-2" /> Back
+            <FaArrowLeft className="mr-2" size={14} /> Back
           </button>
           {/* User Status Indicator */}
           {user && (
             <div className="flex items-center space-x-2">
               <span className="text-sm text-gray-500">Status:</span>
               <span
-                className={`px-3 py-1 rounded-full text-xs font-medium ${
+                className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium ${
                   user.approval_status === 'approved'
                     ? 'bg-green-100 text-green-800'
                     : user.approval_status === 'pending'
@@ -234,16 +234,16 @@ export default function UserDetailsPage() {
         </div>
         {/* Only show approve/decline buttons for users with pending approval status */}
         {user && user.approval_status === 'pending' && (
-          <div className="flex space-x-4">
+          <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
             <button
               onClick={() => setShowApproveModal(true)}
-              className="bg-[#C8EDDF80] text-[#174B35] px-4 py-2 rounded-md hover:bg-[#C8EDDF] transition-colors"
+              className="bg-[#C8EDDF80] text-[#174B35] px-3 sm:px-4 py-2 rounded-md hover:bg-[#C8EDDF] transition-colors text-sm"
             >
               Approve User
             </button>
             <button
               onClick={() => setShowDeclineModal(true)}
-              className="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-50 transition-colors"
+              className="bg-white border border-gray-300 text-gray-700 px-3 sm:px-4 py-2 rounded-md hover:bg-gray-50 transition-colors text-sm"
             >
               Decline User
             </button>
@@ -251,47 +251,70 @@ export default function UserDetailsPage() {
         )}
       </div>
 
-      <div className="bg-white shadow rounded-lg p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-4">
+      <div className="bg-white shadow rounded-lg p-4 sm:p-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+          <div className="space-y-3 sm:space-y-4">
             <div>
-              <h3 className="text-sm font-medium text-gray-500">Title</h3>
+              <h3 className="text-xs sm:text-sm font-medium text-gray-500">
+                Title
+              </h3>
               <p className="mt-1 text-sm text-gray-900">{user.title || 'Mr'}</p>
             </div>
 
             <div>
-              <h3 className="text-sm font-medium text-gray-500">First Name</h3>
+              <h3 className="text-xs sm:text-sm font-medium text-gray-500">
+                First Name
+              </h3>
               <p className="mt-1 text-sm text-gray-900">{user.first_name}</p>
             </div>
 
             <div>
-              <h3 className="text-sm font-medium text-gray-500">Last Name</h3>
+              <h3 className="text-xs sm:text-sm font-medium text-gray-500">
+                Last Name
+              </h3>
               <p className="mt-1 text-sm text-gray-900">{user.last_name}</p>
             </div>
 
             <div>
-              <h3 className="text-sm font-medium text-gray-500">Email</h3>
-              <p className="mt-1 text-sm text-gray-900">{user.email}</p>
+              <h3 className="text-xs sm:text-sm font-medium text-gray-500">
+                Email
+              </h3>
+              <p className="mt-1 text-sm text-gray-900 break-all">
+                {user.email}
+              </p>
             </div>
-          </div>
 
-          <div className="space-y-4">
             <div>
-              <h3 className="text-sm font-medium text-gray-500">
+              <h3 className="text-xs sm:text-sm font-medium text-gray-500">
                 Phone Number
               </h3>
               <p className="mt-1 text-sm text-gray-900">{user.phone}</p>
             </div>
 
+            {userType === 'employee' && (
+              <div>
+                <h3 className="text-xs sm:text-sm font-medium text-gray-500">
+                  Occupation
+                </h3>
+                <p className="mt-1 text-sm text-gray-900">
+                  {getUserOccupations(user)}
+                </p>
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-3 sm:space-y-4">
             <div>
-              <h3 className="text-sm font-medium text-gray-500">
+              <h3 className="text-xs sm:text-sm font-medium text-gray-500">
                 Home Address
               </h3>
-              <p className="mt-1 text-sm text-gray-900">{user.address}</p>
+              <p className="mt-1 text-sm text-gray-900 break-words">
+                {user.address}
+              </p>
             </div>
 
             <div>
-              <h3 className="text-sm font-medium text-gray-500">
+              <h3 className="text-xs sm:text-sm font-medium text-gray-500">
                 Date of Birth
               </h3>
               <p className="mt-1 text-sm text-gray-900">
@@ -306,30 +329,21 @@ export default function UserDetailsPage() {
             </div>
 
             <div>
-              <h3 className="text-sm font-medium text-gray-500">Gender</h3>
+              <h3 className="text-xs sm:text-sm font-medium text-gray-500">
+                Gender
+              </h3>
               <p className="mt-1 text-sm text-gray-900 capitalize">
                 {user.gender || 'Not specified'}
               </p>
             </div>
 
-            {userType === 'employee' && (
-              <div>
-                <h3 className="text-sm font-medium text-gray-500">
-                  Occupation
-                </h3>
-                <p className="mt-1 text-sm text-gray-900">
-                  {getUserOccupations(user)}
-                </p>
-              </div>
-            )}
-
             <div>
-              <h3 className="text-sm font-medium text-gray-500">
+              <h3 className="text-xs sm:text-sm font-medium text-gray-500">
                 Verification Status
               </h3>
               <p className="mt-1">
                 <span
-                  className={`px-3 py-1 rounded-full text-xs font-medium ${
+                  className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium ${
                     user.is_verified === 1
                       ? 'bg-green-100 text-green-800'
                       : 'bg-red-100 text-red-800'

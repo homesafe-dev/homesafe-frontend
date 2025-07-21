@@ -17,17 +17,21 @@ const ResourceCard: React.FC<ResourceProps> = ({
   recipeCount,
 }) => {
   return (
-    <div className="flex items-center mb-6">
+    <div className="flex flex-col sm:flex-row items-start sm:items-center mb-4 sm:mb-6 p-3 sm:p-0">
       <img
         src={Resources}
         alt={title}
-        className="w-[140px] h-[144px] rounded mr-4"
+        className="w-full sm:w-[120px] lg:w-[140px] h-[120px] sm:h-[124px] lg:h-[144px] rounded mr-0 sm:mr-4 mb-3 sm:mb-0 object-cover"
       />
-      <div>
-        <h3 className="font-medium text-green-700">{title}</h3>
-        <p className="text-xs text-gray-500">Started: {startDate}</p>
-        <p className="text-xs text-gray-700 mt-1">{description}</p>
-        <p className="text-xs text-gray-700">
+      <div className="flex-1">
+        <h3 className="font-medium text-green-700 text-sm sm:text-base">
+          {title}
+        </h3>
+        <p className="text-xs text-gray-500 mt-1">Started: {startDate}</p>
+        <p className="text-xs sm:text-sm text-gray-700 mt-1 leading-relaxed">
+          {description}
+        </p>
+        <p className="text-xs sm:text-sm text-gray-700 mt-1 leading-relaxed">
           It has {chapterCount} chapters and {recipeCount} different recipes on
           how well to make pasta with oor with cheese.
         </p>
@@ -44,7 +48,7 @@ const EducationalResources: React.FC<EducationalResourcesProps> = ({
   resources,
 }) => {
   return (
-    <div className="p-4">
+    <div className="p-2 sm:p-4">
       {resources.map((resource, index) => (
         <ResourceCard key={index} {...resource} />
       ))}

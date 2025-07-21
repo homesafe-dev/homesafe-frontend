@@ -24,8 +24,10 @@ export default function AllUsersPage() {
   return (
     <div className="p-0">
       {/* Header */}
-      <div className="mb-8">
-        <h2 className="text-[#24292E] text-[20px] font-semibold">Users</h2>
+      <div className="mb-6 sm:mb-8">
+        <h2 className="text-[#24292E] text-[18px] sm:text-[20px] font-semibold">
+          Users
+        </h2>
         <p className="text-gray-600 text-sm mt-1">
           Manage all users in the system
         </p>
@@ -34,10 +36,10 @@ export default function AllUsersPage() {
       {/* Main Content */}
       <div className="bg-white shadow rounded-lg">
         {/* Tabs */}
-        <div className="px-6 pt-6 mb-4">
-          <div className="flex space-x-4">
+        <div className="px-4 sm:px-6 pt-4 sm:pt-6 mb-4">
+          <div className="flex flex-wrap gap-2 sm:space-x-4 sm:gap-0">
             <button
-              className={`py-2 px-4 text-sm font-medium rounded ${
+              className={`py-2 px-3 sm:px-4 text-xs sm:text-sm font-medium rounded ${
                 activeTab === 'employers'
                   ? 'bg-[#C8EDDF80] text-[#174B35]'
                   : 'text-gray-500 hover:text-gray-700'
@@ -47,7 +49,7 @@ export default function AllUsersPage() {
               Employers
             </button>
             <button
-              className={`py-2 px-4 text-sm font-medium rounded ${
+              className={`py-2 px-3 sm:px-4 text-xs sm:text-sm font-medium rounded ${
                 activeTab === 'agents'
                   ? 'bg-[#C8EDDF80] text-[#174B35]'
                   : 'text-gray-500 hover:text-gray-700'
@@ -57,7 +59,7 @@ export default function AllUsersPage() {
               Agents
             </button>
             <button
-              className={`py-2 px-4 text-sm font-medium rounded ${
+              className={`py-2 px-3 sm:px-4 text-xs sm:text-sm font-medium rounded ${
                 activeTab === 'incoming'
                   ? 'bg-[#C8EDDF80] text-[#174B35]'
                   : 'text-gray-500 hover:text-gray-700'
@@ -70,25 +72,25 @@ export default function AllUsersPage() {
         </div>
 
         {/* Tab Content */}
-        <div className="px-6 pb-6">
+        <div className="px-4 sm:px-6 pb-4 sm:pb-6">
           {activeTab === 'employers' && <EmployersTab />}
           {activeTab === 'agents' && <AgentsTab />}
           {activeTab === 'incoming' && <IncomingRequestsTab />}
         </div>
 
         {/* Pagination */}
-        <div className="flex justify-end items-center p-4">
-          <div className="flex items-center space-x-2">
+        <div className="flex justify-center sm:justify-end items-center p-3 sm:p-4">
+          <div className="flex items-center space-x-1 sm:space-x-2">
             <button
               onClick={handlePreviousPage}
               disabled={currentPage === 1}
-              className={`p-2 rounded-full ${
+              className={`p-1.5 sm:p-2 rounded-full ${
                 currentPage === 1
                   ? 'text-gray-300 cursor-not-allowed'
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
-              <FiChevronLeft size={20} />
+              <FiChevronLeft size={16} className="sm:w-5 sm:h-5" />
             </button>
 
             {[...Array(3)].map((_, index) => {
@@ -96,7 +98,7 @@ export default function AllUsersPage() {
                 <button
                   key={index}
                   onClick={() => setCurrentPage(index + 1)}
-                  className={`w-8 h-8 flex items-center justify-center rounded-full ${
+                  className={`w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full text-sm ${
                     currentPage === index + 1
                       ? 'bg-gray-200 text-gray-800 font-medium'
                       : 'text-gray-600 hover:bg-gray-100'
@@ -110,13 +112,13 @@ export default function AllUsersPage() {
             <button
               onClick={handleNextPage}
               disabled={currentPage === 3}
-              className={`p-2 rounded-full ${
+              className={`p-1.5 sm:p-2 rounded-full ${
                 currentPage === totalPages
                   ? 'text-gray-300 cursor-not-allowed'
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
-              <FiChevronRight size={20} />
+              <FiChevronRight size={16} className="sm:w-5 sm:h-5" />
             </button>
           </div>
         </div>

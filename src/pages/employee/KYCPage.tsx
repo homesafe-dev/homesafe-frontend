@@ -131,21 +131,28 @@ const EmployeeKYCPage: React.FC = () => {
   };
 
   return (
-    <div className="rounded-lg w-full mx-auto">
+    <div className="rounded-lg w-full mx-auto px-4 sm:px-0">
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.isVisible}
+        onClose={hideToast}
+      />
+
       {/* Header */}
-      <div className="mb-6 flex justify-between items-center">
+      <div className="mb-4 sm:mb-6 flex justify-between items-center">
         <div>
           <button
             className="flex items-center text-gray-600 hover:text-gray-800 mb-4"
             onClick={() => navigate(-1)}
           >
             <FaArrowLeft className="mr-2" />
-            <span className="text-gray-800">Back</span>
+            <span className="text-gray-800 text-sm sm:text-base">Back</span>
           </button>
-          <h1 className="text-2xl font-semibold text-gray-800">
+          <h1 className="text-xl sm:text-2xl font-semibold text-gray-800">
             KYC Verification
           </h1>
-          <p className="text-gray-600 mt-2">
+          <p className="text-gray-600 mt-2 text-sm sm:text-base">
             Please enter your NIN for verification
           </p>
         </div>
@@ -160,18 +167,20 @@ const EmployeeKYCPage: React.FC = () => {
           {error}
         </div>
       ) : userProfile?.status === 1 ? (
-        <div className="bg-white rounded-lg border-2 border-gray-300 shadow-sm p-12 max-w-3xl">
+        <div className="bg-white rounded-lg border-2 border-gray-300 shadow-sm p-6 sm:p-8 lg:p-12 max-w-3xl">
           {/* Header Section */}
-          <div className="mb-8">
+          <div className="mb-6 sm:mb-8">
             <div className="flex items-center mb-4">
-              <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center mr-3">
-                <span className="text-green-600 font-semibold">✅</span>
+              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-100 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
+                <span className="text-green-600 font-semibold text-sm sm:text-base">
+                  ✅
+                </span>
               </div>
-              <div>
-                <h2 className="text-lg font-semibold text-gray-800">
+              <div className="min-w-0">
+                <h2 className="text-base sm:text-lg font-semibold text-gray-800">
                   KYC Verification Complete
                 </h2>
-                <p className="text-sm text-green-600">
+                <p className="text-xs sm:text-sm text-green-600">
                   Your KYC verification has already been submitted and
                   processed.
                 </p>

@@ -55,12 +55,18 @@ const CandidateReview: React.FC<CandidateReviewProps> = ({
 
   if (reviews.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center p-8 text-center">
-        <div className="bg-gray-100 p-4 rounded-lg mb-4">
-          <img src={NoReviewImg} alt="No reviews" />
+      <div className="flex flex-col items-center justify-center p-6 sm:p-8 text-center">
+        <div className="bg-gray-100 p-3 sm:p-4 rounded-lg mb-3 sm:mb-4">
+          <img
+            src={NoReviewImg}
+            alt="No reviews"
+            className="w-16 h-16 sm:w-auto sm:h-auto"
+          />
         </div>
-        <h3 className="font-medium text-gray-700 mb-1">No Reviews Yet</h3>
-        <p className="text-sm text-gray-500">
+        <h3 className="font-medium text-gray-700 mb-1 text-sm sm:text-base">
+          No Reviews Yet
+        </h3>
+        <p className="text-xs sm:text-sm text-gray-500">
           No reviews have been submitted for {candidateName} yet.
         </p>
       </div>
@@ -68,17 +74,17 @@ const CandidateReview: React.FC<CandidateReviewProps> = ({
   }
 
   return (
-    <div className="p-6">
-      <div className="space-y-4">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-800">
+    <div className="p-3 sm:p-6">
+      <div className="space-y-3 sm:space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3 sm:mb-4 gap-2 sm:gap-0">
+          <h3 className="text-base sm:text-lg font-semibold text-gray-800">
             Reviews ({reviews.length})
           </h3>
           <div className="flex items-center">
             <div className="flex mr-2">
               {renderStars(Math.round(averageRating))}
             </div>
-            <span className="text-sm text-gray-600">
+            <span className="text-xs sm:text-sm text-gray-600">
               ({averageRating.toFixed(1)}/5)
             </span>
           </div>
@@ -87,16 +93,16 @@ const CandidateReview: React.FC<CandidateReviewProps> = ({
         {reviews.map((review) => (
           <div
             key={review.id}
-            className="bg-white border border-gray-200 rounded-lg p-4"
+            className="bg-white border border-gray-200 rounded-lg p-3 sm:p-4"
           >
-            <div className="flex justify-between items-start mb-2">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2 gap-2 sm:gap-0">
               <div className="flex items-center space-x-2">
                 <div className="flex">{renderStars(review.rating)}</div>
-                <span className="text-sm text-gray-600">
+                <span className="text-xs sm:text-sm text-gray-600">
                   ({review.rating}/5)
                 </span>
               </div>
-              <span className="text-sm text-gray-500">
+              <span className="text-xs sm:text-sm text-gray-500">
                 {new Date(
                   review.date || review.created_at || ''
                 ).toLocaleDateString('en-GB', {
@@ -108,7 +114,9 @@ const CandidateReview: React.FC<CandidateReviewProps> = ({
             </div>
 
             {review.comment && (
-              <p className="text-gray-700 text-sm mb-2">{review.comment}</p>
+              <p className="text-gray-700 text-xs sm:text-sm mb-2 leading-relaxed">
+                {review.comment}
+              </p>
             )}
 
             {(review.reviewer || review.reviewer_name) && (
@@ -117,7 +125,7 @@ const CandidateReview: React.FC<CandidateReviewProps> = ({
                   <img
                     src={review.reviewer.avatar}
                     alt="Reviewer"
-                    className="w-6 h-6 rounded-full object-cover mr-2"
+                    className="w-5 h-5 sm:w-6 sm:h-6 rounded-full object-cover mr-2"
                   />
                 )}
                 <p className="text-xs text-gray-500">
