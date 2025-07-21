@@ -151,20 +151,22 @@ const StaffProfile: React.FC = () => {
   ];
 
   return (
-    <div className="rounded-lg ">
-      <div className="p-4 border-b border-gray-100">
+    <div className="rounded-lg p-3 sm:p-4 lg:p-6">
+      <div className="p-3 sm:p-4 border-b border-gray-100">
         <button
           className="flex items-center text-gray-600"
           onClick={() => navigate(-1)}
         >
-          <FaArrowLeft className="mr-2" />
-          <span>{employee.first_name}'s Profile</span>
+          <FaArrowLeft className="mr-2" size={16} />
+          <span className="text-sm sm:text-base">
+            {employee.first_name}'s Profile
+          </span>
         </button>
       </div>
 
-      <div className="flex flex-row gap-8">
+      <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8 mt-4 sm:mt-6">
         {/* Left panel */}
-        <div className="w-1/3 border-r bg-white border-gray-100 p-6 shadow-md">
+        <div className="w-full lg:w-1/3 lg:border-r bg-white border-gray-100 p-4 sm:p-6 shadow-md rounded-lg lg:rounded-none">
           <StaffProfileAbout
             name={`${employee.first_name} ${employee.last_name}`}
             location={extractLocation(employee.address)}
@@ -187,23 +189,23 @@ const StaffProfile: React.FC = () => {
         </div>
 
         {/* Right panel */}
-        <div className="w-2/3">
+        <div className="w-full lg:w-2/3">
           {/* Tabs */}
-          <div className="flex border-b border-gray-200">
+          <div className="flex border-b border-gray-200 overflow-x-auto">
             <button
-              className={`px-4 py-3 ${activeTab === 'medical' ? 'border-b-2 border-green-600 text-green-600' : 'text-gray-600'}`}
+              className={`px-3 sm:px-4 py-2 sm:py-3 whitespace-nowrap text-sm sm:text-base ${activeTab === 'medical' ? 'border-b-2 border-green-600 text-green-600' : 'text-gray-600'}`}
               onClick={() => setActiveTab('medical')}
             >
               Medical History
             </button>
             <button
-              className={`px-4 py-3 ${activeTab === 'educational' ? 'border-b-2 border-green-600 text-green-600' : 'text-gray-600'}`}
+              className={`px-3 sm:px-4 py-2 sm:py-3 whitespace-nowrap text-sm sm:text-base ${activeTab === 'educational' ? 'border-b-2 border-green-600 text-green-600' : 'text-gray-600'}`}
               onClick={() => setActiveTab('educational')}
             >
               Educational Resources
             </button>
             <button
-              className={`px-4 py-3 ${activeTab === 'reviews' ? 'border-b-2 border-green-600 text-green-600' : 'text-gray-600'}`}
+              className={`px-3 sm:px-4 py-2 sm:py-3 whitespace-nowrap text-sm sm:text-base ${activeTab === 'reviews' ? 'border-b-2 border-green-600 text-green-600' : 'text-gray-600'}`}
               onClick={() => setActiveTab('reviews')}
             >
               Reviews
@@ -211,7 +213,7 @@ const StaffProfile: React.FC = () => {
           </div>
 
           {/* Tab content */}
-          <div className="p-2">
+          <div className="p-2 sm:p-4">
             {activeTab === 'medical' && (
               <MedicalHistory
                 medicalFiles={employee.user_medicals}

@@ -105,19 +105,21 @@ const ContractCard: React.FC<ContractCardProps> = ({ proposal, imageUrl }) => {
   };
 
   return (
-    <div className="bg-white p-4 rounded-md border border-gray-100">
-      <div className="mb-3">
+    <div className="bg-white p-3 sm:p-4 rounded-md border border-gray-100">
+      <div className="mb-2 sm:mb-3">
         <img
           src={imageUrl}
           alt="Contract document"
-          className="w-full h-[174px] object-cover rounded-sm"
+          className="w-full h-[140px] sm:h-[174px] object-cover rounded-sm"
         />
       </div>
-      <h3 className="font-semibold text-[16px] text-[#24292E] mb-2">
+      <h3 className="font-semibold text-sm sm:text-[16px] text-[#24292E] mb-2">
         {employeeName}
       </h3>
-      <p className="text-[13px] text-[#48525B] mb-3">{description}</p>
-      <div className="flex justify-between items-center mb-3">
+      <p className="text-xs sm:text-[13px] text-[#48525B] mb-2 sm:mb-3 leading-relaxed">
+        {description}
+      </p>
+      <div className="flex justify-between items-center mb-2 sm:mb-3">
         <span
           className={`px-2 py-1 rounded-full text-xs ${
             status === 'pending'
@@ -131,16 +133,17 @@ const ContractCard: React.FC<ContractCardProps> = ({ proposal, imageUrl }) => {
         </span>
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex flex-col sm:flex-row gap-2">
         <button
           onClick={handleViewDetails}
           className="flex-1 flex items-center justify-center rounded-[6px] text-[#246D51] text-xs border border-[#246D51] hover:bg-[#246D51] hover:text-white transition-colors h-[32px]"
         >
           View Details
         </button>
-        <button className="flex items-center justify-center rounded-[6px] text-[#6C7A89] text-xs border border-[#DCDEE5] w-[98px] h-[32px]">
+        <button className="flex items-center justify-center rounded-[6px] text-[#6C7A89] text-xs border border-[#DCDEE5] sm:w-[98px] h-[32px]">
           <FiDownload className="mr-1 text-black" size={14} />
-          Download
+          <span className="hidden sm:inline">Download</span>
+          <span className="sm:hidden">PDF</span>
         </button>
       </div>
     </div>
@@ -218,18 +221,23 @@ const ContractsPage: React.FC<ContractsPageProps> = ({
   });
 
   return (
-    <div className="rounded-md">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold text-[#24292E]">{title}</h2>
-        <div className="relative">
+    <div className="rounded-md p-3 sm:p-4 lg:p-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 sm:mb-6 gap-4">
+        <h2 className="text-lg sm:text-xl font-semibold text-[#24292E]">
+          {title}
+        </h2>
+        <div className="relative w-full sm:w-auto">
           <input
             type="text"
             placeholder="Search by name, position, status"
-            className="pl-8 pr-4 py-2 border border-gray-100 rounded-[16px] text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-[480px]"
+            className="w-full sm:w-[320px] lg:w-[480px] pl-8 pr-4 py-2 border border-gray-100 rounded-[16px] text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+          <FiSearch
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+            size={16}
+          />
         </div>
       </div>
 
@@ -248,7 +256,7 @@ const ContractsPage: React.FC<ContractsPageProps> = ({
             : 'No contract proposals found.'}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
           {filteredProposals.map((contractProposal) => (
             <ContractCard
               key={contractProposal.proposal.id}

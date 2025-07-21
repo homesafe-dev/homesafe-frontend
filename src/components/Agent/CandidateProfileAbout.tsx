@@ -36,8 +36,8 @@ const CandidateProfileAbout: React.FC<CandidateProfileAboutProps> = ({
   onUnblockUser,
 }) => {
   return (
-    <div className="flex flex-col items-center bg-white rounded-lg p-4 h-full">
-      <div className="mb-4">
+    <div className="flex flex-col items-center bg-white rounded-lg p-3 sm:p-4 h-full">
+      <div className="mb-3 sm:mb-4">
         <Avatar
           src={profileImage}
           firstName={name.split(' ')[0] || ''}
@@ -49,22 +49,22 @@ const CandidateProfileAbout: React.FC<CandidateProfileAboutProps> = ({
         />
       </div>
 
-      <h2 className="text-[16px] text-gray-700 mt-[0.5rem] font-medium">
+      <h2 className="text-sm sm:text-[16px] text-gray-700 mt-2 sm:mt-[0.5rem] font-medium text-center">
         {name}
       </h2>
-      <p className="text-[13px] mt-[0.5rem] text-[#24292E] mb-2">
+      <p className="text-xs sm:text-[13px] mt-2 sm:mt-[0.5rem] text-[#24292E] mb-2 text-center">
         {location} {age > 0 ? `| ${age} yrs old` : ''}
       </p>
 
-      <div className="bg-[#C8EDDF80] mt-[0.5rem] text-[#48525B] min-w-[64px] h-[26px] flex items-center justify-center px-3 py-1 rounded-[8px] text-[13px] mb-2 whitespace-nowrap">
+      <div className="bg-[#C8EDDF80] mt-2 sm:mt-[0.5rem] text-[#48525B] min-w-[64px] h-[26px] flex items-center justify-center px-2 sm:px-3 py-1 rounded-[8px] text-xs sm:text-[13px] mb-2 whitespace-nowrap">
         {role}
       </div>
 
-      <div className="flex mb-6">
+      <div className="flex mb-4 sm:mb-6">
         {[1, 2, 3, 4, 5].map((star) => (
           <span
             key={star}
-            className={`text-[#EFAE73] mt-[0.5rem] ${star <= Math.round(rating) ? 'opacity-100' : 'opacity-30'}`}
+            className={`text-[#EFAE73] mt-2 sm:mt-[0.5rem] text-sm sm:text-base ${star <= Math.round(rating) ? 'opacity-100' : 'opacity-30'}`}
           >
             ★
           </span>
@@ -72,32 +72,40 @@ const CandidateProfileAbout: React.FC<CandidateProfileAboutProps> = ({
       </div>
 
       <div className="w-full">
-        <h3 className="text-[#246D51] font-semibold text-[16px] mb-2">About</h3>
-        <p className="text-[13px] text-[#48525B] mb-6">{bio}</p>
+        <h3 className="text-[#246D51] font-semibold text-sm sm:text-[16px] mb-2">
+          About
+        </h3>
+        <p className="text-xs sm:text-[13px] text-[#48525B] mb-4 sm:mb-6 leading-relaxed">
+          {bio}
+        </p>
 
-        <h3 className="text-[#246D51] font-semibold text-[16px] mb-2">
+        <h3 className="text-[#246D51] font-semibold text-sm sm:text-[16px] mb-2">
           Contact Details
         </h3>
-        <p className="text-[13px] text-[#246D51]">{phone}</p>
+        <p className="text-xs sm:text-[13px] text-[#246D51] break-all">
+          {phone}
+        </p>
 
-        <h3 className="text-[#246D51] font-semibold text-[16px] mt-4 mb-2">
+        <h3 className="text-[#246D51] font-semibold text-sm sm:text-[16px] mt-3 sm:mt-4 mb-2">
           Email
         </h3>
-        <p className="text-[13px] text-[#246D51]">{email}</p>
+        <p className="text-xs sm:text-[13px] text-[#246D51] break-all">
+          {email}
+        </p>
 
         {showAdminActions && (
-          <div className="mt-6 flex gap-2">
+          <div className="mt-4 sm:mt-6 flex gap-2">
             {isBlocked ? (
               <button
                 onClick={onUnblockUser}
-                className="bg-green-600 text-white px-4 py-2 rounded-md w-full"
+                className="bg-green-600 text-white px-3 sm:px-4 py-2 rounded-md w-full text-sm"
               >
                 Unblock User
               </button>
             ) : (
               <button
                 onClick={onBlockUser}
-                className="bg-[#993018] text-white px-4 py-2 rounded-md w-full"
+                className="bg-[#993018] text-white px-3 sm:px-4 py-2 rounded-md w-full text-sm"
               >
                 Block User
               </button>

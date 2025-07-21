@@ -106,23 +106,30 @@ const StaffPage: React.FC = () => {
   };
 
   return (
-    <div className="rounded-lg w-full mx-auto">
-      <div className="mb-6 flex justify-between items-center">
+    <div className="rounded-lg w-full mx-auto p-3 sm:p-4 lg:p-6">
+      <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-800">My Staff</h1>
-          <p className="text-gray-600 mt-2">Here are the names of your staff</p>
+          <h1 className="text-xl sm:text-2xl font-semibold text-gray-800">
+            My Staff
+          </h1>
+          <p className="text-sm sm:text-base text-gray-600 mt-1 sm:mt-2">
+            Here are the names of your staff
+          </p>
         </div>
 
         {/* Search Bar */}
-        <div className="relative">
+        <div className="relative w-full sm:w-auto">
           <input
             type="text"
             placeholder="Search staff..."
-            className="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full sm:w-64 pl-9 sm:pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+          <FaSearch
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+            size={14}
+          />
         </div>
       </div>
 
@@ -136,71 +143,79 @@ const StaffPage: React.FC = () => {
         </div>
       ) : (
         <div className="bg-white rounded-lg overflow-hidden">
-          <div className="grid grid-cols-5 bg-[#C8EDDF80] px-4 h-[56px] items-center text-sm font-medium text-gray-600">
-            <div>Employee Name</div>
-            <div>Location</div>
-            <div>Email</div>
-            <div>Age</div>
-            <div>Status</div>
-          </div>
-
-          {filteredEmployees && filteredEmployees.length > 0 ? (
-            filteredEmployees.map((employee) => (
-              <div
-                key={employee.id}
-                className="grid grid-cols-5 items-center px-4 h-[56px] mb-2 last:mb-0 bg-white"
-              >
-                <div className="flex items-center gap-2 relative">
-                  <div className="bg-gray-200 rounded-full p-2 flex items-center justify-center relative">
-                    {employee.avatar ? (
-                      <img
-                        src={employee.avatar}
-                        alt={`${employee.first_name} ${employee.last_name}`}
-                        className="w-6 h-6 rounded-full object-cover"
-                      />
-                    ) : (
-                      <FaUser className="text-white" />
-                    )}
-                    <div
-                      className={`absolute w-3 h-3 ${employee.status === 1 ? 'bg-green-500' : 'bg-red-500'} rounded-full -top-1 -right-1 border-2 border-white`}
-                    />
-                  </div>
-                  <span>
-                    {employee.first_name} {employee.last_name}
-                  </span>
-                </div>
-                <div>{extractLocation(employee.address)}</div>
-                <div className="truncate">{employee.email}</div>
-                <div>{calculateAge(employee.dob)}</div>
-                <div className="flex justify-between items-center">
-                  <span
-                    className={`px-3 py-1 rounded-full text-xs ${
-                      employee.is_verified === 1
-                        ? 'bg-green-100 text-green-700'
-                        : 'bg-yellow-100 text-yellow-700'
-                    }`}
-                  >
-                    {employee.is_verified === 1 ? 'Verified' : 'Unverified'}
-                  </span>
-                  <Link to={`/employer/staff/profile/${employee.id}`}>
-                    <button className="bg-green-200 text-green-800 px-3 py-1 rounded-md text-sm">
-                      View Profile
-                    </button>
-                  </Link>
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="py-8 text-center text-gray-500">
-              <p>No staff members found</p>
-              {/* <p className="mt-2 text-sm">You haven't added any staff members yet.</p>
-              <Link to="/employer/staff/add">
-                <button className="mt-4 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors">
-                  Add Staff Member
-                </button>
-              </Link> */}
+          <div className="overflow-x-auto">
+            <div className="grid grid-cols-5 bg-[#C8EDDF80] px-3 sm:px-4 h-[48px] sm:h-[56px] items-center text-xs sm:text-sm font-medium text-gray-600 min-w-[600px]">
+              <div>Employee Name</div>
+              <div>Location</div>
+              <div>Email</div>
+              <div>Age</div>
+              <div>Status</div>
             </div>
-          )}
+
+            {filteredEmployees && filteredEmployees.length > 0 ? (
+              filteredEmployees.map((employee) => (
+                <div
+                  key={employee.id}
+                  className="grid grid-cols-5 items-center px-3 sm:px-4 h-[48px] sm:h-[56px] mb-2 last:mb-0 bg-white min-w-[600px]"
+                >
+                  <div className="flex items-center gap-2 relative">
+                    <div className="bg-gray-200 rounded-full p-1.5 sm:p-2 flex items-center justify-center relative">
+                      {employee.avatar ? (
+                        <img
+                          src={employee.avatar}
+                          alt={`${employee.first_name} ${employee.last_name}`}
+                          className="w-5 h-5 sm:w-6 sm:h-6 rounded-full object-cover"
+                        />
+                      ) : (
+                        <FaUser className="text-white text-xs sm:text-sm" />
+                      )}
+                      <div
+                        className={`absolute w-2.5 h-2.5 sm:w-3 sm:h-3 ${employee.status === 1 ? 'bg-green-500' : 'bg-red-500'} rounded-full -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 border-2 border-white`}
+                      />
+                    </div>
+                    <span className="text-xs sm:text-sm truncate">
+                      {employee.first_name} {employee.last_name}
+                    </span>
+                  </div>
+                  <div className="text-xs sm:text-sm truncate">
+                    {extractLocation(employee.address)}
+                  </div>
+                  <div className="text-xs sm:text-sm truncate">
+                    {employee.email}
+                  </div>
+                  <div className="text-xs sm:text-sm">
+                    {calculateAge(employee.dob)}
+                  </div>
+                  <div className="flex justify-between items-center gap-2">
+                    <span
+                      className={`px-2 sm:px-3 py-1 rounded-full text-xs ${
+                        employee.is_verified === 1
+                          ? 'bg-green-100 text-green-700'
+                          : 'bg-yellow-100 text-yellow-700'
+                      }`}
+                    >
+                      {employee.is_verified === 1 ? 'Verified' : 'Unverified'}
+                    </span>
+                    <Link to={`/employer/staff/profile/${employee.id}`}>
+                      <button className="bg-green-200 text-green-800 px-2 sm:px-3 py-1 rounded-md text-xs sm:text-sm whitespace-nowrap">
+                        View Profile
+                      </button>
+                    </Link>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="py-8 text-center text-gray-500">
+                <p>No staff members found</p>
+                {/* <p className="mt-2 text-sm">You haven't added any staff members yet.</p>
+                <Link to="/employer/staff/add">
+                  <button className="mt-4 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors">
+                    Add Staff Member
+                  </button>
+                </Link> */}
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>

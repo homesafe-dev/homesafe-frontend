@@ -138,9 +138,17 @@ const AdminSettings: React.FC = () => {
       </div>
 
       {/* Header with Meet all admins, View All, and Create New Admin */}
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-xl font-semibold">Meet all admins</h1>
-        <div className="flex items-center gap-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+        <div className="flex items-center justify-between w-full sm:justify-start sm:gap-4">
+          <h1 className="text-lg sm:text-xl font-semibold">Meet all admins</h1>
+          <button
+            className="text-sm text-gray-600 hover:text-gray-800 sm:hidden"
+            onClick={() => navigate('/admin/all-admins')}
+          >
+            View All
+          </button>
+        </div>
+        <div className="hidden sm:flex items-center gap-8">
           <button
             className="text-sm text-gray-600 hover:text-gray-800"
             onClick={() => navigate('/admin/all-admins')}
@@ -154,6 +162,12 @@ const AdminSettings: React.FC = () => {
             <span className="mr-1">+</span> Create New Admin
           </button>
         </div>
+        <button
+          onClick={() => setShowCreateModal(true)}
+          className="px-3 py-2 bg-[#A5EA91] text-[#174B35] rounded-md flex items-center text-sm w-full justify-center sm:hidden"
+        >
+          <span className="mr-1">+</span> Create New Admin
+        </button>
       </div>
 
       {error && (
@@ -169,16 +183,28 @@ const AdminSettings: React.FC = () => {
         </div>
       ) : admins.length > 0 ? (
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full text-xs sm:text-sm min-w-[700px]">
             <thead>
               <tr className="text-left text-gray-700 bg-[#C8EDDF80]">
-                <th className="py-3 px-4">Full Name</th>
-                <th className="py-3 px-4">Email</th>
-                <th className="py-3 px-4">Phone Number</th>
-                <th className="py-3 px-4">Date of Birth</th>
-                <th className="py-3 px-4">Gender</th>
-                <th className="py-3 px-4">Status</th>
-                <th className="py-3 px-4"></th>
+                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                  Full Name
+                </th>
+                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                  Email
+                </th>
+                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                  Phone Number
+                </th>
+                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                  Date of Birth
+                </th>
+                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                  Gender
+                </th>
+                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                  Status
+                </th>
+                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm"></th>
               </tr>
             </thead>
             <tbody>
@@ -187,8 +213,8 @@ const AdminSettings: React.FC = () => {
                   key={admin.id}
                   className="border-b border-gray-200 hover:bg-gray-50"
                 >
-                  <td className="py-3 px-4 flex items-center">
-                    <div className="w-8 h-8 rounded-full bg-gray-200 mr-2 overflow-hidden">
+                  <td className="py-2 sm:py-3 px-2 sm:px-4 flex items-center text-xs sm:text-sm">
+                    <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gray-200 mr-2 overflow-hidden">
                       {admin.avatar ? (
                         <img
                           src={admin.avatar}
@@ -196,16 +222,20 @@ const AdminSettings: React.FC = () => {
                           className="w-full h-full object-cover"
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-gray-500">
+                        <div className="w-full h-full flex items-center justify-center text-gray-500 text-xs">
                           {admin.first_name?.charAt(0) || 'A'}
                         </div>
                       )}
                     </div>
-                    {`${admin.first_name} ${admin.last_name}`}
+                    <span className="truncate">{`${admin.first_name} ${admin.last_name}`}</span>
                   </td>
-                  <td className="py-3 px-4">{admin.email}</td>
-                  <td className="py-3 px-4">{admin.phone}</td>
-                  <td className="py-3 px-4">
+                  <td className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                    <span className="truncate block">{admin.email}</span>
+                  </td>
+                  <td className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                    <span className="truncate block">{admin.phone}</span>
+                  </td>
+                  <td className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
                     {admin.dob
                       ? (() => {
                           try {
@@ -216,10 +246,12 @@ const AdminSettings: React.FC = () => {
                         })()
                       : 'N/A'}
                   </td>
-                  <td className="py-3 px-4 capitalize">{admin.gender}</td>
-                  <td className="py-3 px-4">
+                  <td className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm capitalize">
+                    {admin.gender}
+                  </td>
+                  <td className="py-2 sm:py-3 px-2 sm:px-4">
                     <span
-                      className={`px-3 py-1 rounded-full text-xs ${
+                      className={`px-2 sm:px-3 py-1 rounded-full text-[10px] sm:text-xs ${
                         admin.is_verified
                           ? 'bg-green-100 text-green-700'
                           : 'bg-yellow-100 text-yellow-700'

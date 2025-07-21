@@ -112,11 +112,11 @@ const ResourcesPage: React.FC = () => {
           onClose={() => setIsShareModalOpen(false)}
         />
 
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-2xl font-semibold">Resources</h1>
-          <div className="flex items-center">
-            <div className="relative rounded-[16px] border border-gray-100 px-4 py-2 flex items-center w-[480px]">
-              <FiSearch className="text-gray-400 mr-2" />
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 sm:mb-8 gap-4">
+          <h1 className="text-xl sm:text-2xl font-semibold">Resources</h1>
+          <div className="flex items-center w-full sm:w-auto">
+            <div className="relative rounded-[16px] border border-gray-100 px-4 py-2 flex items-center w-full sm:w-[320px] md:w-[480px]">
+              <FiSearch className="text-gray-400 mr-2 flex-shrink-0" />
               <input
                 type="text"
                 placeholder="Search for video, link"
@@ -136,7 +136,7 @@ const ResourcesPage: React.FC = () => {
           <div className="text-center text-red-500 py-8">{error}</div>
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {resources.map((resource) => (
                 <div
                   key={resource.id}
@@ -146,7 +146,7 @@ const ResourcesPage: React.FC = () => {
                     <img
                       src={`https://img.youtube.com/vi/${getYoutubeVideoId(resource.video_link)}/hqdefault.jpg`}
                       alt={`${resource.occupation.name} resource`}
-                      className="w-full h-48 object-cover"
+                      className="w-full h-40 sm:h-48 object-cover"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
                         target.src = 'https://via.placeholder.com/400x200';
@@ -154,13 +154,13 @@ const ResourcesPage: React.FC = () => {
                     />
                   </div>
 
-                  <div className="p-4">
+                  <div className="p-3 sm:p-4">
                     <div className="flex justify-between items-start relative">
-                      <h3 className="font-medium text-gray-900">
+                      <h3 className="font-medium text-gray-900 text-sm sm:text-base truncate pr-2">
                         {resource.occupation.name} Training
                       </h3>
                       <button
-                        className="text-gray-500 hover:text-gray-700"
+                        className="text-gray-500 hover:text-gray-700 flex-shrink-0"
                         onClick={(e) => {
                           e.stopPropagation();
                           toggleMenu(resource.id);
@@ -191,16 +191,16 @@ const ResourcesPage: React.FC = () => {
                       )}
                     </div>
 
-                    <p className="mt-2 text-sm text-gray-600">
+                    <p className="mt-2 text-xs sm:text-sm text-gray-600 line-clamp-2">
                       {resource.description}
                     </p>
 
-                    <div className="mt-4 flex justify-between items-center">
+                    <div className="mt-3 sm:mt-4 flex justify-between items-center">
                       <a
                         href={resource.video_link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-blue-500 text-sm hover:underline"
+                        className="text-blue-500 text-xs sm:text-sm hover:underline"
                       >
                         Watch Video
                       </a>
@@ -215,38 +215,100 @@ const ResourcesPage: React.FC = () => {
 
             {/* Pagination */}
             {paginationMeta && (
-              <div className="flex justify-center mt-8">
-                <nav className="flex items-center space-x-2">
+              <div className="flex justify-center mt-6 sm:mt-8">
+                <nav className="flex items-center space-x-1 sm:space-x-2">
                   <button
                     onClick={() =>
                       handlePageChange(paginationMeta.current_page - 1)
                     }
                     disabled={paginationMeta.current_page === 1}
-                    className={`px-3 py-1 rounded ${
+                    className={`px-2 sm:px-3 py-1 rounded text-sm ${
                       paginationMeta.current_page === 1
                         ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                         : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                     }`}
                   >
-                    Previous
+                    <span className="hidden sm:inline">Previous</span>
+                    <span className="sm:hidden">Prev</span>
                   </button>
 
-                  {Array.from(
-                    { length: paginationMeta.last_page },
-                    (_, i) => i + 1
-                  ).map((page) => (
-                    <button
-                      key={page}
-                      onClick={() => handlePageChange(page)}
-                      className={`px-3 py-1 rounded ${
-                        page === paginationMeta.current_page
-                          ? 'bg-green-500 text-white'
-                          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                      }`}
-                    >
-                      {page}
-                    </button>
-                  ))}
+                  {/* Show limited page numbers on mobile */}
+                  {paginationMeta.last_page <= 5 ? (
+                    Array.from(
+                      { length: paginationMeta.last_page },
+                      (_, i) => i + 1
+                    ).map((page) => (
+                      <button
+                        key={page}
+                        onClick={() => handlePageChange(page)}
+                        className={`px-2 sm:px-3 py-1 rounded text-sm ${
+                          page === paginationMeta.current_page
+                            ? 'bg-green-500 text-white'
+                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    ))
+                  ) : (
+                    <>
+                      {/* Show current page and adjacent pages on mobile */}
+                      {paginationMeta.current_page > 2 && (
+                        <>
+                          <button
+                            onClick={() => handlePageChange(1)}
+                            className="px-2 sm:px-3 py-1 rounded text-sm bg-gray-200 text-gray-700 hover:bg-gray-300"
+                          >
+                            1
+                          </button>
+                          {paginationMeta.current_page > 3 && (
+                            <span className="px-1 text-gray-500">...</span>
+                          )}
+                        </>
+                      )}
+
+                      {[
+                        paginationMeta.current_page - 1,
+                        paginationMeta.current_page,
+                        paginationMeta.current_page + 1,
+                      ]
+                        .filter(
+                          (page) =>
+                            page >= 1 && page <= paginationMeta.last_page
+                        )
+                        .map((page) => (
+                          <button
+                            key={page}
+                            onClick={() => handlePageChange(page)}
+                            className={`px-2 sm:px-3 py-1 rounded text-sm ${
+                              page === paginationMeta.current_page
+                                ? 'bg-green-500 text-white'
+                                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                            }`}
+                          >
+                            {page}
+                          </button>
+                        ))}
+
+                      {paginationMeta.current_page <
+                        paginationMeta.last_page - 1 && (
+                        <>
+                          {paginationMeta.current_page <
+                            paginationMeta.last_page - 2 && (
+                            <span className="px-1 text-gray-500">...</span>
+                          )}
+                          <button
+                            onClick={() =>
+                              handlePageChange(paginationMeta.last_page)
+                            }
+                            className="px-2 sm:px-3 py-1 rounded text-sm bg-gray-200 text-gray-700 hover:bg-gray-300"
+                          >
+                            {paginationMeta.last_page}
+                          </button>
+                        </>
+                      )}
+                    </>
+                  )}
 
                   <button
                     onClick={() =>
@@ -255,7 +317,7 @@ const ResourcesPage: React.FC = () => {
                     disabled={
                       paginationMeta.current_page === paginationMeta.last_page
                     }
-                    className={`px-3 py-1 rounded ${
+                    className={`px-2 sm:px-3 py-1 rounded text-sm ${
                       paginationMeta.current_page === paginationMeta.last_page
                         ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                         : 'bg-gray-200 text-gray-700 hover:bg-gray-300'

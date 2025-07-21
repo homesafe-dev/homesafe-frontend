@@ -233,14 +233,16 @@ const EmployeeProfilePage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen">
-      <div className="mb-6">
+    <div className="min-h-screen px-4 sm:px-0">
+      <div className="mb-4 sm:mb-6">
         <button
           className="flex items-center text-gray-600 hover:text-gray-800"
           onClick={() => navigate(-1)}
         >
           <FaArrowLeft className="mr-2" />
-          <span className="text-lg font-medium">Employee Profile</span>
+          <span className="text-base sm:text-lg font-medium">
+            Employee Profile
+          </span>
         </button>
       </div>
 
@@ -251,16 +253,16 @@ const EmployeeProfilePage: React.FC = () => {
       )}
 
       {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 text-sm">
           {error}
         </div>
       )}
 
-      <div className="bg-white rounded-lg shadow p-8 max-w-4xl mb-6">
+      <div className="bg-white rounded-lg shadow p-4 sm:p-6 lg:p-8 max-w-4xl mb-6">
         <form onSubmit={handleSubmit}>
-          <div className="flex flex-col items-center mb-8">
+          <div className="flex flex-col items-center mb-6 sm:mb-8">
             <div className="relative mb-4">
-              <div className="w-32 h-32 rounded-full bg-[#D9D9D9] flex items-center justify-center overflow-hidden">
+              <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-[#D9D9D9] flex items-center justify-center overflow-hidden">
                 {profileImage ? (
                   <img
                     src={profileImage}
@@ -270,22 +272,22 @@ const EmployeeProfilePage: React.FC = () => {
                 ) : (
                   <div className="w-full h-full" />
                 )}
-                <div className="absolute top-2 right-0 mr-2">
-                  <div className="w-4 h-4 bg-gray-600 rounded-full"></div>
+                <div className="absolute top-1 right-0 sm:top-2 mr-1 sm:mr-2">
+                  <div className="w-3 h-3 sm:w-4 sm:h-4 bg-gray-600 rounded-full"></div>
                 </div>
               </div>
             </div>
 
-            <div className="flex space-x-4">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto">
               <button
                 type="button"
                 onClick={handleDeleteImage}
-                className="px-4 py-2 border border-gray-300 rounded-md text-sm hover:bg-gray-50"
+                className="px-3 sm:px-4 py-2 border border-gray-300 rounded-md text-xs sm:text-sm hover:bg-gray-50 w-full sm:w-auto"
               >
                 Delete Image
               </button>
 
-              <label className="px-4 py-2 bg-[#A5EA91] text-[#24292E] rounded-md text-sm cursor-pointer hover:bg-green-200">
+              <label className="px-3 sm:px-4 py-2 bg-[#A5EA91] text-[#24292E] rounded-md text-xs sm:text-sm cursor-pointer hover:bg-green-200 text-center w-full sm:w-auto">
                 Change Image
                 <input
                   type="file"
@@ -297,11 +299,11 @@ const EmployeeProfilePage: React.FC = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 sm:gap-x-6 gap-y-4">
             <div>
               <label
                 htmlFor="firstName"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
               >
                 First Name
               </label>
@@ -312,14 +314,14 @@ const EmployeeProfilePage: React.FC = () => {
                 placeholder="eg. John"
                 value={formData.firstName}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800 placeholder-[#BDC2C7]"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800 placeholder-[#BDC2C7] text-sm"
               />
             </div>
 
             <div>
               <label
                 htmlFor="lastName"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
               >
                 Last Name
               </label>
@@ -330,7 +332,7 @@ const EmployeeProfilePage: React.FC = () => {
                 placeholder="eg. Duke"
                 value={formData.lastName}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800 placeholder-[#BDC2C7]"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800 placeholder-[#BDC2C7] text-sm"
               />
             </div>
 

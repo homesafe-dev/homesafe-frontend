@@ -75,15 +75,15 @@ const PaystackPaymentModal: React.FC<PaystackPaymentModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50">
+    <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
       <div
         className="absolute inset-0 bg-black/30 backdrop-blur-sm"
         onClick={onClose}
       ></div>
-      <div className="bg-white rounded-lg w-full max-w-md relative z-10">
-        <div className="p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-medium text-gray-800">
+      <div className="bg-white rounded-lg w-full max-w-md relative z-10 max-h-[90vh] overflow-y-auto">
+        <div className="p-4 sm:p-6">
+          <div className="flex justify-between items-center mb-4 sm:mb-6">
+            <h2 className="text-xl sm:text-2xl font-medium text-gray-800">
               Top Up Wallet
             </h2>
             <button
@@ -91,19 +91,19 @@ const PaystackPaymentModal: React.FC<PaystackPaymentModalProps> = ({
               className="rounded-full p-1 hover:bg-gray-100"
               disabled={loading}
             >
-              <FiX size={20} />
+              <FiX size={18} />
             </button>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                 Amount (NGN)
               </label>
               <input
                 type="text"
                 placeholder="Enter amount"
-                className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full border border-gray-300 rounded-lg p-2 sm:p-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm sm:text-base"
                 value={amount}
                 onChange={handleAmountChange}
                 disabled={loading}
@@ -111,28 +111,28 @@ const PaystackPaymentModal: React.FC<PaystackPaymentModalProps> = ({
             </div>
 
             {error && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-                <p className="text-red-600 text-sm">{error}</p>
+              <div className="bg-red-50 border border-red-200 rounded-lg p-2 sm:p-3">
+                <p className="text-red-600 text-xs sm:text-sm">{error}</p>
               </div>
             )}
 
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-              <p className="text-blue-600 text-sm">
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-2 sm:p-3">
+              <p className="text-blue-600 text-xs sm:text-sm">
                 You will be redirected to Paystack to complete your payment
                 securely.
               </p>
             </div>
           </div>
 
-          <div className="mt-6 space-y-3">
+          <div className="mt-4 sm:mt-6 space-y-2 sm:space-y-3">
             <button
               onClick={handlePayment}
               disabled={loading || !amount || parseFloat(amount) <= 0}
-              className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white py-3 rounded-lg font-medium transition-colors"
+              className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white py-2 sm:py-3 rounded-lg font-medium transition-colors text-sm sm:text-base"
             >
               {loading ? (
                 <div className="flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                  <div className="animate-spin rounded-full h-4 w-4 sm:h-5 sm:w-5 border-b-2 border-white mr-2"></div>
                   Processing...
                 </div>
               ) : (
@@ -143,7 +143,7 @@ const PaystackPaymentModal: React.FC<PaystackPaymentModalProps> = ({
             <button
               onClick={onClose}
               disabled={loading}
-              className="w-full bg-gray-100 hover:bg-gray-200 disabled:bg-gray-50 text-gray-700 py-3 rounded-lg font-medium transition-colors"
+              className="w-full bg-gray-100 hover:bg-gray-200 disabled:bg-gray-50 text-gray-700 py-2 sm:py-3 rounded-lg font-medium transition-colors text-sm sm:text-base"
             >
               Cancel
             </button>
