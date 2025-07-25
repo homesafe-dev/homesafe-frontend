@@ -105,6 +105,7 @@ import About from '../pages/Landing Page/About';
 import Artisans from '../pages/Landing Page/Artisans';
 import Support from '../pages/Landing Page/Support';
 import TestPage from '../pages/TestPage';
+import ErrorPage from '../pages/ErrorPage';
 
 export const router = createBrowserRouter([
   // {
@@ -114,6 +115,7 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: <Home />,
+    errorElement: <ErrorPage />,
   },
   {
     path: 'about',
@@ -708,5 +710,10 @@ export const router = createBrowserRouter([
         ),
       },
     ],
+  },
+  // Catch-all route for 404 errors
+  {
+    path: '*',
+    element: <ErrorPage />,
   },
 ]);
