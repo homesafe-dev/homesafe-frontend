@@ -3,6 +3,7 @@ import axiosInstance from './axiosConfig';
 // Resources API endpoints
 const RESOURCES_ENDPOINTS = {
   LEARNING_RESOURCES: '/learning-resources',
+  RECOMMEND_RESOURCE: '/learning-resources/recommend',
 };
 
 // Resources API service
@@ -50,6 +51,28 @@ const resourcesApi = {
       return response.data;
     } catch (error) {
       console.error('Error fetching learning resources by occupation:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Recommend a learning resource to a user
+   * @param userId - ID of the user to recommend the resource to
+   * @param learningResourceId - ID of the learning resource to recommend
+   * @returns Promise with the API response
+   */
+  recommendResource: async (userId: number, learningResourceId: number) => {
+    try {
+      const response = await axiosInstance.post(
+        `${RESOURCES_ENDPOINTS.RECOMMEND_RESOURCE}?user`,
+        {
+          user_ids: [userId], // Send as array
+          learning_resource_id: learningResourceId,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error recommending resource:', error);
       throw error;
     }
   },

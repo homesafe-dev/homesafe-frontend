@@ -10,6 +10,7 @@ import LogoutIcon from '../../../assets/icons/logout.svg';
 import KycIcon from '../../../assets/icons/kyc.svg';
 import SecurityIcon from '../../../assets/icons/security.svg';
 import userApi from '../../../api/userApi';
+import Toast from '../../common/Toast';
 
 interface UserProfile {
   id: number;
@@ -45,8 +46,21 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, isMobile = false }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [toast, setToast] = useState({
+    message: '',
+    type: 'success' as 'success' | 'error' | 'info',
+    isVisible: false,
+  });
+
+  // Toast helper functions
+  const showToast = (message: string, type: 'success' | 'error' | 'info') => {
+    setToast({ message, type, isVisible: true });
+  };
+
+  const hideToast = () => {
+    setToast((prev) => ({ ...prev, isVisible: false }));
+  };
 
   // Fetch user profile data when component mounts
   useEffect(() => {
@@ -57,10 +71,15 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, isMobile = false }) => {
         if (response.status) {
           setUserProfile(response.data);
         } else {
-          setError(response.message || 'Failed to fetch user profile');
+          const errorMessage =
+            response.message || 'Failed to fetch user profile';
+          setError(errorMessage);
+          showToast(errorMessage, 'error');
         }
       } catch (err) {
-        setError('Error fetching user profile');
+        const errorMessage = 'Error fetching user profile';
+        setError(errorMessage);
+        showToast(errorMessage, 'error');
         console.error('Error fetching user profile:', err);
       } finally {
         setIsLoading(false);
@@ -131,25 +150,6 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, isMobile = false }) => {
               )}
               <span className="hidden sm:block text-lg lg:text-xl font-semibold text-gray-800 truncate">
                 Welcome, {userProfile.first_name} {userProfile.last_name}
-              </span>
-              <div className="hidden sm:block flex-shrink-0">
-                <EnvironmentIndicator />
-              </div>
-            </div>
-          ) : error ? (
-            <div className="flex items-center space-x-2 sm:space-x-4 flex-1 min-w-0">
-              {/* Mobile menu button */}
-              {isMobile && (
-                <button
-                  id="mobile-menu-button"
-                  onClick={onMenuToggle}
-                  className="p-1 sm:p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-500 lg:hidden flex-shrink-0"
-                >
-                  <HiOutlineMenu size={20} />
-                </button>
-              )}
-              <span className="hidden sm:block text-lg lg:text-xl font-semibold text-red-500">
-                Error loading profile
               </span>
               <div className="hidden sm:block flex-shrink-0">
                 <EnvironmentIndicator />
@@ -262,6 +262,14 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, isMobile = false }) => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         portalType="agent"
+      />
+
+      {/* Toast Notification */}
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.isVisible}
+        onClose={hideToast}
       />
     </header>
   );

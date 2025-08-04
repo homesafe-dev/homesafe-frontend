@@ -3,6 +3,7 @@ import { FiSearch, FiChevronDown } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import artisanApi from '../../api/artisanApi';
 import Avatar from '../../components/common/Avatar';
+import Toast from '../../components/common/Toast';
 
 interface Occupation {
   id: number;
@@ -67,6 +68,22 @@ const ArtisansPage: React.FC = () => {
   // Available job types (occupations)
   const [availableJobTypes, setAvailableJobTypes] = useState<string[]>([]);
 
+  // Toast state
+  const [toast, setToast] = useState({
+    message: '',
+    type: 'success' as 'success' | 'error' | 'info',
+    isVisible: false,
+  });
+
+  // Toast helper functions
+  const showToast = (message: string, type: 'success' | 'error' | 'info') => {
+    setToast({ message, type, isVisible: true });
+  };
+
+  const hideToast = () => {
+    setToast((prev) => ({ ...prev, isVisible: false }));
+  };
+
   // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -117,11 +134,15 @@ const ArtisansPage: React.FC = () => {
           });
           setAvailableJobTypes(Array.from(jobTypes).sort());
         } else {
-          setError(response.message || 'Failed to load artisans');
+          const errorMessage = response.message || 'Failed to load artisans';
+          setError(errorMessage);
+          showToast(errorMessage, 'error');
         }
       } catch (err: any) {
         console.error('Error fetching artisans:', err);
-        setError(err.message || 'Failed to load artisans');
+        const errorMessage = err.message || 'Failed to load artisans';
+        setError(errorMessage);
+        showToast(errorMessage, 'error');
       } finally {
         setLoading(false);
       }
@@ -432,10 +453,6 @@ const ArtisansPage: React.FC = () => {
           <div className="flex justify-center items-center h-40">
             <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-500"></div>
           </div>
-        ) : error ? (
-          <div className="bg-red-50 text-red-600 p-4 rounded-lg text-center">
-            {error}
-          </div>
         ) : filteredArtisans.length === 0 ? (
           <div className="text-center py-8 text-gray-500">
             No artisans found matching your search criteria.
@@ -553,6 +570,14 @@ const ArtisansPage: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Toast Notification */}
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.isVisible}
+        onClose={hideToast}
+      />
     </div>
   );
 };

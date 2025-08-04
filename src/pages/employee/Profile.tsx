@@ -36,7 +36,6 @@ const EmployeeProfilePage: React.FC = () => {
   const navigate = useNavigate();
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   // userProfile state is used to store the full user data, but we extract specific fields to formData
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [formData, setFormData] = useState<ProfileFormData>({
@@ -121,7 +120,6 @@ const EmployeeProfilePage: React.FC = () => {
 
     try {
       setSalaryLoading(true);
-      setError(null);
 
       const response = await userApi.updateSalary(userProfile.id, {
         salary: parseFloat(salaryData.salary),
@@ -177,10 +175,10 @@ const EmployeeProfilePage: React.FC = () => {
             profileDescription: userData.profile_description || '',
           });
         } else {
-          setError('Failed to fetch user profile');
+          showToastNotification('Failed to fetch user profile', 'error');
         }
       } catch (err) {
-        setError('Error fetching user profile');
+        showToastNotification('Error fetching user profile', 'error');
         console.error('Error fetching user profile:', err);
       } finally {
         setLoading(false);
@@ -219,13 +217,15 @@ const EmployeeProfilePage: React.FC = () => {
       const response = await userApi.updateProfile(formDataObj);
 
       if (response.status) {
-        // Show success message or notification
-        alert('Profile updated successfully');
+        showToastNotification('Profile updated successfully', 'success');
       } else {
-        setError(response.message || 'Failed to update profile');
+        showToastNotification(
+          response.message || 'Failed to update profile',
+          'error'
+        );
       }
     } catch (err) {
-      setError('Error updating profile');
+      showToastNotification('Error updating profile', 'error');
       console.error('Error updating profile:', err);
     } finally {
       setLoading(false);
@@ -249,12 +249,6 @@ const EmployeeProfilePage: React.FC = () => {
       {loading && (
         <div className="flex justify-center items-center py-8">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
-        </div>
-      )}
-
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 text-sm">
-          {error}
         </div>
       )}
 

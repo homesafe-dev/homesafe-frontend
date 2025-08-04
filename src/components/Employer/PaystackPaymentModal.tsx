@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FiX } from 'react-icons/fi';
 import { useAuth } from '../../contexts/AuthContext';
 import walletApi from '../../api/walletApi';
+import Toast from '../common/Toast';
 
 interface PaystackPaymentModalProps {
   isOpen: boolean;
@@ -15,15 +16,30 @@ const PaystackPaymentModal: React.FC<PaystackPaymentModalProps> = ({
 }) => {
   const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
+  const [toast, setToast] = useState({
+    message: '',
+    type: 'success' as 'success' | 'error' | 'info',
+    isVisible: false,
+  });
+
+  // Toast helper functions
+  const showToast = (message: string, type: 'success' | 'error' | 'info') => {
+    setToast({ message, type, isVisible: true });
+  };
+
+  const hideToast = () => {
+    setToast((prev) => ({ ...prev, isVisible: false }));
+  };
   console.log('User:', user);
 
   if (!isOpen) return null;
 
   const handlePayment = async () => {
     if (!amount || parseFloat(amount) <= 0) {
-      setError('Please enter a valid amount');
+      const errorMessage = 'Please enter a valid amount';
+      setError(errorMessage);
+      showToast(errorMessage, 'error');
       return;
     }
 
@@ -55,11 +71,12 @@ const PaystackPaymentModal: React.FC<PaystackPaymentModalProps> = ({
       }
     } catch (err: any) {
       console.error('Payment initialization error:', err);
-      setError(
+      const errorMessage =
         err.response?.data?.message ||
-          err.message ||
-          'Failed to initialize payment. Please try again.'
-      );
+        err.message ||
+        'Failed to initialize payment. Please try again.';
+      setError(errorMessage);
+      showToast(errorMessage, 'error');
     } finally {
       setLoading(false);
     }
@@ -110,12 +127,6 @@ const PaystackPaymentModal: React.FC<PaystackPaymentModalProps> = ({
               />
             </div>
 
-            {error && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-2 sm:p-3">
-                <p className="text-red-600 text-xs sm:text-sm">{error}</p>
-              </div>
-            )}
-
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-2 sm:p-3">
               <p className="text-blue-600 text-xs sm:text-sm">
                 You will be redirected to Paystack to complete your payment
@@ -150,6 +161,14 @@ const PaystackPaymentModal: React.FC<PaystackPaymentModalProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Toast Notification */}
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.isVisible}
+        onClose={hideToast}
+      />
     </div>
   );
 };

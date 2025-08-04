@@ -4,6 +4,7 @@ import userRegistrationApi, {
   UserRegistrationData,
 } from '../api/userRegistrationApi';
 import adminApi from '../api/adminApi';
+import Toast from './common/Toast';
 
 interface CreateUserModalProps {
   isOpen: boolean;
@@ -24,9 +25,21 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({
   onSuccess,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
   const [occupations, setOccupations] = useState<Occupation[]>([]);
+  const [toast, setToast] = useState({
+    message: '',
+    type: 'success' as 'success' | 'error' | 'info',
+    isVisible: false,
+  });
+
+  // Toast helper functions
+  const showToast = (message: string, type: 'success' | 'error' | 'info') => {
+    setToast({ message, type, isVisible: true });
+  };
+
+  const hideToast = () => {
+    setToast((prev) => ({ ...prev, isVisible: false }));
+  };
 
   const [formData, setFormData] = useState({
     first_name: '',
@@ -147,18 +160,23 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({
       const response = await userRegistrationApi.registerUser(userData);
 
       if (response.status) {
-        setSuccess(
-          `${userType.charAt(0).toUpperCase() + userType.slice(1)} created successfully!`
-        );
+        const successMessage = `${userType.charAt(0).toUpperCase() + userType.slice(1)} created successfully!`;
+        setSuccess(successMessage);
+        showToast(successMessage, 'success');
         setTimeout(() => {
           handleClose();
           if (onSuccess) onSuccess();
         }, 1500);
       } else {
-        setError(response.message || `Failed to create ${userType}`);
+        const errorMessage = response.message || `Failed to create ${userType}`;
+        setError(errorMessage);
+        showToast(errorMessage, 'error');
       }
     } catch (err: any) {
-      setError(err.response?.data?.message || `Error creating ${userType}`);
+      const errorMessage =
+        err.response?.data?.message || `Error creating ${userType}`;
+      setError(errorMessage);
+      showToast(errorMessage, 'error');
     } finally {
       setIsLoading(false);
     }
@@ -181,18 +199,6 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({
             <FaTimes size={20} />
           </button>
         </div>
-
-        {error && (
-          <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
-            {error}
-          </div>
-        )}
-
-        {success && (
-          <div className="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
-            {success}
-          </div>
-        )}
 
         <div className="mb-4 p-4 bg-blue-50 border border-blue-200 text-blue-700 rounded">
           <p className="text-sm">
@@ -305,6 +311,14 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({
           </div>
         </form>
       </div>
+
+      {/* Toast Notification */}
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.isVisible}
+        onClose={hideToast}
+      />
     </div>
   );
 };

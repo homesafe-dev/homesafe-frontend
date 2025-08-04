@@ -25,7 +25,6 @@ const EmployeeKYCPage: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [formData, setFormData] = useState<KYCFormData>({
     idType: '',
@@ -64,10 +63,10 @@ const EmployeeKYCPage: React.FC = () => {
 
           // User profile loaded successfully
         } else {
-          setError('Failed to fetch user profile');
+          showToast('Failed to fetch user profile', 'error');
         }
       } catch (err) {
-        setError('Error fetching user profile');
+        showToast('Error fetching user profile', 'error');
         console.error('Error fetching user profile:', err);
       } finally {
         setLoading(false);
@@ -91,11 +90,10 @@ const EmployeeKYCPage: React.FC = () => {
     e.preventDefault();
     try {
       setSubmitting(true);
-      setError(null);
 
       // Validate form data
       if (!formData.idType || !formData.ninNumber) {
-        setError('Please fill in all required fields');
+        showToast('Please fill in all required fields', 'error');
         return;
       }
 
@@ -116,13 +114,17 @@ const EmployeeKYCPage: React.FC = () => {
           navigate('/employee/dashboard');
         }, 2000);
       } else {
-        setError(response.message || 'Failed to submit NIN verification');
+        showToast(
+          response.message || 'Failed to submit NIN verification',
+          'error'
+        );
       }
     } catch (err: any) {
-      setError(
+      showToast(
         err.response?.data?.message ||
           err.message ||
-          'Error submitting NIN verification'
+          'Error submitting NIN verification',
+        'error'
       );
       console.error('Error submitting NIN verification:', err);
     } finally {
@@ -161,10 +163,6 @@ const EmployeeKYCPage: React.FC = () => {
       {loading ? (
         <div className="flex justify-center items-center h-40">
           <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-500"></div>
-        </div>
-      ) : error ? (
-        <div className="bg-red-50 text-red-600 p-4 rounded-lg text-center mb-6">
-          {error}
         </div>
       ) : userProfile?.status === 1 ? (
         <div className="bg-white rounded-lg border-2 border-gray-300 shadow-sm p-6 sm:p-8 lg:p-12 max-w-3xl">

@@ -10,6 +10,7 @@ import {
   NotificationItem,
   convertApiNotificationToUI,
 } from '../../types/notification';
+import Toast from '../common/Toast';
 
 const NotificationsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -17,10 +18,25 @@ const NotificationsPage: React.FC = () => {
   // State for notifications
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   // State for active tab
   const [activeTab, setActiveTab] = useState<'unread' | 'read'>('unread');
+
+  // Toast state
+  const [toast, setToast] = useState({
+    message: '',
+    type: 'success' as 'success' | 'error' | 'info',
+    isVisible: false,
+  });
+
+  // Toast helper functions
+  const showToast = (message: string, type: 'success' | 'error' | 'info') => {
+    setToast({ message, type, isVisible: true });
+  };
+
+  const hideToast = () => {
+    setToast((prev) => ({ ...prev, isVisible: false }));
+  };
 
   // Fetch notifications from API
   const fetchNotifications = async () => {
@@ -34,11 +50,16 @@ const NotificationsPage: React.FC = () => {
         const uiNotifications = response.data.map(convertApiNotificationToUI);
         setNotifications(uiNotifications);
       } else {
-        setError(response.message || 'Failed to fetch notifications');
+        const errorMessage =
+          response.message || 'Failed to fetch notifications';
+        setError(errorMessage);
+        showToast(errorMessage, 'error');
       }
     } catch (err) {
       console.error('Error fetching notifications:', err);
-      setError('Failed to load notifications');
+      const errorMessage = 'Failed to load notifications';
+      setError(errorMessage);
+      showToast(errorMessage, 'error');
     } finally {
       setLoading(false);
     }
@@ -58,7 +79,9 @@ const NotificationsPage: React.FC = () => {
       );
     } catch (err) {
       console.error('Error marking all as read:', err);
-      setError('Failed to mark notifications as read');
+      const errorMessage = 'Failed to mark notifications as read';
+      setError(errorMessage);
+      showToast(errorMessage, 'error');
     }
   };
 
@@ -77,6 +100,7 @@ const NotificationsPage: React.FC = () => {
       );
     } catch (err) {
       console.error('Error marking notification as read:', err);
+      showToast('Failed to mark notification as read', 'error');
     }
   };
 
@@ -149,16 +173,6 @@ const NotificationsPage: React.FC = () => {
       {loading ? (
         <div className="text-center py-8 text-gray-500">
           Loading notifications...
-        </div>
-      ) : error ? (
-        <div className="text-center py-8 text-red-500">
-          {error}
-          <button
-            onClick={fetchNotifications}
-            className="block mx-auto mt-2 text-blue-600 hover:text-blue-800"
-          >
-            Try again
-          </button>
         </div>
       ) : filteredNotifications.length === 0 ? (
         <div className="text-center py-8 text-gray-500">
@@ -242,6 +256,14 @@ const NotificationsPage: React.FC = () => {
           ))}
         </div>
       )}
+
+      {/* Toast Notification */}
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.isVisible}
+        onClose={hideToast}
+      />
     </div>
   );
 };

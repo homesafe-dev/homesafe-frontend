@@ -80,6 +80,7 @@ import Medical from '../pages/employer/Medical';
 import ReviewsPage from '../pages/employer/Reviews';
 import Contracts from '../pages/employer/Contracts';
 import EmployerProposalDetails from '../pages/employer/ProposalDetails';
+import Suggestions from '../pages/employer/Suggestions';
 // Removed unused import: HomesafeForgotPasswordPage
 import Salary from '../pages/employee/Salary';
 import EmployeeMedical from '../pages/employee/Medical';
@@ -105,6 +106,7 @@ import About from '../pages/Landing Page/About';
 import Artisans from '../pages/Landing Page/Artisans';
 import Support from '../pages/Landing Page/Support';
 import TestPage from '../pages/TestPage';
+import ErrorPage from '../pages/ErrorPage';
 
 export const router = createBrowserRouter([
   // {
@@ -114,6 +116,7 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: <Home />,
+    errorElement: <ErrorPage />,
   },
   {
     path: 'about',
@@ -309,6 +312,14 @@ export const router = createBrowserRouter([
         element: protectEmployerRoute(
           <EmployerLayout>
             <StaffProfile />
+          </EmployerLayout>
+        ),
+      },
+      {
+        path: 'suggestions',
+        element: protectEmployerRoute(
+          <EmployerLayout>
+            <Suggestions />
           </EmployerLayout>
         ),
       },
@@ -708,5 +719,10 @@ export const router = createBrowserRouter([
         ),
       },
     ],
+  },
+  // Catch-all route for 404 errors
+  {
+    path: '*',
+    element: <ErrorPage />,
   },
 ]);

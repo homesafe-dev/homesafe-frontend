@@ -204,21 +204,25 @@ const CandidateTracker = () => {
                       <td className="px-4 py-3 whitespace-nowrap">
                         <span
                           className={`${
+                            employee.placement &&
                             employee.placement.toLowerCase() ===
-                            'no employer assigned'
+                              'no employer assigned'
                               ? 'text-gray-500 italic'
                               : 'text-gray-700'
                           }`}
                         >
-                          {employee.placement.toLowerCase() ===
-                          'no employer assigned'
+                          {employee.placement &&
+                          employee.placement.toLowerCase() ===
+                            'no employer assigned'
                             ? 'Not on placement'
-                            : employee.placement}
+                            : employee.placement || 'Not assigned'}
                         </span>
                       </td>
                       <td className="px-4 py-3 text-gray-700 whitespace-nowrap">
-                        {employee.gender.charAt(0).toUpperCase() +
-                          employee.gender.slice(1)}
+                        {employee.gender
+                          ? employee.gender.charAt(0).toUpperCase() +
+                            employee.gender.slice(1)
+                          : 'Not specified'}
                       </td>
                       <td className="px-4 py-3 text-gray-700 whitespace-nowrap">
                         {employee.phone}
@@ -226,13 +230,15 @@ const CandidateTracker = () => {
                       <td className="px-4 py-3 whitespace-nowrap">
                         <button
                           className={`px-3 py-1 rounded-full text-[13px] ${
-                            employee.status.toLowerCase().includes('not') ||
-                            employee.status.toLowerCase() === 'unverified'
+                            employee.status &&
+                            (employee.status.toLowerCase().includes('not') ||
+                              employee.status.toLowerCase() === 'unverified')
                               ? 'bg-red-100 text-red-800'
                               : 'bg-green-100 text-green-800'
                           }`}
                         >
-                          {employee.status.toLowerCase().includes('not')
+                          {employee.status &&
+                          employee.status.toLowerCase().includes('not')
                             ? 'Unverified'
                             : 'Verified'}
                         </button>
