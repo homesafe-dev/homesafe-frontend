@@ -7,6 +7,27 @@ import {
 import { FaHome, FaArrowLeft, FaExclamationTriangle } from 'react-icons/fa';
 import { IoRefreshOutline } from 'react-icons/io5';
 
+// Utility function to safely convert error to string
+const convertErrorToString = (error: unknown): string => {
+  if (error instanceof Error) {
+    return error.stack || error.message;
+  }
+  if (error === null || error === undefined) {
+    return 'Unknown error';
+  }
+  if (typeof error === 'string') {
+    return error;
+  }
+  if (typeof error === 'object') {
+    try {
+      return JSON.stringify(error, null, 2);
+    } catch {
+      return 'Error object';
+    }
+  }
+  return String(error);
+};
+
 interface ErrorPageProps {
   error?: Error | null;
   resetError?: () => void;
@@ -81,6 +102,9 @@ const ErrorPage: React.FC<ErrorPageProps> = ({ error, resetError }) => {
     }
   };
 
+  // Convert error to display string
+  const errorDisplayText = convertErrorToString(displayError);
+
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8 text-center">
@@ -152,11 +176,7 @@ const ErrorPage: React.FC<ErrorPageProps> = ({ error, resetError }) => {
               Error Details (Development Only)
             </summary>
             <div className="mt-2 p-4 bg-gray-100 rounded-lg text-xs text-gray-700 overflow-auto">
-              <pre className="whitespace-pre-wrap">
-                {displayError instanceof Error
-                  ? displayError.stack || displayError.message
-                  : JSON.stringify(displayError, null, 2)}
-              </pre>
+              <pre className="whitespace-pre-wrap">{errorDisplayText}</pre>
             </div>
           </details>
         )}

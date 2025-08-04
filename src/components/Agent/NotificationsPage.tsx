@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   IoCheckmarkCircleOutline,
   IoArrowBack,
@@ -18,6 +18,7 @@ const NotificationsPage: React.FC = () => {
   // State for notifications
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // State for active tab
   const [activeTab, setActiveTab] = useState<'unread' | 'read'>('unread');
@@ -38,14 +39,12 @@ const NotificationsPage: React.FC = () => {
     setToast((prev) => ({ ...prev, isVisible: false }));
   };
 
-  // Fetch notifications from API
-  const fetchNotifications = async () => {
+  // Memoize fetchNotifications
+  const fetchNotifications = useCallback(async () => {
     setLoading(true);
     setError(null);
-
     try {
       const response = await notificationApi.getNotifications();
-
       if (response.status && response.data) {
         const uiNotifications = response.data.map(convertApiNotificationToUI);
         setNotifications(uiNotifications);
@@ -63,7 +62,7 @@ const NotificationsPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   // Mark all as read
   const handleMarkAllAsRead = async () => {
@@ -118,7 +117,7 @@ const NotificationsPage: React.FC = () => {
   // Fetch notifications on component mount
   useEffect(() => {
     fetchNotifications();
-  }, []);
+  }, [fetchNotifications]);
 
   return (
     <div className="bg-white p-6">
@@ -134,6 +133,8 @@ const NotificationsPage: React.FC = () => {
       <p className="text-sm text-gray-500 mb-6">
         Keep track of all your notifications
       </p>
+
+      {error && <div className="text-red-500 text-sm mb-2">{error}</div>}
 
       <div className="flex justify-between mb-6">
         {/* Tabs */}

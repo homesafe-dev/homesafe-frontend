@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import adminApi from '../../../api/adminApi';
@@ -87,38 +87,35 @@ export default function AgentsTab() {
     }
   };
 
-  const fetchAgents = async () => {
+  // Memoize fetchAgents
+  const fetchAgents = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
 
-      // Use a larger limit to ensure we get all agents
-      const response = await adminApi.getAgentList(1, 100);
-      console.log('Agents API Response:', response); // Debug log
+      // Use a smaller limit for the dashboard preview
+      const response = await adminApi.getAgentList(1, 5);
+      console.log('Dashboard Agents API Response:', response); // Debug log
 
       if (response.status) {
         // Handle the new paginated response structure
         const agentData = response.data?.data || response.data || [];
-        console.log('Extracted agent data:', agentData); // Debug log
+        console.log('Extracted dashboard agent data:', agentData); // Debug log
         setAgents(agentData);
       } else {
-        const errorMessage = response.message || 'Failed to fetch agents';
-        setError(errorMessage);
-        showToast(errorMessage, 'error');
+        setError(response.message || 'Failed to fetch agents');
       }
     } catch (err) {
-      const errorMessage = 'Error fetching agents';
-      setError(errorMessage);
-      showToast(errorMessage, 'error');
+      setError('Error fetching agents');
       console.error('Error fetching agents:', err);
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchAgents();
-  }, []);
+  }, [fetchAgents]);
 
   return (
     <div className="overflow-x-auto">

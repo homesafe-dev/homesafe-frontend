@@ -16,6 +16,7 @@ interface CandidateProfileAboutProps {
   isBlocked?: boolean;
   onBlockUser?: () => void;
   onUnblockUser?: () => void;
+  onSuspendUser?: () => void;
   onAssignEmployer?: () => void;
 }
 
