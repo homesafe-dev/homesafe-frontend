@@ -32,8 +32,6 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
 }) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
   const [occupations, setOccupations] = useState<Occupation[]>([]);
   const [toast, setToast] = useState({
     message: '',
@@ -162,7 +160,8 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
         showToast(errorMessage, 'error');
       }
     } catch (err: any) {
-      const errorMessage = err.response?.data?.message || `Error creating ${userType}`;
+      const errorMessage =
+        err.response?.data?.message || `Error creating ${userType}`;
       setError(errorMessage);
       showToast(errorMessage, 'error');
     } finally {
@@ -184,8 +183,6 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
 
       <div className="max-w-2xl mx-auto">
         <h1 className="text-2xl font-semibold mb-6">{title}</h1>
-
-
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

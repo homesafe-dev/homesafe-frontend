@@ -48,19 +48,13 @@ const Toast: React.FC<ToastProps> = ({
   const getIcon = () => {
     switch (type) {
       case 'success':
-        return (
-          <IoCheckmarkCircleOutline size={20} className="text-white" />
-        );
+        return <IoCheckmarkCircleOutline size={20} className="text-white" />;
       case 'error':
         return <IoCloseCircleOutline size={20} className="text-white" />;
       case 'info':
-        return (
-          <IoInformationCircleOutline size={20} className="text-white" />
-        );
+        return <IoInformationCircleOutline size={20} className="text-white" />;
       default:
-        return (
-          <IoInformationCircleOutline size={20} className="text-white" />
-        );
+        return <IoInformationCircleOutline size={20} className="text-white" />;
     }
   };
 
@@ -69,7 +63,9 @@ const Toast: React.FC<ToastProps> = ({
       <div className="pointer-events-auto">
         <div
           className={`flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg max-w-md min-w-[300px] transform transition-all duration-300 ease-in-out ${getToastStyles()} ${
-            isVisible ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
+            isVisible
+              ? 'translate-x-0 opacity-100'
+              : 'translate-x-full opacity-0'
           }`}
         >
           {getIcon()}

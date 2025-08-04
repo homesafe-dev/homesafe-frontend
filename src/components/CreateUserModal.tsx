@@ -25,8 +25,6 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({
   onSuccess,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
   const [occupations, setOccupations] = useState<Occupation[]>([]);
   const [toast, setToast] = useState({
     message: '',
@@ -175,7 +173,8 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({
         showToast(errorMessage, 'error');
       }
     } catch (err: any) {
-      const errorMessage = err.response?.data?.message || `Error creating ${userType}`;
+      const errorMessage =
+        err.response?.data?.message || `Error creating ${userType}`;
       setError(errorMessage);
       showToast(errorMessage, 'error');
     } finally {
@@ -200,8 +199,6 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({
             <FaTimes size={20} />
           </button>
         </div>
-
-
 
         <div className="mb-4 p-4 bg-blue-50 border border-blue-200 text-blue-700 rounded">
           <p className="text-sm">

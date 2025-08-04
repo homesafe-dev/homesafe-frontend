@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { IoClose, IoSearch } from 'react-icons/io5';
+import { IoClose } from 'react-icons/io5';
 import { FiSearch, FiX } from 'react-icons/fi';
 import employerApi from '../../api/employerApi';
 import resourcesApi from '../../api/resourcesApi';
@@ -31,7 +31,9 @@ const EmployeeResourceShareModal: React.FC<EmployeeResourceShareModalProps> = ({
   resourceTitle,
 }) => {
   const [employees, setEmployees] = useState<Employee[]>([]);
-  const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
+  const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(
+    null
+  );
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoadingEmployees, setIsLoadingEmployees] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
@@ -61,7 +63,10 @@ const EmployeeResourceShareModal: React.FC<EmployeeResourceShareModalProps> = ({
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setSearchQuery('');
       }
     };
@@ -106,7 +111,10 @@ const EmployeeResourceShareModal: React.FC<EmployeeResourceShareModalProps> = ({
 
     try {
       setIsSharing(true);
-      const response = await resourcesApi.recommendResource(selectedEmployee.id, resourceId);
+      const response = await resourcesApi.recommendResource(
+        selectedEmployee.id,
+        resourceId
+      );
 
       if (response.status) {
         showToast(
@@ -122,7 +130,9 @@ const EmployeeResourceShareModal: React.FC<EmployeeResourceShareModalProps> = ({
       }
     } catch (err: any) {
       console.error('Error sharing resource:', err);
-      const errorMessage = err.response?.data?.message || 'An error occurred while sharing the resource';
+      const errorMessage =
+        err.response?.data?.message ||
+        'An error occurred while sharing the resource';
       showToast(errorMessage, 'error');
     } finally {
       setIsSharing(false);
@@ -153,11 +163,16 @@ const EmployeeResourceShareModal: React.FC<EmployeeResourceShareModalProps> = ({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
-      <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={handleClose}></div>
+      <div
+        className="absolute inset-0 bg-black/30 backdrop-blur-sm"
+        onClick={handleClose}
+      ></div>
       <div className="bg-white rounded-lg w-full max-w-md relative z-10">
         <div className="p-6">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-[25px] font-semibold text-[#24292E]">Share Resource</h2>
+            <h2 className="text-[25px] font-semibold text-[#24292E]">
+              Share Resource
+            </h2>
             <button
               onClick={handleClose}
               className="rounded-full p-1 hover:bg-gray-100"
@@ -200,11 +215,14 @@ const EmployeeResourceShareModal: React.FC<EmployeeResourceShareModalProps> = ({
                   <div className="font-medium pr-6">
                     {selectedEmployee.first_name} {selectedEmployee.last_name}
                   </div>
-                  {selectedEmployee.occupations && selectedEmployee.occupations.length > 0 && (
-                    <div className="text-sm text-gray-500">
-                      {selectedEmployee.occupations.map(occ => occ.name).join(', ')}
-                    </div>
-                  )}
+                  {selectedEmployee.occupations &&
+                    selectedEmployee.occupations.length > 0 && (
+                      <div className="text-sm text-gray-500">
+                        {selectedEmployee.occupations
+                          .map((occ) => occ.name)
+                          .join(', ')}
+                      </div>
+                    )}
                   <div className="text-xs text-gray-400">
                     {selectedEmployee.email}
                   </div>
@@ -227,11 +245,14 @@ const EmployeeResourceShareModal: React.FC<EmployeeResourceShareModalProps> = ({
                         <div className="font-medium">
                           {employee.first_name} {employee.last_name}
                         </div>
-                        {employee.occupations && employee.occupations.length > 0 && (
-                          <div className="text-sm text-gray-500">
-                            {employee.occupations.map(occ => occ.name).join(', ')}
-                          </div>
-                        )}
+                        {employee.occupations &&
+                          employee.occupations.length > 0 && (
+                            <div className="text-sm text-gray-500">
+                              {employee.occupations
+                                .map((occ) => occ.name)
+                                .join(', ')}
+                            </div>
+                          )}
                         <div className="text-xs text-gray-400">
                           {employee.email}
                         </div>

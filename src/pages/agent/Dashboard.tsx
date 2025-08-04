@@ -236,21 +236,24 @@ export default function AgentDashboard() {
                       <td className="px-6 py-4 text-[13px] font-normal whitespace-nowrap">
                         <span
                           className={`${
-                            employee.placement && employee.placement.toLowerCase() ===
-                            'no employer assigned'
+                            employee.placement &&
+                            employee.placement.toLowerCase() ===
+                              'no employer assigned'
                               ? 'text-gray-500 italic'
                               : 'text-[#24292E]'
                           }`}
                         >
-                          {employee.placement && employee.placement.toLowerCase() ===
-                          'no employer assigned'
+                          {employee.placement &&
+                          employee.placement.toLowerCase() ===
+                            'no employer assigned'
                             ? 'Not on placement'
                             : employee.placement || 'Not assigned'}
                         </span>
                       </td>
                       <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal whitespace-nowrap">
                         {employee.gender
-                          ? employee.gender.charAt(0).toUpperCase() + employee.gender.slice(1)
+                          ? employee.gender.charAt(0).toUpperCase() +
+                            employee.gender.slice(1)
                           : 'Not specified'}
                       </td>
                       <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal whitespace-nowrap">
@@ -259,13 +262,15 @@ export default function AgentDashboard() {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span
                           className={`px-3 py-1 rounded-full text-[13px] ${
-                            employee.status && (employee.status.toLowerCase().includes('not') ||
-                            employee.status.toLowerCase() === 'unverified')
+                            employee.status &&
+                            (employee.status.toLowerCase().includes('not') ||
+                              employee.status.toLowerCase() === 'unverified')
                               ? 'bg-red-100 text-red-800'
                               : 'bg-green-100 text-green-800'
                           }`}
                         >
-                          {employee.status && employee.status.toLowerCase().includes('not')
+                          {employee.status &&
+                          employee.status.toLowerCase().includes('not')
                             ? 'Unverified'
                             : 'Verified'}
                         </span>

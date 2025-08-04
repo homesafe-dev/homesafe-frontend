@@ -46,7 +46,6 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, isMobile = false }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [toast, setToast] = useState({
     message: '',
@@ -72,7 +71,8 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, isMobile = false }) => {
         if (response.status) {
           setUserProfile(response.data);
         } else {
-          const errorMessage = response.message || 'Failed to fetch user profile';
+          const errorMessage =
+            response.message || 'Failed to fetch user profile';
           setError(errorMessage);
           showToast(errorMessage, 'error');
         }

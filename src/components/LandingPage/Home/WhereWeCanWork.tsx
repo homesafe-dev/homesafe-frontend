@@ -1,9 +1,6 @@
 import React from 'react';
-import Homes from '../../../assets/images/Homes.png';
 import Homes2 from '../../../assets/images/Homes2.jpg';
-import Office from '../../../assets/images/Office.png';
 import LivingSpace from '../../../assets/images/LivingSpace.png';
-import Hotel from '../../../assets/images/Hotel.png';
 import Institutions from '../../../assets/images/Institutions.jpg';
 
 interface WorkCategoryProps {

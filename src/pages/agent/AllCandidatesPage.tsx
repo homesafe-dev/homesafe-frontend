@@ -21,7 +21,6 @@ const AllCandidatesPage = () => {
   const navigate = useNavigate();
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [toast, setToast] = useState({
@@ -88,8 +87,6 @@ const AllCandidatesPage = () => {
           <span className="sm:hidden">Add Candidate</span>
         </button>
       </div>
-
-
 
       {/* Subheader */}
       <div className="flex justify-between items-center mb-4 sm:mb-6">
@@ -189,7 +186,8 @@ const AllCandidatesPage = () => {
                     </td>
                     <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal whitespace-nowrap">
                       {employee.gender
-                        ? employee.gender.charAt(0).toUpperCase() + employee.gender.slice(1)
+                        ? employee.gender.charAt(0).toUpperCase() +
+                          employee.gender.slice(1)
                         : 'Not specified'}
                     </td>
                     <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal whitespace-nowrap">
@@ -198,13 +196,15 @@ const AllCandidatesPage = () => {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
                         className={`px-3 py-1 rounded-full text-[13px] ${
-                          employee.status && (employee.status.toLowerCase().includes('not') ||
-                          employee.status.toLowerCase() === 'unverified')
+                          employee.status &&
+                          (employee.status.toLowerCase().includes('not') ||
+                            employee.status.toLowerCase() === 'unverified')
                             ? 'bg-red-100 text-red-800'
                             : 'bg-green-100 text-green-800'
                         }`}
                       >
-                        {employee.status && employee.status.toLowerCase().includes('not')
+                        {employee.status &&
+                        employee.status.toLowerCase().includes('not')
                           ? 'Unverified'
                           : 'Verified'}
                       </span>

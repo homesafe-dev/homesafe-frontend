@@ -12,7 +12,8 @@ const SuggestionsPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [totalSuggestions, setTotalSuggestions] = useState<number>(0);
-  const [selectedSuggestion, setSelectedSuggestion] = useState<Suggestion | null>(null);
+  const [selectedSuggestion, setSelectedSuggestion] =
+    useState<Suggestion | null>(null);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
   const [isAcceptModalOpen, setIsAcceptModalOpen] = useState(false);
   const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
@@ -74,13 +75,19 @@ const SuggestionsPage: React.FC = () => {
   // Filter suggestions based on search term
   const filteredSuggestions = Array.isArray(suggestions)
     ? suggestions.filter((suggestion) => {
-        const employeeName = `${suggestion.employee.first_name} ${suggestion.employee.last_name}`.toLowerCase();
-        const agentName = `${suggestion.agent.first_name} ${suggestion.agent.last_name}`.toLowerCase();
+        const employeeName =
+          `${suggestion.employee.first_name} ${suggestion.employee.last_name}`.toLowerCase();
+        const agentName =
+          `${suggestion.agent.first_name} ${suggestion.agent.last_name}`.toLowerCase();
         return (
           employeeName.includes(searchTerm.toLowerCase()) ||
           agentName.includes(searchTerm.toLowerCase()) ||
-          suggestion.employee.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          suggestion.suggestion_reason.toLowerCase().includes(searchTerm.toLowerCase())
+          suggestion.employee.email
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
+          suggestion.suggestion_reason
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase())
         );
       })
     : [];
@@ -137,8 +144,10 @@ const SuggestionsPage: React.FC = () => {
     setIsAcceptModalOpen(true);
     // Set default start date to next Monday
     const nextMonday = new Date();
-    nextMonday.setDate(nextMonday.getDate() + ((1 + 7 - nextMonday.getDay()) % 7));
-    setContractTerms(prev => ({
+    nextMonday.setDate(
+      nextMonday.getDate() + ((1 + 7 - nextMonday.getDay()) % 7)
+    );
+    setContractTerms((prev) => ({
       ...prev,
       start_date: nextMonday.toISOString().split('T')[0],
     }));
@@ -154,15 +163,20 @@ const SuggestionsPage: React.FC = () => {
 
     try {
       setIsProcessing(true);
-      const response = await suggestionsApi.respondToSuggestion(selectedSuggestion.id, {
-        response: 'rejected',
-      });
+      const response = await suggestionsApi.respondToSuggestion(
+        selectedSuggestion.id,
+        {
+          response: 'rejected',
+        }
+      );
 
       if (response.status) {
         showToast('Suggestion rejected successfully', 'success');
         // Refresh suggestions list
-        const updatedSuggestions = suggestions.map(s =>
-          s.id === selectedSuggestion.id ? { ...s, status: 'rejected' as const } : s
+        const updatedSuggestions = suggestions.map((s) =>
+          s.id === selectedSuggestion.id
+            ? { ...s, status: 'rejected' as const }
+            : s
         );
         setSuggestions(updatedSuggestions);
         setIsDetailsModalOpen(false);
@@ -172,7 +186,10 @@ const SuggestionsPage: React.FC = () => {
       }
     } catch (err: any) {
       console.error('Error rejecting suggestion:', err);
-      const errorMessage = err.response?.data?.message || err.message || 'Failed to reject suggestion';
+      const errorMessage =
+        err.response?.data?.message ||
+        err.message ||
+        'Failed to reject suggestion';
       showToast(errorMessage, 'error');
     } finally {
       setIsProcessing(false);
@@ -189,16 +206,24 @@ const SuggestionsPage: React.FC = () => {
 
     try {
       setIsProcessing(true);
-      const response = await suggestionsApi.respondToSuggestion(selectedSuggestion.id, {
-        response: 'accepted',
-        ...contractTerms,
-      });
+      const response = await suggestionsApi.respondToSuggestion(
+        selectedSuggestion.id,
+        {
+          response: 'accepted',
+          ...contractTerms,
+        }
+      );
 
       if (response.status) {
-        showToast('Suggestion accepted successfully! Contract created.', 'success');
+        showToast(
+          'Suggestion accepted successfully! Contract created.',
+          'success'
+        );
         // Refresh suggestions list
-        const updatedSuggestions = suggestions.map(s =>
-          s.id === selectedSuggestion.id ? { ...s, status: 'accepted' as const } : s
+        const updatedSuggestions = suggestions.map((s) =>
+          s.id === selectedSuggestion.id
+            ? { ...s, status: 'accepted' as const }
+            : s
         );
         setSuggestions(updatedSuggestions);
         setIsAcceptModalOpen(false);
@@ -208,7 +233,10 @@ const SuggestionsPage: React.FC = () => {
       }
     } catch (err: any) {
       console.error('Error accepting suggestion:', err);
-      const errorMessage = err.response?.data?.data || err.message || 'Failed to accept suggestion';
+      const errorMessage =
+        err.response?.data?.data ||
+        err.message ||
+        'Failed to accept suggestion';
       showToast(errorMessage, 'error');
     } finally {
       setIsProcessing(false);
@@ -294,7 +322,8 @@ const SuggestionsPage: React.FC = () => {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
                         <p className="text-sm font-medium text-gray-900 truncate">
-                          {suggestion.employee.first_name} {suggestion.employee.last_name}
+                          {suggestion.employee.first_name}{' '}
+                          {suggestion.employee.last_name}
                         </p>
                         {getStatusBadge(suggestion.status)}
                       </div>
@@ -302,7 +331,8 @@ const SuggestionsPage: React.FC = () => {
                         {suggestion.employee.email}
                       </p>
                       <p className="text-xs text-gray-400 mt-1">
-                        Suggested by: {suggestion.agent.first_name} {suggestion.agent.last_name}
+                        Suggested by: {suggestion.agent.first_name}{' '}
+                        {suggestion.agent.last_name}
                       </p>
                       <p className="text-xs text-gray-400">
                         Date: {formatDate(suggestion.created_at)}
@@ -321,7 +351,8 @@ const SuggestionsPage: React.FC = () => {
                 </div>
                 <div className="mt-3">
                   <p className="text-sm text-gray-600 line-clamp-2">
-                    <span className="font-medium">Reason:</span> {suggestion.suggestion_reason}
+                    <span className="font-medium">Reason:</span>{' '}
+                    {suggestion.suggestion_reason}
                   </p>
                 </div>
               </div>
@@ -342,7 +373,9 @@ const SuggestionsPage: React.FC = () => {
               Previous
             </button>
             <button
-              onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+              onClick={() =>
+                setCurrentPage(Math.min(totalPages, currentPage + 1))
+              }
               disabled={currentPage === totalPages}
               className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
@@ -352,8 +385,8 @@ const SuggestionsPage: React.FC = () => {
           <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
             <div>
               <p className="text-sm text-gray-700">
-                Showing page <span className="font-medium">{currentPage}</span> of{' '}
-                <span className="font-medium">{totalPages}</span>
+                Showing page <span className="font-medium">{currentPage}</span>{' '}
+                of <span className="font-medium">{totalPages}</span>
               </p>
             </div>
             <div>
@@ -366,7 +399,9 @@ const SuggestionsPage: React.FC = () => {
                   Previous
                 </button>
                 <button
-                  onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                  onClick={() =>
+                    setCurrentPage(Math.min(totalPages, currentPage + 1))
+                  }
                   disabled={currentPage === totalPages}
                   className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
@@ -381,10 +416,15 @@ const SuggestionsPage: React.FC = () => {
       {/* Suggestion Details Modal */}
       {isDetailsModalOpen && selectedSuggestion && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={handleCloseModal}></div>
+          <div
+            className="absolute inset-0 bg-black/30 backdrop-blur-sm"
+            onClick={handleCloseModal}
+          ></div>
           <div className="bg-white rounded-lg w-full max-w-2xl relative z-10 p-6 m-4 max-h-[90vh] overflow-y-auto border border-gray-300">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-medium text-gray-800">Suggestion Details</h2>
+              <h2 className="text-2xl font-medium text-gray-800">
+                Suggestion Details
+              </h2>
               <button
                 onClick={handleCloseModal}
                 className="rounded-full p-1 hover:bg-gray-100"
@@ -396,7 +436,9 @@ const SuggestionsPage: React.FC = () => {
             <div className="space-y-6">
               {/* Employee Information */}
               <div className="border border-gray-300 rounded-lg p-4">
-                <h3 className="text-lg font-medium text-gray-800 mb-3">Employee Information</h3>
+                <h3 className="text-lg font-medium text-gray-800 mb-3">
+                  Employee Information
+                </h3>
                 <div className="flex items-center space-x-4 mb-4">
                   <Avatar
                     src={selectedSuggestion.employee.avatar || ''}
@@ -407,27 +449,43 @@ const SuggestionsPage: React.FC = () => {
                   />
                   <div>
                     <p className="text-lg font-medium text-gray-900">
-                      {selectedSuggestion.employee.first_name} {selectedSuggestion.employee.last_name}
+                      {selectedSuggestion.employee.first_name}{' '}
+                      {selectedSuggestion.employee.last_name}
                     </p>
-                    <p className="text-sm text-gray-500">{selectedSuggestion.employee.email}</p>
+                    <p className="text-sm text-gray-500">
+                      {selectedSuggestion.employee.email}
+                    </p>
                     {selectedSuggestion.employee.phone && (
-                      <p className="text-sm text-gray-500">{selectedSuggestion.employee.phone}</p>
+                      <p className="text-sm text-gray-500">
+                        {selectedSuggestion.employee.phone}
+                      </p>
                     )}
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
                     <span className="font-medium text-gray-700">Salary:</span>
-                    <span className="ml-2 text-gray-600">₦{parseFloat(selectedSuggestion.employee.salary).toLocaleString()}</span>
+                    <span className="ml-2 text-gray-600">
+                      ₦
+                      {parseFloat(
+                        selectedSuggestion.employee.salary
+                      ).toLocaleString()}
+                    </span>
                   </div>
                   <div>
                     <span className="font-medium text-gray-700">Status:</span>
-                    <span className="ml-2 text-gray-600">{selectedSuggestion.status}</span>
+                    <span className="ml-2 text-gray-600">
+                      {selectedSuggestion.status}
+                    </span>
                   </div>
                   {selectedSuggestion.employee.address && (
                     <div className="col-span-2">
-                      <span className="font-medium text-gray-700">Address:</span>
-                      <span className="ml-2 text-gray-600">{selectedSuggestion.employee.address}</span>
+                      <span className="font-medium text-gray-700">
+                        Address:
+                      </span>
+                      <span className="ml-2 text-gray-600">
+                        {selectedSuggestion.employee.address}
+                      </span>
                     </div>
                   )}
                 </div>
@@ -435,7 +493,9 @@ const SuggestionsPage: React.FC = () => {
 
               {/* Agent Information */}
               <div className="border border-gray-300 rounded-lg p-4">
-                <h3 className="text-lg font-medium text-gray-800 mb-3">Suggested by Agent</h3>
+                <h3 className="text-lg font-medium text-gray-800 mb-3">
+                  Suggested by Agent
+                </h3>
                 <div className="flex items-center space-x-4">
                   <Avatar
                     src={selectedSuggestion.agent.avatar || ''}
@@ -446,24 +506,35 @@ const SuggestionsPage: React.FC = () => {
                   />
                   <div>
                     <p className="text-base font-medium text-gray-900">
-                      {selectedSuggestion.agent.first_name} {selectedSuggestion.agent.last_name}
+                      {selectedSuggestion.agent.first_name}{' '}
+                      {selectedSuggestion.agent.last_name}
                     </p>
-                    <p className="text-sm text-gray-500">{selectedSuggestion.agent.email}</p>
+                    <p className="text-sm text-gray-500">
+                      {selectedSuggestion.agent.email}
+                    </p>
                   </div>
                 </div>
               </div>
 
               {/* Suggestion Details */}
               <div className="border border-gray-300 rounded-lg p-4">
-                <h3 className="text-lg font-medium text-gray-800 mb-3">Suggestion Details</h3>
+                <h3 className="text-lg font-medium text-gray-800 mb-3">
+                  Suggestion Details
+                </h3>
                 <div className="space-y-3">
                   <div>
                     <span className="font-medium text-gray-700">Status:</span>
-                    <span className="ml-2">{getStatusBadge(selectedSuggestion.status)}</span>
+                    <span className="ml-2">
+                      {getStatusBadge(selectedSuggestion.status)}
+                    </span>
                   </div>
                   <div>
-                    <span className="font-medium text-gray-700">Date Submitted:</span>
-                    <span className="ml-2 text-gray-600">{formatDate(selectedSuggestion.created_at)}</span>
+                    <span className="font-medium text-gray-700">
+                      Date Submitted:
+                    </span>
+                    <span className="ml-2 text-gray-600">
+                      {formatDate(selectedSuggestion.created_at)}
+                    </span>
                   </div>
                   <div>
                     <span className="font-medium text-gray-700">Reason:</span>
@@ -509,10 +580,15 @@ const SuggestionsPage: React.FC = () => {
       {/* Reject Confirmation Modal */}
       {isRejectModalOpen && selectedSuggestion && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={handleCloseRejectModal}></div>
+          <div
+            className="absolute inset-0 bg-black/30 backdrop-blur-sm"
+            onClick={handleCloseRejectModal}
+          ></div>
           <div className="bg-white rounded-lg w-full max-w-md relative z-10 p-6 m-4 border border-gray-300">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-medium text-gray-800">Reject Suggestion</h2>
+              <h2 className="text-xl font-medium text-gray-800">
+                Reject Suggestion
+              </h2>
               <button
                 onClick={handleCloseRejectModal}
                 className="rounded-full p-1 hover:bg-gray-100"
@@ -525,12 +601,14 @@ const SuggestionsPage: React.FC = () => {
               <p className="text-gray-600">
                 Are you sure you want to reject the suggestion for{' '}
                 <span className="font-medium text-gray-900">
-                  {selectedSuggestion.employee.first_name} {selectedSuggestion.employee.last_name}
+                  {selectedSuggestion.employee.first_name}{' '}
+                  {selectedSuggestion.employee.last_name}
                 </span>
                 ?
               </p>
               <p className="text-sm text-gray-500">
-                This action cannot be undone. The agent will be notified of the rejection.
+                This action cannot be undone. The agent will be notified of the
+                rejection.
               </p>
 
               <div className="flex gap-3 pt-4">
@@ -557,10 +635,15 @@ const SuggestionsPage: React.FC = () => {
       {/* Accept Suggestion Modal */}
       {isAcceptModalOpen && selectedSuggestion && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={handleCloseAcceptModal}></div>
+          <div
+            className="absolute inset-0 bg-black/30 backdrop-blur-sm"
+            onClick={handleCloseAcceptModal}
+          ></div>
           <div className="bg-white rounded-lg w-full max-w-2xl relative z-10 p-6 m-4 max-h-[90vh] overflow-y-auto border border-gray-300">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-medium text-gray-800">Accept Suggestion & Create Contract</h2>
+              <h2 className="text-2xl font-medium text-gray-800">
+                Accept Suggestion & Create Contract
+              </h2>
               <button
                 onClick={handleCloseAcceptModal}
                 className="rounded-full p-1 hover:bg-gray-100"
@@ -572,7 +655,9 @@ const SuggestionsPage: React.FC = () => {
             <div className="space-y-6">
               {/* Employee Summary */}
               <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-                <h3 className="text-lg font-medium text-gray-800 mb-2">Employee</h3>
+                <h3 className="text-lg font-medium text-gray-800 mb-2">
+                  Employee
+                </h3>
                 <div className="flex items-center space-x-3">
                   <Avatar
                     src={selectedSuggestion.employee.avatar || ''}
@@ -583,16 +668,21 @@ const SuggestionsPage: React.FC = () => {
                   />
                   <div>
                     <p className="font-medium text-gray-900">
-                      {selectedSuggestion.employee.first_name} {selectedSuggestion.employee.last_name}
+                      {selectedSuggestion.employee.first_name}{' '}
+                      {selectedSuggestion.employee.last_name}
                     </p>
-                    <p className="text-sm text-gray-500">{selectedSuggestion.employee.email}</p>
+                    <p className="text-sm text-gray-500">
+                      {selectedSuggestion.employee.email}
+                    </p>
                   </div>
                 </div>
               </div>
 
               {/* Contract Terms Form */}
               <div className="space-y-4">
-                <h3 className="text-lg font-medium text-gray-800">Contract Terms</h3>
+                <h3 className="text-lg font-medium text-gray-800">
+                  Contract Terms
+                </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
@@ -604,10 +694,12 @@ const SuggestionsPage: React.FC = () => {
                       min="1"
                       max="31"
                       value={contractTerms.working_days_per_month}
-                      onChange={(e) => setContractTerms(prev => ({
-                        ...prev,
-                        working_days_per_month: parseInt(e.target.value) || 0
-                      }))}
+                      onChange={(e) =>
+                        setContractTerms((prev) => ({
+                          ...prev,
+                          working_days_per_month: parseInt(e.target.value) || 0,
+                        }))
+                      }
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
                     />
                   </div>
@@ -621,10 +713,12 @@ const SuggestionsPage: React.FC = () => {
                       min="1"
                       max="168"
                       value={contractTerms.working_hours_per_week}
-                      onChange={(e) => setContractTerms(prev => ({
-                        ...prev,
-                        working_hours_per_week: parseInt(e.target.value) || 0
-                      }))}
+                      onChange={(e) =>
+                        setContractTerms((prev) => ({
+                          ...prev,
+                          working_hours_per_week: parseInt(e.target.value) || 0,
+                        }))
+                      }
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
                     />
                   </div>
@@ -636,10 +730,12 @@ const SuggestionsPage: React.FC = () => {
                     <input
                       type="date"
                       value={contractTerms.start_date}
-                      onChange={(e) => setContractTerms(prev => ({
-                        ...prev,
-                        start_date: e.target.value
-                      }))}
+                      onChange={(e) =>
+                        setContractTerms((prev) => ({
+                          ...prev,
+                          start_date: e.target.value,
+                        }))
+                      }
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
                     />
                   </div>
@@ -653,10 +749,12 @@ const SuggestionsPage: React.FC = () => {
                       min="1"
                       max="60"
                       value={contractTerms.duration_months}
-                      onChange={(e) => setContractTerms(prev => ({
-                        ...prev,
-                        duration_months: parseInt(e.target.value) || 0
-                      }))}
+                      onChange={(e) =>
+                        setContractTerms((prev) => ({
+                          ...prev,
+                          duration_months: parseInt(e.target.value) || 0,
+                        }))
+                      }
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
                     />
                   </div>
@@ -668,37 +766,66 @@ const SuggestionsPage: React.FC = () => {
                   </label>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <div>
-                      <label className="block text-xs text-gray-500 mb-1">Days</label>
+                      <label className="block text-xs text-gray-500 mb-1">
+                        Days
+                      </label>
                       <select
-                        value={contractTerms.working_hours_schedule.split(',')[0]?.trim() || 'Monday to Friday'}
+                        value={
+                          contractTerms.working_hours_schedule
+                            .split(',')[0]
+                            ?.trim() || 'Monday to Friday'
+                        }
                         onChange={(e) => {
-                          const currentSchedule = contractTerms.working_hours_schedule.split(',');
-                          const timeRange = currentSchedule[1]?.trim() || '9 AM to 5 PM';
-                          setContractTerms(prev => ({
+                          const currentSchedule =
+                            contractTerms.working_hours_schedule.split(',');
+                          const timeRange =
+                            currentSchedule[1]?.trim() || '9 AM to 5 PM';
+                          setContractTerms((prev) => ({
                             ...prev,
-                            working_hours_schedule: `${e.target.value}, ${timeRange}`
+                            working_hours_schedule: `${e.target.value}, ${timeRange}`,
                           }));
                         }}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       >
-                        <option value="Monday to Friday">Monday to Friday</option>
-                        <option value="Monday to Saturday">Monday to Saturday</option>
-                        <option value="Monday to Sunday">Monday to Sunday</option>
-                        <option value="Tuesday to Saturday">Tuesday to Saturday</option>
-                        <option value="Sunday to Thursday">Sunday to Thursday</option>
+                        <option value="Monday to Friday">
+                          Monday to Friday
+                        </option>
+                        <option value="Monday to Saturday">
+                          Monday to Saturday
+                        </option>
+                        <option value="Monday to Sunday">
+                          Monday to Sunday
+                        </option>
+                        <option value="Tuesday to Saturday">
+                          Tuesday to Saturday
+                        </option>
+                        <option value="Sunday to Thursday">
+                          Sunday to Thursday
+                        </option>
                       </select>
                     </div>
                     <div>
-                      <label className="block text-xs text-gray-500 mb-1">Start Time</label>
+                      <label className="block text-xs text-gray-500 mb-1">
+                        Start Time
+                      </label>
                       <select
-                        value={contractTerms.working_hours_schedule.split(',')[1]?.trim().split(' to ')[0] || '9 AM'}
+                        value={
+                          contractTerms.working_hours_schedule
+                            .split(',')[1]
+                            ?.trim()
+                            .split(' to ')[0] || '9 AM'
+                        }
                         onChange={(e) => {
-                          const currentSchedule = contractTerms.working_hours_schedule.split(',');
-                          const days = currentSchedule[0]?.trim() || 'Monday to Friday';
-                          const endTime = currentSchedule[1]?.trim().split(' to ')[1] || '5 PM';
-                          setContractTerms(prev => ({
+                          const currentSchedule =
+                            contractTerms.working_hours_schedule.split(',');
+                          const days =
+                            currentSchedule[0]?.trim() || 'Monday to Friday';
+                          const endTime =
+                            currentSchedule[1]?.trim().split(' to ')[1] ||
+                            '5 PM';
+                          setContractTerms((prev) => ({
                             ...prev,
-                            working_hours_schedule: `${days}, ${e.target.value} to ${endTime}`
+                            working_hours_schedule: `${days}, ${e.target.value} to ${endTime}`,
                           }));
                         }}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
@@ -713,16 +840,27 @@ const SuggestionsPage: React.FC = () => {
                       </select>
                     </div>
                     <div>
-                      <label className="block text-xs text-gray-500 mb-1">End Time</label>
+                      <label className="block text-xs text-gray-500 mb-1">
+                        End Time
+                      </label>
                       <select
-                        value={contractTerms.working_hours_schedule.split(',')[1]?.trim().split(' to ')[1] || '5 PM'}
+                        value={
+                          contractTerms.working_hours_schedule
+                            .split(',')[1]
+                            ?.trim()
+                            .split(' to ')[1] || '5 PM'
+                        }
                         onChange={(e) => {
-                          const currentSchedule = contractTerms.working_hours_schedule.split(',');
-                          const days = currentSchedule[0]?.trim() || 'Monday to Friday';
-                          const startTime = currentSchedule[1]?.trim().split(' to ')[0] || '9 AM';
-                          setContractTerms(prev => ({
+                          const currentSchedule =
+                            contractTerms.working_hours_schedule.split(',');
+                          const days =
+                            currentSchedule[0]?.trim() || 'Monday to Friday';
+                          const startTime =
+                            currentSchedule[1]?.trim().split(' to ')[0] ||
+                            '9 AM';
+                          setContractTerms((prev) => ({
                             ...prev,
-                            working_hours_schedule: `${days}, ${startTime} to ${e.target.value}`
+                            working_hours_schedule: `${days}, ${startTime} to ${e.target.value}`,
                           }));
                         }}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
@@ -746,10 +884,12 @@ const SuggestionsPage: React.FC = () => {
                   </label>
                   <textarea
                     value={contractTerms.terms}
-                    onChange={(e) => setContractTerms(prev => ({
-                      ...prev,
-                      terms: e.target.value
-                    }))}
+                    onChange={(e) =>
+                      setContractTerms((prev) => ({
+                        ...prev,
+                        terms: e.target.value,
+                      }))
+                    }
                     rows={4}
                     placeholder="Enter contract terms and conditions..."
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 resize-none"
@@ -771,7 +911,9 @@ const SuggestionsPage: React.FC = () => {
                   disabled={isProcessing || !contractTerms.start_date}
                   className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
                 >
-                  {isProcessing ? 'Creating Contract...' : 'Accept & Create Contract'}
+                  {isProcessing
+                    ? 'Creating Contract...'
+                    : 'Accept & Create Contract'}
                 </button>
               </div>
             </div>
