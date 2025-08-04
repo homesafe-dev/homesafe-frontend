@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import walletApi from '../../api/walletApi';
 import Toast from '../../components/common/Toast';
 
@@ -69,11 +69,8 @@ const Salary: React.FC = () => {
     setToast((prev) => ({ ...prev, isVisible: false }));
   };
 
-  useEffect(() => {
-    fetchTransactions(1);
-  }, []);
-
-  const fetchTransactions = async (page: number) => {
+  // Memoize fetchTransactions
+  const fetchTransactions = useCallback(async (page: number) => {
     try {
       setLoading(true);
       const response = await walletApi.getTransactions(page);
@@ -118,19 +115,23 @@ const Salary: React.FC = () => {
         }
       } else {
         const errorMessage = 'Failed to fetch transactions';
-        setError(errorMessage);
+        // setError(errorMessage); // This line was removed as per the new_code
         showToast(errorMessage, 'error');
       }
     } catch (err) {
       console.error('Error fetching transactions:', err);
       const errorMessage =
         'Error fetching transactions. Please try again later.';
-      setError(errorMessage);
+      // setError(errorMessage); // This line was removed as per the new_code
       showToast(errorMessage, 'error');
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchTransactions(1);
+  }, [fetchTransactions]);
 
   // Removed fallback data as it's not being used
 

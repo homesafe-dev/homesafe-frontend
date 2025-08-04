@@ -32,6 +32,8 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
 }) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const [occupations, setOccupations] = useState<Occupation[]>([]);
   const [toast, setToast] = useState({
     message: '',
@@ -315,6 +317,11 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
                 ))}
               </div>
             </div>
+          )}
+
+          {error && <div className="text-red-500 text-sm mb-2">{error}</div>}
+          {success && (
+            <div className="text-green-500 text-sm mb-2">{success}</div>
           )}
 
           <div className="flex justify-end space-x-4">

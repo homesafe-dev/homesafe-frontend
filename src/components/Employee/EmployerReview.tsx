@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
 import { FiX, FiSearch } from 'react-icons/fi';
 import userApi from '../../api/userApi';
@@ -32,6 +32,7 @@ const EmployerReview: React.FC<EmployerReviewProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [employers, setEmployers] = useState<Employer[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [toast, setToast] = useState({
@@ -49,22 +50,13 @@ const EmployerReview: React.FC<EmployerReviewProps> = ({
     setToast((prev) => ({ ...prev, isVisible: false }));
   };
 
-  useEffect(() => {
-    if (isOpen) {
-      fetchEmployers();
-    }
-  }, [isOpen]);
-
-  const fetchEmployers = async () => {
+  // Memoize fetchEmployers
+  const fetchEmployers = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null); // Clear any previous errors
-
       // Use a higher limit to get more employers for selection
       const response = await userApi.getEmployerList(1, 50);
-
-      console.log('Employer API Response:', response); // Debug log
-
       if (response.status) {
         // Handle the new paginated response structure
         const employerData =
@@ -72,7 +64,6 @@ const EmployerReview: React.FC<EmployerReviewProps> = ({
           response.data?.data ||
           response.data ||
           [];
-        console.log('Extracted employer data:', employerData); // Debug log
         setEmployers(employerData);
       } else {
         const errorMessage = response.message || 'Failed to fetch employers';
@@ -87,7 +78,13 @@ const EmployerReview: React.FC<EmployerReviewProps> = ({
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      fetchEmployers();
+    }
+  }, [isOpen, fetchEmployers]);
 
   const filteredEmployers = searchQuery
     ? employers.filter(
@@ -288,6 +285,8 @@ const EmployerReview: React.FC<EmployerReviewProps> = ({
                 disabled={isSubmitting}
               />
             </div>
+
+            {error && <div className="text-red-500 text-sm mb-2">{error}</div>}
 
             <button
               type="submit"

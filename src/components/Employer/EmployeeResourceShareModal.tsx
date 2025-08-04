@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { FiSearch, FiX } from 'react-icons/fi';
 import employerApi from '../../api/employerApi';
@@ -53,31 +53,8 @@ const EmployeeResourceShareModal: React.FC<EmployeeResourceShareModalProps> = ({
     setToast((prev) => ({ ...prev, isVisible: false }));
   };
 
-  // Fetch employees when modal opens
-  useEffect(() => {
-    if (isOpen) {
-      fetchEmployees();
-    }
-  }, [isOpen]);
-
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setSearchQuery('');
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
-  const fetchEmployees = async () => {
+  // Memoize fetchEmployees
+  const fetchEmployees = useCallback(async () => {
     try {
       setIsLoadingEmployees(true);
       const response = await employerApi.getEmployees();
@@ -96,7 +73,31 @@ const EmployeeResourceShareModal: React.FC<EmployeeResourceShareModalProps> = ({
     } finally {
       setIsLoadingEmployees(false);
     }
-  };
+  }, []);
+
+  // Fetch employees when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      fetchEmployees();
+    }
+  }, [isOpen, fetchEmployees]);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setSearchQuery('');
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleEmployeeSelect = (employee: Employee) => {
     setSelectedEmployee(employee);
