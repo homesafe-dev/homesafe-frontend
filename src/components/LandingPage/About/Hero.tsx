@@ -188,7 +188,7 @@ const Hero: React.FC = () => {
           </h2>
 
           <p className="text-lg sm:text-xl md:text-2xl lg:text-[32px] text-white max-w-2xl mx-auto">
-            Fill your Space, with people that feels safe
+            Trusted artisans for your space, verified for your peace of mind
           </p>
         </div>
       </div>
