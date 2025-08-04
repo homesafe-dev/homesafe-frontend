@@ -170,16 +170,18 @@ const ErrorPage: React.FC<ErrorPageProps> = ({ error, resetError }) => {
         </div>
 
         {/* Development Error Details */}
-        {process.env.NODE_ENV === 'development' && displayError && (
-          <details className="mt-8 text-left">
-            <summary className="cursor-pointer text-sm text-gray-500 hover:text-gray-700">
-              Error Details (Development Only)
-            </summary>
-            <div className="mt-2 p-4 bg-gray-100 rounded-lg text-xs text-gray-700 overflow-auto">
-              <pre className="whitespace-pre-wrap">{errorDisplayText}</pre>
-            </div>
-          </details>
-        )}
+        {process.env.NODE_ENV === 'development' &&
+          displayError !== null &&
+          displayError !== undefined && (
+            <details className="mt-8 text-left">
+              <summary className="cursor-pointer text-sm text-gray-500 hover:text-gray-700">
+                Error Details (Development Only)
+              </summary>
+              <div className="mt-2 p-4 bg-gray-100 rounded-lg text-xs text-gray-700 overflow-auto">
+                <pre className="whitespace-pre-wrap">{errorDisplayText}</pre>
+              </div>
+            </details>
+          )}
       </div>
     </div>
   );
