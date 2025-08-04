@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
 import { FiX, FiSearch } from 'react-icons/fi';
 import userApi from '../../api/userApi';
+import Toast from '../common/Toast';
 
 interface Employer {
   id: number;
@@ -34,6 +35,20 @@ const EmployerReview: React.FC<EmployerReviewProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [toast, setToast] = useState({
+    message: '',
+    type: 'success' as 'success' | 'error' | 'info',
+    isVisible: false,
+  });
+
+  // Toast helper functions
+  const showToast = (message: string, type: 'success' | 'error' | 'info') => {
+    setToast({ message, type, isVisible: true });
+  };
+
+  const hideToast = () => {
+    setToast((prev) => ({ ...prev, isVisible: false }));
+  };
 
   useEffect(() => {
     if (isOpen) {
@@ -61,11 +76,15 @@ const EmployerReview: React.FC<EmployerReviewProps> = ({
         console.log('Extracted employer data:', employerData); // Debug log
         setEmployers(employerData);
       } else {
-        setError(response.message || 'Failed to fetch employers');
+        const errorMessage = response.message || 'Failed to fetch employers';
+        setError(errorMessage);
+        showToast(errorMessage, 'error');
       }
     } catch (err) {
       console.error('Error fetching employers:', err);
-      setError('An error occurred while fetching employers');
+      const errorMessage = 'An error occurred while fetching employers';
+      setError(errorMessage);
+      showToast(errorMessage, 'error');
     } finally {
       setIsLoading(false);
     }
@@ -116,6 +135,8 @@ const EmployerReview: React.FC<EmployerReviewProps> = ({
       });
 
       if (response.status) {
+        showToast('Review submitted successfully!', 'success');
+
         // Reset form
         setRating(0);
         setSelectedEmployer(null);
@@ -127,14 +148,20 @@ const EmployerReview: React.FC<EmployerReviewProps> = ({
           onReviewSubmitted();
         }
 
-        // Close modal
-        onClose();
+        // Close modal after a delay to show the success toast
+        setTimeout(() => {
+          onClose();
+        }, 2000);
       } else {
-        setError(response.message || 'Failed to submit review');
+        const errorMessage = response.message || 'Failed to submit review';
+        setError(errorMessage);
+        showToast(errorMessage, 'error');
       }
     } catch (err) {
       console.error('Error submitting review:', err);
-      setError('An error occurred while submitting your review');
+      const errorMessage = 'An error occurred while submitting your review';
+      setError(errorMessage);
+      showToast(errorMessage, 'error');
     } finally {
       setIsSubmitting(false);
     }
@@ -263,9 +290,7 @@ const EmployerReview: React.FC<EmployerReviewProps> = ({
               />
             </div>
 
-            {error && (
-              <div className="text-red-500 text-sm mt-2 mb-2">{error}</div>
-            )}
+
 
             <button
               type="submit"
@@ -277,6 +302,14 @@ const EmployerReview: React.FC<EmployerReviewProps> = ({
           </div>
         </form>
       </div>
+
+      {/* Toast Notification */}
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.isVisible}
+        onClose={hideToast}
+      />
     </div>
   );
 };

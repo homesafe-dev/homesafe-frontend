@@ -1,8 +1,10 @@
 import React from 'react';
 import Homes from '../../../assets/images/Homes.png';
+import Homes2 from '../../../assets/images/Homes2.jpg';
 import Office from '../../../assets/images/Office.png';
 import LivingSpace from '../../../assets/images/LivingSpace.png';
 import Hotel from '../../../assets/images/Hotel.png';
+import Institutions from '../../../assets/images/Institutions.jpg';
 
 interface WorkCategoryProps {
   title: string;
@@ -32,23 +34,23 @@ const WorkCategory: React.FC<WorkCategoryProps> = ({
 
 const WhereWeCanWork: React.FC = () => {
   const categories = [
-    {
-      title: 'Office',
-      imageSrc: Office,
-      description: 'Providing outstanding services for your homes and offices.',
-    },
+    // {
+    //   title: 'Office',
+    //   imageSrc: Office,
+    //   description: 'Providing outstanding services for your homes and offices.',
+    // },
     {
       title: 'Homes',
-      imageSrc: Homes,
+      imageSrc: Homes2,
       description: 'Providing outstanding services for your homes and offices.',
     },
     {
-      title: 'Hotel',
-      imageSrc: Hotel,
+      title: 'Institutions',
+      imageSrc: Institutions,
       description: 'Providing outstanding services for your homes and offices.',
     },
     {
-      title: 'Living Spaces',
+      title: 'Businesses',
       imageSrc: LivingSpace,
       description: 'Providing outstanding services for your homes and offices.',
     },
@@ -61,7 +63,7 @@ const WhereWeCanWork: React.FC = () => {
           Where we can work
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {categories.map((category, index) => (
             <WorkCategory
               key={index}

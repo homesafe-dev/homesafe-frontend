@@ -4,6 +4,7 @@ import adminApi from '../../../api/adminApi';
 import DropdownMenu from '../../../components/common/DropdownMenu';
 import CreateUserModal from '../../../components/CreateUserModal';
 import Avatar from '../../../components/common/Avatar';
+import Toast from '../../../components/common/Toast';
 
 interface Employer {
   id: number;
@@ -33,12 +34,26 @@ export default function EmployersTab() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [toast, setToast] = useState({
+    message: '',
+    type: 'success' as 'success' | 'error' | 'info',
+    isVisible: false,
+  });
+
+  // Toast helper functions
+  const showToast = (message: string, type: 'success' | 'error' | 'info') => {
+    setToast({ message, type, isVisible: true });
+  };
+
+  const hideToast = () => {
+    setToast((prev) => ({ ...prev, isVisible: false }));
+  };
 
   const handleBlockUser = async (userId: number) => {
     try {
       const response = await adminApi.blockUser(userId);
       if (response.status) {
-        alert('User blocked successfully');
+        showToast('User blocked successfully', 'success');
         // Update the employer list to reflect the change
         setEmployers(
           employers.map((emp) =>
@@ -46,11 +61,11 @@ export default function EmployersTab() {
           )
         );
       } else {
-        alert(response.message || 'Failed to block user');
+        showToast(response.message || 'Failed to block user', 'error');
       }
     } catch (error) {
       console.error('Error blocking user:', error);
-      alert('An error occurred while blocking the user');
+      showToast('An error occurred while blocking the user', 'error');
     }
   };
 
@@ -58,7 +73,7 @@ export default function EmployersTab() {
     try {
       const response = await adminApi.unblockUser(userId);
       if (response.status) {
-        alert('User unblocked successfully');
+        showToast('User unblocked successfully', 'success');
         // Update the employer list to reflect the change
         setEmployers(
           employers.map((emp) =>
@@ -66,11 +81,11 @@ export default function EmployersTab() {
           )
         );
       } else {
-        alert(response.message || 'Failed to unblock user');
+        showToast(response.message || 'Failed to unblock user', 'error');
       }
     } catch (error) {
       console.error('Error unblocking user:', error);
-      alert('An error occurred while unblocking the user');
+      showToast('An error occurred while unblocking the user', 'error');
     }
   };
 
@@ -90,10 +105,14 @@ export default function EmployersTab() {
           console.log('Extracted employer data:', employerData); // Debug log
           setEmployers(employerData);
         } else {
-          setError(response.message || 'Failed to fetch employers');
+          const errorMessage = response.message || 'Failed to fetch employers';
+          setError(errorMessage);
+          showToast(errorMessage, 'error');
         }
       } catch (err) {
-        setError('Error fetching employers');
+        const errorMessage = 'Error fetching employers';
+        setError(errorMessage);
+        showToast(errorMessage, 'error');
         console.error('Error fetching employers:', err);
       } finally {
         setIsLoading(false);
@@ -277,6 +296,14 @@ export default function EmployersTab() {
           // Refresh the employers list
           window.location.reload();
         }}
+      />
+
+      {/* Toast Notification */}
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.isVisible}
+        onClose={hideToast}
       />
     </div>
   );

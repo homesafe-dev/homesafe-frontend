@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import agentApi from '../../api/agentApi';
 import Avatar from '../../components/common/Avatar';
+import Toast from '../../components/common/Toast';
 
 interface Employee {
   id: number;
@@ -23,6 +24,20 @@ const AllCandidatesPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [toast, setToast] = useState({
+    message: '',
+    type: 'success' as 'success' | 'error' | 'info',
+    isVisible: false,
+  });
+
+  // Toast helper functions
+  const showToast = (message: string, type: 'success' | 'error' | 'info') => {
+    setToast({ message, type, isVisible: true });
+  };
+
+  const hideToast = () => {
+    setToast((prev) => ({ ...prev, isVisible: false }));
+  };
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -36,10 +51,14 @@ const AllCandidatesPage = () => {
             setTotalPages(response.meta.last_page);
           }
         } else {
-          setError(response.message || 'Failed to fetch employees');
+          const errorMessage = response.message || 'Failed to fetch employees';
+          setError(errorMessage);
+          showToast(errorMessage, 'error');
         }
       } catch (err: any) {
-        setError('Error fetching employees');
+        const errorMessage = 'Error fetching employees';
+        setError(errorMessage);
+        showToast(errorMessage, 'error');
         console.error('Error fetching employees:', err);
       } finally {
         setIsLoading(false);
@@ -70,12 +89,7 @@ const AllCandidatesPage = () => {
         </button>
       </div>
 
-      {/* Error Message */}
-      {error && (
-        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded text-sm">
-          {error}
-        </div>
-      )}
+
 
       {/* Subheader */}
       <div className="flex justify-between items-center mb-4 sm:mb-6">
@@ -174,8 +188,9 @@ const AllCandidatesPage = () => {
                       {employee.placement}
                     </td>
                     <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal whitespace-nowrap">
-                      {employee.gender.charAt(0).toUpperCase() +
-                        employee.gender.slice(1)}
+                      {employee.gender
+                        ? employee.gender.charAt(0).toUpperCase() + employee.gender.slice(1)
+                        : 'Not specified'}
                     </td>
                     <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal whitespace-nowrap">
                       {employee.phone}
@@ -183,13 +198,13 @@ const AllCandidatesPage = () => {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
                         className={`px-3 py-1 rounded-full text-[13px] ${
-                          employee.status.toLowerCase().includes('not') ||
-                          employee.status.toLowerCase() === 'unverified'
+                          employee.status && (employee.status.toLowerCase().includes('not') ||
+                          employee.status.toLowerCase() === 'unverified')
                             ? 'bg-red-100 text-red-800'
                             : 'bg-green-100 text-green-800'
                         }`}
                       >
-                        {employee.status.toLowerCase().includes('not')
+                        {employee.status && employee.status.toLowerCase().includes('not')
                           ? 'Unverified'
                           : 'Verified'}
                       </span>
@@ -241,6 +256,14 @@ const AllCandidatesPage = () => {
           </button>
         </div>
       )}
+
+      {/* Toast Notification */}
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.isVisible}
+        onClose={hideToast}
+      />
     </div>
   );
 };

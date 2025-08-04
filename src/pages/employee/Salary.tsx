@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import walletApi from '../../api/walletApi';
+import Toast from '../../components/common/Toast';
 
 interface TransactionUser {
   id: number;
@@ -54,6 +55,20 @@ const Salary: React.FC = () => {
     total: 0,
     per_page: 15,
   });
+  const [toast, setToast] = useState({
+    message: '',
+    type: 'success' as 'success' | 'error' | 'info',
+    isVisible: false,
+  });
+
+  // Toast helper functions
+  const showToast = (message: string, type: 'success' | 'error' | 'info') => {
+    setToast({ message, type, isVisible: true });
+  };
+
+  const hideToast = () => {
+    setToast((prev) => ({ ...prev, isVisible: false }));
+  };
 
   useEffect(() => {
     fetchTransactions(1);
@@ -103,11 +118,15 @@ const Salary: React.FC = () => {
           });
         }
       } else {
-        setError('Failed to fetch transactions');
+        const errorMessage = 'Failed to fetch transactions';
+        setError(errorMessage);
+        showToast(errorMessage, 'error');
       }
     } catch (err) {
       console.error('Error fetching transactions:', err);
-      setError('Error fetching transactions. Please try again later.');
+      const errorMessage = 'Error fetching transactions. Please try again later.';
+      setError(errorMessage);
+      showToast(errorMessage, 'error');
     } finally {
       setLoading(false);
     }
@@ -159,10 +178,6 @@ const Salary: React.FC = () => {
       {loading ? (
         <div className="flex justify-center items-center py-20">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
-        </div>
-      ) : error ? (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-          {error}
         </div>
       ) : (
         <div
@@ -232,6 +247,14 @@ const Salary: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Toast Notification */}
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.isVisible}
+        onClose={hideToast}
+      />
     </div>
   );
 };
