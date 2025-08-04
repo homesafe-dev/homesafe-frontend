@@ -21,6 +21,7 @@ const AllCandidatesPage = () => {
   const navigate = useNavigate();
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [toast, setToast] = useState({
@@ -94,6 +95,8 @@ const AllCandidatesPage = () => {
           Here are all your candidates
         </p>
       </div>
+
+      {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
 
       {/* Table */}
       <div

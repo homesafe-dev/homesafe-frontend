@@ -46,6 +46,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, isMobile = false }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [toast, setToast] = useState({
     message: '',
@@ -115,6 +116,9 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, isMobile = false }) => {
 
   return (
     <header className="bg-white shadow-sm">
+      {error && (
+        <div className="text-red-500 text-sm p-2 text-center">{error}</div>
+      )}
       <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-3 sm:py-4">
         <div className="flex justify-between items-center">
           {isLoading ? (
