@@ -10,6 +10,7 @@ import LogoutIcon from '../../../assets/icons/logout.svg';
 import KycIcon from '../../../assets/icons/kyc.svg';
 import SecurityIcon from '../../../assets/icons/security.svg';
 import userApi from '../../../api/userApi';
+import Toast from '../../common/Toast';
 
 interface HeaderProps {
   userEmail?: string;
@@ -39,9 +40,21 @@ const Header: React.FC<HeaderProps> = ({
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   // Loading state is used in the fetchUserProfile function
   const [, setLoading] = useState(true);
-  // Error state is used in the fetchUserProfile function
-  const [, setError] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [toast, setToast] = useState({
+    message: '',
+    type: 'success' as 'success' | 'error' | 'info',
+    isVisible: false,
+  });
+
+  // Toast helper functions
+  const showToast = (message: string, type: 'success' | 'error' | 'info') => {
+    setToast({ message, type, isVisible: true });
+  };
+
+  const hideToast = () => {
+    setToast((prev) => ({ ...prev, isVisible: false }));
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('auth_token');
@@ -56,10 +69,10 @@ const Header: React.FC<HeaderProps> = ({
         if (response.status) {
           setUserProfile(response.data);
         } else {
-          setError('Failed to fetch user profile');
+          showToast('Failed to fetch user profile', 'error');
         }
       } catch (err) {
-        setError('Error fetching user profile');
+        showToast('Error fetching user profile', 'error');
         console.error('Error fetching user profile:', err);
       } finally {
         setLoading(false);
@@ -211,6 +224,14 @@ const Header: React.FC<HeaderProps> = ({
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         portalType="employer"
+      />
+
+      {/* Toast Notification */}
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.isVisible}
+        onClose={hideToast}
       />
     </header>
   );

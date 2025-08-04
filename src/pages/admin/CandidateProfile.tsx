@@ -3,6 +3,7 @@ import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate, useParams } from 'react-router-dom';
 import adminApi from '../../api/adminApi';
 import ArtisanImg from '../../assets/images/artisans.png';
+import Toast from '../../components/common/Toast';
 
 // Import components
 import CandidateProfileAbout from '../../components/Agent/CandidateProfileAbout';
@@ -58,6 +59,20 @@ const AdminCandidateProfile: React.FC = () => {
   const [employee, setEmployee] = useState<Employee | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [toast, setToast] = useState({
+    message: '',
+    type: 'success' as 'success' | 'error' | 'info',
+    isVisible: false,
+  });
+
+  // Toast helper functions
+  const showToast = (message: string, type: 'success' | 'error' | 'info') => {
+    setToast({ message, type, isVisible: true });
+  };
+
+  const hideToast = () => {
+    setToast((prev) => ({ ...prev, isVisible: false }));
+  };
 
   // Sample educational resources data
   const educationalResources = [
@@ -115,18 +130,18 @@ const AdminCandidateProfile: React.FC = () => {
     try {
       const response = await adminApi.blockUser(employee.id);
       if (response.status) {
-        alert('User blocked successfully');
+        showToast('User blocked successfully', 'success');
         // Refresh the employee data to reflect the change
         const updatedResponse = await adminApi.getEmployeeById(employee.id);
         if (updatedResponse.status) {
           setEmployee(updatedResponse.data);
         }
       } else {
-        alert(response.message || 'Failed to block user');
+        showToast(response.message || 'Failed to block user', 'error');
       }
     } catch (error) {
       console.error('Error blocking user:', error);
-      alert('An error occurred while blocking the user');
+      showToast('An error occurred while blocking the user', 'error');
     }
   };
 
@@ -136,18 +151,18 @@ const AdminCandidateProfile: React.FC = () => {
     try {
       const response = await adminApi.unblockUser(employee.id);
       if (response.status) {
-        alert('User unblocked successfully');
+        showToast('User unblocked successfully', 'success');
         // Refresh the employee data to reflect the change
         const updatedResponse = await adminApi.getEmployeeById(employee.id);
         if (updatedResponse.status) {
           setEmployee(updatedResponse.data);
         }
       } else {
-        alert(response.message || 'Failed to unblock user');
+        showToast(response.message || 'Failed to unblock user', 'error');
       }
     } catch (error) {
       console.error('Error unblocking user:', error);
-      alert('An error occurred while unblocking the user');
+      showToast('An error occurred while unblocking the user', 'error');
     }
   };
 
@@ -157,14 +172,14 @@ const AdminCandidateProfile: React.FC = () => {
     try {
       const response = await adminApi.suspendUser(employee.id);
       if (response.status) {
-        alert('User suspended successfully');
+        showToast('User suspended successfully', 'success');
         // Optionally navigate back or refresh data
       } else {
-        alert(response.message || 'Failed to suspend user');
+        showToast(response.message || 'Failed to suspend user', 'error');
       }
     } catch (error) {
       console.error('Error suspending user:', error);
-      alert('An error occurred while suspending the user');
+      showToast('An error occurred while suspending the user', 'error');
     }
   };
 
@@ -289,6 +304,14 @@ const AdminCandidateProfile: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Toast Notification */}
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.isVisible}
+        onClose={hideToast}
+      />
     </div>
   );
 };

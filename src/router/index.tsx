@@ -80,6 +80,7 @@ import Medical from '../pages/employer/Medical';
 import ReviewsPage from '../pages/employer/Reviews';
 import Contracts from '../pages/employer/Contracts';
 import EmployerProposalDetails from '../pages/employer/ProposalDetails';
+import Suggestions from '../pages/employer/Suggestions';
 // Removed unused import: HomesafeForgotPasswordPage
 import Salary from '../pages/employee/Salary';
 import EmployeeMedical from '../pages/employee/Medical';
@@ -311,6 +312,14 @@ export const router = createBrowserRouter([
         element: protectEmployerRoute(
           <EmployerLayout>
             <StaffProfile />
+          </EmployerLayout>
+        ),
+      },
+      {
+        path: 'suggestions',
+        element: protectEmployerRoute(
+          <EmployerLayout>
+            <Suggestions />
           </EmployerLayout>
         ),
       },
