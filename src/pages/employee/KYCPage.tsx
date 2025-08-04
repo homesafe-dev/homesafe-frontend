@@ -114,7 +114,10 @@ const EmployeeKYCPage: React.FC = () => {
           navigate('/employee/dashboard');
         }, 2000);
       } else {
-        showToast(response.message || 'Failed to submit NIN verification', 'error');
+        showToast(
+          response.message || 'Failed to submit NIN verification',
+          'error'
+        );
       }
     } catch (err: any) {
       showToast(

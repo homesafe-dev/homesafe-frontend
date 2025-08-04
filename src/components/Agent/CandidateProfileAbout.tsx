@@ -16,7 +16,6 @@ interface CandidateProfileAboutProps {
   isBlocked?: boolean;
   onBlockUser?: () => void;
   onUnblockUser?: () => void;
-  onSuspendUser?: () => void;
   onAssignEmployer?: () => void;
 }
 
@@ -35,7 +34,6 @@ const CandidateProfileAbout: React.FC<CandidateProfileAboutProps> = ({
   isBlocked = false,
   onBlockUser,
   onUnblockUser,
-  onSuspendUser,
   onAssignEmployer,
 }) => {
   return (

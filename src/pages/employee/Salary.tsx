@@ -48,7 +48,6 @@ interface PaginationMeta {
 const Salary: React.FC = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
   const [pagination, setPagination] = useState<PaginationMeta>({
     current_page: 1,
     last_page: 1,
@@ -124,7 +123,8 @@ const Salary: React.FC = () => {
       }
     } catch (err) {
       console.error('Error fetching transactions:', err);
-      const errorMessage = 'Error fetching transactions. Please try again later.';
+      const errorMessage =
+        'Error fetching transactions. Please try again later.';
       setError(errorMessage);
       showToast(errorMessage, 'error');
     } finally {

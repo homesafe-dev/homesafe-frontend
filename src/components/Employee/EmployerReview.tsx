@@ -30,7 +30,6 @@ const EmployerReview: React.FC<EmployerReviewProps> = ({
   );
   const [feedback, setFeedback] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [employers, setEmployers] = useState<Employer[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -289,8 +288,6 @@ const EmployerReview: React.FC<EmployerReviewProps> = ({
                 disabled={isSubmitting}
               />
             </div>
-
-
 
             <button
               type="submit"

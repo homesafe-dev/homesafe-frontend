@@ -18,7 +18,6 @@ const NotificationsPage: React.FC = () => {
   // State for notifications
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   // State for active tab
   const [activeTab, setActiveTab] = useState<'unread' | 'read'>('unread');
@@ -51,7 +50,8 @@ const NotificationsPage: React.FC = () => {
         const uiNotifications = response.data.map(convertApiNotificationToUI);
         setNotifications(uiNotifications);
       } else {
-        const errorMessage = response.message || 'Failed to fetch notifications';
+        const errorMessage =
+          response.message || 'Failed to fetch notifications';
         setError(errorMessage);
         showToast(errorMessage, 'error');
       }

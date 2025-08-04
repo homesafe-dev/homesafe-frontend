@@ -16,7 +16,6 @@ const PaystackPaymentModal: React.FC<PaystackPaymentModalProps> = ({
 }) => {
   const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
   const [toast, setToast] = useState({
     message: '',
@@ -72,9 +71,10 @@ const PaystackPaymentModal: React.FC<PaystackPaymentModalProps> = ({
       }
     } catch (err: any) {
       console.error('Payment initialization error:', err);
-      const errorMessage = err.response?.data?.message ||
-          err.message ||
-          'Failed to initialize payment. Please try again.';
+      const errorMessage =
+        err.response?.data?.message ||
+        err.message ||
+        'Failed to initialize payment. Please try again.';
       setError(errorMessage);
       showToast(errorMessage, 'error');
     } finally {
@@ -126,8 +126,6 @@ const PaystackPaymentModal: React.FC<PaystackPaymentModalProps> = ({
                 disabled={loading}
               />
             </div>
-
-
 
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-2 sm:p-3">
               <p className="text-blue-600 text-xs sm:text-sm">

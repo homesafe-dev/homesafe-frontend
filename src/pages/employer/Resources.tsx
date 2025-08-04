@@ -44,7 +44,9 @@ const ResourcesPage: React.FC = () => {
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
-  const [selectedResource, setSelectedResource] = useState<Resource | null>(null);
+  const [selectedResource, setSelectedResource] = useState<Resource | null>(
+    null
+  );
   const [resources, setResources] = useState<Resource[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -116,7 +118,11 @@ const ResourcesPage: React.FC = () => {
             setSelectedResource(null);
           }}
           resourceId={selectedResource?.id || 0}
-          resourceTitle={selectedResource?.occupation?.name ? `${selectedResource.occupation.name} Training` : 'Resource'}
+          resourceTitle={
+            selectedResource?.occupation?.name
+              ? `${selectedResource.occupation.name} Training`
+              : 'Resource'
+          }
         />
 
         <div className="flex justify-between items-center mb-8">

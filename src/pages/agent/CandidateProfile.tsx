@@ -85,7 +85,9 @@ const CandidateProfile: React.FC = () => {
   // Assignment modal state
   const [isAssignModalOpen, setIsAssignModalOpen] = useState(false);
   const [employers, setEmployers] = useState<Employer[]>([]);
-  const [selectedEmployer, setSelectedEmployer] = useState<Employer | null>(null);
+  const [selectedEmployer, setSelectedEmployer] = useState<Employer | null>(
+    null
+  );
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoadingEmployers, setIsLoadingEmployers] = useState(false);
   const [isAssigning, setIsAssigning] = useState(false);
@@ -145,7 +147,10 @@ const CandidateProfile: React.FC = () => {
       const response = await suggestionsApi.createSuggestion(suggestionData);
 
       if (response.status) {
-        showToast(`Successfully suggested ${employee.candidate} to ${selectedEmployer.first_name} ${selectedEmployer.last_name}`, 'success');
+        showToast(
+          `Successfully suggested ${employee.candidate} to ${selectedEmployer.first_name} ${selectedEmployer.last_name}`,
+          'success'
+        );
         setIsAssignModalOpen(false);
         setSelectedEmployer(null);
         setSearchQuery('');
@@ -155,7 +160,10 @@ const CandidateProfile: React.FC = () => {
       }
     } catch (err: any) {
       console.error('Error creating suggestion:', err);
-      const errorMessage = err.response?.data?.message || err.message || 'Failed to create suggestion';
+      const errorMessage =
+        err.response?.data?.message ||
+        err.message ||
+        'Failed to create suggestion';
       showToast(errorMessage, 'error');
     } finally {
       setIsAssigning(false);
@@ -206,7 +214,8 @@ const CandidateProfile: React.FC = () => {
             showToast(errorMessage, 'error');
           }
         } else {
-          const errorMessage = response.message || 'Failed to fetch employee details';
+          const errorMessage =
+            response.message || 'Failed to fetch employee details';
           setError(errorMessage);
           showToast(errorMessage, 'error');
         }
@@ -379,7 +388,10 @@ const CandidateProfile: React.FC = () => {
       {/* Assignment Modal */}
       {isAssignModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={() => setIsAssignModalOpen(false)}></div>
+          <div
+            className="absolute inset-0 bg-black/30 backdrop-blur-sm"
+            onClick={() => setIsAssignModalOpen(false)}
+          ></div>
           <div className="bg-white rounded-lg w-full max-w-md relative z-10 p-6">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-medium">Suggest to Employer</h2>
@@ -416,7 +428,8 @@ const CandidateProfile: React.FC = () => {
                         <FiX size={18} />
                       </button>
                       <div className="font-medium pr-6">
-                        {selectedEmployer.first_name} {selectedEmployer.last_name}
+                        {selectedEmployer.first_name}{' '}
+                        {selectedEmployer.last_name}
                       </div>
                       {selectedEmployer.company_name && (
                         <div className="text-sm text-gray-500">
@@ -486,7 +499,9 @@ const CandidateProfile: React.FC = () => {
                 </button>
                 <button
                   onClick={handleAssignEmployer}
-                  disabled={!selectedEmployer || !suggestionReason.trim() || isAssigning}
+                  disabled={
+                    !selectedEmployer || !suggestionReason.trim() || isAssigning
+                  }
                   className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
                 >
                   {isAssigning ? 'Suggesting...' : 'Suggest'}

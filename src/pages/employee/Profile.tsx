@@ -219,7 +219,10 @@ const EmployeeProfilePage: React.FC = () => {
       if (response.status) {
         showToastNotification('Profile updated successfully', 'success');
       } else {
-        showToastNotification(response.message || 'Failed to update profile', 'error');
+        showToastNotification(
+          response.message || 'Failed to update profile',
+          'error'
+        );
       }
     } catch (err) {
       showToastNotification('Error updating profile', 'error');
@@ -248,8 +251,6 @@ const EmployeeProfilePage: React.FC = () => {
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
         </div>
       )}
-
-
 
       <div className="bg-white rounded-lg shadow p-4 sm:p-6 lg:p-8 max-w-4xl mb-6">
         <form onSubmit={handleSubmit}>
