@@ -16,6 +16,7 @@ const PaystackPaymentModal: React.FC<PaystackPaymentModalProps> = ({
 }) => {
   const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
   const [toast, setToast] = useState({
     message: '',
@@ -111,6 +112,8 @@ const PaystackPaymentModal: React.FC<PaystackPaymentModalProps> = ({
               <FiX size={18} />
             </button>
           </div>
+
+          {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
 
           <div className="space-y-3 sm:space-y-4">
             <div>
