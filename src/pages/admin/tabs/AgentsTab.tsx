@@ -5,6 +5,7 @@ import adminApi from '../../../api/adminApi';
 import DropdownMenu from '../../../components/common/DropdownMenu';
 import CreateUserModal from '../../../components/CreateUserModal';
 import Avatar from '../../../components/common/Avatar';
+import Toast from '../../../components/common/Toast';
 
 interface Agent {
   id: number;
@@ -31,12 +32,26 @@ export default function AgentsTab() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [toast, setToast] = useState({
+    message: '',
+    type: 'success' as 'success' | 'error' | 'info',
+    isVisible: false,
+  });
+
+  // Toast helper functions
+  const showToast = (message: string, type: 'success' | 'error' | 'info') => {
+    setToast({ message, type, isVisible: true });
+  };
+
+  const hideToast = () => {
+    setToast((prev) => ({ ...prev, isVisible: false }));
+  };
 
   const handleBlockUser = async (userId: number) => {
     try {
       const response = await adminApi.blockUser(userId);
       if (response.status) {
-        alert('User blocked successfully');
+        showToast('User blocked successfully', 'success');
         // Update the agent list to reflect the change
         setAgents(
           agents.map((agent) =>
@@ -44,11 +59,11 @@ export default function AgentsTab() {
           )
         );
       } else {
-        alert(response.message || 'Failed to block user');
+        showToast(response.message || 'Failed to block user', 'error');
       }
     } catch (error) {
       console.error('Error blocking user:', error);
-      alert('An error occurred while blocking the user');
+      showToast('An error occurred while blocking the user', 'error');
     }
   };
 
@@ -56,7 +71,7 @@ export default function AgentsTab() {
     try {
       const response = await adminApi.unblockUser(userId);
       if (response.status) {
-        alert('User unblocked successfully');
+        showToast('User unblocked successfully', 'success');
         // Update the agent list to reflect the change
         setAgents(
           agents.map((agent) =>
@@ -64,11 +79,11 @@ export default function AgentsTab() {
           )
         );
       } else {
-        alert(response.message || 'Failed to unblock user');
+        showToast(response.message || 'Failed to unblock user', 'error');
       }
     } catch (error) {
       console.error('Error unblocking user:', error);
-      alert('An error occurred while unblocking the user');
+      showToast('An error occurred while unblocking the user', 'error');
     }
   };
 
@@ -87,10 +102,14 @@ export default function AgentsTab() {
         console.log('Extracted agent data:', agentData); // Debug log
         setAgents(agentData);
       } else {
-        setError(response.message || 'Failed to fetch agents');
+        const errorMessage = response.message || 'Failed to fetch agents';
+        setError(errorMessage);
+        showToast(errorMessage, 'error');
       }
     } catch (err) {
-      setError('Error fetching agents');
+      const errorMessage = 'Error fetching agents';
+      setError(errorMessage);
+      showToast(errorMessage, 'error');
       console.error('Error fetching agents:', err);
     } finally {
       setIsLoading(false);
@@ -270,6 +289,14 @@ export default function AgentsTab() {
           // Refresh the agents list
           fetchAgents();
         }}
+      />
+
+      {/* Toast Notification */}
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.isVisible}
+        onClose={hideToast}
       />
     </div>
   );

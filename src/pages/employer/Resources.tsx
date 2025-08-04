@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FiMoreVertical, FiShare2, FiDownload, FiSearch } from 'react-icons/fi';
-import ShareModal from '../../components/Employer/ResourceShareModal';
+import EmployeeResourceShareModal from '../../components/Employer/EmployeeResourceShareModal';
 import resourcesApi from '../../api/resourcesApi';
 
 // Helper function to extract YouTube video ID from URL
@@ -44,6 +44,9 @@ const ResourcesPage: React.FC = () => {
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [selectedResource, setSelectedResource] = useState<Resource | null>(
+    null
+  );
   const [resources, setResources] = useState<Resource[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -79,7 +82,8 @@ const ResourcesPage: React.FC = () => {
     setActiveMenuId(activeMenuId === id.toString() ? null : id.toString());
   };
 
-  const handleShare = () => {
+  const handleShare = (resource: Resource) => {
+    setSelectedResource(resource);
     setIsShareModalOpen(true);
     setActiveMenuId(null);
   };
@@ -107,9 +111,18 @@ const ResourcesPage: React.FC = () => {
   return (
     <div className="min-h-screen">
       <div className="max-w-7xl mx-auto px-4 py-6">
-        <ShareModal
+        <EmployeeResourceShareModal
           isOpen={isShareModalOpen}
-          onClose={() => setIsShareModalOpen(false)}
+          onClose={() => {
+            setIsShareModalOpen(false);
+            setSelectedResource(null);
+          }}
+          resourceId={selectedResource?.id || 0}
+          resourceTitle={
+            selectedResource?.occupation?.name
+              ? `${selectedResource.occupation.name} Training`
+              : 'Resource'
+          }
         />
 
         <div className="flex justify-between items-center mb-8">
@@ -175,7 +188,7 @@ const ResourcesPage: React.FC = () => {
                         >
                           <div
                             className="px-4 py-2 hover:bg-gray-100 flex items-center cursor-pointer"
-                            onClick={handleShare}
+                            onClick={() => handleShare(resource)}
                           >
                             <FiShare2 className="mr-2" />
                             Share

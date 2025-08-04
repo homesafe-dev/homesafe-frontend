@@ -16,7 +16,7 @@ interface CandidateProfileAboutProps {
   isBlocked?: boolean;
   onBlockUser?: () => void;
   onUnblockUser?: () => void;
-  onSuspendUser?: () => void;
+  onAssignEmployer?: () => void;
 }
 
 const CandidateProfileAbout: React.FC<CandidateProfileAboutProps> = ({
@@ -34,6 +34,7 @@ const CandidateProfileAbout: React.FC<CandidateProfileAboutProps> = ({
   isBlocked = false,
   onBlockUser,
   onUnblockUser,
+  onAssignEmployer,
 }) => {
   return (
     <div className="flex flex-col items-center bg-white rounded-lg p-3 sm:p-4 h-full">
@@ -92,6 +93,18 @@ const CandidateProfileAbout: React.FC<CandidateProfileAboutProps> = ({
         <p className="text-xs sm:text-[13px] text-[#246D51] break-all">
           {email}
         </p>
+
+        {/* Assign to Employer Button */}
+        {onAssignEmployer && (
+          <div className="mt-4 sm:mt-6">
+            <button
+              onClick={onAssignEmployer}
+              className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
+            >
+              Suggest to Employer
+            </button>
+          </div>
+        )}
 
         {showAdminActions && (
           <div className="mt-4 sm:mt-6 flex gap-2">

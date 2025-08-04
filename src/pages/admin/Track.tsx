@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaRegUser } from 'react-icons/fa';
 import adminApi from '../../api/adminApi';
 import Avatar from '../../components/common/Avatar';
+import Toast from '../../components/common/Toast';
 
 interface Employee {
   id: number;
@@ -27,6 +28,20 @@ const AdminTrack = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showOptionsFor, setShowOptionsFor] = useState<number | null>(null);
+  const [toast, setToast] = useState({
+    message: '',
+    type: 'success' as 'success' | 'error' | 'info',
+    isVisible: false,
+  });
+
+  // Toast helper functions
+  const showToast = (message: string, type: 'success' | 'error' | 'info') => {
+    setToast({ message, type, isVisible: true });
+  };
+
+  const hideToast = () => {
+    setToast((prev) => ({ ...prev, isVisible: false }));
+  };
 
   // Helper function to safely format gender
   const formatGender = (gender: string | null): string => {
@@ -59,10 +74,14 @@ const AdminTrack = () => {
           const employeeData = response.data || [];
           setEmployees(employeeData);
         } else {
-          setError(response.message || 'Failed to fetch employees');
+          const errorMessage = response.message || 'Failed to fetch employees';
+          setError(errorMessage);
+          showToast(errorMessage, 'error');
         }
       } catch (err: any) {
-        setError('Error fetching employees');
+        const errorMessage = 'Error fetching employees';
+        setError(errorMessage);
+        showToast(errorMessage, 'error');
         console.error('Error fetching employees:', err);
       } finally {
         setIsLoading(false);
@@ -84,7 +103,7 @@ const AdminTrack = () => {
     try {
       const response = await adminApi.blockUser(userId);
       if (response.status) {
-        alert('User blocked successfully');
+        showToast('User blocked successfully', 'success');
         // Update the employee list to reflect the change
         setEmployees(
           employees.map((emp) =>
@@ -92,11 +111,11 @@ const AdminTrack = () => {
           )
         );
       } else {
-        alert(response.message || 'Failed to block user');
+        showToast(response.message || 'Failed to block user', 'error');
       }
     } catch (error) {
       console.error('Error blocking user:', error);
-      alert('An error occurred while blocking the user');
+      showToast('An error occurred while blocking the user', 'error');
     }
     setShowOptionsFor(null);
   };
@@ -105,7 +124,7 @@ const AdminTrack = () => {
     try {
       const response = await adminApi.unblockUser(userId);
       if (response.status) {
-        alert('User unblocked successfully');
+        showToast('User unblocked successfully', 'success');
         // Update the employee list to reflect the change
         setEmployees(
           employees.map((emp) =>
@@ -113,11 +132,11 @@ const AdminTrack = () => {
           )
         );
       } else {
-        alert(response.message || 'Failed to unblock user');
+        showToast(response.message || 'Failed to unblock user', 'error');
       }
     } catch (error) {
       console.error('Error unblocking user:', error);
-      alert('An error occurred while unblocking the user');
+      showToast('An error occurred while unblocking the user', 'error');
     }
     setShowOptionsFor(null);
   };
@@ -360,6 +379,14 @@ const AdminTrack = () => {
           </table>
         </div>
       </div>
+
+      {/* Toast Notification */}
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.isVisible}
+        onClose={hideToast}
+      />
     </div>
   );
 };

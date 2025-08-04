@@ -35,48 +35,48 @@ const Toast: React.FC<ToastProps> = ({
   const getToastStyles = () => {
     switch (type) {
       case 'success':
-        return 'bg-green-100 border-green-400 text-green-700';
+        return 'bg-green-500 text-white';
       case 'error':
-        return 'bg-red-100 border-red-400 text-red-700';
+        return 'bg-red-500 text-white';
       case 'info':
-        return 'bg-blue-100 border-blue-400 text-blue-700';
+        return 'bg-blue-500 text-white';
       default:
-        return 'bg-gray-100 border-gray-400 text-gray-700';
+        return 'bg-gray-500 text-white';
     }
   };
 
   const getIcon = () => {
     switch (type) {
       case 'success':
-        return (
-          <IoCheckmarkCircleOutline size={20} className="text-green-600" />
-        );
+        return <IoCheckmarkCircleOutline size={20} className="text-white" />;
       case 'error':
-        return <IoCloseCircleOutline size={20} className="text-red-600" />;
+        return <IoCloseCircleOutline size={20} className="text-white" />;
       case 'info':
-        return (
-          <IoInformationCircleOutline size={20} className="text-blue-600" />
-        );
+        return <IoInformationCircleOutline size={20} className="text-white" />;
       default:
-        return (
-          <IoInformationCircleOutline size={20} className="text-gray-600" />
-        );
+        return <IoInformationCircleOutline size={20} className="text-white" />;
     }
   };
 
   return (
-    <div className="fixed top-4 right-4 z-50 animate-slide-in">
-      <div
-        className={`flex items-center gap-3 px-4 py-3 rounded-lg border shadow-lg max-w-md ${getToastStyles()}`}
-      >
-        {getIcon()}
-        <span className="text-sm font-medium">{message}</span>
-        <button
-          onClick={onClose}
-          className="ml-auto text-gray-500 hover:text-gray-700"
+    <div className="fixed top-4 right-4 z-[9999] pointer-events-none">
+      <div className="pointer-events-auto">
+        <div
+          className={`flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg max-w-md min-w-[300px] transform transition-all duration-300 ease-in-out ${getToastStyles()} ${
+            isVisible
+              ? 'translate-x-0 opacity-100'
+              : 'translate-x-full opacity-0'
+          }`}
         >
-          <IoCloseCircleOutline size={16} />
-        </button>
+          {getIcon()}
+          <span className="text-sm font-medium flex-1">{message}</span>
+          <button
+            onClick={onClose}
+            className="ml-2 text-white hover:text-gray-200 transition-colors"
+          >
+            <IoCloseCircleOutline size={16} />
+          </button>
+        </div>
       </div>
     </div>
   );
