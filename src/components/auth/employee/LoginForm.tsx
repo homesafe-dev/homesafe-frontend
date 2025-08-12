@@ -104,6 +104,17 @@ const HomesafeSignupPage: React.FC = () => {
 
             <button
               type="button"
+              onClick={() => {
+                const baseUrl =
+                  import.meta.env.VITE_BACKEND_BASE_URL ||
+                  'https://homesafeng.xyz/api';
+                const currentOrigin = window.location.origin;
+                const callbackPath = '/auth/google/callback';
+                const redirectUrl = `${currentOrigin}${callbackPath}`;
+                const encodedRedirect = encodeURIComponent(redirectUrl);
+                const loginUrl = `${baseUrl}/auth/google/login?redirect_url=${encodedRedirect}`;
+                window.location.href = loginUrl;
+              }}
               className="w-full flex items-center justify-center py-2 px-4 border border-gray-300 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
             >
               <svg
