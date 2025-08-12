@@ -55,6 +55,7 @@ import AllAdmins from '../pages/admin/AllAdmins';
 import FacialCapturePage from '../components/auth/employer/FacialCapture';
 import EmployeeFacialCapturePage from '../components/auth/employee/FacialCapture';
 import CreatePassword from '../components/auth/employee/CreatePassword';
+import GoogleAuthCallback from '../pages/auth/GoogleAuthCallback';
 
 // Layouts
 import EmployerLayout from '../components/layouts/Employer/Layout';
@@ -202,6 +203,10 @@ export const router = createBrowserRouter([
   {
     path: 'signin/create-password',
     element: <EmployerSigninCreatePassword />,
+  },
+  {
+    path: 'auth/google/callback',
+    element: <GoogleAuthCallback />,
   },
   // Employer Routes
   {
