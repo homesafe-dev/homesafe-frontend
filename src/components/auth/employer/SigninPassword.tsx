@@ -6,6 +6,7 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import HomesafeLogo from '../../../assets/images/HomesafeLogo.png';
 import HomesafeLogo2 from '../../../assets/images/HomesafeLogo2.svg';
 import { useAuth } from '../../../contexts/AuthContext';
+import { getBackendBaseUrl } from '../../../utils/config';
 
 const SigninPasswordPage: React.FC = () => {
   const [password, setPassword] = useState<string>('');
@@ -208,9 +209,7 @@ const SigninPasswordPage: React.FC = () => {
             <button
               type="button"
               onClick={() => {
-                const baseUrl =
-                  import.meta.env.VITE_BACKEND_BASE_URL ||
-                  'https://homesafeng.xyz/api';
+                const baseUrl = getBackendBaseUrl();
                 const currentOrigin = window.location.origin;
                 const callbackPath = '/auth/google/callback';
                 const redirectUrl = `${currentOrigin}${callbackPath}`;

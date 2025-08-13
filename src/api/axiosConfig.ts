@@ -1,8 +1,8 @@
 import axios from 'axios';
+import { getBackendBaseUrl } from '../utils/config';
 
 const axiosInstance = axios.create({
-  baseURL:
-    import.meta.env.VITE_BACKEND_BASE_URL || 'https://homesafeng.xyz/api',
+  baseURL: getBackendBaseUrl(),
   headers: {
     'Content-Type': 'application/json',
   },
