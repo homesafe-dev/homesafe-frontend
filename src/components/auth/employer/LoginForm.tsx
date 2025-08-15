@@ -4,6 +4,7 @@ import signupImg2 from '../../../assets/images/signupImg2.png';
 import { Link, useNavigate } from 'react-router-dom';
 import HomesafeLogo from '../../../assets/images/HomesafeLogo.png';
 import HomesafeLogo2 from '../../../assets/images/HomesafeLogo2.svg';
+import { getBackendBaseUrl } from '../../../utils/config';
 
 const HomesafeSignupPage: React.FC = () => {
   const [email, setEmail] = useState<string>('');
@@ -126,6 +127,15 @@ const HomesafeSignupPage: React.FC = () => {
 
             <button
               type="button"
+              onClick={() => {
+                const baseUrl = getBackendBaseUrl();
+                const currentOrigin = window.location.origin;
+                const callbackPath = '/auth/google/callback';
+                const redirectUrl = `${currentOrigin}${callbackPath}`;
+                const encodedRedirect = encodeURIComponent(redirectUrl);
+                const loginUrl = `${baseUrl}/auth/google/login?redirect_url=${encodedRedirect}`;
+                window.location.href = loginUrl;
+              }}
               className="w-full flex items-center justify-center py-2 px-4 border border-gray-300 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
             >
               <svg
