@@ -7,89 +7,97 @@ const GoogleAuthCallback: React.FC = () => {
   React.useEffect(() => {
     const completeLogin = async () => {
       try {
-        console.log('Google OAuth Callback - Processing callback...');
+        const pageText = document.body.innerText;
 
-        const params = new URLSearchParams(window.location.search);
-        const token = params.get('token');
-        const error = params.get('error');
-        const userJson = params.get('user');
-
-        console.log('Token:', token);
-        console.log('Error:', error);
-        console.log('User JSON:', userJson);
-
-        if (error) {
-          console.error('OAuth error:', error);
-          setMessage(`OAuth error: ${error}. Redirecting to login...`);
-          setTimeout(() => {
-            window.location.replace('/login');
-          }, 2000);
-          return;
-        }
-
-        if (!token) {
-          console.error('Missing token');
-          setMessage('Missing authentication token. Redirecting to login...');
-          setTimeout(() => {
-            window.location.replace('/login');
-          }, 2000);
-          return;
-        }
-
-        // Store token first (this enables the axios interceptor)
-        localStorage.setItem('auth_token', token);
-        console.log('Token stored successfully');
-
+        let jsonData;
         try {
-          // Fetch user profile from API (same as normal login)
-          console.log('Fetching user profile...');
-          const profileResponse = await axiosInstance.get('/profile');
-          const profile =
-            profileResponse?.data?.data || profileResponse?.data || {};
+          jsonData = JSON.parse(pageText);
+        } catch {
+          // Not JSON, continue with URL params
+        }
 
-          console.log('Profile response:', profile);
-
-          if (!profile || !profile.role) {
-            throw new Error('Invalid profile data received');
+        if (jsonData && jsonData.redirect_url) {
+          if (jsonData.status === false && jsonData.error) {
+            console.error('OAuth error:', jsonData.error);
+            setMessage(
+              `OAuth error: ${jsonData.error}. Redirecting to login...`
+            );
+            setTimeout(() => {
+              window.location.replace('/login');
+            }, 2000);
+            return;
           }
 
-          // Construct user object (same structure as normal login)
-          const userObj = {
-            id: String(profile.id ?? '1'),
-            email: String(profile.email ?? ''),
-            name: `${profile.first_name ?? ''} ${profile.last_name ?? ''}`.trim(),
-            type: profile.role as 'employer' | 'employee' | 'agent' | 'admin',
-          };
+          window.location.href = jsonData.redirect_url;
+          return;
+        } else {
+          const params = new URLSearchParams(window.location.search);
+          const token = params.get('token');
+          const error = params.get('error');
 
-          console.log('User object constructed:', userObj);
+          if (error) {
+            setMessage(`OAuth error: ${error}. Redirecting to login...`);
+            setTimeout(() => {
+              window.location.replace('/login');
+            }, 2000);
+            return;
+          }
 
-          // Store user data (same as normal login)
-          localStorage.setItem('auth_user', JSON.stringify(userObj));
+          if (!token) {
+            console.error('Missing authentication token');
+            setMessage('Missing authentication token. Redirecting to login...');
+            setTimeout(() => {
+              window.location.replace('/login');
+            }, 2000);
+            return;
+          }
 
-          // Check for stored redirect URL
-          const redirectUrl = sessionStorage.getItem('redirectAfterLogin');
-          if (redirectUrl) {
-            sessionStorage.removeItem('redirectAfterLogin');
-            const rolePrefix = `/${userObj.type}`;
-            if (redirectUrl.startsWith(rolePrefix)) {
-              console.log('Redirecting to stored URL:', redirectUrl);
-              window.location.replace(redirectUrl);
-              return;
+          localStorage.setItem('auth_token', token);
+
+          try {
+            const profileResponse = await axiosInstance.get('/profile');
+            const profile =
+              profileResponse?.data?.data || profileResponse?.data || {};
+
+            if (!profile || !profile.role) {
+              throw new Error('Invalid profile data received');
             }
-          }
 
-          // Redirect to appropriate dashboard (same as normal login)
-          const dashboardUrl = `/${userObj.type}/dashboard`;
-          console.log('Redirecting to dashboard:', dashboardUrl);
-          window.location.replace(dashboardUrl);
-        } catch (profileError) {
-          console.error('Failed to fetch profile:', profileError);
-          localStorage.removeItem('auth_token');
-          localStorage.removeItem('auth_user');
-          setMessage('Failed to load user profile. Redirecting to login...');
-          setTimeout(() => {
-            window.location.replace('/login');
-          }, 2000);
+            const userObj = {
+              id: String(profile.id),
+              email: String(profile.email),
+              name: `${profile.first_name || ''} ${profile.last_name || ''}`.trim(),
+              type: profile.role[0] as
+                | 'employer'
+                | 'employee'
+                | 'agent'
+                | 'admin',
+            };
+
+            localStorage.setItem('auth_user', JSON.stringify(userObj));
+
+            const redirectUrl = sessionStorage.getItem('redirectAfterLogin');
+            if (redirectUrl) {
+              sessionStorage.removeItem('redirectAfterLogin');
+              const rolePrefix = `/${userObj.type}`;
+              if (redirectUrl.startsWith(rolePrefix)) {
+                window.location.replace(redirectUrl);
+                return;
+              }
+            }
+
+            // Redirect to appropriate dashboard
+            const dashboardUrl = `/${userObj.type}/dashboard`;
+            window.location.replace(dashboardUrl);
+          } catch (profileError: any) {
+            console.error('Failed to fetch user profile:', profileError);
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('auth_user');
+            setMessage('Failed to load user profile. Redirecting to login...');
+            setTimeout(() => {
+              window.location.replace('/login');
+            }, 2000);
+          }
         }
       } catch (err) {
         console.error('Google OAuth callback error:', err);

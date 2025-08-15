@@ -4,14 +4,6 @@ export const getBackendBaseUrl = (): string => {
     return import.meta.env.VITE_BACKEND_BASE_URL;
   }
 
-  // Check if running locally
-  if (
-    window.location.hostname === 'localhost' ||
-    window.location.hostname === '127.0.0.1'
-  ) {
-    return 'https://d80b3a15bf4e.ngrok-free.app/api';
-  }
-
-  // Default production URL
   return 'https://homesafeng.xyz/api';
+  // return 'http://127.0.0.1:8000/api';
 };
