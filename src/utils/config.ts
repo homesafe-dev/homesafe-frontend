@@ -5,5 +5,4 @@ export const getBackendBaseUrl = (): string => {
   }
 
   return 'https://homesafeng.xyz/api';
-  // return 'http://127.0.0.1:8000/api';
 };
