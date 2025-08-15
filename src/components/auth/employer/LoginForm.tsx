@@ -4,6 +4,7 @@ import signupImg2 from '../../../assets/images/signupImg2.png';
 import { Link, useNavigate } from 'react-router-dom';
 import HomesafeLogo from '../../../assets/images/HomesafeLogo.png';
 import HomesafeLogo2 from '../../../assets/images/HomesafeLogo2.svg';
+import { getBackendBaseUrl } from '../../../utils/config';
 
 const HomesafeSignupPage: React.FC = () => {
   const [email, setEmail] = useState<string>('');
@@ -127,9 +128,7 @@ const HomesafeSignupPage: React.FC = () => {
             <button
               type="button"
               onClick={() => {
-                const baseUrl =
-                  import.meta.env.VITE_BACKEND_BASE_URL ||
-                  'https://homesafeng.xyz/api';
+                const baseUrl = getBackendBaseUrl();
                 const currentOrigin = window.location.origin;
                 const callbackPath = '/auth/google/callback';
                 const redirectUrl = `${currentOrigin}${callbackPath}`;
