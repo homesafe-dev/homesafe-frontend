@@ -29,6 +29,10 @@ const EnvironmentIndicator: React.FC = () => {
 
   // Get environment text based on environment
   const getEnvironmentText = () => {
+    if (!environment || typeof environment !== 'string') {
+      return 'DEV';
+    }
+
     switch (environment.toLowerCase()) {
       case 'staging':
         return 'STAGING';
