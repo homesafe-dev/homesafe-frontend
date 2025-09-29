@@ -232,7 +232,7 @@ const ForgotPasswordOTPPage: React.FC = () => {
                     className="text-green-500 text-sm hover:text-green-600 disabled:text-gray-400"
                     disabled={resending}
                   >
-                    {resending ? 'Resending...' : 'Reset code'}
+                    {resending ? 'Resending...' : 'Resend code'}
                   </button>
                 </div>
               </div>

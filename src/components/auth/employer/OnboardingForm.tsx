@@ -268,10 +268,11 @@ const OnboardingForm: React.FC = () => {
                 id="email"
                 name="email"
                 placeholder="name@email.com"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-sm md:text-base"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-sm md:text-base bg-gray-100 cursor-not-allowed"
                 value={formData.email}
                 onChange={handleChange}
                 required
+                readOnly
               />
             </div>
 
@@ -412,20 +413,25 @@ const OnboardingForm: React.FC = () => {
                   </div>
                 ) : (
                   <div className="grid grid-cols-2 gap-2 max-h-32 overflow-y-auto border border-gray-300 rounded-md p-3">
-                    {occupations.map((occupation) => (
-                      <label key={occupation.id} className="flex items-center">
-                        <input
-                          type="radio"
-                          name="occupation"
-                          checked={formData.occupation === occupation.id}
-                          onChange={() => handleOccupationChange(occupation.id)}
-                          className="mr-2 h-4 w-4 text-green-500 focus:ring-green-500"
-                        />
-                        <span className="text-sm text-gray-700">
-                          {occupation.name}
-                        </span>
-                      </label>
-                    ))}
+                    {occupations
+                      .sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
+                      .map((occupation) => {
+                        const formattedName = occupation.name.charAt(0).toUpperCase() + occupation.name.slice(1).toLowerCase();
+                        return (
+                          <label key={occupation.id} className="flex items-center">
+                            <input
+                              type="radio"
+                              name="occupation"
+                              checked={formData.occupation === occupation.id}
+                              onChange={() => handleOccupationChange(occupation.id)}
+                              className="mr-2 h-4 w-4 text-green-500 focus:ring-green-500"
+                            />
+                            <span className="text-sm text-gray-700">
+                              {formattedName}
+                            </span>
+                          </label>
+                        );
+                      })}
                   </div>
                 )}
               </div>

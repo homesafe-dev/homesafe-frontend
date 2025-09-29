@@ -226,7 +226,7 @@ const SignupOTPPage: React.FC = () => {
                     className="text-green-500 text-sm hover:text-green-600"
                     disabled={isSubmitting || loading}
                   >
-                    {loading ? 'Sending...' : 'Reset code'}
+                    {loading ? 'Sending...' : 'Resend code'}
                   </button>
                 </div>
               </div>

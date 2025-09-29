@@ -200,7 +200,7 @@ const DashboardContent: React.FC = () => {
         {/* Staff Count Card */}
         <div className="bg-[#E7E3F6] p-4 sm:p-6 rounded-lg shadow">
           <div className="flex items-center gap-4 sm:gap-6">
-            <div className="bg-[#C8EDDF80] p-3 sm:p-4 rounded-full">
+            <div className="bg-[#C8EDDF80] w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center aspect-square">
               <BsPeople className="text-gray-500" size={20} />
             </div>
             <div>
@@ -236,7 +236,7 @@ const DashboardContent: React.FC = () => {
                   Recommend Resources
                 </button> */}
               </div>
-              <div className="bg-white w-[60px] h-[60px] sm:w-[100px] sm:h-[100px] rounded-full"></div>
+              <div className="bg-white w-12 h-12 sm:w-20 sm:h-20 rounded-full aspect-square flex-shrink-0"></div>
             </div>
           </div>
 
@@ -259,7 +259,7 @@ const DashboardContent: React.FC = () => {
                   Add Staff to Payroll
                 </button> */}
               </div>
-              <div className="bg-white w-[60px] h-[60px] sm:w-[100px] sm:h-[100px] rounded-full"></div>
+              <div className="bg-white w-12 h-12 sm:w-20 sm:h-20 rounded-full aspect-square flex-shrink-0"></div>
             </div>
           </div>
         </div>
