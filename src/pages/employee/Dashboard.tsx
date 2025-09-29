@@ -173,7 +173,7 @@ const DashboardContent: React.FC = () => {
         {/* Wallet Balance Card */}
         <div className="bg-[#E7E3F6] p-4 sm:p-6 rounded-lg shadow">
           <div className="flex items-center gap-4 sm:gap-6">
-            <div className="bg-[#C8EDDF80] p-3 sm:p-4 rounded-full flex-shrink-0">
+            <div className="bg-[#C8EDDF80] w-12 h-12 sm:w-16 sm:h-16 rounded-full flex-shrink-0 flex items-center justify-center aspect-square">
               <FaPlus className="text-gray-500" size={20} />
             </div>
             <div className="min-w-0 flex-1">
@@ -192,7 +192,7 @@ const DashboardContent: React.FC = () => {
         {/* Educational Resources Card */}
         <div className="bg-[#E9E3E3] p-4 sm:p-6 rounded-lg shadow sm:col-span-2 lg:col-span-1">
           <div className="flex items-center gap-4 sm:gap-6">
-            <div className="bg-[#EFAE7333] p-3 sm:p-4 rounded-full flex-shrink-0">
+            <div className="bg-[#EFAE7333] w-12 h-12 sm:w-16 sm:h-16 rounded-full flex-shrink-0 flex items-center justify-center aspect-square">
               <BsBook className="text-gray-500" size={20} />
             </div>
             <div className="min-w-0 flex-1">
@@ -214,7 +214,7 @@ const DashboardContent: React.FC = () => {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
           <div className="bg-[#F1F1F1] p-4 sm:p-6 rounded-lg shadow min-h-[140px] sm:min-h-[180px] relative">
-            <div className="absolute top-4 right-4 sm:top-6 sm:right-6 w-[80px] h-[80px] sm:w-[100px] sm:h-[100px] bg-white rounded-full"></div>
+            <div className="absolute top-4 right-4 sm:top-6 sm:right-6 w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-full aspect-square"></div>
             <div className="mt-8 sm:mt-12">
               <p className="text-gray-600 text-sm">Available Advance</p>
               <h3 className="text-lg sm:text-xl font-medium text-gray-800 mt-2">

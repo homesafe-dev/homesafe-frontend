@@ -33,7 +33,7 @@ const ForgotPasswordOTPPage: React.FC = () => {
   // Handle paste event for OTP
   const handlePaste = (e: React.ClipboardEvent) => {
     e.preventDefault();
-    const pastedData = e.clipboardData.getData('text').trim().toUpperCase();
+    const pastedData = e.clipboardData.getData('text').trim();
 
     // Remove any non-alphanumeric characters
     const cleanedData = pastedData.replace(/[^a-zA-Z0-9]/g, '');
@@ -166,7 +166,7 @@ const ForgotPasswordOTPPage: React.FC = () => {
                     onClick={handleResetCode}
                     className="text-green-500 text-sm hover:text-green-600"
                   >
-                    Reset code
+                    Resend code
                   </button>
                 </div>
               </div>
