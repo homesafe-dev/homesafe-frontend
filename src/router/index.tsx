@@ -56,6 +56,7 @@ import FacialCapturePage from '../components/auth/employer/FacialCapture';
 import EmployeeFacialCapturePage from '../components/auth/employee/FacialCapture';
 import CreatePassword from '../components/auth/employee/CreatePassword';
 import GoogleAuthCallback from '../pages/auth/GoogleAuthCallback';
+import GoogleProfileCompletion from '../pages/auth/GoogleProfileCompletion';
 
 // Layouts
 import EmployerLayout from '../components/layouts/Employer/Layout';
@@ -207,6 +208,10 @@ export const router = createBrowserRouter([
   {
     path: 'auth/google/callback',
     element: <GoogleAuthCallback />,
+  },
+  {
+    path: 'auth/google/profile-completion',
+    element: <GoogleProfileCompletion />,
   },
   // Employer Routes
   {
