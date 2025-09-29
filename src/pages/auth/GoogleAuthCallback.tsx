@@ -34,12 +34,45 @@ const GoogleAuthCallback: React.FC = () => {
           const params = new URLSearchParams(window.location.search);
           const token = params.get('token');
           const error = params.get('error');
+          const googleSignup = params.get('google_signup');
+          const profileIncomplete = params.get('profile_incomplete');
+
+          console.log('GoogleAuthCallback - URL Parameters:', {
+            token: !!token,
+            error,
+            googleSignup,
+            profileIncomplete,
+            allParams: Object.fromEntries(params.entries()),
+          });
 
           if (error) {
+            console.error('OAuth error:', error);
             setMessage(`OAuth error: ${error}. Redirecting to login...`);
             setTimeout(() => {
               window.location.replace('/login');
             }, 2000);
+            return;
+          }
+
+          // Check if this is a new Google signup user
+          if (googleSignup === 'true') {
+            setMessage('Redirecting to profile completion...');
+            // Preserve all URL parameters when redirecting to profile completion
+            const currentParams = window.location.search;
+            window.location.replace(
+              `/auth/google/profile-completion${currentParams}`
+            );
+            return;
+          }
+
+          // Check if this is an existing user with incomplete profile
+          if (profileIncomplete === 'true') {
+            setMessage('Redirecting to profile completion...');
+            // Preserve all URL parameters when redirecting to profile completion
+            const currentParams = window.location.search;
+            window.location.replace(
+              `/auth/google/profile-completion${currentParams}`
+            );
             return;
           }
 
@@ -86,7 +119,6 @@ const GoogleAuthCallback: React.FC = () => {
               }
             }
 
-            // Redirect to appropriate dashboard
             const dashboardUrl = `/${userObj.type}/dashboard`;
             window.location.replace(dashboardUrl);
           } catch (profileError: any) {
