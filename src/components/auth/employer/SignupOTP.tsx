@@ -28,7 +28,7 @@ const SignupOTPPage: React.FC = () => {
 
   const handleChange = (element: HTMLInputElement, index: number) => {
     // Allow both numbers and alphabets
-    const value = element.value.toUpperCase(); // Convert to uppercase for consistency
+    const value = element.value.slice(-1); // Only take the last character entered
 
     const newOtp = [...otp];
     newOtp[index] = value;
@@ -208,7 +208,7 @@ const SignupOTPPage: React.FC = () => {
                       onChange={(e) => handleChange(e.target, index)}
                       onKeyDown={(e) => handleKeyDown(e, index)}
                       onPaste={handlePaste}
-                      className="w-8 h-8 md:w-12 md:h-12 text-center border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-base md:text-lg font-semibold uppercase"
+                      className="w-8 h-8 md:w-12 md:h-12 text-center border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-base md:text-lg font-semibold"
                       disabled={isSubmitting}
                       autoComplete="one-time-code"
                     />
@@ -226,7 +226,7 @@ const SignupOTPPage: React.FC = () => {
                     className="text-green-500 text-sm hover:text-green-600"
                     disabled={isSubmitting || loading}
                   >
-                    {loading ? 'Sending...' : 'Reset code'}
+                    {loading ? 'Sending...' : 'Resend code'}
                   </button>
                 </div>
               </div>

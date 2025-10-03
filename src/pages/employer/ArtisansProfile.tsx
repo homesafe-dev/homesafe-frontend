@@ -343,11 +343,18 @@ const ArtisanProfileView: React.FC = () => {
                       onChange={handleInputChange}
                     >
                       <option value="">Select</option>
+                      <option value="1">1 month</option>
+                      <option value="2">2 months</option>
                       <option value="3">3 months</option>
+                      <option value="4">4 months</option>
+                      <option value="5">5 months</option>
                       <option value="6">6 months</option>
+                      <option value="7">7 months</option>
+                      <option value="8">8 months</option>
+                      <option value="9">9 months</option>
+                      <option value="10">10 months</option>
+                      <option value="11">11 months</option>
                       <option value="12">12 months</option>
-                      <option value="24">24 months</option>
-                      <option value="36">36 months</option>
                     </select>
                     <FiChevronDown
                       className="absolute right-2 sm:right-3 top-3 text-gray-400"
