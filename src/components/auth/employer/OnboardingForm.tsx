@@ -385,19 +385,6 @@ const OnboardingForm: React.FC = () => {
                     Female
                   </label>
                 </div>
-                <div className="flex items-center">
-                  <input
-                    type="radio"
-                    id="other"
-                    name="gender"
-                    className="h-4 w-4 text-green-500 focus:ring-green-500"
-                    checked={formData.gender === 'other'}
-                    onChange={() => handleGenderChange('other')}
-                  />
-                  <label htmlFor="other" className="ml-2 text-sm text-gray-700">
-                    Other
-                  </label>
-                </div>
               </div>
             </div>
 
