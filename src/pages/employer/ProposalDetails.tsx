@@ -95,8 +95,8 @@ const EmployerProposalDetailsPage: React.FC = () => {
   }, [contractId]);
 
   const handleTerminateContract = async () => {
-    if (!contractId) {
-      setError('Contract ID not found');
+    if (!proposalData) {
+      setError('Contract data not found');
       return;
     }
 
@@ -105,11 +105,29 @@ const EmployerProposalDetailsPage: React.FC = () => {
       setError(null);
       setSuccessMessage(null);
 
-      const response = await contractApi.terminateContract(Number(contractId));
+      const contractStatus = proposalData.contract.status?.toLowerCase();
+      let response;
+
+      // Check contract status and call appropriate endpoint
+      if (contractStatus === 'pending') {
+        // Use proposal ID for canceling pending contracts
+        response = await contractApi.cancelContract(proposalData.proposal.id);
+      } else if (contractStatus === 'active') {
+        // Use contract ID for terminating active contracts
+        response = await contractApi.terminateContract(
+          proposalData.contract.id
+        );
+      } else {
+        setError(
+          `Cannot cancel/terminate contract with status: ${contractStatus}`
+        );
+        return;
+      }
 
       if (response.status) {
+        const action = contractStatus === 'pending' ? 'canceled' : 'terminated';
         setSuccessMessage(
-          response.message || 'Contract terminated successfully'
+          response.message || `Contract ${action} successfully`
         );
         setShowConfirmation(false);
         // Optionally navigate back to contracts page after a delay
@@ -117,13 +135,17 @@ const EmployerProposalDetailsPage: React.FC = () => {
           navigate('/employer/contracts');
         }, 2000);
       } else {
-        setError('Failed to terminate contract');
+        setError(
+          `Failed to ${contractStatus === 'pending' ? 'cancel' : 'terminate'} contract`
+        );
       }
     } catch (err: any) {
-      console.error('Error terminating contract:', err);
+      const contractStatus = proposalData?.contract.status?.toLowerCase();
+      const action = contractStatus === 'pending' ? 'canceling' : 'terminating';
+      console.error(`Error ${action} contract:`, err);
       setError(
         err.response?.data?.message ||
-          'An error occurred while terminating the contract'
+          `An error occurred while ${action} the contract`
       );
     } finally {
       setTerminating(false);
@@ -247,14 +269,20 @@ const EmployerProposalDetailsPage: React.FC = () => {
                 {employee.email}
               </p>
 
-              {/* Terminate Contract Button */}
+              {/* Terminate/Cancel Contract Button */}
               <div className="mt-3 sm:mt-4">
                 <button
                   onClick={() => setShowConfirmation(true)}
                   disabled={terminating}
                   className="text-white rounded-md py-2 text-xs sm:text-sm w-full h-[34px] bg-[#dc3545] hover:bg-[#c82333] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {terminating ? 'Terminating...' : 'Terminate Contract'}
+                  {terminating
+                    ? contract.status?.toLowerCase() === 'pending'
+                      ? 'Canceling...'
+                      : 'Terminating...'
+                    : contract.status?.toLowerCase() === 'pending'
+                      ? 'Cancel Contract'
+                      : 'Terminate Contract'}
                 </button>
               </div>
             </div>
@@ -274,12 +302,18 @@ const EmployerProposalDetailsPage: React.FC = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              Confirm Contract Termination
+              Confirm Contract{' '}
+              {proposalData?.contract.status?.toLowerCase() === 'pending'
+                ? 'Cancellation'
+                : 'Termination'}
             </h3>
             <p className="text-gray-600 mb-6">
-              Are you sure you want to terminate this contract with{' '}
-              {employee?.first_name} {employee?.last_name}? This action cannot
-              be undone.
+              Are you sure you want to{' '}
+              {proposalData?.contract.status?.toLowerCase() === 'pending'
+                ? 'cancel'
+                : 'terminate'}{' '}
+              this contract with {employee?.first_name} {employee?.last_name}?
+              This action cannot be undone.
             </p>
             <div className="flex gap-3">
               <button
@@ -293,7 +327,13 @@ const EmployerProposalDetailsPage: React.FC = () => {
                 disabled={terminating}
                 className="flex-1 px-4 py-2 text-white bg-[#dc3545] rounded-md hover:bg-[#c82333] transition-colors disabled:opacity-50"
               >
-                {terminating ? 'Terminating...' : 'Terminate'}
+                {terminating
+                  ? proposalData?.contract.status?.toLowerCase() === 'pending'
+                    ? 'Canceling...'
+                    : 'Terminating...'
+                  : proposalData?.contract.status?.toLowerCase() === 'pending'
+                    ? 'Cancel'
+                    : 'Terminate'}
               </button>
             </div>
           </div>

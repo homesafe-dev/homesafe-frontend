@@ -15,9 +15,11 @@ const Agents: React.FC = () => {
               Our agents help match you with skilled artisans for every job.
             </p>
 
-            <button className="mt-4 sm:mt-6 bg-[#A5EA91] hover:bg-green-500 text-[#24292E] px-6 py-3 font-medium rounded-md text-base sm:text-lg lg:text-xl transition-colors w-full sm:w-auto">
-              Get Started
-            </button>
+            <a href="/about">
+              <button className="mt-4 sm:mt-6 bg-[#A5EA91] hover:bg-green-500 text-[#24292E] px-6 py-3 font-medium rounded-md text-base sm:text-lg lg:text-xl transition-colors w-full sm:w-auto">
+                Learn More
+              </button>
+            </a>
           </div>
 
           <div className="w-full md:w-1/3 max-w-sm">
