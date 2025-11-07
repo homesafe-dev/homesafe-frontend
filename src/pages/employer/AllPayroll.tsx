@@ -131,7 +131,7 @@ const AllPayrollPage: React.FC = () => {
                       className="grid grid-cols-6 border-b border-[#DEE0E3]"
                     >
                       <div className="p-3 text-sm text-gray-800">
-                        {entry.employee_name || 'N/A'}
+                        {entry.staff?.name || entry.employee_name || 'N/A'}
                       </div>
                       <div className="p-3 text-sm text-gray-800">
                         {entry.position || 'N/A'}
