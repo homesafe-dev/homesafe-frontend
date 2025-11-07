@@ -17,6 +17,8 @@ interface StaffProfileAboutProps {
   rating: number;
   isOnline?: boolean;
   contractId?: number; // Contract ID for termination
+  contractStatus?: string; // Contract status (pending, active, etc.)
+  proposalId?: number; // Proposal ID for cancellation
 }
 
 const StaffProfileAbout: React.FC<StaffProfileAboutProps> = ({
@@ -30,6 +32,8 @@ const StaffProfileAbout: React.FC<StaffProfileAboutProps> = ({
   profileImage,
   isOnline = true,
   contractId,
+  contractStatus,
+  proposalId,
 }) => {
   const [isTerminateModalOpen, setIsTerminateModalOpen] = useState(false);
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
@@ -78,23 +82,56 @@ const StaffProfileAbout: React.FC<StaffProfileAboutProps> = ({
     try {
       setIsTerminating(true);
 
-      // Call the terminate contract API
-      const response = await contractApi.terminateContract(contractId);
+      const status = contractStatus?.toLowerCase();
+      let response;
+
+      // Check contract status and call appropriate endpoint
+      if (status === 'pending') {
+        // Use proposal ID for canceling pending contracts
+        if (!proposalId) {
+          showToast('Proposal ID not found. Cannot cancel contract.', 'error');
+          return;
+        }
+        response = await contractApi.cancelContract(proposalId);
+      } else if (status === 'active') {
+        // Use contract ID for terminating active contracts
+        if (!contractId) {
+          showToast(
+            'Contract ID not found. Cannot terminate contract.',
+            'error'
+          );
+          return;
+        }
+        response = await contractApi.terminateContract(contractId);
+      } else {
+        showToast(
+          `Cannot cancel/terminate contract with status: ${status}`,
+          'error'
+        );
+        return;
+      }
 
       if (response.status) {
+        const action = status === 'pending' ? 'canceled' : 'terminated';
         showToast(
-          response.message || 'Contract terminated successfully',
+          response.message || `Contract ${action} successfully`,
           'success'
         );
         setIsConfirmationOpen(true);
       } else {
-        showToast(response.message || 'Failed to terminate contract', 'error');
+        showToast(
+          response.message ||
+            `Failed to ${status === 'pending' ? 'cancel' : 'terminate'} contract`,
+          'error'
+        );
       }
     } catch (error: any) {
-      console.error('Error terminating contract:', error);
+      const status = contractStatus?.toLowerCase();
+      const action = status === 'pending' ? 'canceling' : 'terminating';
+      console.error(`Error ${action} contract:`, error);
       showToast(
         error.response?.data?.message ||
-          'An error occurred while terminating the contract',
+          `An error occurred while ${action} the contract`,
         'error'
       );
     } finally {
@@ -173,8 +210,14 @@ const StaffProfileAbout: React.FC<StaffProfileAboutProps> = ({
             {isTerminating ? (
               <div className="flex items-center justify-center">
                 <div className="animate-spin rounded-full h-3 w-3 sm:h-4 sm:w-4 border-b-2 border-white mr-1"></div>
-                <span className="text-xs">Terminating...</span>
+                <span className="text-xs">
+                  {contractStatus?.toLowerCase() === 'pending'
+                    ? 'Canceling...'
+                    : 'Terminating...'}
+                </span>
               </div>
+            ) : contractStatus?.toLowerCase() === 'pending' ? (
+              'Cancel Staff'
             ) : (
               'Terminate Staff'
             )}

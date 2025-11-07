@@ -193,9 +193,11 @@ const Hero: React.FC = () => {
             essential services.
           </p>
 
-          <button className="bg-[#A5EA91] hover:bg-green-500 text-[#24292E] font-semibold py-2 sm:py-3 px-6 sm:px-8 rounded-md text-base sm:text-lg transition-colors">
-            Get Started
-          </button>
+          <a href="/signup">
+            <button className="bg-[#A5EA91] hover:bg-green-500 text-[#24292E] font-semibold py-2 sm:py-3 px-6 sm:px-8 rounded-md text-base sm:text-lg transition-colors">
+              Get Started
+            </button>
+          </a>
         </div>
       </div>
     </div>

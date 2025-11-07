@@ -114,6 +114,23 @@ const contractApi = {
   },
 
   /**
+   * Cancel a pending contract
+   * @param proposalId - ID of the proposal to cancel (for pending contracts)
+   * @returns Promise with the API response
+   */
+  cancelContract: async (proposalId: number) => {
+    try {
+      const response = await axiosInstance.post(
+        `/contracts/${proposalId}/cancel`
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error canceling contract:', error);
+      throw error;
+    }
+  },
+
+  /**
    * Get contract proposals
    * @param page - Page number for pagination
    * @param limit - Number of items per page

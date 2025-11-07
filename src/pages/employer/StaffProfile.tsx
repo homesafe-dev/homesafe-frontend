@@ -6,6 +6,7 @@ import MedicalHistory from '../../components/Employer/StaffMedicHistory';
 import EducationalResources from '../../components/Employer/StaffResources';
 import StaffReview from '../../components/Employer/StaffReview';
 import employerApi from '../../api/employerApi';
+import contractApi from '../../api/contractApi';
 import ArtisanImg from '../../assets/images/artisans.png';
 
 interface Employee {
@@ -52,6 +53,11 @@ const StaffProfile: React.FC = () => {
   const [employee, setEmployee] = useState<Employee | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [contractId, setContractId] = useState<number | undefined>(undefined);
+  const [contractStatus, setContractStatus] = useState<string | undefined>(
+    undefined
+  );
+  const [proposalId, setProposalId] = useState<number | undefined>(undefined);
 
   useEffect(() => {
     const fetchEmployeeData = async () => {
@@ -65,15 +71,41 @@ const StaffProfile: React.FC = () => {
         setLoading(true);
         setError(null);
 
-        const response = await employerApi.getEmployees();
+        // Fetch employee data
+        const employeeResponse = await employerApi.getEmployees();
 
-        if (response.status && response.data && response.data.data) {
-          const foundEmployee = response.data.data.find(
+        if (
+          employeeResponse.status &&
+          employeeResponse.data &&
+          employeeResponse.data.data
+        ) {
+          const foundEmployee = employeeResponse.data.data.find(
             (emp: Employee) => emp.id === Number(employeeId)
           );
 
           if (foundEmployee) {
             setEmployee(foundEmployee);
+
+            // Fetch contracts to find the contract for this employee
+            try {
+              const contractsResponse = await contractApi.getProposals();
+              if (contractsResponse.status && contractsResponse.data) {
+                const employeeContract = contractsResponse.data.find(
+                  (proposal: any) =>
+                    proposal.employee?.id === Number(employeeId) ||
+                    proposal.contract?.employee_id === Number(employeeId)
+                );
+
+                if (employeeContract) {
+                  setContractId(employeeContract.contract.id);
+                  setContractStatus(employeeContract.contract.status);
+                  setProposalId(employeeContract.proposal.id);
+                }
+              }
+            } catch (contractErr) {
+              console.error('Error fetching contract data:', contractErr);
+              // Don't fail the whole page if contract fetch fails
+            }
           } else {
             setError('Employee not found');
           }
@@ -184,7 +216,9 @@ const StaffProfile: React.FC = () => {
             email={employee.email}
             profileImage={employee.avatar || ArtisanImg}
             rating={4.0} // Default rating, would come from reviews calculation
-            contractId={employee.id} // Pass employee ID as contract ID for termination
+            contractId={contractId}
+            contractStatus={contractStatus}
+            proposalId={proposalId}
           />
         </div>
 
