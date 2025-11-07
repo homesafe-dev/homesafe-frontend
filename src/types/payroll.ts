@@ -25,6 +25,11 @@ export interface PayrollEntry {
   id: number;
   employee_id?: number;
   employee_name?: string;
+  staff?: {
+    id: number;
+    name: string;
+    email: string;
+  };
   position?: string;
   amount: string | number;
   payment_date?: string;
