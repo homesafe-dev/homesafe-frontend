@@ -5,7 +5,6 @@ import userApi from '../../api/userApi';
 import Toast from '../../components/common/Toast';
 
 interface KYCFormData {
-  idType: string;
   ninNumber: string;
 }
 
@@ -27,7 +26,6 @@ const EmployeeKYCPage: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [formData, setFormData] = useState<KYCFormData>({
-    idType: '',
     ninNumber: '',
   });
   const [toast, setToast] = useState<{
@@ -76,9 +74,7 @@ const EmployeeKYCPage: React.FC = () => {
     fetchUserProfile();
   }, []);
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -92,15 +88,14 @@ const EmployeeKYCPage: React.FC = () => {
       setSubmitting(true);
 
       // Validate form data
-      if (!formData.idType || !formData.ninNumber) {
-        showToast('Please fill in all required fields', 'error');
+      if (!formData.ninNumber) {
+        showToast('Please enter your NIN number', 'error');
         return;
       }
 
       // Create payload for KYC API
       const kycPayload = {
         number: formData.ninNumber,
-        type: formData.idType,
       };
 
       const response = await userApi.submitKYC(kycPayload);
@@ -234,8 +229,7 @@ const EmployeeKYCPage: React.FC = () => {
                   ID Verification
                 </h2>
                 <p className="text-sm text-orange-600">
-                  Please use 1000000001 for NIN number & JZ426633988976CH for
-                  V-NIN verification
+                  Please use 70123456789 for NIN number verification
                 </p>
               </div>
             </div>
@@ -263,30 +257,6 @@ const EmployeeKYCPage: React.FC = () => {
           {/* Form Container with Border */}
           <div className="border-2 border-gray-300 rounded-lg p-6 mb-6">
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* ID Type */}
-              <div>
-                <label
-                  htmlFor="idType"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  ID Type
-                </label>
-                <select
-                  id="idType"
-                  name="idType"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 bg-white text-gray-700"
-                  value={formData.idType}
-                  onChange={handleInputChange}
-                  required
-                >
-                  <option value="">Select ID Type</option>
-                  <option value="nin">
-                    National Identification Number (NIN)
-                  </option>
-                  <option value="v_nin">Virtual NIN</option>
-                </select>
-              </div>
-
               {/* NIN Number */}
               <div>
                 <label
@@ -299,7 +269,7 @@ const EmployeeKYCPage: React.FC = () => {
                   type="text"
                   id="ninNumber"
                   name="ninNumber"
-                  placeholder="Enter your NIN or Virtual NIN"
+                  placeholder="Enter your NIN number"
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-700"
                   value={formData.ninNumber}
                   onChange={handleInputChange}
