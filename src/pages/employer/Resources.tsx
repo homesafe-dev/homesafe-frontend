@@ -169,7 +169,7 @@ const ResourcesPage: React.FC = () => {
 
                   <div className="p-4">
                     <div className="flex justify-between items-start relative">
-                      <h3 className="font-medium text-gray-900">
+                      <h3 className="font-medium text-gray-900 capitalize">
                         {resource.occupation.name} Training
                       </h3>
                       <button

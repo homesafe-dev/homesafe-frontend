@@ -156,7 +156,7 @@ const ResourcesPage: React.FC = () => {
 
                   <div className="p-3 sm:p-4">
                     <div className="flex justify-between items-start relative">
-                      <h3 className="font-medium text-gray-900 text-sm sm:text-base truncate pr-2">
+                      <h3 className="font-medium text-gray-900 text-sm sm:text-base truncate pr-2 capitalize">
                         {resource.occupation.name} Training
                       </h3>
                       <button
