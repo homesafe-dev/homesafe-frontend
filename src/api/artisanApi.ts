@@ -2,7 +2,8 @@ import axiosInstance from './axiosConfig';
 
 // Artisan API endpoints
 const ARTISAN_ENDPOINTS = {
-  EMPLOYEE_LIST: '/users',
+  EMPLOYEE_LIST: '/artisans', // For listing artisans
+  USER_LIST: '/users', // For other purposes like getEmployeeById
 };
 
 // Artisan API service
@@ -19,7 +20,6 @@ const artisanApi = {
         ARTISAN_ENDPOINTS.EMPLOYEE_LIST,
         {
           params: {
-            role: 'employee',
             page,
             limit,
           },
@@ -41,16 +41,13 @@ const artisanApi = {
   getEmployeeById: async (employeeId: number) => {
     try {
       // Get all employees (with a high limit to ensure we get the one we need)
-      const response = await axiosInstance.get(
-        ARTISAN_ENDPOINTS.EMPLOYEE_LIST,
-        {
-          params: {
-            role: 'employee',
-            page: 1,
-            limit: 100,
-          },
-        }
-      );
+      const response = await axiosInstance.get(ARTISAN_ENDPOINTS.USER_LIST, {
+        params: {
+          role: 'employee',
+          page: 1,
+          limit: 100,
+        },
+      });
 
       if (
         response.data.status &&
