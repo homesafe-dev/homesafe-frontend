@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FiSearch, FiChevronDown } from 'react-icons/fi';
+import { Search, ChevronDown, Users, Star, MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import artisanApi from '../../api/artisanApi';
 import Avatar from '../../components/common/Avatar';
@@ -233,7 +233,10 @@ const ArtisansPage: React.FC = () => {
 
   // Get rating or default to 0
   const getRating = (artisan: Artisan): number => {
-    return artisan.average_rating || 0;
+    const rating = artisan.average_rating;
+    if (rating === null || rating === undefined) return 0;
+    const numRating = typeof rating === 'string' ? parseFloat(rating) : rating;
+    return isNaN(numRating) ? 0 : numRating;
   };
 
   // Get salary filter label
@@ -305,32 +308,55 @@ const ArtisansPage: React.FC = () => {
   });
 
   return (
-    <div className="min-h-screen">
-      {/* Main Content */}
-      <div className="px-3 sm:px-4 lg:px-6 py-4 sm:py-6">
-        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4 gap-4">
-          <h1 className="text-lg sm:text-xl font-semibold text-[#24292E]">
+    <div className="p-0">
+      {/* Header Section */}
+      <div className="mb-6 sm:mb-8">
+        <div className="flex items-center gap-3 mb-2">
+          <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+            <Users className="w-4 h-4 text-blue-600" />
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
             Artisans
           </h1>
+        </div>
+        <p className="text-sm sm:text-base text-gray-600">
+          Browse and discover available artisans
+        </p>
+      </div>
 
-          <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 items-stretch sm:items-center">
+      {/* Main Content */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-100">
+        {/* Search and Filters Section */}
+        <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-gray-100">
+          <div className="flex flex-col sm:flex-row gap-4 mb-4">
+            {/* Search Input */}
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                placeholder="Search by name, occupation or location..."
+                className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+
             {/* Salary Filter */}
-            <div className="relative dropdown-container w-full sm:w-auto">
+            <div className="relative dropdown-container">
               <button
                 onClick={() => {
                   setShowSalaryDropdown(!showSalaryDropdown);
                   setShowJobTypeDropdown(false);
                 }}
-                className="flex items-center gap-2 px-3 sm:px-4 py-2 border border-gray-200 rounded-lg text-xs sm:text-sm text-gray-700 hover:bg-gray-50 w-full sm:min-w-[140px] justify-between"
+                className="flex items-center gap-2 px-4 py-2.5 border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-50 min-w-[160px] justify-between"
               >
                 <span className="truncate">
                   {salaryFilter
                     ? getSalaryLabel(salaryFilter)
                     : 'Filter by Salary'}
                 </span>
-                <FiChevronDown
-                  className={`transition-transform flex-shrink-0 ${showSalaryDropdown ? 'rotate-180' : ''}`}
-                  size={14}
+                <ChevronDown
+                  className={`w-4 h-4 transition-transform flex-shrink-0 ${showSalaryDropdown ? 'rotate-180' : ''}`}
                 />
               </button>
               {showSalaryDropdown && (
@@ -385,20 +411,19 @@ const ArtisansPage: React.FC = () => {
             </div>
 
             {/* Job Type Filter */}
-            <div className="relative dropdown-container w-full sm:w-auto">
+            <div className="relative dropdown-container">
               <button
                 onClick={() => {
                   setShowJobTypeDropdown(!showJobTypeDropdown);
                   setShowSalaryDropdown(false);
                 }}
-                className="flex items-center gap-2 px-3 sm:px-4 py-2 border border-gray-200 rounded-lg text-xs sm:text-sm text-gray-700 hover:bg-gray-50 w-full sm:min-w-[140px] justify-between"
+                className="flex items-center gap-2 px-4 py-2.5 border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-50 min-w-[160px] justify-between"
               >
                 <span className="truncate">
                   {jobTypeFilter || 'Filter by Job Type'}
                 </span>
-                <FiChevronDown
-                  className={`transition-transform flex-shrink-0 ${showJobTypeDropdown ? 'rotate-180' : ''}`}
-                  size={14}
+                <ChevronDown
+                  className={`w-4 h-4 transition-transform flex-shrink-0 ${showJobTypeDropdown ? 'rotate-180' : ''}`}
                 />
               </button>
               {showJobTypeDropdown && (
@@ -427,148 +452,189 @@ const ArtisansPage: React.FC = () => {
                 </div>
               )}
             </div>
+          </div>
 
-            {/* Search Input */}
-            <div className="relative w-full sm:w-[280px] lg:w-[335px] h-[38px] sm:h-[42px]">
-              <FiSearch
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                size={16}
-              />
-              <input
-                type="text"
-                placeholder="Search by name, occupation or location"
-                className="w-full pl-9 sm:pl-10 pr-4 py-2 border border-gray-100 rounded-[16px] text-sm sm:text-[16px] text-[#5A6672] focus:outline-none focus:ring-1 focus:ring-green-500"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
+          {/* Results Count */}
+          <div className="text-sm text-gray-600">
+            Showing {filteredArtisans.length} of {artisans.length} artisans
           </div>
         </div>
 
-        <p className="text-xs sm:text-[13px] text-[#24292E] mb-4 sm:mb-6">
-          List of available artisans
-        </p>
-
-        {loading ? (
-          <div className="flex justify-center items-center h-40">
-            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-500"></div>
-          </div>
-        ) : filteredArtisans.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
-            No artisans found matching your search criteria.
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 sm:gap-x-6 lg:gap-x-8 gap-y-4 sm:gap-y-6">
-            {filteredArtisans.map((artisan) => (
-              <div
-                key={artisan.id}
-                className={`flex flex-col items-center bg-white p-4 sm:p-6 lg:p-8 shadow relative ${
-                  artisan.is_employed ? 'opacity-60 grayscale' : ''
-                }`}
-              >
-                {/* Hired Badge - moved to left side */}
-                {artisan.is_employed && (
-                  <div className="absolute top-2 sm:top-4 left-2 sm:left-4 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-medium">
-                    HIRED
-                  </div>
-                )}
-
-                {/* Verified Star - in right section where hired used to be */}
-                {artisan.status === 1 && (
-                  <div className="absolute top-2 sm:top-4 right-2 sm:right-4 text-green-500 text-base sm:text-lg">
-                    ★
-                  </div>
-                )}
-
-                <div className="mb-2 sm:mb-3">
-                  <Avatar
-                    src={artisan.avatar}
-                    firstName={artisan.first_name}
-                    lastName={artisan.last_name}
-                    size="lg"
-                    showStatus={false}
-                    isOnline={artisan.status === 1}
-                  />
-                </div>
-                <h3 className="font-medium text-center text-sm sm:text-[16px] text-[#24292E] mt-2 sm:mt-[1rem]">
-                  {artisan.first_name} {artisan.last_name}
-                </h3>
-                {getLocationAgeDisplay(artisan.address, artisan.dob) && (
-                  <p className="text-xs sm:text-sm text-gray-500 mb-1 mt-2 sm:mt-[0.5rem]">
-                    {getLocationAgeDisplay(artisan.address, artisan.dob)}
-                  </p>
-                )}
-                <div className="bg-green-100 text-green-700 px-2 sm:px-3 py-1 rounded-full text-xs mb-2 mt-2 sm:mt-[0.5rem]">
-                  {getOccupation(artisan)}
-                </div>
-                <div className="flex mb-2 sm:mb-3">
-                  {renderStars(getRating(artisan))}
-                </div>
-                <Link
-                  to={`/employer/artisan/profile?id=${artisan.id}`}
-                  className="w-full"
-                >
-                  <button
-                    className={`px-3 sm:px-4 py-2 rounded-md text-xs sm:text-sm transition-colors w-full text-center mt-2 sm:mt-[1rem] cursor-pointer ${
-                      artisan.is_employed
-                        ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
-                        : 'bg-[#A5EA91] hover:bg-green-300 text-[#24292E]'
-                    }`}
-                    disabled={artisan.is_employed}
-                  >
-                    View Profile
-                  </button>
-                </Link>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {!loading && !error && totalPages > 1 && (
-          <div className="flex justify-center mt-8">
-            <div className="flex space-x-2">
-              <button
-                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-                className={`px-3 py-1 rounded ${
-                  currentPage === 1
-                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                }`}
-              >
-                Previous
-              </button>
-
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                (page) => (
-                  <button
-                    key={page}
-                    onClick={() => setCurrentPage(page)}
-                    className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                      currentPage === page ? 'bg-gray-200' : 'hover:bg-gray-100'
-                    }`}
-                  >
-                    {page}
-                  </button>
-                )
-              )}
-
-              <button
-                onClick={() =>
-                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                }
-                disabled={currentPage === totalPages}
-                className={`px-3 py-1 rounded ${
-                  currentPage === totalPages
-                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                }`}
-              >
-                Next
-              </button>
+        {/* Artisans Grid */}
+        <div className="p-4 sm:p-6">
+          {loading ? (
+            <div className="flex justify-center items-center h-64">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
             </div>
-          </div>
-        )}
+          ) : filteredArtisans.length === 0 ? (
+            <div className="text-center py-16">
+              <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+              <p className="text-lg font-medium text-gray-900 mb-2">
+                No artisans found
+              </p>
+              <p className="text-sm text-gray-500">
+                {searchQuery || salaryFilter || jobTypeFilter
+                  ? 'Try adjusting your search or filters'
+                  : 'No artisans available at the moment'}
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredArtisans.map((artisan) => (
+                <div
+                  key={artisan.id}
+                  className={`bg-white rounded-lg border border-gray-100 shadow-sm p-6 relative transition-all hover:shadow-md ${
+                    artisan.is_employed ? 'opacity-60' : ''
+                  }`}
+                >
+                  {/* Hired Badge */}
+                  {artisan.is_employed && (
+                    <div className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-xs font-medium">
+                      HIRED
+                    </div>
+                  )}
+
+                  {/* Verified Badge */}
+                  {artisan.status === 1 && (
+                    <div className="absolute top-4 right-4 bg-green-50 text-green-600 px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+                      <Star className="w-3 h-3 fill-current" />
+                      Verified
+                    </div>
+                  )}
+
+                  <div className="flex flex-col items-center mb-4">
+                    <Avatar
+                      src={artisan.avatar}
+                      firstName={artisan.first_name}
+                      lastName={artisan.last_name}
+                      size="lg"
+                      showStatus={false}
+                      isOnline={artisan.status === 1}
+                    />
+                  </div>
+
+                  <h3 className="font-semibold text-center text-lg text-gray-900 mb-2">
+                    {artisan.first_name} {artisan.last_name}
+                  </h3>
+
+                  {getLocationAgeDisplay(artisan.address, artisan.dob) && (
+                    <div className="flex items-center justify-center gap-1 text-sm text-gray-500 mb-3">
+                      <MapPin className="w-4 h-4" />
+                      <span>
+                        {getLocationAgeDisplay(artisan.address, artisan.dob)}
+                      </span>
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-center mb-3">
+                    <span className="bg-green-50 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
+                      {getOccupation(artisan)}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-center gap-1 mb-4">
+                    {renderStars(getRating(artisan))}
+                    {getRating(artisan) > 0 && (
+                      <span className="text-sm text-gray-600 ml-1">
+                        ({getRating(artisan).toFixed(1)})
+                      </span>
+                    )}
+                  </div>
+
+                  <Link
+                    to={`/employer/artisan/profile?id=${artisan.id}`}
+                    className="block"
+                  >
+                    <button
+                      className={`w-full px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                        artisan.is_employed
+                          ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                          : 'bg-green-600 hover:bg-green-700 text-white'
+                      }`}
+                      disabled={artisan.is_employed}
+                    >
+                      View Profile
+                    </button>
+                  </Link>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Pagination */}
+          {!loading && !error && totalPages > 1 && (
+            <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-gray-100">
+              <div className="text-sm text-gray-700">
+                Page <span className="font-medium">{currentPage}</span> of{' '}
+                <span className="font-medium">{totalPages}</span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(prev - 1, 1))
+                  }
+                  disabled={currentPage === 1}
+                  className={`px-4 py-2 rounded-lg border transition-colors ${
+                    currentPage === 1
+                      ? 'border-gray-200 text-gray-300 cursor-not-allowed'
+                      : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  Previous
+                </button>
+
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                  (page) => {
+                    if (
+                      page === 1 ||
+                      page === totalPages ||
+                      (page >= currentPage - 1 && page <= currentPage + 1)
+                    ) {
+                      return (
+                        <button
+                          key={page}
+                          onClick={() => setCurrentPage(page)}
+                          className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                            currentPage === page
+                              ? 'bg-green-600 text-white'
+                              : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
+                          }`}
+                        >
+                          {page}
+                        </button>
+                      );
+                    } else if (
+                      page === currentPage - 2 ||
+                      page === currentPage + 2
+                    ) {
+                      return (
+                        <span key={page} className="px-2 text-gray-500">
+                          ...
+                        </span>
+                      );
+                    }
+                    return null;
+                  }
+                )}
+
+                <button
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                  }
+                  disabled={currentPage === totalPages}
+                  className={`px-4 py-2 rounded-lg border transition-colors ${
+                    currentPage === totalPages
+                      ? 'border-gray-200 text-gray-300 cursor-not-allowed'
+                      : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Toast Notification */}

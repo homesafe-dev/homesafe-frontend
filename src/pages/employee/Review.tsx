@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
+import { Star, Plus, MessageSquare, Calendar, User } from 'lucide-react';
 import EmployerReview from '../../components/Employee/EmployerReview';
 import userApi from '../../api/userApi';
 import { format } from 'date-fns';
+import Avatar from '../../components/common/Avatar';
 
 interface Reviewer {
   id: number;
@@ -26,6 +27,7 @@ interface Review {
 interface ReviewCardProps {
   reviewerName: string;
   reviewerAvatar?: string;
+  reviewerEmail?: string;
   comment: string;
   rating: number;
   date: string;
@@ -34,53 +36,64 @@ interface ReviewCardProps {
 const ReviewCard: React.FC<ReviewCardProps> = ({
   reviewerName,
   reviewerAvatar,
+  reviewerEmail,
   comment,
   rating,
   date,
 }) => {
+  const firstName = reviewerName.split(' ')[0] || '';
+  const lastName = reviewerName.split(' ').slice(1).join(' ') || '';
+
   return (
-    <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm border border-gray-200">
-      <div className="flex items-center mb-3">
-        {reviewerAvatar ? (
-          <img
-            src={reviewerAvatar}
-            alt={reviewerName}
-            className="w-8 h-8 sm:w-10 sm:h-10 rounded-full mr-3 object-cover flex-shrink-0"
-          />
-        ) : (
-          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-300 flex items-center justify-center mr-3 flex-shrink-0">
-            <span className="text-white font-medium text-xs sm:text-sm">
-              {reviewerName
-                .split(' ')
-                .map((name) => name[0])
-                .join('')}
-            </span>
+    <div className="bg-white p-5 sm:p-6 rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-all">
+      <div className="flex items-start gap-4 mb-4">
+        <Avatar
+          src={reviewerAvatar}
+          firstName={firstName}
+          lastName={lastName}
+          size="md"
+          showStatus={false}
+        />
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1">
+            <h3 className="font-semibold text-gray-900 text-base truncate">
+              {reviewerName}
+            </h3>
           </div>
-        )}
-        <div className="min-w-0 flex-1">
-          <h3 className="font-semibold text-[#24292E] text-[14px] sm:text-[16px] truncate">
-            {reviewerName}
-          </h3>
-          <p className="text-xs text-gray-500">{date}</p>
+          {reviewerEmail && (
+            <div className="flex items-center gap-1.5 mb-2">
+              <User className="w-3 h-3 text-gray-400" />
+              <p className="text-xs text-gray-500 truncate">{reviewerEmail}</p>
+            </div>
+          )}
+          <div className="flex items-center gap-1.5">
+            <Calendar className="w-3 h-3 text-gray-400" />
+            <p className="text-xs text-gray-500">{date}</p>
+          </div>
         </div>
       </div>
-      <p className="text-xs sm:text-sm text-gray-600 mb-3 line-clamp-3">
-        {comment}
-      </p>
-      <div className="flex">
-        {[...Array(5)].map((_, index) =>
-          index < rating ? (
-            <AiFillStar
+      <div className="mb-4">
+        <div className="flex items-center gap-1 mb-3">
+          {[...Array(5)].map((_, index) => (
+            <Star
               key={index}
-              className="text-[#EFAE73] text-sm sm:text-base"
+              className={`w-4 h-4 ${
+                index < rating
+                  ? 'fill-yellow-400 text-yellow-400'
+                  : 'fill-gray-200 text-gray-200'
+              }`}
             />
-          ) : (
-            <AiOutlineStar
-              key={index}
-              className="text-[#EFAE73] text-sm sm:text-base"
-            />
-          )
-        )}
+          ))}
+          <span className="ml-2 text-sm font-semibold text-gray-900">
+            {rating}.0
+          </span>
+        </div>
+        <div className="flex items-start gap-2">
+          <MessageSquare className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
+          <p className="text-sm text-gray-700 break-words leading-relaxed flex-1">
+            {comment}
+          </p>
+        </div>
       </div>
     </div>
   );
@@ -185,47 +198,58 @@ const ReviewsPage: React.FC<ReviewsPageProps> = ({
   };
 
   return (
-    <div className="bg-gray-50 p-4 sm:p-6">
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-6 gap-4">
-        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-          <h2 className="text-lg sm:text-xl font-semibold">{title}</h2>
-          {!loading && !error && (
-            <div className="flex items-center">
-              <span className="text-base sm:text-lg font-medium mr-2">
+    <div className="p-0">
+      {/* Header Section */}
+      <div className="mb-6 sm:mb-8">
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+              <MessageSquare className="w-4 h-4 text-blue-600" />
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+              {title}
+            </h1>
+          </div>
+          <button
+            onClick={() => setIsReviewModalOpen(true)}
+            className="flex items-center justify-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Review an Employer</span>
+          </button>
+        </div>
+        {!loading && !error && (
+          <div className="flex items-center gap-4 mt-4">
+            <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-4 py-2">
+              <span className="text-xl font-bold text-gray-900">
                 {!isNaN(parseFloat(averageRating))
                   ? parseFloat(averageRating).toFixed(1)
                   : '0.0'}
               </span>
-              <div className="flex mr-2">
+              <div className="flex items-center gap-0.5">
                 {[...Array(5)].map((_, index) => {
                   const ratingValue = !isNaN(parseFloat(averageRating))
                     ? parseFloat(averageRating)
                     : 0;
                   return (
-                    <AiFillStar
+                    <Star
                       key={index}
-                      className={`text-sm sm:text-base ${
+                      className={`w-4 h-4 ${
                         index < Math.round(ratingValue)
-                          ? 'text-[#EFAE73]'
-                          : 'text-gray-300'
+                          ? 'fill-yellow-400 text-yellow-400'
+                          : 'fill-gray-200 text-gray-200'
                       }`}
                     />
                   );
                 })}
               </div>
-              <span className="text-xs sm:text-sm text-gray-500">
-                ({reviews.length} reviews)
-              </span>
             </div>
-          )}
-        </div>
-        <button
-          onClick={() => setIsReviewModalOpen(true)}
-          className="flex items-center justify-center gap-2 bg-[#A5EA91] text-[#24292E] px-3 sm:px-4 py-2 rounded-[8px] hover:bg-[#95ddb1] transition-colors text-sm sm:text-base w-full sm:w-auto"
-        >
-          <AiOutlineStar className="text-[#24292E] flex-shrink-0" />
-          <span className="truncate">Click to Review an Employer</span>
-        </button>
+            <div className="text-sm text-gray-600">
+              <span className="font-medium">{reviews.length}</span> review
+              {reviews.length !== 1 ? 's' : ''}
+            </div>
+          </div>
+        )}
       </div>
 
       <EmployerReview
@@ -234,42 +258,59 @@ const ReviewsPage: React.FC<ReviewsPageProps> = ({
         onReviewSubmitted={handleReviewSubmitted}
       />
 
-      <p className="mb-4 sm:mb-6 text-[#24292E] text-[14px] sm:text-[16px]">
-        Here are the reviews from your employers
-      </p>
+      {/* Content Section */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-100">
+        {loading && (
+          <div className="flex justify-center items-center py-16">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
+          </div>
+        )}
 
-      {loading && (
-        <div className="flex justify-center items-center py-8 sm:py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
-        </div>
-      )}
+        {error && (
+          <div className="p-6">
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+              {error}
+            </div>
+          </div>
+        )}
 
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 text-sm">
-          {error}
-        </div>
-      )}
+        {!loading && !error && reviews.length === 0 && (
+          <div className="text-center py-16">
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
+                <MessageSquare className="w-8 h-8 text-gray-400" />
+              </div>
+              <div>
+                <p className="text-lg font-semibold text-gray-900 mb-1">
+                  No reviews available
+                </p>
+                <p className="text-sm text-gray-500">
+                  Reviews from your employers will appear here once they are
+                  submitted
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
 
-      {!loading && !error && reviews.length === 0 && (
-        <div className="text-center py-8 sm:py-12 text-gray-500 text-sm sm:text-base">
-          No reviews available
-        </div>
-      )}
-
-      {!loading && !error && reviews.length > 0 && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-          {reviews.map((review) => (
-            <ReviewCard
-              key={review.id}
-              reviewerName={`${review.reviewer.first_name} ${review.reviewer.last_name}`}
-              reviewerAvatar={review.reviewer.avatar}
-              comment={review.comment}
-              rating={review.rating}
-              date={formatDate(review.created_at)}
-            />
-          ))}
-        </div>
-      )}
+        {!loading && !error && reviews.length > 0 && (
+          <div className="p-4 sm:p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+              {reviews.map((review) => (
+                <ReviewCard
+                  key={review.id}
+                  reviewerName={`${review.reviewer.first_name} ${review.reviewer.last_name}`}
+                  reviewerAvatar={review.reviewer.avatar}
+                  reviewerEmail={review.reviewer.email}
+                  comment={review.comment}
+                  rating={review.rating}
+                  date={formatDate(review.created_at)}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

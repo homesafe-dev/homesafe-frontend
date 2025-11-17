@@ -1,5 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import {
+  ChevronLeft,
+  ChevronRight,
+  CalendarSync,
+  User,
+  Briefcase,
+  Calendar,
+  TrendingUp,
+  ArrowRight,
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
 import CreatePayrollModal from '../../components/Employer/CreatePayrollModal';
 import payrollApi from '../../api/payrollApi';
@@ -65,164 +74,250 @@ const PayrollPage: React.FC = () => {
     }
   };
 
+  const formatCurrency = (amount: number | string) => {
+    const numAmount = typeof amount === 'string' ? parseFloat(amount) : amount;
+    return new Intl.NumberFormat('en-NG', {
+      style: 'currency',
+      currency: 'NGN',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(numAmount);
+  };
+
+  const formatDate = (dateString: string | undefined) => {
+    if (!dateString) return 'N/A';
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
+  };
+
+  const getStatusColor = (status: string) => {
+    const statusLower = status?.toLowerCase() || '';
+    if (statusLower === 'active' || statusLower === 'completed') {
+      return 'bg-green-50 text-green-700';
+    } else if (statusLower === 'pending') {
+      return 'bg-yellow-50 text-yellow-700';
+    } else {
+      return 'bg-gray-50 text-gray-700';
+    }
+  };
+
   return (
-    <div className="w-full max-w-7xl mx-auto p-3 sm:p-4 lg:p-6">
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 sm:mb-6 gap-4">
-        <h1 className="text-lg sm:text-[20px] font-semibold text-[#24292E]">
-          Payroll
-        </h1>
-        {/* <button
-          className="bg-[#A5EA91] text-[#24292E] font-semibold w-full sm:w-[211px] h-[38px] px-4 py-2 rounded-md text-xs sm:text-[13px] flex items-center justify-center gap-2"
-          onClick={handleOpenCreateModal}
-        >
-          <FaPlus size={12} />
-          <span>Add New Staff to Payroll</span>
-        </button> */}
+    <div className="p-0">
+      {/* Header Section */}
+      <div className="mb-6 sm:mb-8">
+        <div className="flex items-center gap-3 mb-2">
+          <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+            <CalendarSync className="w-4 h-4 text-blue-600" />
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+            Payroll
+          </h1>
+        </div>
+        <p className="text-sm sm:text-base text-gray-600">
+          Manage and view payroll history
+        </p>
       </div>
 
-      <div className="mb-6 sm:mb-8">
-        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-2 gap-2">
-          <h2 className="text-lg sm:text-xl font-semibold text-[#24292E]">
-            Payroll History
-          </h2>
-          <Link to="/employer/payroll/all">
-            <button className="text-[#24292E] font-semibold text-xs sm:text-[13px] text-left sm:text-right">
-              View All
-            </button>
-          </Link>
+      {/* Main Content */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-100">
+        {/* Header with View All */}
+        <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-gray-100">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+            <h2 className="text-lg font-semibold text-gray-900">
+              Payroll History
+            </h2>
+            <Link to="/employer/payroll/all">
+              <button className="inline-flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700 font-medium">
+                View All
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </Link>
+          </div>
         </div>
 
-        <div className="w-full mt-4 overflow-x-auto">
+        {/* Table Section */}
+        <div className="overflow-x-auto">
           {loading ? (
-            <div className="flex justify-center items-center h-40">
-              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-500"></div>
+            <div className="flex justify-center items-center h-64">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
             </div>
           ) : error ? (
-            <div className="bg-red-50 text-red-600 p-4 rounded-lg text-center">
-              {error}
-            </div>
-          ) : (
-            <>
-              <div className="grid grid-cols-6 bg-[#C8EDDF80] rounded-t-lg min-w-[700px]">
-                <div className="p-2 sm:p-3 text-xs sm:text-sm font-medium text-gray-600">
-                  Staff
-                </div>
-                <div className="p-2 sm:p-3 text-xs sm:text-sm font-medium text-gray-600">
-                  Position
-                </div>
-                <div className="p-2 sm:p-3 text-xs sm:text-sm font-medium text-gray-600">
-                  Amount
-                </div>
-                <div className="p-2 sm:p-3 text-xs sm:text-sm font-medium text-gray-600">
-                  Payment Date
-                </div>
-                <div className="p-2 sm:p-3 text-xs sm:text-sm font-medium text-gray-600">
-                  Advance Salary
-                </div>
-                <div className="p-2 sm:p-3 text-xs sm:text-sm font-medium text-gray-600">
-                  Status
-                </div>
+            <div className="p-12 text-center">
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg inline-block">
+                {error}
               </div>
-
-              <div className="bg-white min-w-[700px]">
-                {payrollEntries.length > 0 ? (
-                  payrollEntries.map((entry, index) => (
-                    <div
+            </div>
+          ) : payrollEntries.length > 0 ? (
+            <>
+              <table className="w-full">
+                <thead className="bg-gray-50 border-b border-gray-100">
+                  <tr>
+                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                      Staff
+                    </th>
+                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                      Position
+                    </th>
+                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                      Amount
+                    </th>
+                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                      Payment Date
+                    </th>
+                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                      Advance Salary
+                    </th>
+                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                      Status
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-100">
+                  {payrollEntries.map((entry, index) => (
+                    <tr
                       key={entry.id || index}
-                      className="grid grid-cols-6 border-b border-[#DEE0E3]"
+                      className="hover:bg-gray-50 transition-colors"
                     >
-                      <div className="p-2 sm:p-3 text-xs sm:text-sm text-gray-800 truncate">
-                        {entry.staff?.name || entry.employee_name || 'N/A'}
-                      </div>
-                      <div className="p-2 sm:p-3 text-xs sm:text-sm text-gray-800 truncate">
-                        {entry.position || 'N/A'}
-                      </div>
-                      <div className="p-2 sm:p-3 text-xs sm:text-sm text-gray-800">
-                        ₦{' '}
-                        {typeof entry.amount === 'number'
-                          ? entry.amount.toLocaleString()
-                          : entry.amount}
-                      </div>
-                      <div className="p-2 sm:p-3 text-xs sm:text-sm text-gray-800">
-                        {entry.payment_date || 'N/A'}
-                      </div>
-                      <div className="p-2 sm:p-3 text-xs sm:text-sm text-gray-800">
-                        {entry.advanced_salary
-                          ? typeof entry.advanced_salary === 'number'
-                            ? `₦ ${entry.advanced_salary.toLocaleString()}`
-                            : entry.advanced_salary
-                          : '-'}
-                      </div>
-                      <div className="p-2 sm:p-3">
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center gap-2">
+                          <User className="w-4 h-4 text-gray-400" />
+                          <span className="text-sm text-gray-900">
+                            {entry.staff?.name || entry.employee_name || 'N/A'}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center gap-2">
+                          <Briefcase className="w-4 h-4 text-gray-400" />
+                          <span className="text-sm text-gray-900">
+                            {entry.position || 'N/A'}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
+                        <span className="text-sm font-semibold text-gray-900">
+                          {formatCurrency(entry.amount)}
+                        </span>
+                      </td>
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center gap-2">
+                          <Calendar className="w-4 h-4 text-gray-400" />
+                          <span className="text-sm text-gray-900">
+                            {formatDate(entry.payment_date)}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
+                        {entry.advanced_salary ? (
+                          <div className="flex items-center gap-2">
+                            <TrendingUp className="w-4 h-4 text-orange-400" />
+                            <span className="text-sm text-gray-900">
+                              {typeof entry.advanced_salary === 'number'
+                                ? formatCurrency(entry.advanced_salary)
+                                : entry.advanced_salary}
+                            </span>
+                          </div>
+                        ) : (
+                          <span className="text-sm text-gray-400">-</span>
+                        )}
+                      </td>
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
                         <span
-                          className={`px-2 sm:px-3 py-1 rounded-md text-xs sm:text-sm ${
-                            entry.status?.toLowerCase() === 'active'
-                              ? 'bg-[#C8EDDF80] text-green-800'
-                              : entry.status?.toLowerCase() === 'pending'
-                                ? 'bg-yellow-100 text-yellow-800'
-                                : 'bg-gray-100 text-gray-800'
-                          }`}
+                          className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${getStatusColor(
+                            entry.status || ''
+                          )}`}
                         >
                           {entry.status || 'N/A'}
                         </span>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="py-8 text-center text-gray-500 text-sm">
-                    No payroll entries found
-                  </div>
-                )}
-              </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
 
+              {/* Pagination */}
               {totalPages > 1 && (
-                <div className="flex justify-center sm:justify-end items-center gap-2 sm:gap-4 mt-4 sm:mt-6 overflow-x-auto">
-                  <button
-                    className="p-2"
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                  >
-                    <FaChevronLeft
-                      size={14}
-                      className={
-                        currentPage === 1 ? 'text-gray-300' : 'text-gray-500'
+                <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-gray-100 px-4 sm:px-6">
+                  <div className="text-sm text-gray-700">
+                    Page <span className="font-medium">{currentPage}</span> of{' '}
+                    <span className="font-medium">{totalPages}</span>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
+                      className={`px-4 py-2 rounded-lg border transition-colors ${
+                        currentPage === 1
+                          ? 'border-gray-200 text-gray-300 cursor-not-allowed'
+                          : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      <ChevronLeft className="w-5 h-5" />
+                    </button>
+
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                      (page) => {
+                        if (
+                          page === 1 ||
+                          page === totalPages ||
+                          (page >= currentPage - 1 && page <= currentPage + 1)
+                        ) {
+                          return (
+                            <button
+                              key={page}
+                              onClick={() => handlePageChange(page)}
+                              className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                                currentPage === page
+                                  ? 'bg-green-600 text-white'
+                                  : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
+                              }`}
+                            >
+                              {page}
+                            </button>
+                          );
+                        } else if (
+                          page === currentPage - 2 ||
+                          page === currentPage + 2
+                        ) {
+                          return (
+                            <span key={page} className="px-2 text-gray-500">
+                              ...
+                            </span>
+                          );
+                        }
+                        return null;
                       }
-                    />
-                  </button>
+                    )}
 
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                    (page) => (
-                      <button
-                        key={page}
-                        className={`w-8 h-8 flex items-center justify-center rounded-md ${
-                          currentPage === page
-                            ? 'bg-[#00000014] text-[#000000DE] font-medium'
-                            : 'text-[#000000DE]'
-                        }`}
-                        onClick={() => handlePageChange(page)}
-                      >
-                        {page}
-                      </button>
-                    )
-                  )}
-
-                  <button
-                    className="p-2"
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                  >
-                    <FaChevronRight
-                      size={14}
-                      className={
+                    <button
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                      className={`px-4 py-2 rounded-lg border transition-colors ${
                         currentPage === totalPages
-                          ? 'text-gray-300'
-                          : 'text-[#000000DE]'
-                      }
-                    />
-                  </button>
+                          ? 'border-gray-200 text-gray-300 cursor-not-allowed'
+                          : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      <ChevronRight className="w-5 h-5" />
+                    </button>
+                  </div>
                 </div>
               )}
             </>
+          ) : (
+            <div className="p-12 text-center">
+              <CalendarSync className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+              <p className="text-lg font-medium text-gray-900 mb-2">
+                No payroll entries found
+              </p>
+              <p className="text-sm text-gray-500">
+                Payroll history will appear here once entries are created
+              </p>
+            </div>
           )}
         </div>
       </div>

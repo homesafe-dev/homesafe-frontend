@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { FiArrowLeft, FiChevronDown } from 'react-icons/fi';
+import {
+  ArrowLeft,
+  ChevronDown,
+  User,
+  MapPin,
+  Calendar,
+  Clock,
+  Star,
+  FileText,
+  Send,
+} from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import artisanApi from '../../api/artisanApi';
 import contractApi from '../../api/contractApi';
@@ -214,248 +224,282 @@ const ArtisanProfileView: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen p-3 sm:p-4 lg:p-6">
+    <div className="p-0">
       {loading ? (
-        <div className="flex justify-center items-center h-40">
-          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-500"></div>
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
         </div>
       ) : error ? (
-        <div className="bg-red-50 text-red-600 p-4 rounded-lg text-center">
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
           {error}
         </div>
       ) : artisan ? (
         <>
-          <div className="flex items-center mb-6 sm:mb-8">
+          {/* Header Section */}
+          <div className="mb-6 sm:mb-8">
             <button
               onClick={goBack}
-              className="flex items-center text-semibold text-lg sm:text-[20px] text-[#24292E] hover:text-gray-900"
+              className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4 transition-colors"
             >
-              <FiArrowLeft className="mr-2" size={18} />
-              <span>{artisan.first_name}'s Profile</span>
+              <ArrowLeft className="w-5 h-5" />
+              <span className="text-sm font-medium">Back to Artisans</span>
             </button>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+                <User className="w-4 h-4 text-blue-600" />
+              </div>
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+                {artisan.first_name}'s Profile
+              </h1>
+            </div>
           </div>
 
-          <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 bg-white shadow-sm p-4 sm:p-6 lg:p-8 rounded-[16px]">
-            {/* Profile section */}
-            <div className="w-full lg:w-1/2 lg:border-r border-[#BDC2C7] p-3 sm:p-4 lg:p-6 flex flex-col items-center relative">
-              <div className="mb-3 sm:mb-4">
-                <Avatar
-                  src={artisan.avatar}
-                  firstName={artisan.first_name}
-                  lastName={artisan.last_name}
-                  size="lg"
-                  showStatus={true}
-                  isOnline={artisan.status === 1}
-                />
+          <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+            <div className="flex flex-col lg:flex-row">
+              {/* Profile section */}
+              <div className="w-full lg:w-1/2 lg:border-r border-gray-200 p-6 sm:p-8 flex flex-col items-center bg-gradient-to-br from-gray-50 to-white">
+                <div className="mb-6">
+                  <Avatar
+                    src={artisan.avatar}
+                    firstName={artisan.first_name}
+                    lastName={artisan.last_name}
+                    size="lg"
+                    showStatus={true}
+                    isOnline={artisan.status === 1}
+                  />
+                </div>
+
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
+                  {artisan.first_name} {artisan.last_name}
+                </h2>
+
+                <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
+                  <MapPin className="w-4 h-4 text-gray-400" />
+                  <span>{extractLocation(artisan.address)}</span>
+                  <span className="text-gray-300">•</span>
+                  <Calendar className="w-4 h-4 text-gray-400" />
+                  <span>{calculateAge(artisan.dob)} yrs old</span>
+                </div>
+
+                <div className="inline-flex items-center gap-2 bg-green-50 text-green-700 px-3 py-1.5 rounded-full text-sm font-medium mb-4">
+                  <FileText className="w-4 h-4" />
+                  {artisan.occupations && artisan.occupations.length > 0
+                    ? artisan.occupations[0].name.charAt(0).toUpperCase() +
+                      artisan.occupations[0].name.slice(1)
+                    : 'Professional'}
+                </div>
+
+                <div className="flex items-center gap-1 mb-6">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <Star
+                      key={star}
+                      className={`w-5 h-5 ${
+                        star <= (artisan.average_rating || 0)
+                          ? 'text-yellow-400 fill-yellow-400'
+                          : 'text-gray-300'
+                      }`}
+                    />
+                  ))}
+                  {artisan.average_rating && (
+                    <span className="ml-2 text-sm font-medium text-gray-600">
+                      ({artisan.average_rating.toFixed(1)})
+                    </span>
+                  )}
+                </div>
+
+                <div className="w-full max-w-md">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+                      <FileText className="w-4 h-4 text-blue-600" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      About
+                    </h3>
+                  </div>
+                  <div className="bg-white border border-gray-100 rounded-lg p-4">
+                    {artisan.profile_description ? (
+                      <p className="text-sm text-gray-700 leading-relaxed">
+                        {artisan.profile_description}
+                      </p>
+                    ) : (
+                      <p className="text-sm text-gray-700 leading-relaxed">
+                        Meet {artisan.first_name} {artisan.last_name}, a
+                        passionate{' '}
+                        {artisan.occupations && artisan.occupations.length > 0
+                          ? artisan.occupations[0].name
+                          : 'professional'}{' '}
+                        from {extractLocation(artisan.address)}. With a love for{' '}
+                        {artisan.occupations && artisan.occupations.length > 0
+                          ? artisan.occupations[0].name
+                          : 'their profession'}{' '}
+                        that knows no bounds, {artisan.first_name} brings
+                        dedication and skill to every task. From traditional
+                        techniques to innovative approaches, this talented
+                        professional is dedicated to delivering exceptional
+                        quality and service.
+                      </p>
+                    )}
+                  </div>
+                </div>
               </div>
 
-              <h2 className="text-sm sm:text-[16px] text-gray-700 mt-3 sm:mt-[1rem] font-medium">
-                {artisan.first_name} {artisan.last_name}
-              </h2>
-              <p className="text-xs sm:text-[13px] mt-2 sm:mt-[0.5rem] text-[#24292E] mb-2">
-                {extractLocation(artisan.address)} | {calculateAge(artisan.dob)}{' '}
-                yrs old
-              </p>
+              {/* Employment Form */}
+              <div className="w-full lg:w-1/2 p-6 sm:p-8">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
+                    <FileText className="w-4 h-4 text-green-600" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900">
+                    Employment Form
+                  </h3>
+                </div>
 
-              <div className="bg-[#C8EDDF80] mt-2 sm:mt-[0.5rem] text-[#48525B] px-2 sm:px-3 py-1 rounded-[8px] text-xs sm:text-[13px] mb-2">
-                {artisan.occupations && artisan.occupations.length > 0
-                  ? artisan.occupations[0].name.charAt(0).toUpperCase() +
-                    artisan.occupations[0].name.slice(1)
-                  : 'Professional'}
-              </div>
-
-              <div className="flex mb-4 sm:mb-6">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <span
-                    key={star}
-                    className={`text-yellow-400 mt-2 sm:mt-[0.5rem] text-sm sm:text-base ${
-                      star <= (artisan.average_rating || 0)
-                        ? 'opacity-100'
-                        : 'opacity-30'
-                    }`}
-                  >
-                    ★
-                  </span>
-                ))}
-              </div>
-
-              <div className="mb-4 sm:mb-6 w-full">
-                <h3 className="text-[#246D51] text-sm sm:text-[16px] font-semibold mb-2">
-                  About me
-                </h3>
-                {artisan.profile_description ? (
-                  <p className="text-xs sm:text-[13px] text-[#48525B] leading-relaxed">
-                    {artisan.profile_description}
-                  </p>
-                ) : (
-                  <p className="text-xs sm:text-[13px] text-[#48525B] leading-relaxed">
-                    Meet {artisan.first_name} {artisan.last_name}, a passionate{' '}
-                    {artisan.occupations && artisan.occupations.length > 0
-                      ? artisan.occupations[0].name
-                      : 'professional'}{' '}
-                    from {extractLocation(artisan.address)}. With a love for{' '}
-                    {artisan.occupations && artisan.occupations.length > 0
-                      ? artisan.occupations[0].name
-                      : 'their profession'}{' '}
-                    that knows no bounds, {artisan.first_name} brings dedication
-                    and skill to every task. From traditional techniques to
-                    innovative approaches, this talented professional is
-                    dedicated to delivering exceptional quality and service.
-                  </p>
-                )}
-              </div>
-            </div>
-
-            {/* Employment Form */}
-            <div className="w-full lg:w-1/2">
-              <h3 className="text-[#246D51] text-sm sm:text-[16px] font-semibold mb-4 sm:mb-6">
-                Employment Form
-              </h3>
-
-              <div className="space-y-4 sm:space-y-6 border border-gray-100 p-4 sm:p-6 lg:p-8 rounded-[16px]">
-                {/* Employment Start Date */}
-                <div>
-                  <label className="block text-xs sm:text-sm font-medium text-gray-600 mb-2">
-                    Employment Start Date
-                  </label>
-                  <div className="relative">
+                <div className="space-y-5">
+                  {/* Employment Start Date */}
+                  <div>
+                    <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
+                      <Calendar className="w-4 h-4 text-gray-500" />
+                      Employment Start Date
+                    </label>
                     <input
                       type="date"
                       name="start_date"
-                      placeholder="MM/DD/YYYY"
-                      className="w-full border h-[42px] sm:h-[50px] border-gray-100 rounded p-2 sm:p-3 pr-8 sm:pr-10 focus:outline-none focus:ring-1 focus:ring-gray-400 text-sm sm:text-base"
+                      className="w-full border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
                       value={formData.start_date}
                       onChange={handleInputChange}
                     />
                   </div>
-                </div>
 
-                {/* Employment Period */}
-                <div>
-                  <label className="block text-xs sm:text-sm font-medium text-gray-600 mb-2">
-                    Employment Period
-                  </label>
-                  <div className="relative">
-                    <select
-                      name="duration_months"
-                      className="appearance-none w-full border h-[42px] sm:h-[50px] border-gray-100 rounded p-2 sm:p-3 pr-8 sm:pr-10 focus:outline-none focus:ring-1 focus:ring-gray-400 text-sm sm:text-base"
-                      value={formData.duration_months}
-                      onChange={handleInputChange}
-                    >
-                      <option value="">Select</option>
-                      <option value="1">1 month</option>
-                      <option value="2">2 months</option>
-                      <option value="3">3 months</option>
-                      <option value="4">4 months</option>
-                      <option value="5">5 months</option>
-                      <option value="6">6 months</option>
-                      <option value="7">7 months</option>
-                      <option value="8">8 months</option>
-                      <option value="9">9 months</option>
-                      <option value="10">10 months</option>
-                      <option value="11">11 months</option>
-                      <option value="12">12 months</option>
-                    </select>
-                    <FiChevronDown
-                      className="absolute right-2 sm:right-3 top-3 text-gray-400"
-                      size={16}
-                    />
+                  {/* Employment Period */}
+                  <div>
+                    <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
+                      <Calendar className="w-4 h-4 text-gray-500" />
+                      Employment Period
+                    </label>
+                    <div className="relative">
+                      <select
+                        name="duration_months"
+                        className="appearance-none w-full border border-gray-200 rounded-lg px-4 py-2.5 pr-10 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white"
+                        value={formData.duration_months}
+                        onChange={handleInputChange}
+                      >
+                        <option value="">Select period</option>
+                        <option value="1">1 month</option>
+                        <option value="2">2 months</option>
+                        <option value="3">3 months</option>
+                        <option value="4">4 months</option>
+                        <option value="5">5 months</option>
+                        <option value="6">6 months</option>
+                        <option value="7">7 months</option>
+                        <option value="8">8 months</option>
+                        <option value="9">9 months</option>
+                        <option value="10">10 months</option>
+                        <option value="11">11 months</option>
+                        <option value="12">12 months</option>
+                      </select>
+                      <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none" />
+                    </div>
                   </div>
-                </div>
 
-                {/* Working Hours - Start */}
-                <div>
-                  <label className="block text-xs sm:text-sm font-medium text-gray-600 mb-2">
-                    Working Hours (Start)
-                  </label>
-                  <div className="relative">
-                    <select
-                      name="working_hours_start"
-                      className="appearance-none w-full border h-[42px] sm:h-[50px] border-gray-100 rounded p-2 sm:p-3 pr-8 sm:pr-10 focus:outline-none focus:ring-1 focus:ring-gray-400 text-sm sm:text-base"
-                      value={formData.working_hours_start}
-                      onChange={handleInputChange}
-                    >
-                      <option value="">Start</option>
-                      <option value="08:00">8:00 AM</option>
-                      <option value="09:00">9:00 AM</option>
-                      <option value="10:00">10:00 AM</option>
-                      <option value="11:00">11:00 AM</option>
-                      <option value="12:00">12:00 PM</option>
-                    </select>
-                    <FiChevronDown
-                      className="absolute right-2 sm:right-3 top-3 text-gray-400"
-                      size={16}
-                    />
+                  {/* Working Hours - Start */}
+                  <div>
+                    <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
+                      <Clock className="w-4 h-4 text-gray-500" />
+                      Working Hours (Start)
+                    </label>
+                    <div className="relative">
+                      <select
+                        name="working_hours_start"
+                        className="appearance-none w-full border border-gray-200 rounded-lg px-4 py-2.5 pr-10 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white"
+                        value={formData.working_hours_start}
+                        onChange={handleInputChange}
+                      >
+                        <option value="">Select start time</option>
+                        <option value="08:00">8:00 AM</option>
+                        <option value="09:00">9:00 AM</option>
+                        <option value="10:00">10:00 AM</option>
+                        <option value="11:00">11:00 AM</option>
+                        <option value="12:00">12:00 PM</option>
+                      </select>
+                      <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none" />
+                    </div>
                   </div>
-                </div>
 
-                {/* Working Hours - End */}
-                <div>
-                  <label className="block text-xs sm:text-sm font-medium text-gray-600 mb-2">
-                    Working Hours (End)
-                  </label>
-                  <div className="relative">
-                    <select
-                      name="working_hours_end"
-                      className="appearance-none w-full border h-[42px] sm:h-[50px] border-gray-100 rounded p-2 sm:p-3 pr-8 sm:pr-10 focus:outline-none focus:ring-1 focus:ring-gray-400 text-sm sm:text-base"
-                      value={formData.working_hours_end}
-                      onChange={handleInputChange}
-                    >
-                      <option value="">End</option>
-                      <option value="16:00">4:00 PM</option>
-                      <option value="17:00">5:00 PM</option>
-                      <option value="18:00">6:00 PM</option>
-                      <option value="19:00">7:00 PM</option>
-                      <option value="20:00">8:00 PM</option>
-                    </select>
-                    <FiChevronDown
-                      className="absolute right-2 sm:right-3 top-3 text-gray-400"
-                      size={16}
-                    />
+                  {/* Working Hours - End */}
+                  <div>
+                    <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
+                      <Clock className="w-4 h-4 text-gray-500" />
+                      Working Hours (End)
+                    </label>
+                    <div className="relative">
+                      <select
+                        name="working_hours_end"
+                        className="appearance-none w-full border border-gray-200 rounded-lg px-4 py-2.5 pr-10 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white"
+                        value={formData.working_hours_end}
+                        onChange={handleInputChange}
+                      >
+                        <option value="">Select end time</option>
+                        <option value="16:00">4:00 PM</option>
+                        <option value="17:00">5:00 PM</option>
+                        <option value="18:00">6:00 PM</option>
+                        <option value="19:00">7:00 PM</option>
+                        <option value="20:00">8:00 PM</option>
+                      </select>
+                      <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none" />
+                    </div>
                   </div>
+
+                  {/* Hidden fields for API compatibility */}
+                  <input
+                    type="hidden"
+                    name="working_days_per_month"
+                    value={formData.working_days_per_month}
+                  />
+                  <input
+                    type="hidden"
+                    name="working_hours_per_week"
+                    value={formData.working_hours_per_week}
+                  />
+                  <input
+                    type="hidden"
+                    name="working_hours_schedule"
+                    value={formData.working_hours_schedule}
+                  />
                 </div>
 
-                {/* Hidden fields for API compatibility */}
-                <input
-                  type="hidden"
-                  name="working_days_per_month"
-                  value={formData.working_days_per_month}
-                />
-                <input
-                  type="hidden"
-                  name="working_hours_per_week"
-                  value={formData.working_hours_per_week}
-                />
-                <input
-                  type="hidden"
-                  name="working_hours_schedule"
-                  value={formData.working_hours_schedule}
-                />
+                {/* Submit Button */}
+                <div className="pt-4 border-t border-gray-200">
+                  <button
+                    onClick={handleSubmitProposal}
+                    disabled={submitting || !formData.start_date}
+                    className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {submitting ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                        <span>Sending Proposal...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4" />
+                        <span>Send Proposal</span>
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-
-          <div className="flex justify-center sm:justify-end mt-4 sm:mt-6">
-            <button
-              onClick={handleSubmitProposal}
-              disabled={submitting || !formData.start_date}
-              className="bg-[#A5EA91] hover:bg-green-500 text-green-800 py-2 sm:py-2 px-6 sm:px-4 rounded-md text-sm transition-colors w-full sm:w-[143px] h-[42px] disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {submitting ? (
-                <div className="flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-green-700 mr-2"></div>
-                  <span className="hidden sm:inline">Processing...</span>
-                  <span className="sm:hidden">Sending...</span>
-                </div>
-              ) : (
-                'Send Proposal'
-              )}
-            </button>
-          </div>
         </>
       ) : (
-        <div className="text-center py-8 text-gray-500">
-          No artisan found with the provided ID.
+        <div className="text-center py-16">
+          <User className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+          <p className="text-lg font-medium text-gray-900 mb-2">
+            No artisan found
+          </p>
+          <p className="text-sm text-gray-500">
+            No artisan found with the provided ID.
+          </p>
         </div>
       )}
 
