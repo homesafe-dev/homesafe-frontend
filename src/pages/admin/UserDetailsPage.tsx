@@ -1,9 +1,25 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { FaArrowLeft } from 'react-icons/fa';
+import {
+  ArrowLeft,
+  User,
+  Mail,
+  Phone,
+  MapPin,
+  Calendar,
+  UserCheck,
+  UserX,
+  CheckCircle,
+  XCircle,
+  Clock,
+  Briefcase,
+  Shield,
+} from 'lucide-react';
+import { format } from 'date-fns';
 import adminApi from '../../api/adminApi';
 import ApproveUserModal from '../../components/admin/ApproveUserModal';
 import DeclineUserModal from '../../components/admin/DeclineUserModal';
+import Avatar from '../../components/common/Avatar';
 
 interface UserDetails {
   id: number;
@@ -54,73 +70,138 @@ export default function UserDetailsPage() {
     return 'No occupation';
   };
 
+  // Helper function to normalize user data
+  const normalizeUserData = (userData: any): UserDetails => {
+    // Normalize is_verified: handle boolean, number (0/1), string ("0"/"1"/"true"/"false")
+    let isVerified = 0;
+    if (typeof userData.is_verified === 'boolean') {
+      isVerified = userData.is_verified ? 1 : 0;
+    } else if (typeof userData.is_verified === 'number') {
+      isVerified = userData.is_verified === 1 ? 1 : 0;
+    } else if (typeof userData.is_verified === 'string') {
+      const value = userData.is_verified.toLowerCase().trim();
+      isVerified = value === '1' || value === 'true' || value === 'yes' ? 1 : 0;
+    } else {
+      // Default to 0 if undefined/null or unexpected type
+      isVerified = userData.is_verified === true ? 1 : 0;
+    }
+
+    // Normalize approval_status: handle different possible values
+    let approvalStatus = userData.approval_status || 'pending';
+    if (typeof approvalStatus === 'string') {
+      approvalStatus = approvalStatus.toLowerCase();
+    }
+
+    return {
+      id: userData.id,
+      first_name: userData.first_name || '',
+      last_name: userData.last_name || '',
+      title: userData.title || 'Mr',
+      username: userData.username || null,
+      email: userData.email || '',
+      email_verified_at: userData.email_verified_at || '',
+      avatar: userData.avatar || '',
+      gender: userData.gender || 'Not specified',
+      dob: userData.dob || '',
+      phone: userData.phone || '',
+      address: userData.address || '',
+      status: userData.status || 0,
+      is_verified: isVerified,
+      approval_status: approvalStatus,
+      salary: userData.salary || '',
+      profile_description: userData.profile_description || null,
+      created_at: userData.created_at || '',
+      updated_at: userData.updated_at || '',
+      occupation: userData.occupation,
+      occupations: userData.occupations || [],
+    };
+  };
+
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
         setLoading(true);
-        // Since there's no single user API, we'll try to find the user in all lists
+        setError(null);
 
-        // Try to find in employees list
-        const employeeResponse = await adminApi.getEmployeeList(1, 100); // Use larger limit
-        if (employeeResponse.status) {
-          // Check if data is an array or has a data property
-          const employeeList = Array.isArray(employeeResponse.data.data)
-            ? employeeResponse.data.data
-            : Array.isArray(employeeResponse.data)
-              ? employeeResponse.data
-              : [];
+        const userId = parseInt(id || '0');
+        if (!userId) {
+          setError('Invalid user ID');
+          setLoading(false);
+          return;
+        }
 
-          const employeeData = employeeList.find(
-            (user: any) => user.id === parseInt(id || '0')
-          );
-          if (employeeData) {
-            setUser(employeeData);
-            setUserType('employee');
+        // Use the direct user endpoint
+        try {
+          const response = await adminApi.getUserById(userId);
+
+          // Handle response structure: { status: true, message: "...", data: { ...userData } }
+          // Note: adminApi.getUserById returns response.data from axios, so response is already the API response object
+          let userData = null;
+          if (response.status && response.data) {
+            // Standard structure: response.data contains the user data object
+            userData = response.data;
+          } else if (response.data) {
+            // Fallback: if response.data exists but no status, use it directly
+            userData = response.data;
+          } else if (response && !response.status) {
+            // If response itself is the user data (no wrapper)
+            userData = response;
+          }
+
+          if (userData) {
+            // Determine user type from roles or other indicators
+            const roles = userData.roles || userData.role || [];
+            let detectedUserType: 'employee' | 'employer' | 'agent' | null =
+              null;
+
+            if (Array.isArray(roles)) {
+              if (
+                roles.some(
+                  (r: any) => r.name === 'employee' || r === 'employee'
+                )
+              ) {
+                detectedUserType = 'employee';
+              } else if (
+                roles.some(
+                  (r: any) => r.name === 'employer' || r === 'employer'
+                )
+              ) {
+                detectedUserType = 'employer';
+              } else if (
+                roles.some((r: any) => r.name === 'agent' || r === 'agent')
+              ) {
+                detectedUserType = 'agent';
+              }
+            } else if (typeof roles === 'string') {
+              if (roles === 'employee') detectedUserType = 'employee';
+              else if (roles === 'employer') detectedUserType = 'employer';
+              else if (roles === 'agent') detectedUserType = 'agent';
+            }
+
+            // If we can't determine from roles, try to infer from other fields
+            if (!detectedUserType) {
+              // Check if user has occupations (typically employees)
+              if (userData.occupations && userData.occupations.length > 0) {
+                detectedUserType = 'employee';
+              }
+              // You could add more logic here to detect employer/agent
+            }
+
+            setUser(normalizeUserData(userData));
+            setUserType(detectedUserType);
             setLoading(false);
             return;
           }
-        }
 
-        // Try to find in employers list
-        const employerResponse = await adminApi.getEmployerList(1, 100); // Use larger limit
-        if (employerResponse.status) {
-          // Check if data is an array or has a data property
-          const employerList = Array.isArray(employerResponse.data)
-            ? employerResponse.data
-            : employerResponse.data.data || [];
-
-          const employerData = employerList.find(
-            (user: any) => user.id === parseInt(id || '0')
+          setError('User data not found in response');
+        } catch (err: any) {
+          console.error('Error fetching user by ID:', err);
+          setError(
+            err.response?.data?.message ||
+              err.message ||
+              'Error fetching user details'
           );
-          if (employerData) {
-            setUser(employerData);
-            setUserType('employer');
-            setLoading(false);
-            return;
-          }
         }
-
-        // Try to find in agents list
-        const agentResponse = await adminApi.getAgentList(1, 100); // Use larger limit
-        if (agentResponse.status) {
-          // Check if data is an array or has a data property
-          const agentList = Array.isArray(agentResponse.data)
-            ? agentResponse.data
-            : agentResponse.data.data || [];
-
-          const agentData = agentList.find(
-            (user: any) => user.id === parseInt(id || '0')
-          );
-          if (agentData) {
-            setUser(agentData);
-            setUserType('agent');
-            setLoading(false);
-            return;
-          }
-        }
-
-        // If we get here, user was not found in any list
-        setError('User not found');
       } catch (err) {
         setError('Error fetching user details');
         console.error('Error fetching user details:', err);
@@ -178,180 +259,302 @@ export default function UserDetailsPage() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-t-2 border-b-2 border-green-500"></div>
+      <div className="p-0">
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
+        </div>
       </div>
     );
   }
 
   if (error || !user) {
     return (
-      <div className="p-4 sm:p-6">
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded text-sm">
+      <div className="p-0">
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
           {error || 'User not found'}
         </div>
         <button
           onClick={() => navigate(-1)}
-          className="mt-4 flex items-center text-gray-600 hover:text-gray-900 text-sm"
+          className="flex items-center gap-2 text-gray-600 hover:text-gray-900 text-sm font-medium"
         >
-          <FaArrowLeft className="mr-2" size={14} /> Go Back
+          <ArrowLeft className="w-4 h-4" />
+          Go Back
         </button>
       </div>
     );
   }
 
+  const userName = `${user.first_name} ${user.last_name}`;
+
   return (
-    <div className="p-4 sm:p-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 sm:gap-0">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center text-gray-600 hover:text-gray-900 text-sm"
-          >
-            <FaArrowLeft className="mr-2" size={14} /> Back
-          </button>
-          {/* User Status Indicator */}
-          {user && (
-            <div className="flex items-center space-x-2">
-              <span className="text-sm text-gray-500">Status:</span>
-              <span
-                className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium ${
-                  user.approval_status === 'approved'
-                    ? 'bg-green-100 text-green-800'
-                    : user.approval_status === 'pending'
-                      ? 'bg-yellow-100 text-yellow-800'
-                      : 'bg-red-100 text-red-800'
-                }`}
-              >
-                {user.approval_status === 'approved'
-                  ? 'Approved'
-                  : user.approval_status === 'pending'
-                    ? 'Pending Approval'
-                    : 'Not Approved'}
-              </span>
+    <div className="p-0">
+      {/* Header */}
+      <div className="mb-6 sm:mb-8">
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4 sm:mb-6 transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span className="text-sm font-medium">Back to Users</span>
+        </button>
+        <div className="flex items-center justify-between flex-wrap gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+              <User className="w-4 h-4 text-blue-600" />
             </div>
-          )}
-        </div>
-        {/* Only show approve/decline buttons for users with pending approval status */}
-        {user && user.approval_status === 'pending' && (
-          <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
-            <button
-              onClick={() => setShowApproveModal(true)}
-              className="bg-[#C8EDDF80] text-[#174B35] px-3 sm:px-4 py-2 rounded-md hover:bg-[#C8EDDF] transition-colors text-sm"
-            >
-              Approve User
-            </button>
-            <button
-              onClick={() => setShowDeclineModal(true)}
-              className="bg-white border border-gray-300 text-gray-700 px-3 sm:px-4 py-2 rounded-md hover:bg-gray-50 transition-colors text-sm"
-            >
-              Decline User
-            </button>
-          </div>
-        )}
-      </div>
-
-      <div className="bg-white shadow rounded-lg p-4 sm:p-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-          <div className="space-y-3 sm:space-y-4">
             <div>
-              <h3 className="text-xs sm:text-sm font-medium text-gray-500">
-                Title
-              </h3>
-              <p className="mt-1 text-sm text-gray-900">{user.title || 'Mr'}</p>
-            </div>
-
-            <div>
-              <h3 className="text-xs sm:text-sm font-medium text-gray-500">
-                First Name
-              </h3>
-              <p className="mt-1 text-sm text-gray-900">{user.first_name}</p>
-            </div>
-
-            <div>
-              <h3 className="text-xs sm:text-sm font-medium text-gray-500">
-                Last Name
-              </h3>
-              <p className="mt-1 text-sm text-gray-900">{user.last_name}</p>
-            </div>
-
-            <div>
-              <h3 className="text-xs sm:text-sm font-medium text-gray-500">
-                Email
-              </h3>
-              <p className="mt-1 text-sm text-gray-900 break-all">
-                {user.email}
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+                {userName}
+              </h1>
+              <p className="text-sm sm:text-base text-gray-500 mt-1">
+                User Profile Details
               </p>
             </div>
+          </div>
 
-            <div>
-              <h3 className="text-xs sm:text-sm font-medium text-gray-500">
-                Phone Number
-              </h3>
-              <p className="mt-1 text-sm text-gray-900">{user.phone}</p>
-            </div>
+          {/* Status Badge and Action Buttons */}
+          <div className="flex items-center gap-3 flex-wrap">
+            <span
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border ${
+                user.approval_status === 'approved'
+                  ? 'bg-green-50 text-green-700 border-green-200'
+                  : user.approval_status === 'pending'
+                    ? 'bg-yellow-50 text-yellow-700 border-yellow-200'
+                    : 'bg-red-50 text-red-700 border-red-200'
+              }`}
+            >
+              {user.approval_status === 'approved' ? (
+                <CheckCircle className="w-3.5 h-3.5" />
+              ) : user.approval_status === 'pending' ? (
+                <Clock className="w-3.5 h-3.5" />
+              ) : (
+                <XCircle className="w-3.5 h-3.5" />
+              )}
+              {user.approval_status === 'approved'
+                ? 'Approved'
+                : user.approval_status === 'pending'
+                  ? 'Pending Approval'
+                  : 'Not Approved'}
+            </span>
 
-            {userType === 'employee' && (
-              <div>
-                <h3 className="text-xs sm:text-sm font-medium text-gray-500">
-                  Occupation
-                </h3>
-                <p className="mt-1 text-sm text-gray-900">
-                  {getUserOccupations(user)}
-                </p>
+            {/* Only show approve/decline buttons for users with pending approval status */}
+            {user.approval_status === 'pending' && (
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setShowApproveModal(true)}
+                  className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-medium transition-colors"
+                >
+                  <UserCheck className="w-4 h-4" />
+                  Approve
+                </button>
+                <button
+                  onClick={() => setShowDeclineModal(true)}
+                  className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-medium transition-colors"
+                >
+                  <UserX className="w-4 h-4" />
+                  Decline
+                </button>
               </div>
             )}
           </div>
+        </div>
+      </div>
 
-          <div className="space-y-3 sm:space-y-4">
-            <div>
-              <h3 className="text-xs sm:text-sm font-medium text-gray-500">
-                Home Address
-              </h3>
-              <p className="mt-1 text-sm text-gray-900 break-words">
-                {user.address}
-              </p>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Profile Card */}
+        <div className="lg:col-span-1">
+          <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+            <div className="flex flex-col items-center">
+              {/* Avatar */}
+              <div className="mb-4">
+                <Avatar
+                  src={user.avatar}
+                  firstName={user.first_name}
+                  lastName={user.last_name}
+                  size="lg"
+                  showStatus={true}
+                  isOnline={user.is_verified === 1}
+                />
+              </div>
+
+              {/* Name */}
+              <h2 className="text-xl font-bold text-gray-900 mb-2">
+                {userName}
+              </h2>
+
+              {/* User Type Badge */}
+              <div className="inline-flex items-center gap-2 bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-full text-sm font-medium mb-4">
+                <Briefcase className="w-4 h-4" />
+                {userType
+                  ? userType.charAt(0).toUpperCase() + userType.slice(1)
+                  : 'User'}
+              </div>
+
+              {/* Verification Status */}
+              <div className="w-full mb-4">
+                <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                  <div
+                    className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                      user.is_verified === 1 ? 'bg-green-50' : 'bg-red-50'
+                    }`}
+                  >
+                    <Shield
+                      className={`w-4 h-4 ${
+                        user.is_verified === 1
+                          ? 'text-green-600'
+                          : 'text-red-600'
+                      }`}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-xs text-gray-500 mb-0.5">
+                      Verification Status
+                    </p>
+                    <p
+                      className={`text-sm font-medium ${
+                        user.is_verified === 1
+                          ? 'text-green-700'
+                          : 'text-red-700'
+                      }`}
+                    >
+                      {user.is_verified === 1 ? 'Verified' : 'Unverified'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Details Card */}
+        <div className="lg:col-span-2">
+          <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center">
+                <User className="w-4 h-4 text-indigo-600" />
+              </div>
+              <div>
+                <h2 className="text-lg font-semibold text-gray-900">
+                  Personal Information
+                </h2>
+                <p className="text-xs text-gray-500 mt-0.5">
+                  User details and contact information
+                </p>
+              </div>
             </div>
 
-            <div>
-              <h3 className="text-xs sm:text-sm font-medium text-gray-500">
-                Date of Birth
-              </h3>
-              <p className="mt-1 text-sm text-gray-900">
-                {user.dob
-                  ? new Date(user.dob).toLocaleDateString('en-US', {
-                      month: 'long',
-                      day: 'numeric',
-                      year: 'numeric',
-                    })
-                  : 'Not provided'}
-              </p>
-            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center gap-2 mb-2">
+                  <User className="w-4 h-4 text-gray-400" />
+                  <span className="text-xs font-medium text-gray-500">
+                    Title
+                  </span>
+                </div>
+                <p className="text-sm font-semibold text-gray-900">
+                  {user.title || 'N/A'}
+                </p>
+              </div>
 
-            <div>
-              <h3 className="text-xs sm:text-sm font-medium text-gray-500">
-                Gender
-              </h3>
-              <p className="mt-1 text-sm text-gray-900 capitalize">
-                {user.gender || 'Not specified'}
-              </p>
-            </div>
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center gap-2 mb-2">
+                  <User className="w-4 h-4 text-gray-400" />
+                  <span className="text-xs font-medium text-gray-500">
+                    First Name
+                  </span>
+                </div>
+                <p className="text-sm font-semibold text-gray-900">
+                  {user.first_name}
+                </p>
+              </div>
 
-            <div>
-              <h3 className="text-xs sm:text-sm font-medium text-gray-500">
-                Verification Status
-              </h3>
-              <p className="mt-1">
-                <span
-                  className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium ${
-                    user.is_verified === 1
-                      ? 'bg-green-100 text-green-800'
-                      : 'bg-red-100 text-red-800'
-                  }`}
-                >
-                  {user.is_verified === 1 ? 'Verified' : 'Unverified'}
-                </span>
-              </p>
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center gap-2 mb-2">
+                  <User className="w-4 h-4 text-gray-400" />
+                  <span className="text-xs font-medium text-gray-500">
+                    Last Name
+                  </span>
+                </div>
+                <p className="text-sm font-semibold text-gray-900">
+                  {user.last_name}
+                </p>
+              </div>
+
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center gap-2 mb-2">
+                  <Mail className="w-4 h-4 text-gray-400" />
+                  <span className="text-xs font-medium text-gray-500">
+                    Email
+                  </span>
+                </div>
+                <p className="text-sm font-semibold text-gray-900 break-all">
+                  {user.email}
+                </p>
+              </div>
+
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center gap-2 mb-2">
+                  <Phone className="w-4 h-4 text-gray-400" />
+                  <span className="text-xs font-medium text-gray-500">
+                    Phone Number
+                  </span>
+                </div>
+                <p className="text-sm font-semibold text-gray-900">
+                  {user.phone || 'N/A'}
+                </p>
+              </div>
+
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center gap-2 mb-2">
+                  <MapPin className="w-4 h-4 text-gray-400" />
+                  <span className="text-xs font-medium text-gray-500">
+                    Address
+                  </span>
+                </div>
+                <p className="text-sm font-semibold text-gray-900 break-words">
+                  {user.address || 'N/A'}
+                </p>
+              </div>
+
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center gap-2 mb-2">
+                  <Calendar className="w-4 h-4 text-gray-400" />
+                  <span className="text-xs font-medium text-gray-500">
+                    Date of Birth
+                  </span>
+                </div>
+                <p className="text-sm font-semibold text-gray-900">
+                  {user.dob
+                    ? format(new Date(user.dob), 'MMM dd, yyyy')
+                    : 'Not provided'}
+                </p>
+              </div>
+
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center gap-2 mb-2">
+                  <User className="w-4 h-4 text-gray-400" />
+                  <span className="text-xs font-medium text-gray-500">
+                    Gender
+                  </span>
+                </div>
+                <p className="text-sm font-semibold text-gray-900 capitalize">
+                  {user.gender || 'Not specified'}
+                </p>
+              </div>
+
+              {userType === 'employee' && (
+                <div className="p-4 bg-gray-50 rounded-lg sm:col-span-2">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Briefcase className="w-4 h-4 text-gray-400" />
+                    <span className="text-xs font-medium text-gray-500">
+                      Occupation
+                    </span>
+                  </div>
+                  <p className="text-sm font-semibold text-gray-900">
+                    {getUserOccupations(user)}
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>

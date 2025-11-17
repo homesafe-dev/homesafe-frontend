@@ -1,10 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { LayoutDashboard, Users, UserCheck, Star } from 'lucide-react';
 import HomesafeLogo from '../../../assets/images/HomesafeLogo2.svg';
-import DashboardIcon from '../../../assets/icons/dashboard.svg';
-import CandidatesIcon from '../../../assets/icons/candidates.svg';
-import TrackIcon from '../../../assets/icons/track.svg';
-import ReviewIcon from '../../../assets/icons/review.svg';
 
 interface SidebarItemProps {
   icon: React.ReactNode;
@@ -24,10 +21,22 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
   return (
     <Link to={path} className="text-decoration-none" onClick={onClick}>
       <div
-        className={`flex items-center gap-3 py-3 px-4 cursor-pointer hover:bg-gray-100 rounded-md ${isActive ? 'bg-[#C8EDDF80]' : ''}`}
+        className={`flex items-center gap-3 py-3 px-4 cursor-pointer rounded-lg transition-colors ${
+          isActive
+            ? 'bg-green-50 text-green-700 border border-green-200'
+            : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+        }`}
       >
-        <div className="text-gray-600">{icon}</div>
-        <span className="text-[#5A6672] text-[16px]">{text}</span>
+        <div className={isActive ? 'text-green-700' : 'text-gray-500'}>
+          {icon}
+        </div>
+        <span
+          className={`text-sm font-medium ${
+            isActive ? 'text-green-700' : 'text-gray-700'
+          }`}
+        >
+          {text}
+        </span>
       </div>
     </Link>
   );
@@ -43,44 +52,47 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
   const sidebarItems = [
     {
       name: 'Dashboard',
-      icon: <img src={DashboardIcon} />,
+      icon: <LayoutDashboard className="w-5 h-5" />,
       path: '/agent/dashboard',
     },
     {
       name: 'Candidates',
-      icon: <img src={CandidatesIcon} />,
+      icon: <Users className="w-5 h-5" />,
       path: '/agent/all-candidates',
     },
     {
       name: 'Track',
-      icon: <img src={TrackIcon} />,
+      icon: <UserCheck className="w-5 h-5" />,
       path: '/agent/track',
     },
-    // {
-    //   name: 'Compliance',
-    //   icon: <img src={ComplianceIcon} />,
-    //   path: '/agent/compliance',
-    // },
     {
       name: 'Review',
-      icon: <img src={ReviewIcon} />,
+      icon: <Star className="w-5 h-5" />,
       path: '/agent/review',
     },
   ];
+
+  // Check if path matches (handles exact and nested routes)
+  const isActive = (path: string) => {
+    if (path === '/agent/dashboard') {
+      return location.pathname === '/agent' || location.pathname === path;
+    }
+    return (
+      location.pathname === path || location.pathname.startsWith(path + '/')
+    );
+  };
 
   return (
     <div
       id="agent-sidebar"
       className="w-64 h-screen bg-white border-r border-gray-200 flex flex-col"
     >
-      {/* Logo Container */}
       <img
         src={HomesafeLogo}
         alt="homesafe logo"
         className="w-[140px] sm:w-[178px] mx-auto mt-[2rem] sm:mt-[3rem] mb-[2rem] sm:mb-[3rem]"
       />
 
-      {/* Navigation Items */}
       <div className="flex-1 px-3 py-4">
         {sidebarItems.map((item) => (
           <SidebarItem
@@ -88,7 +100,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
             icon={item.icon}
             text={item.name}
             path={item.path}
-            isActive={location.pathname === item.path}
+            isActive={isActive(item.path)}
             onClick={onItemClick}
           />
         ))}

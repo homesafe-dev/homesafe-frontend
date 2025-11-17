@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { FiMoreVertical, FiShare2, FiDownload, FiSearch } from 'react-icons/fi';
+import {
+  MoreVertical,
+  Share2,
+  Download,
+  Search,
+  BookOpen,
+  Play,
+  Video,
+  X,
+} from 'lucide-react';
 import EmployeeResourceShareModal from '../../components/Employer/EmployeeResourceShareModal';
 import resourcesApi from '../../api/resourcesApi';
 
@@ -44,6 +53,7 @@ const ResourcesPage: React.FC = () => {
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [selectedResource, setSelectedResource] = useState<Resource | null>(
     null
   );
@@ -92,6 +102,16 @@ const ResourcesPage: React.FC = () => {
     setActiveMenuId(null);
   };
 
+  const handleWatchVideo = (resource: Resource) => {
+    setSelectedResource(resource);
+    setIsVideoModalOpen(true);
+  };
+
+  const handleCloseVideoModal = () => {
+    setIsVideoModalOpen(false);
+    setSelectedResource(null);
+  };
+
   // Handle pagination
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -108,9 +128,56 @@ const ResourcesPage: React.FC = () => {
     };
   }, []);
 
+  // Filter resources based on search query
+  const filteredResources = resources.filter((resource) => {
+    const query = searchQuery.toLowerCase();
+    return (
+      resource.occupation.name.toLowerCase().includes(query) ||
+      resource.description.toLowerCase().includes(query) ||
+      resource.video_link.toLowerCase().includes(query)
+    );
+  });
+
   return (
-    <div className="min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 py-6">
+    <div className="p-0">
+      {/* Header Section */}
+      <div className="mb-6 sm:mb-8">
+        <div className="flex items-center gap-3 mb-2">
+          <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+            <BookOpen className="w-4 h-4 text-blue-600" />
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+            Resources
+          </h1>
+        </div>
+        <p className="text-sm sm:text-base text-gray-600">
+          Educational resources and training materials for your staff
+        </p>
+      </div>
+
+      {/* Main Content */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-100">
+        {/* Search Section */}
+        <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-gray-100">
+          <div className="flex flex-col sm:flex-row gap-4 mb-4">
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                placeholder="Search for video, link, or description..."
+                className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+          </div>
+
+          {/* Results Count */}
+          <div className="text-sm text-gray-600">
+            Showing {filteredResources.length} of {resources.length} resources
+          </div>
+        </div>
+
         <EmployeeResourceShareModal
           isOpen={isShareModalOpen}
           onClose={() => {
@@ -125,35 +192,36 @@ const ResourcesPage: React.FC = () => {
           }
         />
 
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-2xl font-semibold">Resources</h1>
-          <div className="flex items-center">
-            <div className="relative rounded-[16px] border border-gray-100 px-4 py-2 flex items-center w-[480px]">
-              <FiSearch className="text-gray-400 mr-2" />
-              <input
-                type="text"
-                placeholder="Search for video, link"
-                className="bg-transparent outline-none w-full text-sm"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
+        {/* Resources Grid */}
+        <div className="p-4 sm:p-6">
+          {loading ? (
+            <div className="flex justify-center items-center h-64">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
             </div>
-          </div>
-        </div>
-
-        {loading ? (
-          <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500"></div>
-          </div>
-        ) : error ? (
-          <div className="text-center text-red-500 py-8">{error}</div>
-        ) : (
-          <>
+          ) : error ? (
+            <div className="p-12 text-center">
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg inline-block">
+                {error}
+              </div>
+            </div>
+          ) : filteredResources.length === 0 ? (
+            <div className="text-center py-16">
+              <BookOpen className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+              <p className="text-lg font-medium text-gray-900 mb-2">
+                No resources found
+              </p>
+              <p className="text-sm text-gray-500">
+                {searchQuery
+                  ? 'Try adjusting your search criteria'
+                  : 'No resources available at the moment'}
+              </p>
+            </div>
+          ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {resources.map((resource) => (
+              {filteredResources.map((resource) => (
                 <div
                   key={resource.id}
-                  className="rounded-lg overflow-hidden bg-white p-2 shadow-sm border border-gray-50"
+                  className="bg-white rounded-lg overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
                 >
                   <div className="relative">
                     <img
@@ -165,125 +233,219 @@ const ResourcesPage: React.FC = () => {
                         target.src = 'https://via.placeholder.com/400x200';
                       }}
                     />
+                    <div className="absolute top-2 right-2">
+                      <div className="bg-black/50 backdrop-blur-sm text-white px-2 py-1 rounded-md text-xs flex items-center gap-1">
+                        <Video className="w-3 h-3" />
+                        Video
+                      </div>
+                    </div>
                   </div>
 
                   <div className="p-4">
-                    <div className="flex justify-between items-start relative">
-                      <h3 className="font-medium text-gray-900 text-sm sm:text-base truncate pr-2">
+                    <div className="flex justify-between items-start relative mb-3">
+                      <h3 className="font-semibold text-gray-900 text-base truncate pr-2">
                         {resource.occupation.name.charAt(0).toUpperCase() +
                           resource.occupation.name.slice(1)}{' '}
                         Training
                       </h3>
-                      <button
-                        className="text-gray-500 hover:text-gray-700"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleMenu(resource.id);
-                        }}
-                      >
-                        <FiMoreVertical />
-                      </button>
-                      {activeMenuId === resource.id.toString() && (
-                        <div
-                          className="absolute top-8 right-0 bg-white rounded-md shadow-lg overflow-hidden z-10 w-36"
-                          onClick={(e) => e.stopPropagation()}
+                      <div className="relative">
+                        <button
+                          className="text-gray-500 hover:text-gray-700 p-1 rounded-lg hover:bg-gray-100 transition-colors"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleMenu(resource.id);
+                          }}
                         >
+                          <MoreVertical className="w-5 h-5" />
+                        </button>
+                        {activeMenuId === resource.id.toString() && (
                           <div
-                            className="px-4 py-2 hover:bg-gray-100 flex items-center cursor-pointer"
-                            onClick={() => handleShare(resource)}
+                            className="absolute top-8 right-0 bg-white rounded-lg shadow-lg border border-gray-100 overflow-hidden z-10 w-40"
+                            onClick={(e) => e.stopPropagation()}
                           >
-                            <FiShare2 className="mr-2" />
-                            Share
+                            <div
+                              className="px-4 py-2 hover:bg-gray-50 flex items-center gap-2 cursor-pointer text-sm text-gray-700"
+                              onClick={() => handleShare(resource)}
+                            >
+                              <Share2 className="w-4 h-4" />
+                              Share
+                            </div>
+                            <div
+                              className="px-4 py-2 hover:bg-gray-50 flex items-center gap-2 cursor-pointer text-sm text-gray-700"
+                              onClick={handleDownload}
+                            >
+                              <Download className="w-4 h-4" />
+                              Download
+                            </div>
                           </div>
-                          <div
-                            className="px-4 py-2 hover:bg-gray-100 flex items-center cursor-pointer"
-                            onClick={handleDownload}
-                          >
-                            <FiDownload className="mr-2" />
-                            Download
-                          </div>
-                        </div>
-                      )}
+                        )}
+                      </div>
                     </div>
 
-                    <p className="mt-2 text-sm text-gray-600">
+                    <p className="text-sm text-gray-600 line-clamp-2 mb-4">
                       {resource.description}
                     </p>
 
-                    <div className="mt-4 flex justify-between items-center">
-                      <a
-                        href={resource.video_link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-500 text-sm hover:underline"
+                    <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+                      <button
+                        onClick={() => handleWatchVideo(resource)}
+                        className="inline-flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors"
                       >
+                        <Play className="w-4 h-4" />
                         Watch Video
-                      </a>
-                      <div className="px-2 py-1 text-xs rounded-md bg-orange-100 text-orange-800">
-                        Video
-                      </div>
+                      </button>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
+          )}
 
-            {/* Pagination */}
-            {paginationMeta && (
-              <div className="flex justify-center mt-8">
-                <nav className="flex items-center space-x-2">
-                  <button
-                    onClick={() =>
-                      handlePageChange(paginationMeta.current_page - 1)
-                    }
-                    disabled={paginationMeta.current_page === 1}
-                    className={`px-3 py-1 rounded ${
-                      paginationMeta.current_page === 1
-                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                    }`}
-                  >
-                    Previous
-                  </button>
-
-                  {Array.from(
-                    { length: paginationMeta.last_page },
-                    (_, i) => i + 1
-                  ).map((page) => (
-                    <button
-                      key={page}
-                      onClick={() => handlePageChange(page)}
-                      className={`px-3 py-1 rounded ${
-                        page === paginationMeta.current_page
-                          ? 'bg-green-500 text-white'
-                          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                      }`}
-                    >
-                      {page}
-                    </button>
-                  ))}
-
-                  <button
-                    onClick={() =>
-                      handlePageChange(paginationMeta.current_page + 1)
-                    }
-                    disabled={
-                      paginationMeta.current_page === paginationMeta.last_page
-                    }
-                    className={`px-3 py-1 rounded ${
-                      paginationMeta.current_page === paginationMeta.last_page
-                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                    }`}
-                  >
-                    Next
-                  </button>
-                </nav>
+          {/* Pagination */}
+          {paginationMeta && paginationMeta.last_page > 1 && (
+            <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-gray-100 px-4 sm:px-6">
+              <div className="text-sm text-gray-700">
+                Page{' '}
+                <span className="font-medium">
+                  {paginationMeta.current_page}
+                </span>{' '}
+                of{' '}
+                <span className="font-medium">{paginationMeta.last_page}</span>
               </div>
-            )}
-          </>
-        )}
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() =>
+                    handlePageChange(paginationMeta.current_page - 1)
+                  }
+                  disabled={paginationMeta.current_page === 1}
+                  className={`px-4 py-2 rounded-lg border transition-colors ${
+                    paginationMeta.current_page === 1
+                      ? 'border-gray-200 text-gray-300 cursor-not-allowed'
+                      : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  Previous
+                </button>
+
+                {Array.from(
+                  { length: paginationMeta.last_page },
+                  (_, i) => i + 1
+                ).map((page) => {
+                  if (
+                    page === 1 ||
+                    page === paginationMeta.last_page ||
+                    (page >= paginationMeta.current_page - 1 &&
+                      page <= paginationMeta.current_page + 1)
+                  ) {
+                    return (
+                      <button
+                        key={page}
+                        onClick={() => handlePageChange(page)}
+                        className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                          page === paginationMeta.current_page
+                            ? 'bg-green-600 text-white'
+                            : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    );
+                  } else if (
+                    page === paginationMeta.current_page - 2 ||
+                    page === paginationMeta.current_page + 2
+                  ) {
+                    return (
+                      <span key={page} className="px-2 text-gray-500">
+                        ...
+                      </span>
+                    );
+                  }
+                  return null;
+                })}
+
+                <button
+                  onClick={() =>
+                    handlePageChange(paginationMeta.current_page + 1)
+                  }
+                  disabled={
+                    paginationMeta.current_page === paginationMeta.last_page
+                  }
+                  className={`px-4 py-2 rounded-lg border transition-colors ${
+                    paginationMeta.current_page === paginationMeta.last_page
+                      ? 'border-gray-200 text-gray-300 cursor-not-allowed'
+                      : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
+
+      {/* Video Modal */}
+      {isVideoModalOpen && selectedResource && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div
+            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+            onClick={handleCloseVideoModal}
+          ></div>
+          <div className="bg-white rounded-lg w-full max-w-4xl relative z-10 m-4 max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center rounded-t-lg">
+              <div>
+                <h2 className="text-xl font-semibold text-gray-900">
+                  {selectedResource.occupation.name.charAt(0).toUpperCase() +
+                    selectedResource.occupation.name.slice(1)}{' '}
+                  Training
+                </h2>
+                <p className="text-sm text-gray-600 mt-1">
+                  {selectedResource.description}
+                </p>
+              </div>
+              <button
+                onClick={handleCloseVideoModal}
+                className="rounded-full p-2 hover:bg-gray-100 transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-600" />
+              </button>
+            </div>
+
+            <div className="p-6">
+              <div
+                className="relative w-full"
+                style={{ paddingBottom: '56.25%' }}
+              >
+                <iframe
+                  className="absolute top-0 left-0 w-full h-full rounded-lg"
+                  src={`https://www.youtube.com/embed/${getYoutubeVideoId(selectedResource.video_link)}?autoplay=1`}
+                  title={selectedResource.occupation.name + ' Training'}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              </div>
+
+              <div className="mt-6 flex gap-3">
+                <a
+                  href={selectedResource.video_link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                >
+                  Open on YouTube
+                </a>
+                <button
+                  onClick={handleCloseVideoModal}
+                  className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,15 +1,19 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import {
+  LayoutDashboard,
+  Wallet,
+  CreditCard,
+  Briefcase,
+  Users,
+  Send,
+  CalendarSync,
+  BookOpen,
+  Heart,
+  Star,
+  FileText,
+} from 'lucide-react';
 import HomesafeLogo from '../../../assets/images/HomesafeLogo2.svg';
-import DashboardIcon from '../../../assets/icons/dashboard.svg';
-import WalletIcon from '../../../assets/icons/wallet.svg';
-import ArtisansIcon from '../../../assets/icons/artisans.svg';
-import StaffsIcon from '../../../assets/icons/staffs.svg';
-import PayrollIcon from '../../../assets/icons/payroll.svg';
-import ResourcesIcon from '../../../assets/icons/resources.svg';
-import MedicalIcon from '../../../assets/icons/medical.svg';
-import ReviewIcon from '../../../assets/icons/review.svg';
-import AllContractsIcon from '../../../assets/icons/contracts.svg';
 
 interface SidebarItemProps {
   icon: React.ReactNode;
@@ -29,10 +33,22 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
   return (
     <Link to={path} className="text-decoration-none" onClick={onClick}>
       <div
-        className={`flex items-center gap-3 py-3 px-4 cursor-pointer hover:bg-gray-100 rounded-md ${isActive ? 'bg-[#C8EDDF80]' : ''}`}
+        className={`flex items-center gap-3 py-3 px-4 cursor-pointer rounded-lg transition-colors ${
+          isActive
+            ? 'bg-green-50 text-green-700 border border-green-200'
+            : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+        }`}
       >
-        <div className="text-gray-600">{icon}</div>
-        <span className="text-[#5A6672] text-[16px]">{text}</span>
+        <div className={isActive ? 'text-green-700' : 'text-gray-500'}>
+          {icon}
+        </div>
+        <span
+          className={`text-sm font-medium ${
+            isActive ? 'text-green-700' : 'text-gray-700'
+          }`}
+        >
+          {text}
+        </span>
       </div>
     </Link>
   );
@@ -48,70 +64,70 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
   const sidebarItems = [
     {
       name: 'Dashboard',
-      icon: <img src={DashboardIcon} />,
+      icon: <LayoutDashboard className="w-5 h-5" />,
       path: '/employer/dashboard',
     },
     {
       name: 'Wallet',
-      icon: <img src={WalletIcon} />,
+      icon: <Wallet className="w-5 h-5" />,
       path: '/employer/wallet',
     },
     {
+      name: 'Transactions',
+      icon: <CreditCard className="w-5 h-5" />,
+      path: '/employer/transactions',
+    },
+    {
       name: 'Artisans',
-      icon: <img src={ArtisansIcon} />,
+      icon: <Briefcase className="w-5 h-5" />,
       path: '/employer/artisans',
     },
     {
       name: 'My Staff',
-      icon: <img src={StaffsIcon} />,
+      icon: <Users className="w-5 h-5" />,
       path: '/employer/staff',
     },
     {
       name: 'Suggestions',
-      icon: (
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-          <polyline points="16,17 21,12 16,7" />
-          <line x1="21" y1="12" x2="9" y2="12" />
-        </svg>
-      ),
+      icon: <Send className="w-5 h-5" />,
       path: '/employer/suggestions',
     },
     {
       name: 'Payroll',
-      icon: <img src={PayrollIcon} />,
+      icon: <CalendarSync className="w-5 h-5" />,
       path: '/employer/payroll',
     },
     {
       name: 'Resources',
-      icon: <img src={ResourcesIcon} />,
+      icon: <BookOpen className="w-5 h-5" />,
       path: '/employer/resources',
     },
     {
       name: 'Medical',
-      icon: <img src={MedicalIcon} />,
+      icon: <Heart className="w-5 h-5" />,
       path: '/employer/medical',
     },
     {
       name: 'Review',
-      icon: <img src={ReviewIcon} />,
+      icon: <Star className="w-5 h-5" />,
       path: '/employer/review',
     },
     {
       name: 'All Contracts',
-      icon: <img src={AllContractsIcon} />,
+      icon: <FileText className="w-5 h-5" />,
       path: '/employer/contracts',
     },
   ];
+
+  // Check if path matches (handles exact and nested routes)
+  const isActive = (path: string) => {
+    if (path === '/employer/dashboard') {
+      return location.pathname === '/employer' || location.pathname === path;
+    }
+    return (
+      location.pathname === path || location.pathname.startsWith(path + '/')
+    );
+  };
 
   return (
     <div
@@ -131,7 +147,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
             icon={item.icon}
             text={item.name}
             path={item.path}
-            isActive={location.pathname === item.path}
+            isActive={isActive(item.path)}
             onClick={onItemClick}
           />
         ))}
