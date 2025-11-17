@@ -46,6 +46,8 @@ import AdminTrack from '../pages/admin/Track';
 import AdminCandidateProfile from '../pages/admin/CandidateProfile';
 import AdminTransactions from '../pages/admin/Transactions';
 import AdminAllTransactions from '../pages/admin/AllTransactions';
+import EmployerTransactions from '../pages/employer/Transactions';
+import EmployeeTransactions from '../pages/employee/Transactions';
 import AdminReviews from '../pages/admin/Reviews';
 import AdminProfile from '../pages/admin/Profile';
 import AdminSecurity from '../pages/admin/Security';
@@ -64,6 +66,7 @@ import EmployeeLayout from '../components/layouts/Employee/Layout';
 import AgentLayout from '../components/layouts/Agent/Layout';
 import AdminLayout from '../components/layouts/Admin/Layout';
 import WalletPage from '../pages/employer/WalletPage';
+import EmployeeWalletPage from '../pages/employee/WalletPage';
 import WalletHistory from '../pages/employer/WalletHistory';
 import WalletTopUp from '../pages/employer/WalletTopUp';
 import PaymentVerification from '../pages/employer/PaymentVerification';
@@ -389,6 +392,14 @@ export const router = createBrowserRouter([
           </EmployerLayout>
         ),
       },
+      {
+        path: 'transactions',
+        element: protectEmployerRoute(
+          <EmployerLayout>
+            <EmployerTransactions />
+          </EmployerLayout>
+        ),
+      },
     ],
   },
   // Employee Routes
@@ -493,6 +504,22 @@ export const router = createBrowserRouter([
         element: protectEmployeeRoute(
           <EmployeeLayout>
             <EmployeeProposalDetails />
+          </EmployeeLayout>
+        ),
+      },
+      {
+        path: 'transactions',
+        element: protectEmployeeRoute(
+          <EmployeeLayout>
+            <EmployeeTransactions />
+          </EmployeeLayout>
+        ),
+      },
+      {
+        path: 'wallet',
+        element: protectEmployeeRoute(
+          <EmployeeLayout>
+            <EmployeeWalletPage />
           </EmployeeLayout>
         ),
       },

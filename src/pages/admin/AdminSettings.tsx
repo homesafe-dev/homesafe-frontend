@@ -1,11 +1,24 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { FaArrowLeft } from 'react-icons/fa';
-import { BsThreeDotsVertical } from 'react-icons/bs';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import {
+  ChevronLeft,
+  MoreVertical,
+  User,
+  Trash2,
+  Plus,
+  Search,
+  Filter,
+  X,
+  ChevronRight,
+  Users,
+  ArrowLeft,
+} from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import CreateUserModal from '../../components/CreateUserModal';
 import adminApi from '../../api/adminApi';
 import adminSettingsApi from '../../api/adminSettingsApi';
 import { format } from 'date-fns';
+import Avatar from '../../components/common/Avatar';
+import Toast from '../../components/common/Toast';
 
 interface Admin {
   id: number;
@@ -40,71 +53,132 @@ interface Admin {
 const AdminSettings: React.FC = () => {
   const navigate = useNavigate();
   const [admins, setAdmins] = useState<Admin[]>([]);
+  const [filteredAdmins, setFilteredAdmins] = useState<Admin[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [showOptionsFor, setShowOptionsFor] = useState<number | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [genderFilter, setGenderFilter] = useState<string>('all');
+  const itemsPerPage = 10;
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [toast, setToast] = useState({
+    message: '',
+    type: 'success' as 'success' | 'error' | 'info',
+    isVisible: false,
+  });
+
+  // Toast helper functions
+  const showToast = (message: string, type: 'success' | 'error' | 'info') => {
+    setToast({ message, type, isVisible: true });
+  };
+
+  const hideToast = () => {
+    setToast((prev) => ({ ...prev, isVisible: false }));
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setShowOptionsFor(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  // Filter admins based on search and filters
+  useEffect(() => {
+    let filtered = [...admins];
+
+    // Search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(
+        (admin) =>
+          `${admin.first_name} ${admin.last_name}`
+            .toLowerCase()
+            .includes(query) ||
+          admin.email.toLowerCase().includes(query) ||
+          admin.phone?.toLowerCase().includes(query)
+      );
+    }
+
+    // Status filter
+    if (statusFilter !== 'all') {
+      filtered = filtered.filter((admin) => {
+        if (statusFilter === 'verified') return admin.is_verified === 1;
+        if (statusFilter === 'unverified') return admin.is_verified === 0;
+        return true;
+      });
+    }
+
+    // Gender filter
+    if (genderFilter !== 'all') {
+      filtered = filtered.filter((admin) => {
+        if (!admin.gender) return false;
+        return admin.gender.toLowerCase() === genderFilter.toLowerCase();
+      });
+    }
+
+    setFilteredAdmins(filtered);
+    setTotalPages(Math.ceil(filtered.length / itemsPerPage));
+    setCurrentPage(1); // Reset to first page when filters change
+  }, [admins, searchQuery, statusFilter, genderFilter]);
+
+  // Get paginated admins
+  const getPaginatedAdmins = () => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return filteredAdmins.slice(startIndex, endIndex);
+  };
 
   const fetchAdmins = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
 
-      // Call the real API
-      const response = await adminApi.getAdminList(currentPage, 10);
+      // Call the real API - fetch more to allow client-side filtering
+      const response = await adminApi.getAdminList(1, 100);
 
       if (response.status && response.data) {
         // Handle nested data structure
         const adminsData = response.data.data || response.data;
-        setAdmins(Array.isArray(adminsData) ? adminsData : []);
-
-        // Set pagination info
-        if (response.data.last_page) {
-          setTotalPages(response.data.last_page);
-        } else {
-          setTotalPages(1);
-        }
+        const adminsArray = Array.isArray(adminsData) ? adminsData : [];
+        setAdmins(adminsArray);
+        setFilteredAdmins(adminsArray);
       } else {
         setAdmins([]);
+        setFilteredAdmins([]);
         setTotalPages(1);
       }
     } catch (err: any) {
       const errorMessage =
         err.response?.data?.message || 'Failed to fetch admins';
       setError(errorMessage);
+      showToast(errorMessage, 'error');
       setAdmins([]);
+      setFilteredAdmins([]);
       setTotalPages(1);
       console.error('Error fetching admins:', err);
     } finally {
       setIsLoading(false);
     }
-  }, [currentPage]);
+  }, []);
 
   useEffect(() => {
     fetchAdmins();
   }, [fetchAdmins]);
-
-  const handlePreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const toggleOptions = (id: number) => {
-    if (showOptionsFor === id) {
-      setShowOptionsFor(null);
-    } else {
-      setShowOptionsFor(id);
-    }
-  };
 
   const handleRemoveAdmin = async (adminId: number) => {
     try {
@@ -114,233 +188,398 @@ const AdminSettings: React.FC = () => {
       // Update the UI by removing the admin from the list
       setAdmins(admins.filter((admin) => admin.id !== adminId));
       setShowOptionsFor(null);
-
-      // Show success message (optional)
-      console.log('Admin removed successfully');
+      showToast('Admin removed successfully', 'success');
     } catch (err: any) {
       const errorMessage =
         err.response?.data?.message || 'Failed to remove admin';
       setError(errorMessage);
+      showToast(errorMessage, 'error');
       console.error('Error removing admin:', err);
     }
   };
 
+  const clearFilters = () => {
+    setSearchQuery('');
+    setStatusFilter('all');
+    setGenderFilter('all');
+  };
+
+  const hasActiveFilters =
+    searchQuery.trim() !== '' ||
+    statusFilter !== 'all' ||
+    genderFilter !== 'all';
+
   return (
-    <div className="bg-white rounded-lg p-6">
-      <div className="mb-6">
+    <div className="p-0">
+      {/* Back Button */}
+      <div className="mb-4 sm:mb-6">
         <button
-          className="flex items-center text-gray-600 hover:text-gray-800"
+          className="flex items-center text-gray-600 hover:text-gray-900 transition-colors"
           onClick={() => navigate(-1)}
         >
-          <FaArrowLeft className="mr-2" />
-          <span className="text-gray-800">Admin</span>
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          <span>Back</span>
         </button>
       </div>
 
-      {/* Header with Meet all admins, View All, and Create New Admin */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-        <div className="flex items-center justify-between w-full sm:justify-start sm:gap-4">
-          <h1 className="text-lg sm:text-xl font-semibold">Meet all admins</h1>
-          <button
-            className="text-sm text-gray-600 hover:text-gray-800 sm:hidden"
-            onClick={() => navigate('/admin/all-admins')}
-          >
-            View All
-          </button>
+      {/* Header Section */}
+      <div className="mb-6 sm:mb-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+              Admin Settings
+            </h1>
+            <p className="text-sm sm:text-base text-gray-600">
+              Manage all admin users in the system
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              className="text-sm text-gray-600 hover:text-gray-900 font-medium hidden sm:block"
+              onClick={() => navigate('/admin/all-admins')}
+            >
+              View All →
+            </button>
+            <button
+              onClick={() => setShowCreateModal(true)}
+              className="px-4 py-2.5 bg-[#A5EA91] hover:bg-[#95ddb1] text-[#174B35] rounded-lg flex items-center gap-2 text-sm font-medium transition-colors"
+            >
+              <Plus className="w-4 h-4" />
+              Create New Admin
+            </button>
+          </div>
         </div>
-        <div className="hidden sm:flex items-center gap-8">
-          <button
-            className="text-sm text-gray-600 hover:text-gray-800"
-            onClick={() => navigate('/admin/all-admins')}
-          >
-            View All
-          </button>
-          <button
-            onClick={() => setShowCreateModal(true)}
-            className="px-4 py-2 bg-[#A5EA91] text-[#174B35] rounded-md flex items-center"
-          >
-            <span className="mr-1">+</span> Create New Admin
-          </button>
-        </div>
-        <button
-          onClick={() => setShowCreateModal(true)}
-          className="px-3 py-2 bg-[#A5EA91] text-[#174B35] rounded-md flex items-center text-sm w-full justify-center sm:hidden"
-        >
-          <span className="mr-1">+</span> Create New Admin
-        </button>
       </div>
 
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-          {error}
-        </div>
-      )}
+      {/* Main Content */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-100">
+        {/* Search and Filters Section */}
+        <div className="p-4 sm:p-6 border-b border-gray-100">
+          <div className="mb-6 space-y-4">
+            <div className="flex flex-col sm:flex-row gap-4">
+              {/* Search Input */}
+              <div className="flex-1 relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <input
+                  type="text"
+                  placeholder="Search by name, email, or phone..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
+                />
+              </div>
 
-      {/* Admins Table */}
-      {isLoading ? (
-        <div className="flex justify-center items-center h-40">
-          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-500"></div>
-        </div>
-      ) : admins.length > 0 ? (
-        <div className="overflow-x-auto">
-          <table className="w-full text-xs sm:text-sm min-w-[700px]">
-            <thead>
-              <tr className="text-left text-gray-700 bg-[#C8EDDF80]">
-                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
-                  Full Name
-                </th>
-                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
-                  Email
-                </th>
-                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
-                  Phone Number
-                </th>
-                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
-                  Date of Birth
-                </th>
-                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
-                  Gender
-                </th>
-                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
-                  Status
-                </th>
-                <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {admins.map((admin) => (
-                <tr
-                  key={admin.id}
-                  className="border-b border-gray-200 hover:bg-gray-50"
+              {/* Status Filter */}
+              <div className="relative">
+                <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none" />
+                <select
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                  className="pl-10 pr-8 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm appearance-none bg-white"
                 >
-                  <td className="py-2 sm:py-3 px-2 sm:px-4 flex items-center text-xs sm:text-sm">
-                    <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gray-200 mr-2 overflow-hidden">
-                      {admin.avatar ? (
-                        <img
-                          src={admin.avatar}
-                          alt={`${admin.first_name} ${admin.last_name}`}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-gray-500 text-xs">
-                          {admin.first_name?.charAt(0) || 'A'}
-                        </div>
+                  <option value="all">All Status</option>
+                  <option value="verified">Verified</option>
+                  <option value="unverified">Unverified</option>
+                </select>
+              </div>
+
+              {/* Gender Filter */}
+              <div className="relative">
+                <select
+                  value={genderFilter}
+                  onChange={(e) => setGenderFilter(e.target.value)}
+                  className="pl-4 pr-8 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm appearance-none bg-white"
+                >
+                  <option value="all">All Genders</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+              </div>
+
+              {/* Clear Filters Button */}
+              {hasActiveFilters && (
+                <button
+                  onClick={clearFilters}
+                  className="px-4 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors flex items-center gap-2"
+                >
+                  <X className="w-4 h-4" />
+                  Clear Filters
+                </button>
+              )}
+            </div>
+
+            {/* Results Count */}
+            <div className="text-sm text-gray-600">
+              Showing {filteredAdmins.length} of {admins.length} admins
+            </div>
+          </div>
+        </div>
+
+        {/* Table Section */}
+        <div className="p-4 sm:p-6">
+          {isLoading ? (
+            <div className="flex justify-center items-center py-12">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
+            </div>
+          ) : error ? (
+            <div className="text-center py-12">
+              <div className="flex flex-col items-center gap-2">
+                <p className="font-medium text-red-600">{error}</p>
+                <p className="text-sm text-gray-500">
+                  Please try refreshing the page
+                </p>
+              </div>
+            </div>
+          ) : filteredAdmins.length === 0 ? (
+            <div className="text-center py-12">
+              <div className="flex flex-col items-center gap-3">
+                <Users className="w-12 h-12 text-gray-300" />
+                <div>
+                  <p className="font-medium text-gray-900">
+                    {hasActiveFilters
+                      ? 'No admins match your filters'
+                      : 'No admins found'}
+                  </p>
+                  <p className="text-sm text-gray-500 mt-1">
+                    {hasActiveFilters
+                      ? 'Try adjusting your search or filters'
+                      : 'No admin users have been created yet'}
+                  </p>
+                </div>
+                {hasActiveFilters && (
+                  <button
+                    onClick={clearFilters}
+                    className="mt-2 px-4 py-2 text-sm font-medium text-green-700 bg-green-50 hover:bg-green-100 rounded-lg transition-colors"
+                  >
+                    Clear all filters
+                  </button>
+                )}
+              </div>
+            </div>
+          ) : (
+            <>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50 border-b border-gray-100">
+                    <tr>
+                      <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                        Admin
+                      </th>
+                      <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                        Email
+                      </th>
+                      <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                        Phone
+                      </th>
+                      <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                        Date of Birth
+                      </th>
+                      <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                        Gender
+                      </th>
+                      <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                        Status
+                      </th>
+                      <th className="px-4 sm:px-6 py-3 text-right text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-100">
+                    {getPaginatedAdmins().map((admin) => (
+                      <tr
+                        key={admin.id}
+                        className="hover:bg-gray-50 transition-colors"
+                      >
+                        <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center gap-3">
+                            <Avatar
+                              src={admin.avatar}
+                              firstName={admin.first_name}
+                              lastName={admin.last_name}
+                              size="sm"
+                              showStatus={false}
+                            />
+                            <div>
+                              <div className="text-sm font-medium text-gray-900">
+                                {`${admin.first_name} ${admin.last_name}`}
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {admin.email}
+                        </td>
+                        <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {admin.phone || 'N/A'}
+                        </td>
+                        <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {admin.dob
+                            ? (() => {
+                                try {
+                                  return format(
+                                    new Date(admin.dob),
+                                    'MMM dd, yyyy'
+                                  );
+                                } catch {
+                                  return admin.dob;
+                                }
+                              })()
+                            : 'N/A'}
+                        </td>
+                        <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900 capitalize">
+                          {admin.gender || 'N/A'}
+                        </td>
+                        <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
+                          <span
+                            className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
+                              admin.is_verified
+                                ? 'bg-green-50 text-green-700'
+                                : 'bg-yellow-50 text-yellow-700'
+                            }`}
+                          >
+                            {admin.is_verified ? 'Verified' : 'Unverified'}
+                          </span>
+                        </td>
+                        <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                          <div className="relative" ref={dropdownRef}>
+                            <button
+                              onClick={() =>
+                                setShowOptionsFor(
+                                  showOptionsFor === admin.id ? null : admin.id
+                                )
+                              }
+                              className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                            >
+                              <MoreVertical className="w-5 h-5" />
+                            </button>
+
+                            {showOptionsFor === admin.id && (
+                              <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 z-10">
+                                <div className="py-1">
+                                  <button
+                                    onClick={() => {
+                                      navigate(`/admin/user/${admin.id}`);
+                                      setShowOptionsFor(null);
+                                    }}
+                                    className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                                  >
+                                    <User className="w-4 h-4" />
+                                    View Profile
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      handleRemoveAdmin(admin.id);
+                                    }}
+                                    className="w-full px-4 py-2 text-sm text-red-700 hover:bg-gray-50 flex items-center gap-2"
+                                  >
+                                    <Trash2 className="w-4 h-4" />
+                                    Remove Admin
+                                  </button>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Pagination */}
+              {filteredAdmins.length > 0 && (
+                <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+                  <div className="text-sm text-gray-700">
+                    Showing{' '}
+                    <span className="font-medium">
+                      {Math.min(
+                        (currentPage - 1) * itemsPerPage + 1,
+                        filteredAdmins.length
                       )}
-                    </div>
-                    <span className="truncate">{`${admin.first_name} ${admin.last_name}`}</span>
-                  </td>
-                  <td className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
-                    <span className="truncate block">{admin.email}</span>
-                  </td>
-                  <td className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
-                    <span className="truncate block">{admin.phone}</span>
-                  </td>
-                  <td className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
-                    {admin.dob
-                      ? (() => {
-                          try {
-                            return format(new Date(admin.dob), 'MMM dd, yyyy');
-                          } catch {
-                            return admin.dob;
-                          }
-                        })()
-                      : 'N/A'}
-                  </td>
-                  <td className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm capitalize">
-                    {admin.gender}
-                  </td>
-                  <td className="py-2 sm:py-3 px-2 sm:px-4">
-                    <span
-                      className={`px-2 sm:px-3 py-1 rounded-full text-[10px] sm:text-xs ${
-                        admin.is_verified
-                          ? 'bg-green-100 text-green-700'
-                          : 'bg-yellow-100 text-yellow-700'
+                    </span>{' '}
+                    to{' '}
+                    <span className="font-medium">
+                      {Math.min(
+                        currentPage * itemsPerPage,
+                        filteredAdmins.length
+                      )}
+                    </span>{' '}
+                    of{' '}
+                    <span className="font-medium">{filteredAdmins.length}</span>{' '}
+                    results
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() =>
+                        setCurrentPage((prev) => Math.max(prev - 1, 1))
+                      }
+                      disabled={currentPage === 1}
+                      className={`p-2 rounded-lg border transition-colors ${
+                        currentPage === 1
+                          ? 'border-gray-200 text-gray-300 cursor-not-allowed'
+                          : 'border-gray-300 text-gray-700 hover:bg-gray-50'
                       }`}
                     >
-                      {admin.is_verified ? 'Verified' : 'Unverified'}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4 relative">
-                    <button
-                      onClick={() => toggleOptions(admin.id)}
-                      className="text-gray-400 hover:text-gray-600"
-                    >
-                      <BsThreeDotsVertical />
+                      <ChevronLeft className="w-5 h-5" />
                     </button>
 
-                    {showOptionsFor === admin.id && (
-                      <div className="absolute right-8 top-10 bg-white shadow-lg rounded-md py-2 w-48 z-10">
-                        <div
-                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                          onClick={() => handleRemoveAdmin(admin.id)}
-                        >
-                          Remove
-                        </div>
-                      </div>
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                      (page) => {
+                        if (
+                          page === 1 ||
+                          page === totalPages ||
+                          (page >= currentPage - 1 && page <= currentPage + 1)
+                        ) {
+                          return (
+                            <button
+                              key={page}
+                              onClick={() => setCurrentPage(page)}
+                              className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                                currentPage === page
+                                  ? 'bg-green-600 text-white'
+                                  : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
+                              }`}
+                            >
+                              {page}
+                            </button>
+                          );
+                        } else if (
+                          page === currentPage - 2 ||
+                          page === currentPage + 2
+                        ) {
+                          return (
+                            <span key={page} className="px-2 text-gray-500">
+                              ...
+                            </span>
+                          );
+                        }
+                        return null;
+                      }
                     )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        <div className="flex flex-col items-center justify-center py-12">
-          <div className="bg-gray-100 rounded-full p-8 mb-4">
-            <svg
-              width="60"
-              height="60"
-              viewBox="0 0 60 60"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <rect width="60" height="60" rx="30" fill="#F5F5F5" />
-              <path d="M20 20H40V40H20V20Z" fill="#D9D9D9" />
-              <path d="M25 25H35V30H25V25Z" fill="#BDBDBD" />
-              <path d="M25 32H35V35H25V32Z" fill="#BDBDBD" />
-            </svg>
-          </div>
-          <h3 className="text-lg font-medium text-gray-800 mb-1">
-            No Admins Found
-          </h3>
-          <p className="text-gray-500">No admin users have been created yet</p>
-        </div>
-      )}
 
-      {/* Pagination */}
-      {!isLoading && admins.length > 0 && (
-        <div className="flex justify-end items-center gap-2 mt-4">
-          <button
-            onClick={handlePreviousPage}
-            disabled={currentPage === 1}
-            className="p-2 rounded-full hover:bg-gray-100 disabled:opacity-50"
-          >
-            &lt;
-          </button>
-
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-            (pageNum) => (
-              <button
-                key={pageNum}
-                onClick={() => setCurrentPage(pageNum)}
-                className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                  currentPage === pageNum ? 'bg-gray-200' : 'hover:bg-gray-100'
-                }`}
-              >
-                {pageNum}
-              </button>
-            )
+                    <button
+                      onClick={() =>
+                        setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                      }
+                      disabled={currentPage === totalPages}
+                      className={`p-2 rounded-lg border transition-colors ${
+                        currentPage === totalPages
+                          ? 'border-gray-200 text-gray-300 cursor-not-allowed'
+                          : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      <ChevronRight className="w-5 h-5" />
+                    </button>
+                  </div>
+                </div>
+              )}
+            </>
           )}
-
-          <button
-            onClick={handleNextPage}
-            disabled={currentPage === totalPages}
-            className="p-2 rounded-full hover:bg-gray-100 disabled:opacity-50"
-          >
-            &gt;
-          </button>
         </div>
-      )}
+      </div>
+
       <CreateUserModal
         isOpen={showCreateModal}
         onClose={() => setShowCreateModal(false)}
@@ -349,6 +588,14 @@ const AdminSettings: React.FC = () => {
           // Refresh the admins list
           fetchAdmins();
         }}
+      />
+
+      {/* Toast Notification */}
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.isVisible}
+        onClose={hideToast}
       />
     </div>
   );

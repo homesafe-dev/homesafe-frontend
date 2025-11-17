@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { FaUser, FaSearch } from 'react-icons/fa';
+import { Search, Users, MapPin, Mail, Calendar, Eye } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import employerApi from '../../api/employerApi';
 import { Employee } from '../../types/employee';
+import Avatar from '../../components/common/Avatar';
 
 const StaffPage: React.FC = () => {
   const [employees, setEmployees] = useState<Employee[]>([]);
@@ -106,118 +107,163 @@ const StaffPage: React.FC = () => {
   };
 
   return (
-    <div className="rounded-lg w-full mx-auto p-3 sm:p-4 lg:p-6">
-      <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-        <div>
-          <h1 className="text-xl sm:text-2xl font-semibold text-gray-800">
+    <div className="p-0">
+      {/* Header Section */}
+      <div className="mb-6 sm:mb-8">
+        <div className="flex items-center gap-3 mb-2">
+          <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+            <Users className="w-4 h-4 text-blue-600" />
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
             My Staff
           </h1>
-          <p className="text-sm sm:text-base text-gray-600 mt-1 sm:mt-2">
-            Here are the names of your staff
-          </p>
         </div>
-
-        {/* Search Bar */}
-        <div className="relative w-full sm:w-auto">
-          <input
-            type="text"
-            placeholder="Search staff..."
-            className="w-full sm:w-64 pl-9 sm:pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <FaSearch
-            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-            size={14}
-          />
-        </div>
+        <p className="text-sm sm:text-base text-gray-600">
+          Manage and view all your staff members
+        </p>
       </div>
 
-      {loading ? (
-        <div className="flex justify-center items-center h-40">
-          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-500"></div>
-        </div>
-      ) : error ? (
-        <div className="bg-red-50 text-red-600 p-4 rounded-lg text-center">
-          {error}
-        </div>
-      ) : (
-        <div className="bg-white rounded-lg overflow-hidden">
-          <div className="overflow-x-auto">
-            <div className="grid grid-cols-5 bg-[#C8EDDF80] px-3 sm:px-4 h-[48px] sm:h-[56px] items-center text-xs sm:text-sm font-medium text-gray-600 min-w-[600px]">
-              <div>Employee Name</div>
-              <div>Location</div>
-              <div>Email</div>
-              <div>Age</div>
-              <div>Status</div>
+      {/* Main Content */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-100">
+        {/* Search Section */}
+        <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-gray-100">
+          <div className="flex flex-col sm:flex-row gap-4 mb-4">
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                placeholder="Search by name, email, or location..."
+                className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
             </div>
+          </div>
 
-            {filteredEmployees && filteredEmployees.length > 0 ? (
-              filteredEmployees.map((employee) => (
-                <div
-                  key={employee.id}
-                  className="grid grid-cols-5 items-center px-3 sm:px-4 h-[48px] sm:h-[56px] mb-2 last:mb-0 bg-white min-w-[600px]"
-                >
-                  <div className="flex items-center gap-2 relative">
-                    <div className="bg-gray-200 rounded-full p-1.5 sm:p-2 flex items-center justify-center relative">
-                      {employee.avatar ? (
-                        <img
-                          src={employee.avatar}
-                          alt={`${employee.first_name} ${employee.last_name}`}
-                          className="w-5 h-5 sm:w-6 sm:h-6 rounded-full object-cover"
-                        />
-                      ) : (
-                        <FaUser className="text-white text-xs sm:text-sm" />
-                      )}
-                      <div
-                        className={`absolute w-2.5 h-2.5 sm:w-3 sm:h-3 ${employee.status === 1 ? 'bg-green-500' : 'bg-red-500'} rounded-full -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 border-2 border-white`}
-                      />
-                    </div>
-                    <span className="text-xs sm:text-sm truncate">
-                      {employee.first_name} {employee.last_name}
-                    </span>
-                  </div>
-                  <div className="text-xs sm:text-sm truncate">
-                    {extractLocation(employee.address)}
-                  </div>
-                  <div className="text-xs sm:text-sm truncate">
-                    {employee.email}
-                  </div>
-                  <div className="text-xs sm:text-sm">
-                    {calculateAge(employee.dob)}
-                  </div>
-                  <div className="flex justify-between items-center gap-2">
-                    <span
-                      className={`px-2 sm:px-3 py-1 rounded-full text-xs ${
-                        employee.is_verified === 1
-                          ? 'bg-green-100 text-green-700'
-                          : 'bg-yellow-100 text-yellow-700'
-                      }`}
-                    >
-                      {employee.is_verified === 1 ? 'Verified' : 'Unverified'}
-                    </span>
-                    <Link to={`/employer/staff/profile/${employee.id}`}>
-                      <button className="bg-green-200 text-green-800 px-2 sm:px-3 py-1 rounded-md text-xs sm:text-sm whitespace-nowrap">
-                        View Profile
-                      </button>
-                    </Link>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className="py-8 text-center text-gray-500">
-                <p>No staff members found</p>
-                {/* <p className="mt-2 text-sm">You haven't added any staff members yet.</p>
-                <Link to="/employer/staff/add">
-                  <button className="mt-4 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors">
-                    Add Staff Member
-                  </button>
-                </Link> */}
-              </div>
-            )}
+          {/* Results Count */}
+          <div className="text-sm text-gray-600">
+            Showing {filteredEmployees.length} of {employees.length} staff
+            members
           </div>
         </div>
-      )}
+
+        {/* Table Section */}
+        <div className="overflow-x-auto">
+          {loading ? (
+            <div className="flex justify-center items-center h-64">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
+            </div>
+          ) : error ? (
+            <div className="p-12 text-center">
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg inline-block">
+                {error}
+              </div>
+            </div>
+          ) : filteredEmployees && filteredEmployees.length > 0 ? (
+            <table className="w-full">
+              <thead className="bg-gray-50 border-b border-gray-100">
+                <tr>
+                  <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                    Employee
+                  </th>
+                  <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                    Location
+                  </th>
+                  <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                    Email
+                  </th>
+                  <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                    Age
+                  </th>
+                  <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th className="px-4 sm:px-6 py-3 text-right text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-100">
+                {filteredEmployees.map((employee) => (
+                  <tr
+                    key={employee.id}
+                    className="hover:bg-gray-50 transition-colors"
+                  >
+                    <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center gap-3">
+                        <Avatar
+                          src={employee.avatar}
+                          firstName={employee.first_name}
+                          lastName={employee.last_name}
+                          size="md"
+                          showStatus={true}
+                          isOnline={employee.status === 1}
+                        />
+                        <div>
+                          <div className="text-sm font-medium text-gray-900">
+                            {employee.first_name} {employee.last_name}
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center gap-2 text-sm text-gray-600">
+                        <MapPin className="w-4 h-4 text-gray-400" />
+                        <span>{extractLocation(employee.address)}</span>
+                      </div>
+                    </td>
+                    <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center gap-2 text-sm text-gray-600">
+                        <Mail className="w-4 h-4 text-gray-400" />
+                        <span className="truncate max-w-[200px]">
+                          {employee.email}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center gap-2 text-sm text-gray-600">
+                        <Calendar className="w-4 h-4 text-gray-400" />
+                        <span>{calculateAge(employee.dob)}</span>
+                      </div>
+                    </td>
+                    <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
+                      <span
+                        className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
+                          employee.is_verified === 1
+                            ? 'bg-green-50 text-green-700'
+                            : 'bg-yellow-50 text-yellow-700'
+                        }`}
+                      >
+                        {employee.is_verified === 1 ? 'Verified' : 'Unverified'}
+                      </span>
+                    </td>
+                    <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <Link to={`/employer/staff/profile/${employee.id}`}>
+                        <button className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors text-sm font-medium">
+                          <Eye className="w-4 h-4" />
+                          View Profile
+                        </button>
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <div className="p-12 text-center">
+              <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+              <p className="text-lg font-medium text-gray-900 mb-2">
+                No staff members found
+              </p>
+              <p className="text-sm text-gray-500">
+                {searchTerm
+                  ? 'Try adjusting your search criteria'
+                  : 'No staff members have been added yet'}
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

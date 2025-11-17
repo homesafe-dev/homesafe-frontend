@@ -48,7 +48,7 @@ const EnvironmentIndicator: React.FC = () => {
   };
 
   return (
-    <div className="px-2 py-1 rounded text-xs font-semibold uppercase tracking-wide text-red-600 border border-red-600">
+    <div className="px-1.5 py-0.5 rounded text-[10px] font-medium uppercase tracking-tight text-red-600 border border-red-600">
       {getEnvironmentText()}
     </div>
   );

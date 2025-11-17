@@ -2,7 +2,9 @@ import axiosInstance from './axiosConfig';
 
 // Transaction API endpoints
 const TRANSACTION_ENDPOINTS = {
-  ADMIN_TRANSACTIONS: '/admin/transactions',
+  ADMIN_TRANSACTIONS: '/admin/transactions', // Legacy endpoint, can be deprecated
+  TRANSACTIONS: '/transactions', // Role-based endpoint for all roles
+  TRANSACTION_STATS: '/transactions/stats',
 };
 
 // Transaction filter types
@@ -57,6 +59,51 @@ export interface TransactionResponse {
       total_items: number;
       items_per_page: number;
     };
+  };
+}
+
+// Transaction Stats interfaces
+export interface TransactionStatsFilters {
+  period?: 'today' | 'week' | 'month' | 'year' | 'all' | 'custom';
+  from_date?: string;
+  to_date?: string;
+  type?: 'credit' | 'debit';
+}
+
+export interface TransactionStatsResponse {
+  status: boolean;
+  message: string;
+  data: {
+    period: string;
+    date_range: {
+      from: string;
+      to: string;
+    };
+    summary: {
+      total_volume: number;
+      total_transactions: number;
+      total_credits: number;
+      total_withdrawals: number;
+      successful_count: number;
+      pending_count: number;
+      failed_count: number;
+      success_rate: number;
+      wallet_balance?: string; // Optional, only for employer and employee
+    };
+    by_type: Record<
+      string,
+      {
+        count: number;
+        volume: number;
+      }
+    >;
+    by_status: Record<
+      string,
+      {
+        count: number;
+        volume: number;
+      }
+    >;
   };
 }
 
@@ -196,6 +243,65 @@ const transactionApi = {
       to_date,
       ...additionalFilters,
     });
+  },
+
+  /**
+   * Get transactions (role-based - works for admin, employer, employee)
+   * Backend returns data based on authenticated user's role
+   * @param filters - Filter options for transactions
+   * @returns Promise with the API response
+   */
+  getTransactions: async (
+    filters: TransactionFilters = {}
+  ): Promise<TransactionResponse> => {
+    try {
+      const params = new URLSearchParams();
+
+      // Add filters to params
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== '') {
+          params.append(key, value.toString());
+        }
+      });
+
+      const response = await axiosInstance.get(
+        `${TRANSACTION_ENDPOINTS.TRANSACTIONS}?${params.toString()}`
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching transactions:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Get transaction statistics
+   * @param filters - Filter options for statistics
+   * @returns Promise with the API response
+   */
+  getTransactionStats: async (
+    filters: TransactionStatsFilters = {}
+  ): Promise<TransactionStatsResponse> => {
+    try {
+      const params = new URLSearchParams();
+
+      // Add filters to params
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== '') {
+          params.append(key, value.toString());
+        }
+      });
+
+      const response = await axiosInstance.get(
+        `${TRANSACTION_ENDPOINTS.TRANSACTION_STATS}?${params.toString()}`
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching transaction stats:', error);
+      throw error;
+    }
   },
 };
 

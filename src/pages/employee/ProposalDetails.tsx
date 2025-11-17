@@ -1,6 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import {
+  ArrowLeft,
+  User,
+  Phone,
+  Mail,
+  Star,
+  FileText,
+  Calendar,
+  Clock,
+  Briefcase,
+  Eye,
+} from 'lucide-react';
+import { format } from 'date-fns';
 import contractApi from '../../api/contractApi';
+import Avatar from '../../components/common/Avatar';
 
 interface ProposalDetails {
   start_date: string;
@@ -87,125 +101,287 @@ const ProposalDetailsPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
+      <div className="p-0">
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-        {error}
+      <div className="p-0">
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+          {error}
+        </div>
       </div>
     );
   }
 
   if (!proposalData) {
     return (
-      <div className="text-center py-12 text-gray-500">
-        No proposal data found.
+      <div className="p-0">
+        <div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm text-center">
+          <FileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+          <p className="text-gray-500 font-medium">No proposal data found.</p>
+        </div>
       </div>
     );
   }
 
-  const { employer } = proposalData;
+  const { employer, contract, proposal } = proposalData;
   const employerName = `${employer.first_name} ${employer.last_name}`;
 
   // Generate a simple rating (you can replace this with actual rating data)
   const rating = 4; // Default rating
 
   return (
-    <div className="rounded-md px-4 sm:px-0">
-      <div className="mb-4 sm:mb-6">
+    <div className="p-0">
+      {/* Header */}
+      <div className="mb-6 sm:mb-8">
         <button
           onClick={() => navigate('/employee/contracts')}
-          className="text-[#246D51] hover:text-[#1a5a3e] text-xs sm:text-sm mb-4"
+          className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4 sm:mb-6 transition-colors"
         >
-          ← Back to All Contracts
+          <ArrowLeft className="w-4 h-4" />
+          <span className="text-sm font-medium">Back to Contracts</span>
         </button>
-        <h2 className="text-lg sm:text-xl font-semibold text-[#24292E]">
-          Contract Details
-        </h2>
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+            <FileText className="w-4 h-4 text-blue-600" />
+          </div>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+              Contract Proposal
+            </h1>
+            <p className="text-sm sm:text-base text-gray-500 mt-1">
+              Review proposal details from {employerName}
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div className="flex justify-center">
-        <div className="bg-white rounded-lg p-4 sm:p-6 shadow-sm border border-gray-100 w-full max-w-md">
-          <div className="flex flex-col items-center">
-            {/* Profile Image */}
-            <div className="mb-3 sm:mb-4 relative">
-              {employer.avatar ? (
-                <img
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Employer Profile Card */}
+        <div className="lg:col-span-1">
+          <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+            <div className="flex flex-col items-center">
+              {/* Profile Image */}
+              <div className="mb-4">
+                <Avatar
                   src={employer.avatar}
-                  alt={employerName}
-                  className="rounded-full w-20 h-20 sm:w-24 sm:h-24 object-cover border-4 border-white shadow-sm"
+                  firstName={employer.first_name}
+                  lastName={employer.last_name}
+                  size="lg"
+                  showStatus={true}
+                  isOnline={true}
                 />
-              ) : (
-                <div className="rounded-full w-20 h-20 sm:w-24 sm:h-24 bg-gray-300 flex items-center justify-center border-4 border-white shadow-sm">
-                  <span className="text-white text-lg sm:text-xl font-semibold">
-                    {employer.first_name.charAt(0)}
-                    {employer.last_name.charAt(0)}
+              </div>
+
+              {/* Name */}
+              <h2 className="text-xl font-bold text-gray-900 mb-2">
+                {employerName}
+              </h2>
+
+              {/* Rating */}
+              <div className="flex items-center gap-1 mb-4">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Star
+                    key={star}
+                    className={`w-4 h-4 ${
+                      star <= rating
+                        ? 'text-yellow-400 fill-yellow-400'
+                        : 'text-gray-300'
+                    }`}
+                  />
+                ))}
+                <span className="ml-2 text-sm text-gray-600">
+                  {rating.toFixed(1)}
+                </span>
+              </div>
+
+              {/* Contact Information */}
+              <div className="w-full space-y-4 mt-6">
+                <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                  <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+                    <Phone className="w-4 h-4 text-blue-600" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs text-gray-500 mb-0.5">Phone</p>
+                    <p className="text-sm font-medium text-gray-900 truncate">
+                      {employer.phone}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                  <div className="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
+                    <Mail className="w-4 h-4 text-green-600" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs text-gray-500 mb-0.5">Email</p>
+                    <p className="text-sm font-medium text-gray-900 truncate">
+                      {employer.email}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* About Section */}
+              <div className="w-full mt-6 pt-6 border-t border-gray-100">
+                <h3 className="text-sm font-semibold text-gray-900 mb-2 flex items-center gap-2">
+                  <User className="w-4 h-4 text-gray-400" />
+                  About
+                </h3>
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  Meet {employer.first_name}, a passionate employer looking for
+                  dedicated staff. With a commitment to providing a great
+                  working environment, {employer.first_name} values
+                  professionalism and mutual respect in all working
+                  relationships.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Contract Details Card */}
+        <div className="lg:col-span-2">
+          <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center">
+                <Briefcase className="w-4 h-4 text-indigo-600" />
+              </div>
+              <div>
+                <h2 className="text-lg font-semibold text-gray-900">
+                  Contract Details
+                </h2>
+                <p className="text-xs text-gray-500 mt-0.5">
+                  Proposal information and terms
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center gap-2 mb-2">
+                  <Briefcase className="w-4 h-4 text-gray-400" />
+                  <span className="text-xs font-medium text-gray-500">
+                    Position
                   </span>
                 </div>
-              )}
-              <div className="absolute top-1 right-1 w-3 h-3 sm:w-4 sm:h-4 border-2 border-white rounded-full bg-[#37A379]" />
-            </div>
-
-            {/* Name */}
-            <h2 className="text-[14px] sm:text-[16px] text-gray-700 mt-[0.5rem] font-medium text-center">
-              {employerName}
-            </h2>
-
-            {/* Rating */}
-            <div className="flex mb-4 sm:mb-6 mt-2">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <span
-                  key={star}
-                  className={`text-[#EFAE73] text-sm sm:text-base ${star <= rating ? 'opacity-100' : 'opacity-30'}`}
-                >
-                  ★
-                </span>
-              ))}
-            </div>
-
-            {/* About me section */}
-            <div className="w-full">
-              <h3 className="text-[#246D51] font-semibold text-[14px] sm:text-[16px] mb-2">
-                About me
-              </h3>
-              <p className="text-[12px] sm:text-[13px] text-[#48525B] mb-4 sm:mb-6">
-                Meet {employer.first_name}, a passionate employer looking for
-                dedicated staff. With a commitment to providing a great working
-                environment, {employer.first_name}
-                values professionalism and mutual respect in all working
-                relationships.
-              </p>
-
-              {/* Contact Details */}
-              <h3 className="text-[#246D51] font-semibold text-[14px] sm:text-[16px] mb-2">
-                Contact Details
-              </h3>
-              <p className="text-[12px] sm:text-[13px] text-[#246D51] mb-3 sm:mb-4">
-                {employer.phone}
-              </p>
-
-              {/* Email */}
-              <h3 className="text-[#246D51] font-semibold text-[14px] sm:text-[16px] mb-2">
-                Email
-              </h3>
-              <p className="text-[12px] sm:text-[13px] text-[#246D51] mb-4 sm:mb-6 break-all">
-                {employer.email}
-              </p>
-
-              {/* View Contract Button */}
-              <div className="mt-4">
-                <button
-                  onClick={() => navigate(`/employee/${contractId}/contract`)}
-                  className="text-[#24292E] rounded-md py-2 text-sm w-full h-[34px] bg-[#A5EA91] hover:bg-[#A5EA91] transition-colors"
-                >
-                  View Contract
-                </button>
+                <p className="text-sm font-semibold text-gray-900">
+                  {contract.position || 'N/A'}
+                </p>
               </div>
+
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center gap-2 mb-2">
+                  <Calendar className="w-4 h-4 text-gray-400" />
+                  <span className="text-xs font-medium text-gray-500">
+                    Start Date
+                  </span>
+                </div>
+                <p className="text-sm font-semibold text-gray-900">
+                  {contract.start_date
+                    ? format(new Date(contract.start_date), 'MMM dd, yyyy')
+                    : 'N/A'}
+                </p>
+              </div>
+
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center gap-2 mb-2">
+                  <Clock className="w-4 h-4 text-gray-400" />
+                  <span className="text-xs font-medium text-gray-500">
+                    Duration
+                  </span>
+                </div>
+                <p className="text-sm font-semibold text-gray-900">
+                  {contract.duration_months ||
+                    proposal.proposal_details.duration_months ||
+                    0}{' '}
+                  months
+                </p>
+              </div>
+
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center gap-2 mb-2">
+                  <Clock className="w-4 h-4 text-gray-400" />
+                  <span className="text-xs font-medium text-gray-500">
+                    Working Days/Month
+                  </span>
+                </div>
+                <p className="text-sm font-semibold text-gray-900">
+                  {contract.working_days_per_month ||
+                    proposal.proposal_details.working_days_per_month ||
+                    0}{' '}
+                  days
+                </p>
+              </div>
+
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center gap-2 mb-2">
+                  <Clock className="w-4 h-4 text-gray-400" />
+                  <span className="text-xs font-medium text-gray-500">
+                    Working Hours/Week
+                  </span>
+                </div>
+                <p className="text-sm font-semibold text-gray-900">
+                  {contract.working_hours_per_week ||
+                    proposal.proposal_details.working_hours_per_week ||
+                    0}{' '}
+                  hours
+                </p>
+              </div>
+
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center gap-2 mb-2">
+                  <FileText className="w-4 h-4 text-gray-400" />
+                  <span className="text-xs font-medium text-gray-500">
+                    Status
+                  </span>
+                </div>
+                <span
+                  className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
+                    contract.status?.toLowerCase() === 'pending'
+                      ? 'bg-yellow-50 text-yellow-700 border border-yellow-200'
+                      : contract.status?.toLowerCase() === 'active'
+                        ? 'bg-green-50 text-green-700 border border-green-200'
+                        : 'bg-gray-50 text-gray-700 border border-gray-200'
+                  }`}
+                >
+                  {contract.status || proposal.status || 'Pending'}
+                </span>
+              </div>
+            </div>
+
+            {/* Schedule */}
+            {contract.working_hours_schedule ||
+            proposal.proposal_details.working_hours_schedule ? (
+              <div className="mb-6 p-4 bg-indigo-50 rounded-lg border border-indigo-100">
+                <div className="flex items-center gap-2 mb-2">
+                  <Clock className="w-4 h-4 text-indigo-600" />
+                  <span className="text-sm font-semibold text-indigo-900">
+                    Working Schedule
+                  </span>
+                </div>
+                <p className="text-sm text-indigo-700">
+                  {contract.working_hours_schedule ||
+                    proposal.proposal_details.working_hours_schedule}
+                </p>
+              </div>
+            ) : null}
+
+            {/* Action Button */}
+            <div className="pt-6 border-t border-gray-100">
+              <button
+                onClick={() => navigate(`/employee/${contractId}/contract`)}
+                className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors"
+              >
+                <Eye className="w-4 h-4" />
+                View Full Contract
+              </button>
             </div>
           </div>
         </div>

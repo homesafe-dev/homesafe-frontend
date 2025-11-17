@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { FaArrowLeft, FaEdit } from 'react-icons/fa';
+import { Camera, Trash2, Save, Edit } from 'lucide-react';
 import userApi from '../../api/userApi';
-import { useNavigate } from 'react-router-dom';
+import Toast from '../../components/common/Toast';
+import Avatar from '../../components/common/Avatar';
 
 interface ProfileFormData {
   firstName: string;
@@ -33,9 +34,10 @@ interface UserProfile {
 }
 
 const EmployeeProfilePage: React.FC = () => {
-  const navigate = useNavigate();
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
   // userProfile state is used to store the full user data, but we extract specific fields to formData
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [formData, setFormData] = useState<ProfileFormData>({
@@ -48,6 +50,11 @@ const EmployeeProfilePage: React.FC = () => {
     address: '',
     profileDescription: '',
   });
+  const [toast, setToast] = useState({
+    message: '',
+    type: 'success' as 'success' | 'error' | 'info',
+    isVisible: false,
+  });
 
   // Salary update modal states
   const [showSalaryModal, setShowSalaryModal] = useState(false);
@@ -58,24 +65,12 @@ const EmployeeProfilePage: React.FC = () => {
   });
   const [salaryLoading, setSalaryLoading] = useState(false);
 
-  // Toast notification states
-  const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState('');
-  const [toastType, setToastType] = useState<'success' | 'error'>('success');
+  const showToast = (message: string, type: 'success' | 'error' | 'info') => {
+    setToast({ message, type, isVisible: true });
+  };
 
-  // Show toast notification
-  const showToastNotification = (
-    message: string,
-    type: 'success' | 'error'
-  ) => {
-    setToastMessage(message);
-    setToastType(type);
-    setShowToast(true);
-
-    // Auto-hide after 4 seconds
-    setTimeout(() => {
-      setShowToast(false);
-    }, 4000);
+  const hideToast = () => {
+    setToast((prev) => ({ ...prev, isVisible: false }));
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -134,15 +129,12 @@ const EmployeeProfilePage: React.FC = () => {
         );
         setShowSalaryModal(false);
         setSalaryData({ salary: '', change_reason: '', effective_date: '' });
-        showToastNotification('Salary updated successfully!', 'success');
+        showToast('Salary updated successfully!', 'success');
       } else {
-        showToastNotification(
-          response.message || 'Failed to update salary',
-          'error'
-        );
+        showToast(response.message || 'Failed to update salary', 'error');
       }
     } catch (err) {
-      showToastNotification('Error updating salary', 'error');
+      showToast('Error updating salary', 'error');
       console.error('Error updating salary:', err);
     } finally {
       setSalaryLoading(false);
@@ -175,10 +167,10 @@ const EmployeeProfilePage: React.FC = () => {
             profileDescription: userData.profile_description || '',
           });
         } else {
-          showToastNotification('Failed to fetch user profile', 'error');
+          setError('Failed to fetch user profile');
         }
       } catch (err) {
-        showToastNotification('Error fetching user profile', 'error');
+        setError('Error fetching user profile');
         console.error('Error fetching user profile:', err);
       } finally {
         setLoading(false);
@@ -191,7 +183,8 @@ const EmployeeProfilePage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      setLoading(true);
+      setSubmitting(true);
+      setError(null);
 
       // Create FormData object for file upload
       const formDataObj = new FormData();
@@ -217,266 +210,324 @@ const EmployeeProfilePage: React.FC = () => {
       const response = await userApi.updateProfile(formDataObj);
 
       if (response.status) {
-        showToastNotification('Profile updated successfully', 'success');
+        showToast('Profile updated successfully!', 'success');
+        // Refresh profile data
+        const profileResponse = await userApi.getProfile();
+        if (profileResponse.status && profileResponse.data) {
+          const userData = profileResponse.data;
+          setUserProfile(userData);
+          if (userData.avatar) {
+            setProfileImage(userData.avatar);
+          }
+        }
       } else {
-        showToastNotification(
-          response.message || 'Failed to update profile',
-          'error'
-        );
+        const errorMsg = response.message || 'Failed to update profile';
+        setError(errorMsg);
+        showToast(errorMsg, 'error');
       }
     } catch (err) {
-      showToastNotification('Error updating profile', 'error');
+      const errorMsg = 'Error updating profile';
+      setError(errorMsg);
+      showToast(errorMsg, 'error');
       console.error('Error updating profile:', err);
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
 
   return (
-    <div className="min-h-screen px-4 sm:px-0">
-      <div className="mb-4 sm:mb-6">
-        <button
-          className="flex items-center text-gray-600 hover:text-gray-800"
-          onClick={() => navigate(-1)}
-        >
-          <FaArrowLeft className="mr-2" />
-          <span className="text-base sm:text-lg font-medium">
-            Employee Profile
-          </span>
-        </button>
+    <div className="p-0">
+      {/* Header Section */}
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+          Profile Settings
+        </h1>
+        <p className="text-sm sm:text-base text-gray-600">
+          Manage your personal information and profile details
+        </p>
       </div>
 
-      {loading && (
-        <div className="flex justify-center items-center py-8">
+      {loading ? (
+        <div className="flex justify-center items-center py-12">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
         </div>
-      )}
+      ) : (
+        <div className="bg-white rounded-lg shadow-sm border border-gray-100">
+          <form onSubmit={handleSubmit}>
+            {/* Profile Image Section */}
+            <div className="p-6 sm:p-8 border-b border-gray-100">
+              <div className="flex flex-col items-center">
+                <div className="relative mb-6">
+                  <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-gray-100">
+                    {profileImage ? (
+                      <img
+                        src={profileImage}
+                        alt="Profile"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <Avatar
+                        src={null}
+                        firstName={formData.firstName}
+                        lastName={formData.lastName}
+                        size="xl"
+                        showStatus={false}
+                      />
+                    )}
+                  </div>
+                  <div className="absolute bottom-0 right-0 w-10 h-10 bg-green-600 rounded-full flex items-center justify-center border-4 border-white shadow-sm">
+                    <Camera className="w-5 h-5 text-white" />
+                  </div>
+                </div>
 
-      <div className="bg-white rounded-lg shadow p-4 sm:p-6 lg:p-8 max-w-4xl mb-6">
-        <form onSubmit={handleSubmit}>
-          <div className="flex flex-col items-center mb-6 sm:mb-8">
-            <div className="relative mb-4">
-              <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-[#D9D9D9] flex items-center justify-center overflow-hidden">
-                {profileImage ? (
-                  <img
-                    src={profileImage}
-                    alt="Profile"
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full" />
-                )}
-                <div className="absolute top-1 right-0 sm:top-2 mr-1 sm:mr-2">
-                  <div className="w-3 h-3 sm:w-4 sm:h-4 bg-gray-600 rounded-full"></div>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <label className="px-4 py-2.5 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-medium cursor-pointer transition-colors flex items-center justify-center gap-2">
+                    <Camera className="w-4 h-4" />
+                    Change Image
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleImageChange}
+                    />
+                  </label>
+
+                  {profileImage && (
+                    <button
+                      type="button"
+                      onClick={handleDeleteImage}
+                      className="px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                      Remove Image
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto">
-              <button
-                type="button"
-                onClick={handleDeleteImage}
-                className="px-3 sm:px-4 py-2 border border-gray-300 rounded-md text-xs sm:text-sm hover:bg-gray-50 w-full sm:w-auto"
-              >
-                Delete Image
-              </button>
+            {/* Form Fields Section */}
+            <div className="p-6 sm:p-8">
+              {error && (
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6 text-sm">
+                  {error}
+                </div>
+              )}
 
-              <label className="px-3 sm:px-4 py-2 bg-[#A5EA91] text-[#24292E] rounded-md text-xs sm:text-sm cursor-pointer hover:bg-green-200 text-center w-full sm:w-auto">
-                Change Image
-                <input
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handleImageChange}
-                />
-              </label>
-            </div>
-          </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label
+                    htmlFor="firstName"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    First Name
+                  </label>
+                  <input
+                    type="text"
+                    id="firstName"
+                    name="firstName"
+                    placeholder="e.g. John"
+                    value={formData.firstName}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 placeholder-gray-400"
+                  />
+                </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 sm:gap-x-6 gap-y-4">
-            <div>
-              <label
-                htmlFor="firstName"
-                className="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-              >
-                First Name
-              </label>
-              <input
-                type="text"
-                id="firstName"
-                name="firstName"
-                placeholder="eg. John"
-                value={formData.firstName}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800 placeholder-[#BDC2C7] text-sm"
-              />
-            </div>
+                <div>
+                  <label
+                    htmlFor="lastName"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Last Name
+                  </label>
+                  <input
+                    type="text"
+                    id="lastName"
+                    name="lastName"
+                    placeholder="e.g. Doe"
+                    value={formData.lastName}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 placeholder-gray-400"
+                  />
+                </div>
 
-            <div>
-              <label
-                htmlFor="lastName"
-                className="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-              >
-                Last Name
-              </label>
-              <input
-                type="text"
-                id="lastName"
-                name="lastName"
-                placeholder="eg. Duke"
-                value={formData.lastName}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800 placeholder-[#BDC2C7] text-sm"
-              />
-            </div>
+                <div>
+                  <label
+                    htmlFor="phoneNumber"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Phone Number
+                  </label>
+                  <input
+                    type="tel"
+                    id="phoneNumber"
+                    name="phoneNumber"
+                    placeholder="e.g. 08012345678"
+                    value={formData.phoneNumber}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 placeholder-gray-400"
+                  />
+                </div>
 
-            <div>
-              <label
-                htmlFor="phoneNumber"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Phone Number
-              </label>
-              <input
-                type="tel"
-                id="phoneNumber"
-                name="phoneNumber"
-                placeholder="e.g 080*******"
-                value={formData.phoneNumber}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800 placeholder-[#BDC2C7]"
-              />
-            </div>
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="example@gmail.com"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 placeholder-gray-400"
+                  />
+                </div>
 
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                placeholder="example@gmail.com"
-                value={formData.email}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800 placeholder-[#BDC2C7]"
-              />
-            </div>
+                <div>
+                  <label
+                    htmlFor="gender"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Gender
+                  </label>
+                  <select
+                    id="gender"
+                    name="gender"
+                    value={formData.gender}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 appearance-none bg-white"
+                  >
+                    <option value="">Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
 
-            <div>
-              <label
-                htmlFor="gender"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Gender
-              </label>
-              <select
-                id="gender"
-                name="gender"
-                value={formData.gender}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800"
-              >
-                <option value="">Select Gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
+                <div>
+                  <label
+                    htmlFor="dob"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Date of Birth
+                  </label>
+                  <input
+                    type="date"
+                    id="dob"
+                    name="dob"
+                    value={formData.dob}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
+                  />
+                </div>
 
-            <div>
-              <label
-                htmlFor="dob"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Date of Birth
-              </label>
-              <input
-                type="date"
-                id="dob"
-                name="dob"
-                value={formData.dob}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800"
-              />
-            </div>
+                <div className="md:col-span-2">
+                  <label
+                    htmlFor="address"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Address
+                  </label>
+                  <input
+                    type="text"
+                    id="address"
+                    name="address"
+                    placeholder="Your address"
+                    value={formData.address}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 placeholder-gray-400"
+                  />
+                </div>
 
-            <div>
-              <label
-                htmlFor="address"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Address
-              </label>
-              <input
-                type="text"
-                id="address"
-                name="address"
-                placeholder="Your address"
-                value={formData.address}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800 placeholder-[#BDC2C7]"
-              />
-            </div>
+                <div className="md:col-span-2">
+                  <label
+                    htmlFor="profileDescription"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Profile Description
+                  </label>
+                  <textarea
+                    id="profileDescription"
+                    name="profileDescription"
+                    placeholder="Tell us about yourself"
+                    value={formData.profileDescription}
+                    onChange={handleInputChange}
+                    rows={4}
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 placeholder-gray-400 resize-none"
+                  />
+                </div>
+              </div>
 
-            <div className="md:col-span-2">
-              <label
-                htmlFor="profileDescription"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Profile Description
-              </label>
-              <textarea
-                id="profileDescription"
-                name="profileDescription"
-                placeholder="Tell us about yourself"
-                value={formData.profileDescription}
-                onChange={handleInputChange}
-                rows={4}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800 placeholder-[#BDC2C7]"
-              />
+              {/* Save Button */}
+              <div className="flex justify-end mt-8 pt-6 border-t border-gray-100">
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="px-6 py-2.5 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {submitting ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                      <span>Saving...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Save className="w-4 h-4" />
+                      <span>Save Changes</span>
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
-          </div>
-        </form>
-      </div>
+          </form>
+        </div>
+      )}
 
       {/* Salary Section */}
-      <div className="bg-white rounded-lg shadow p-8 max-w-4xl mb-6">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold text-gray-900">
-            Salary Information
-          </h3>
-          <button
-            onClick={() => setShowSalaryModal(true)}
-            className="flex items-center px-4 py-2 bg-[#A5EA91] text-[#24292E] rounded-md hover:bg-green-300 focus:outline-none focus:ring-2 focus:ring-green-500"
-          >
-            <FaEdit className="mr-2" />
-            Update Salary
-          </button>
-        </div>
+      {!loading && (
+        <div className="bg-white rounded-lg shadow-sm border border-gray-100 mt-6">
+          <div className="p-6 sm:p-8">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">
+                Salary Information
+              </h3>
+              <button
+                onClick={() => setShowSalaryModal(true)}
+                className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-medium transition-colors"
+              >
+                <Edit className="w-4 h-4" />
+                Update Salary
+              </button>
+            </div>
 
-        <div className="bg-gray-50 p-4 rounded-lg">
-          <div className="flex justify-between items-center">
-            <span className="text-sm font-medium text-gray-600">
-              Current Salary:
-            </span>
-            <span className="text-lg font-bold text-gray-900">
-              ₦
-              {userProfile?.salary
-                ? parseFloat(userProfile.salary).toLocaleString()
-                : '0'}
-            </span>
+            <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+              <div className="flex justify-between items-center">
+                <span className="text-sm font-medium text-gray-600">
+                  Current Salary:
+                </span>
+                <span className="text-lg font-bold text-gray-900">
+                  ₦
+                  {userProfile?.salary
+                    ? parseFloat(userProfile.salary).toLocaleString()
+                    : '0'}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Salary Update Modal */}
       {showSalaryModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="absolute inset-0 bg-black/30 backdrop-blur-sm"></div>
+          <div
+            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+            onClick={() => setShowSalaryModal(false)}
+          ></div>
           <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4 relative z-10">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold text-gray-900">
@@ -484,7 +535,7 @@ const EmployeeProfilePage: React.FC = () => {
               </h3>
               <button
                 onClick={() => setShowSalaryModal(false)}
-                className="text-gray-400 hover:text-gray-600"
+                className="text-gray-400 hover:text-gray-600 transition-colors"
               >
                 ✕
               </button>
@@ -541,14 +592,14 @@ const EmployeeProfilePage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowSalaryModal(false)}
-                  className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                  className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={salaryLoading}
-                  className="px-4 py-2 bg-[#A5EA91] text-[#24292E] rounded-md hover:bg-green-300 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-50"
+                  className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-50 transition-colors"
                 >
                   {salaryLoading ? 'Updating...' : 'Update Salary'}
                 </button>
@@ -558,36 +609,13 @@ const EmployeeProfilePage: React.FC = () => {
         </div>
       )}
 
-      <div className="flex justify-end max-w-4xl">
-        <button
-          onClick={handleSubmit}
-          type="button"
-          className="px-6 py-2 bg-[#A5EA91] text-[#24292E] rounded-md hover:bg-green-300 focus:outline-none focus:ring-2 focus:ring-green-500 mt-[1rem]"
-        >
-          Save Changes
-        </button>
-      </div>
-
       {/* Toast Notification */}
-      {showToast && (
-        <div
-          className={`fixed top-4 right-4 z-50 px-6 py-4 rounded-lg shadow-lg transform transition-all duration-300 ease-in-out ${
-            toastType === 'success'
-              ? 'bg-green-500 text-white'
-              : 'bg-red-500 text-white'
-          }`}
-        >
-          <div className="flex items-center justify-between">
-            <span className="font-medium">{toastMessage}</span>
-            <button
-              onClick={() => setShowToast(false)}
-              className="ml-4 text-white hover:text-gray-200"
-            >
-              ✕
-            </button>
-          </div>
-        </div>
-      )}
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.isVisible}
+        onClose={hideToast}
+      />
     </div>
   );
 };

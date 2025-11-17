@@ -1,124 +1,311 @@
 import React, { useState, useEffect } from 'react';
-import { FaEye, FaPlus, FaEllipsisV } from 'react-icons/fa';
-import { BsCreditCard, BsPeople } from 'react-icons/bs';
-import { Link } from 'react-router-dom';
-import walletApi from '../../api/walletApi';
-import userApi from '../../api/userApi';
-import employerApi from '../../api/employerApi';
-import { WalletTransaction } from '../../types/wallet';
+import { Link, useNavigate } from 'react-router-dom';
+import {
+  Users,
+  CreditCard,
+  TrendingUp,
+  TrendingDown,
+  DollarSign,
+  FileText,
+  Wallet,
+  Briefcase,
+  Send,
+  CalendarSync,
+  Star,
+  Bell,
+} from 'lucide-react';
+import { format } from 'date-fns';
+import {
+  PieChart,
+  Pie,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+} from 'recharts';
+import dashboardApi from '../../api/dashboardApi';
+import transactionApi, { Transaction } from '../../api/transactionApi';
+import { useAuth } from '../../contexts/useAuth';
+
+interface EmployerDashboardData {
+  employees: {
+    total_count: number;
+    active_count: number;
+    inactive_count: number;
+  };
+  contracts: {
+    active_count: number;
+    pending_proposals_count: number;
+    completed_count: number;
+    terminated_count: number;
+  };
+  suggestions: {
+    pending_count: number;
+    accepted_count: number;
+    rejected_count: number;
+  };
+  payroll: {
+    recent_payrolls: any[];
+    this_month_total: number;
+    employees_with_active_advances_count: number;
+  };
+  financial: {
+    wallet_balance: string;
+    recent_transactions: any[];
+  };
+  reviews: {
+    average_rating: number;
+    total_count: number;
+  };
+  notifications: {
+    unread_count: number;
+    recent: any[];
+  };
+}
+
+// Extended Transaction interface for local use
+interface LocalTransaction extends Omit<Transaction, 'amount' | 'user'> {
+  reference_code?: string;
+  amount: string | number;
+  user?: {
+    id: string | number;
+    first_name: string;
+    last_name: string;
+    email: string;
+    avatar?: string;
+  };
+}
 
 const DashboardContent: React.FC = () => {
-  const [walletBalance, setWalletBalance] = useState<string>('0.00');
-  const [transactions, setTransactions] = useState<WalletTransaction[]>([]);
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const [dashboardData, setDashboardData] =
+    useState<EmployerDashboardData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [userName, setUserName] = useState<string>('User');
-  const [totalStaff, setTotalStaff] = useState<number>(0);
-  const [totalPayroll, setTotalPayroll] = useState<number>(0);
+  const [transactions, setTransactions] = useState<LocalTransaction[]>([]);
 
   useEffect(() => {
-    // Fetch user profile data
-    const fetchUserProfile = async () => {
+    const fetchDashboardData = async () => {
       try {
-        const response = await userApi.getProfile();
+        setLoading(true);
+        setError(null);
+        const response = await dashboardApi.getDashboard();
+
         if (response.status) {
-          const userData = response.data;
-          setUserName(userData.first_name || 'User');
-        }
-      } catch (err) {
-        console.error('Error fetching user profile:', err);
-      }
-    };
-
-    fetchUserProfile();
-
-    // Fetch wallet balance
-    const fetchWalletBalance = async () => {
-      try {
-        const response = await walletApi.getBalance();
-        if (response.status && response.data) {
-          setWalletBalance(response.data.current_balance);
-        }
-      } catch (err) {
-        console.error('Error fetching wallet balance:', err);
-      }
-    };
-
-    // Fetch wallet transactions
-    const fetchTransactions = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const response = await walletApi.getTransactions(1, 6);
-        if (response.status && response.data && response.data.data) {
-          setTransactions(response.data.data);
+          setDashboardData(response.data);
+        } else {
+          setError(response.message || 'Failed to fetch dashboard data');
         }
       } catch (err: any) {
-        console.error('Error fetching transactions:', err);
-        setError(err.message || 'Failed to load transactions');
+        console.error('Error fetching dashboard data:', err);
+        setError(err.response?.data?.message || 'Error loading dashboard');
       } finally {
         setLoading(false);
       }
     };
 
-    // Fetch employees data for staff metrics
-    const fetchStaffMetrics = async () => {
-      try {
-        const response = await employerApi.getEmployees();
-        if (response.status && response.data) {
-          // Set total staff count from pagination total
-          setTotalStaff(response.data.total || 0);
-
-          // Calculate total payroll by summing all employee salaries
-          const employees = response.data.data || [];
-          const totalPayrollAmount = employees.reduce(
-            (sum: number, employee: any) => {
-              const salary = parseFloat(employee.salary || '0');
-              return sum + salary;
-            },
-            0
-          );
-          setTotalPayroll(totalPayrollAmount);
-        }
-      } catch (err) {
-        console.error('Error fetching staff metrics:', err);
-      }
-    };
-
-    fetchWalletBalance();
-    fetchTransactions();
-    fetchStaffMetrics();
+    fetchDashboardData();
 
     // Check if we're returning from a payment
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('payment_success') === 'true') {
-      // Refresh wallet data after successful payment
+      // Refresh dashboard data after successful payment
       setTimeout(() => {
-        fetchWalletBalance();
-        fetchTransactions();
+        fetchDashboardData();
       }, 1000);
       // Clean up URL
       window.history.replaceState({}, document.title, window.location.pathname);
     }
   }, []);
 
+  // Fetch transactions separately (same way as Transactions.tsx)
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        const filters = {
+          limit: 6,
+          page: 1,
+        };
+
+        const response = await transactionApi.getTransactions(filters);
+
+        if (response.status && response.data) {
+          // Handle different possible response structures
+          let txData: LocalTransaction[] = [];
+          const data = response.data as any;
+
+          if (data.transactions && Array.isArray(data.transactions)) {
+            // If transactions array exists, map and transform
+            txData = data.transactions.map((tx: Transaction) => ({
+              ...tx,
+              reference_code: tx.reference || tx.id?.toString(),
+              amount:
+                typeof tx.amount === 'string'
+                  ? tx.amount
+                  : tx.amount.toString(),
+            }));
+          } else if (data.data && Array.isArray(data.data)) {
+            // Fallback to data array
+            txData = data.data.map((tx: any) => ({
+              ...tx,
+              reference_code:
+                tx.reference_code || tx.reference || tx.id?.toString(),
+              amount:
+                typeof tx.amount === 'string'
+                  ? tx.amount
+                  : tx.amount.toString(),
+            }));
+          } else if (Array.isArray(data)) {
+            // If response.data itself is an array
+            txData = data.map((tx: any) => ({
+              ...tx,
+              reference_code:
+                tx.reference_code || tx.reference || tx.id?.toString(),
+              amount:
+                typeof tx.amount === 'string'
+                  ? tx.amount
+                  : tx.amount.toString(),
+            }));
+          }
+
+          setTransactions(txData);
+        } else {
+          setTransactions([]);
+        }
+      } catch (error: any) {
+        console.error('Error fetching transactions:', error);
+        setTransactions([]);
+      }
+    };
+
+    fetchTransactions();
+  }, []);
+
+  const formatCurrency = (amount: number | string) => {
+    const numAmount = typeof amount === 'string' ? parseFloat(amount) : amount;
+    return new Intl.NumberFormat('en-NG', {
+      style: 'currency',
+      currency: 'NGN',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(numAmount);
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    });
+  };
+
+  const formatTime = (dateString: string) => {
+    return new Date(dateString).toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  };
+
+  const getStatusColor = (status: string) => {
+    const statusLower = status.toLowerCase();
+    if (statusLower === 'successful' || statusLower === 'completed') {
+      return 'bg-green-50 text-green-700';
+    } else if (statusLower === 'pending') {
+      return 'bg-yellow-50 text-yellow-700';
+    } else {
+      return 'bg-red-50 text-red-700';
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="h-screen flex items-center justify-center bg-gray-50">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-6">
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+          {error}
+        </div>
+      </div>
+    );
+  }
+
+  if (!dashboardData) {
+    return null;
+  }
+
+  // Prepare chart data
+  const contractStatusData = [
+    {
+      name: 'Active',
+      value: dashboardData.contracts.active_count,
+      color: '#10b981',
+    },
+    {
+      name: 'Pending',
+      value: dashboardData.contracts.pending_proposals_count,
+      color: '#f59e0b',
+    },
+    {
+      name: 'Completed',
+      value: dashboardData.contracts.completed_count,
+      color: '#3b82f6',
+    },
+    {
+      name: 'Terminated',
+      value: dashboardData.contracts.terminated_count,
+      color: '#ef4444',
+    },
+  ];
+
+  const employeeStatusData = [
+    {
+      name: 'Active',
+      value: dashboardData.employees.active_count,
+      color: '#10b981',
+    },
+    {
+      name: 'Inactive',
+      value: dashboardData.employees.inactive_count,
+      color: '#ef4444',
+    },
+  ];
+
   return (
-    <div className="bg-white min-h-screen p-3 sm:p-4 lg:p-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 gap-4 sm:gap-0">
-        <h1 className="text-[16px] font-normal text-[#24292E]">
-          Hello {userName}
-        </h1>
-        <div className="bg-[#EFAE73] text-[#24292E] h-[42px] w-full sm:w-[165px] flex justify-center items-center px-4 py-1 rounded-full text-sm">
-          Ruby Subscription
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
+      {/* Welcome Section */}
+      <div className="mb-6">
+        <div className="flex justify-between items-start mb-4">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+              Welcome Back, {user?.name || 'User'}
+            </h1>
+            <p className="text-sm sm:text-base text-gray-500">
+              Employer Dashboard Overview
+            </p>
+          </div>
+          <div className="bg-[#EFAE73] text-[#24292E] h-[42px] w-full sm:w-[165px] flex justify-center items-center px-4 py-1 rounded-full text-sm">
+            Ruby Subscription
+          </div>
         </div>
       </div>
 
-      {/* Balance and Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
-        {/* Balance Card */}
-        <div className="bg-[#174B35] text-white p-4 sm:p-6 rounded-lg shadow relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-[180px] h-[180px] opacity-10">
+      {/* KPI Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6">
+        {/* Wallet Balance Card */}
+        <div className="bg-[#174B35] text-white p-4 sm:p-6 rounded-2xl shadow-lg relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-[120px] h-[120px] sm:w-[180px] sm:h-[180px] opacity-10">
             <svg width="100%" height="100%" viewBox="0 0 100 100">
               <line
                 x1="40"
@@ -144,53 +331,24 @@ const DashboardContent: React.FC = () => {
                 stroke="white"
                 strokeWidth="1"
               />
-              <line
-                x1="55"
-                y1="0"
-                x2="105"
-                y2="100"
-                stroke="white"
-                strokeWidth="1"
-              />
-              <line
-                x1="60"
-                y1="0"
-                x2="110"
-                y2="100"
-                stroke="white"
-                strokeWidth="1"
-              />
             </svg>
           </div>
-          <button className="absolute right-4 top-4 text-white/80 hover:text-white">
-            <FaEye size={20} />
-          </button>
-          <div className="mb-6">
+          <div className="mb-4 sm:mb-6 relative z-10">
             <p className="text-white/80 text-sm mb-2">Current Balance</p>
-            <h2 className="text-2xl font-semibold">
-              ₦{' '}
-              {parseFloat(walletBalance).toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}
+            <h2 className="text-xl sm:text-2xl font-semibold">
+              {formatCurrency(dashboardData.financial.wallet_balance)}
             </h2>
           </div>
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 relative z-10">
             <Link to="/employer/wallet/top-up">
-              <button
-                className="bg-white hover:bg-green-600 text-[#246D51] h-[42px] w-full sm:w-auto py-2 px-4 rounded flex items-center justify-center gap-2 text-sm cursor-pointer"
-                onClick={() => console.log('Top-up button clicked!')}
-              >
-                <FaPlus size={12} />
+              <button className="bg-white hover:bg-green-600 text-[#246D51] h-[42px] w-full sm:w-auto py-2 px-4 rounded flex items-center justify-center gap-2 text-sm cursor-pointer">
+                <TrendingUp size={12} />
                 Top-up
               </button>
             </Link>
             <Link to="/employer/wallet">
-              <button
-                className="bg-white text-green-800 h-[42px] w-full sm:w-auto py-2 px-4 rounded flex items-center justify-center gap-2 text-sm hover:bg-gray-50 cursor-pointer relative z-20"
-                style={{ pointerEvents: 'auto' }}
-              >
-                <BsCreditCard size={12} />
+              <button className="bg-white text-green-800 h-[42px] w-full sm:w-auto py-2 px-4 rounded flex items-center justify-center gap-2 text-sm hover:bg-gray-50 cursor-pointer">
+                <Wallet size={12} />
                 Withdraw
               </button>
             </Link>
@@ -198,180 +356,458 @@ const DashboardContent: React.FC = () => {
         </div>
 
         {/* Staff Count Card */}
-        <div className="bg-[#E7E3F6] p-4 sm:p-6 rounded-lg shadow">
-          <div className="flex items-center gap-4 sm:gap-6">
-            <div className="bg-[#C8EDDF80] w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center aspect-square">
-              <BsPeople className="text-gray-500" size={20} />
+        <div className="bg-white rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-sm font-medium text-gray-600">
+              Total Staff
+            </span>
+            <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+              <Users className="w-4 h-4 text-blue-600" />
+            </div>
+          </div>
+          <div className="text-2xl font-bold text-gray-900 mb-1">
+            {dashboardData.employees.total_count}
+          </div>
+          <div className="text-xs text-gray-500">
+            {dashboardData.employees.active_count} active
+          </div>
+        </div>
+
+        {/* Active Contracts Card */}
+        <div className="bg-white rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-sm font-medium text-gray-600">
+              Active Contracts
+            </span>
+            <div className="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
+              <Briefcase className="w-4 h-4 text-green-600" />
+            </div>
+          </div>
+          <div className="text-2xl font-bold text-gray-900 mb-1">
+            {dashboardData.contracts.active_count}
+          </div>
+          <div className="text-xs text-gray-500">
+            {dashboardData.contracts.pending_proposals_count} pending
+          </div>
+        </div>
+
+        {/* Total Payroll Card */}
+        <div className="bg-white rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-sm font-medium text-gray-600">
+              Monthly Payroll
+            </span>
+            <div className="w-8 h-8 bg-purple-50 rounded-lg flex items-center justify-center">
+              <DollarSign className="w-4 h-4 text-purple-600" />
+            </div>
+          </div>
+          <div className="text-2xl font-bold text-gray-900 mb-1">
+            {formatCurrency(dashboardData.payroll.this_month_total)}
+          </div>
+          <div className="text-xs text-gray-500">This month</div>
+        </div>
+      </div>
+
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        {/* Contract Status */}
+        <div className="bg-white rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+              <Briefcase className="w-4 h-4 text-blue-600" />
             </div>
             <div>
-              <h3 className="text-[18px] sm:text-[20px] font-normal text-[#24292E]">
-                {totalStaff}
-              </h3>
-              <p className="text-[#24292E] mt-1 sm:mt-2 text-[14px] sm:text-[16px]">
-                Total Number of Staff
-              </p>
+              <h2 className="text-base font-semibold text-gray-900">
+                Contract Status
+              </h2>
+              <p className="text-xs text-gray-500 mt-0.5">By status</p>
             </div>
           </div>
+          <ResponsiveContainer width="100%" height={280}>
+            <PieChart>
+              <Pie
+                data={contractStatusData}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                label={({ percent }) => `${((percent || 0) * 100).toFixed(0)}%`}
+                outerRadius={80}
+                fill="#8884d8"
+                dataKey="value"
+              >
+                {contractStatusData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: 'white',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '12px',
+                  fontSize: '12px',
+                }}
+              />
+              <Legend
+                verticalAlign="bottom"
+                height={36}
+                wrapperStyle={{ fontSize: '11px' }}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Employee Status */}
+        <div className="bg-white rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
+              <Users className="w-4 h-4 text-green-600" />
+            </div>
+            <div>
+              <h2 className="text-base font-semibold text-gray-900">
+                Employee Status
+              </h2>
+              <p className="text-xs text-gray-500 mt-0.5">Active vs Inactive</p>
+            </div>
+          </div>
+          <ResponsiveContainer width="100%" height={280}>
+            <BarChart data={employeeStatusData}>
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="#f3f4f6"
+                vertical={false}
+              />
+              <XAxis
+                dataKey="name"
+                stroke="#9ca3af"
+                style={{ fontSize: '11px' }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <YAxis
+                stroke="#9ca3af"
+                style={{ fontSize: '11px' }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: 'white',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '12px',
+                  fontSize: '12px',
+                }}
+              />
+              <Bar dataKey="value" fill="#3b82f6" radius={[8, 8, 0, 0]}>
+                {employeeStatusData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
         </div>
       </div>
 
-      {/* Activities Section */}
-      <div className="mb-6 sm:mb-8">
-        <h2 className="text-lg font-medium text-gray-700 mb-4 sm:mb-6">
-          Activities
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          {/* Educational Resources Card */}
-          <div className="bg-[#E7E3F6] p-4 sm:p-6 rounded-lg shadow min-h-[140px] sm:min-h-[180px]">
-            <div className="flex justify-between">
-              <div className="mt-6 sm:mt-12">
-                <p className="text-gray-600 text-xs sm:text-sm">
-                  Staff on Educational Resources
-                </p>
-                <h3 className="text-lg sm:text-xl font-medium text-gray-800 mt-1 sm:mt-2">
-                  None
-                </h3>
-                {/* <button className="flex items-center gap-2 mt-6 bg-white border border-gray-300 text-gray-600 py-2 px-4 rounded-md text-sm">
-                  <BsCreditCard size={12} />
-                  Recommend Resources
-                </button> */}
+      {/* Recent Activities & Transactions */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        {/* Recent Payroll */}
+        <div className="bg-white rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center">
+                <FileText className="w-4 h-4 text-indigo-600" />
               </div>
-              <div className="bg-white w-12 h-12 sm:w-20 sm:h-20 rounded-full aspect-square flex-shrink-0"></div>
+              <h2 className="text-base font-semibold text-gray-900">
+                Recent Payroll
+              </h2>
             </div>
-          </div>
-
-          {/* Staff Payroll Card */}
-          <div className="bg-[#E9E3E3] p-4 sm:p-6 rounded-lg shadow min-h-[140px] sm:min-h-[180px]">
-            <div className="flex justify-between">
-              <div className="mt-6 sm:mt-12">
-                <p className="text-gray-600 text-xs sm:text-sm">
-                  Total Staff Payroll
-                </p>
-                <h3 className="text-lg sm:text-xl font-medium text-gray-800 mt-1 sm:mt-2">
-                  ₦
-                  {totalPayroll.toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
-                </h3>
-                {/* <button className="flex items-center gap-2 mt-6 bg-white border border-gray-300 text-gray-600 py-2 px-4 rounded-md text-sm">
-                  <FaPlus size={12} />
-                  Add Staff to Payroll
-                </button> */}
-              </div>
-              <div className="bg-white w-12 h-12 sm:w-20 sm:h-20 rounded-full aspect-square flex-shrink-0"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* History Section - Wallet Transactions */}
-      <div>
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6 gap-2 sm:gap-0">
-          <h2 className="text-lg font-medium text-gray-700">
-            Transaction History
-          </h2>
-          <Link to="/employer/wallet-history">
-            <button className="text-[#7B858E] text-sm hover:underline">
-              View All
+            <button
+              onClick={() => navigate('/employer/payroll')}
+              className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+            >
+              View All →
             </button>
-          </Link>
+          </div>
+
+          <div className="space-y-3">
+            {dashboardData.payroll.recent_payrolls
+              .slice(0, 5)
+              .map((payroll: any) => (
+                <div
+                  key={payroll.id}
+                  className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition"
+                >
+                  <div className="flex items-center gap-3 flex-1 min-w-0">
+                    <div className="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <DollarSign className="w-4 h-4 text-green-600" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-gray-900">
+                        Payroll #{payroll.id}
+                      </p>
+                      <p className="text-xs text-gray-500 mt-0.5">
+                        {payroll.employees_count || 0} employees •{' '}
+                        {formatDate(payroll.payment_date)}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="text-right flex-shrink-0 ml-3">
+                    <p className="text-sm font-semibold text-gray-900">
+                      {formatCurrency(payroll.total_amount)}
+                    </p>
+                    <span
+                      className={`text-xs ${
+                        payroll.status === 'completed'
+                          ? 'text-green-600'
+                          : 'text-orange-600'
+                      }`}
+                    >
+                      {payroll.status}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            {dashboardData.payroll.recent_payrolls.length === 0 && (
+              <p className="text-sm text-gray-500 text-center py-4">
+                No recent payroll records
+              </p>
+            )}
+          </div>
         </div>
 
-        {loading ? (
-          <div className="flex justify-center items-center h-40">
-            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-500"></div>
+        {/* Recent Transactions */}
+        <div className="bg-white rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
+                <CreditCard className="w-4 h-4 text-green-600" />
+              </div>
+              <h2 className="text-base font-semibold text-gray-900">
+                Recent Transactions
+              </h2>
+            </div>
+            <button
+              onClick={() => navigate('/employer/transactions')}
+              className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+            >
+              View All →
+            </button>
           </div>
-        ) : error ? (
-          <div className="bg-red-50 text-red-600 p-4 rounded-lg text-center">
-            {error}
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full bg-green-50 rounded-lg overflow-hidden">
-              <thead className="text-left text-gray-600 text-xs sm:text-sm">
-                <tr>
-                  <th className="py-3 sm:py-4 px-3 sm:px-6 font-medium">
-                    Transaction ID
-                  </th>
-                  <th className="py-3 sm:py-4 px-3 sm:px-6 font-medium">
-                    Type
-                  </th>
-                  <th className="py-3 sm:py-4 px-3 sm:px-6 font-medium hidden sm:table-cell">
-                    Description
-                  </th>
-                  <th className="py-3 sm:py-4 px-3 sm:px-6 font-medium">
-                    Amount
-                  </th>
-                  <th className="py-3 sm:py-4 px-3 sm:px-6 font-medium">
-                    Status
-                  </th>
-                  <th className="py-3 sm:py-4 px-3 sm:px-6 font-medium"></th>
-                </tr>
-              </thead>
-              <tbody className="bg-white">
-                {transactions.length > 0 ? (
-                  transactions.map((transaction) => (
-                    <tr
-                      key={transaction.id}
-                      className="border-b border-gray-100"
+
+          <div className="space-y-3">
+            {dashboardData.financial.recent_transactions
+              .slice(0, 5)
+              .map((transaction: any) => (
+                <div
+                  key={transaction.id}
+                  className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition"
+                >
+                  <div className="flex items-center gap-3 flex-1 min-w-0">
+                    <div
+                      className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                        transaction.type === 'credit'
+                          ? 'bg-green-50'
+                          : 'bg-red-50'
+                      }`}
                     >
-                      <td className="py-3 sm:py-4 px-3 sm:px-6 text-xs sm:text-sm">
-                        {transaction.transaction.reference_code.substring(0, 8)}
-                        ...
-                      </td>
-                      <td className="py-3 sm:py-4 px-3 sm:px-6 capitalize text-xs sm:text-sm">
-                        {transaction.type}
-                      </td>
-                      <td className="py-3 sm:py-4 px-3 sm:px-6 hidden sm:table-cell text-xs sm:text-sm">
-                        {transaction.description}
-                      </td>
-                      <td className="py-3 sm:py-4 px-3 sm:px-6 text-xs sm:text-sm">
-                        ₦{' '}
-                        {parseFloat(
-                          transaction.transaction.amount
-                        ).toLocaleString(undefined, {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })}
-                      </td>
-                      <td className="py-3 sm:py-4 px-3 sm:px-6">
-                        <span
-                          className={`px-2 sm:px-3 py-1 rounded-full text-xs ${
-                            transaction.transaction.status === 'successful'
-                              ? 'bg-green-100 text-green-700'
-                              : transaction.transaction.status === 'pending'
-                                ? 'bg-yellow-100 text-yellow-700'
-                                : 'bg-red-100 text-red-700'
-                          }`}
-                        >
-                          {transaction.transaction.status
-                            .charAt(0)
-                            .toUpperCase() +
-                            transaction.transaction.status.slice(1)}
+                      {transaction.type === 'credit' ? (
+                        <TrendingUp className="w-4 h-4 text-green-600" />
+                      ) : (
+                        <TrendingUp className="w-4 h-4 text-red-600 rotate-180" />
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-gray-900 truncate">
+                        {transaction.description || transaction.source}
+                      </p>
+                      <p className="text-xs text-gray-500 mt-0.5">
+                        {formatTime(transaction.created_at)}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="text-right flex-shrink-0 ml-3">
+                    <p
+                      className={`text-sm font-semibold ${
+                        transaction.type === 'credit'
+                          ? 'text-green-600'
+                          : 'text-red-600'
+                      }`}
+                    >
+                      {transaction.type === 'credit' ? '+' : '-'}
+                      {formatCurrency(transaction.amount)}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            {dashboardData.financial.recent_transactions.length === 0 && (
+              <p className="text-sm text-gray-500 text-center py-4">
+                No recent transactions
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Stats Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+        <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
+          <div className="flex items-center justify-between mb-2">
+            <div className="text-xs text-gray-500">Pending Suggestions</div>
+            <div className="w-8 h-8 bg-orange-50 rounded-lg flex items-center justify-center">
+              <Send className="w-4 h-4 text-orange-600" />
+            </div>
+          </div>
+          <div className="text-lg font-bold text-gray-900">
+            {dashboardData.suggestions.pending_count}
+          </div>
+        </div>
+        <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
+          <div className="flex items-center justify-between mb-2">
+            <div className="text-xs text-gray-500">Active Advances</div>
+            <div className="w-8 h-8 bg-purple-50 rounded-lg flex items-center justify-center">
+              <CalendarSync className="w-4 h-4 text-purple-600" />
+            </div>
+          </div>
+          <div className="text-lg font-bold text-gray-900">
+            {dashboardData.payroll.employees_with_active_advances_count}
+          </div>
+        </div>
+        <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
+          <div className="flex items-center justify-between mb-2">
+            <div className="text-xs text-gray-500">Average Rating</div>
+            <div className="w-8 h-8 bg-yellow-50 rounded-lg flex items-center justify-center">
+              <Star className="w-4 h-4 text-yellow-600" />
+            </div>
+          </div>
+          <div className="text-lg font-bold text-gray-900">
+            {dashboardData.reviews.average_rating.toFixed(1) || '0.0'}
+          </div>
+        </div>
+        <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
+          <div className="flex items-center justify-between mb-2">
+            <div className="text-xs text-gray-500">Unread Notifications</div>
+            <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+              <Bell className="w-4 h-4 text-blue-600" />
+            </div>
+          </div>
+          <div className="text-lg font-bold text-gray-900">
+            {dashboardData.notifications.unread_count}
+          </div>
+        </div>
+      </div>
+
+      {/* Transaction History Table */}
+      <div className="bg-white rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-2 sm:gap-0">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+              <CreditCard className="w-4 h-4 text-blue-600" />
+            </div>
+            <h2 className="text-lg font-semibold text-gray-900">
+              Transaction History
+            </h2>
+          </div>
+          <button
+            onClick={() => navigate('/employer/transactions')}
+            className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+          >
+            View All →
+          </button>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50 border-b border-gray-100">
+              <tr>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  Type
+                </th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  Reference
+                </th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  Date
+                </th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  Amount
+                </th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  Payment Method
+                </th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  Status
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-100">
+              {transactions.length > 0 ? (
+                transactions.slice(0, 6).map((transaction) => (
+                  <tr
+                    key={transaction.id}
+                    className="hover:bg-gray-50 transition-colors"
+                  >
+                    <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <div className="flex items-center gap-2">
+                        {transaction.type === 'wallet_deposit' ||
+                        transaction.type === 'salary_payment' ? (
+                          <TrendingUp className="w-4 h-4 text-green-600" />
+                        ) : (
+                          <TrendingDown className="w-4 h-4 text-red-600" />
+                        )}
+                        <span className="capitalize">
+                          {transaction.type?.replace('_', ' ')}
                         </span>
-                      </td>
-                      <td className="py-3 sm:py-4 px-3 sm:px-6">
-                        <button className="text-gray-500 hover:text-gray-700">
-                          <FaEllipsisV size={14} />
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td
-                      colSpan={6}
-                      className="py-6 sm:py-8 px-3 sm:px-6 text-center text-gray-500 text-sm"
-                    >
-                      No transactions found
+                      </div>
+                    </td>
+                    <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-mono">
+                      {transaction.reference_code ||
+                        transaction.reference ||
+                        'N/A'}
+                    </td>
+                    <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {format(new Date(transaction.created_at), 'MMM dd, yyyy')}
+                    </td>
+                    <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+                      {formatCurrency(transaction.amount)}
+                    </td>
+                    <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <span className="capitalize">
+                        {transaction.payment_method?.replace('_', ' ') || 'N/A'}
+                      </span>
+                    </td>
+                    <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
+                      <span
+                        className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${getStatusColor(
+                          transaction.status
+                        )}`}
+                      >
+                        {transaction.status}
+                      </span>
                     </td>
                   </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        )}
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan={6}
+                    className="px-4 sm:px-6 py-12 text-center text-gray-500"
+                  >
+                    <div className="flex flex-col items-center gap-3">
+                      <CreditCard className="w-12 h-12 text-gray-300" />
+                      <div>
+                        <p className="font-medium text-gray-900">
+                          No transactions found
+                        </p>
+                        <p className="text-sm text-gray-500 mt-1">
+                          Transactions will appear here once they are processed
+                        </p>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
