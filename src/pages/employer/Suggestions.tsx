@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { FaUser, FaSearch, FaEye, FaCheck, FaTimes } from 'react-icons/fa';
+import {
+  Search,
+  Users,
+  Eye,
+  Check,
+  X,
+  Send,
+  Calendar,
+  User,
+  Mail,
+} from 'lucide-react';
 import suggestionsApi, { Suggestion } from '../../api/suggestionsApi';
 import Avatar from '../../components/common/Avatar';
 import Toast from '../../components/common/Toast';
@@ -251,167 +261,213 @@ const SuggestionsPage: React.FC = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
       </div>
     );
   }
 
   return (
-    <div className="rounded-lg w-full mx-auto p-3 sm:p-4 lg:p-6">
-      <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-        <div>
-          <h1 className="text-xl sm:text-2xl font-semibold text-gray-800">
+    <div className="p-0">
+      {/* Header Section */}
+      <div className="mb-6 sm:mb-8">
+        <div className="flex items-center gap-3 mb-2">
+          <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+            <Send className="w-4 h-4 text-blue-600" />
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
             Employee Suggestions
           </h1>
-          <p className="text-sm sm:text-base text-gray-600 mt-1 sm:mt-2">
-            Review employee suggestions from agents ({totalSuggestions} total)
-          </p>
         </div>
-
-        {/* Search Bar */}
-        <div className="relative w-full sm:w-auto">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <FaSearch className="h-4 w-4 text-gray-400" />
-          </div>
-          <input
-            type="text"
-            placeholder="Search suggestions..."
-            className="block w-full sm:w-80 pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-green-500 focus:border-green-500"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
+        <p className="text-sm sm:text-base text-gray-600">
+          Review employee suggestions from agents ({totalSuggestions} total)
+        </p>
       </div>
 
-      {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
-          {error}
-        </div>
-      )}
-
-      {/* Suggestions List */}
-      <div className="bg-white shadow-sm rounded-lg overflow-hidden">
-        {filteredSuggestions.length === 0 ? (
-          <div className="text-center py-12">
-            <FaUser className="mx-auto h-12 w-12 text-gray-400" />
-            <h3 className="mt-2 text-sm font-medium text-gray-900">
-              No suggestions found
-            </h3>
-            <p className="mt-1 text-sm text-gray-500">
-              {searchTerm
-                ? 'Try adjusting your search terms.'
-                : 'No employee suggestions available at the moment.'}
-            </p>
+      {/* Main Content */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-100">
+        {/* Search Section */}
+        <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-gray-100">
+          <div className="flex flex-col sm:flex-row gap-4 mb-4">
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                placeholder="Search by employee name, agent name, email, or reason..."
+                className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
           </div>
-        ) : (
-          <div className="divide-y divide-gray-200">
-            {filteredSuggestions.map((suggestion) => (
-              <div
-                key={suggestion.id}
-                className="p-4 sm:p-6 hover:bg-gray-50 transition-colors duration-200"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-4">
-                    <Avatar
-                      src={suggestion.employee.avatar || ''}
-                      firstName={suggestion.employee.first_name}
-                      lastName={suggestion.employee.last_name}
-                      size="md"
-                      showStatus={false}
-                    />
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <p className="text-sm font-medium text-gray-900 truncate">
-                          {suggestion.employee.first_name}{' '}
-                          {suggestion.employee.last_name}
-                        </p>
-                        {getStatusBadge(suggestion.status)}
+
+          {/* Results Count */}
+          <div className="text-sm text-gray-600">
+            Showing {filteredSuggestions.length} of {totalSuggestions}{' '}
+            suggestions
+          </div>
+        </div>
+
+        {error && (
+          <div className="px-4 sm:px-6 pt-4">
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+              {error}
+            </div>
+          </div>
+        )}
+
+        {/* Suggestions List */}
+        <div className="overflow-x-auto">
+          {filteredSuggestions.length === 0 ? (
+            <div className="text-center py-16">
+              <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+              <p className="text-lg font-medium text-gray-900 mb-2">
+                No suggestions found
+              </p>
+              <p className="text-sm text-gray-500">
+                {searchTerm
+                  ? 'Try adjusting your search criteria'
+                  : 'No employee suggestions available at the moment'}
+              </p>
+            </div>
+          ) : (
+            <div className="divide-y divide-gray-100">
+              {filteredSuggestions.map((suggestion) => (
+                <div
+                  key={suggestion.id}
+                  className="p-4 sm:p-6 hover:bg-gray-50 transition-colors"
+                >
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div className="flex items-start sm:items-center gap-4 flex-1 min-w-0">
+                      <Avatar
+                        src={suggestion.employee.avatar || ''}
+                        firstName={suggestion.employee.first_name}
+                        lastName={suggestion.employee.last_name}
+                        size="md"
+                        showStatus={false}
+                      />
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-2 flex-wrap">
+                          <p className="text-sm font-semibold text-gray-900">
+                            {suggestion.employee.first_name}{' '}
+                            {suggestion.employee.last_name}
+                          </p>
+                          {getStatusBadge(suggestion.status)}
+                        </div>
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-gray-600">
+                          <div className="flex items-center gap-1">
+                            <Mail className="w-4 h-4 text-gray-400" />
+                            <span className="truncate">
+                              {suggestion.employee.email}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <User className="w-4 h-4 text-gray-400" />
+                            <span>
+                              Suggested by: {suggestion.agent.first_name}{' '}
+                              {suggestion.agent.last_name}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Calendar className="w-4 h-4 text-gray-400" />
+                            <span>{formatDate(suggestion.created_at)}</span>
+                          </div>
+                        </div>
+                        <div className="mt-3">
+                          <p className="text-sm text-gray-600 line-clamp-2">
+                            <span className="font-medium">Reason:</span>{' '}
+                            {suggestion.suggestion_reason}
+                          </p>
+                        </div>
                       </div>
-                      <p className="text-sm text-gray-500 truncate">
-                        {suggestion.employee.email}
-                      </p>
-                      <p className="text-xs text-gray-400 mt-1">
-                        Suggested by: {suggestion.agent.first_name}{' '}
-                        {suggestion.agent.last_name}
-                      </p>
-                      <p className="text-xs text-gray-400">
-                        Date: {formatDate(suggestion.created_at)}
-                      </p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => handleViewDetails(suggestion)}
+                        className="inline-flex items-center gap-2 px-4 py-2 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                      >
+                        <Eye className="w-4 h-4" />
+                        View Details
+                      </button>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <button
-                      onClick={() => handleViewDetails(suggestion)}
-                      className="inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                    >
-                      <FaEye className="mr-1 h-3 w-3" />
-                      View Details
-                    </button>
-                  </div>
                 </div>
-                <div className="mt-3">
-                  <p className="text-sm text-gray-600 line-clamp-2">
-                    <span className="font-medium">Reason:</span>{' '}
-                    {suggestion.suggestion_reason}
-                  </p>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-gray-100 px-4 sm:px-6">
+            <div className="text-sm text-gray-700">
+              Page <span className="font-medium">{currentPage}</span> of{' '}
+              <span className="font-medium">{totalPages}</span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                disabled={currentPage === 1}
+                className={`px-4 py-2 rounded-lg border transition-colors ${
+                  currentPage === 1
+                    ? 'border-gray-200 text-gray-300 cursor-not-allowed'
+                    : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                }`}
+              >
+                Previous
+              </button>
+
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                (page) => {
+                  if (
+                    page === 1 ||
+                    page === totalPages ||
+                    (page >= currentPage - 1 && page <= currentPage + 1)
+                  ) {
+                    return (
+                      <button
+                        key={page}
+                        onClick={() => setCurrentPage(page)}
+                        className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                          currentPage === page
+                            ? 'bg-green-600 text-white'
+                            : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    );
+                  } else if (
+                    page === currentPage - 2 ||
+                    page === currentPage + 2
+                  ) {
+                    return (
+                      <span key={page} className="px-2 text-gray-500">
+                        ...
+                      </span>
+                    );
+                  }
+                  return null;
+                }
+              )}
+
+              <button
+                onClick={() =>
+                  setCurrentPage(Math.min(totalPages, currentPage + 1))
+                }
+                disabled={currentPage === totalPages}
+                className={`px-4 py-2 rounded-lg border transition-colors ${
+                  currentPage === totalPages
+                    ? 'border-gray-200 text-gray-300 cursor-not-allowed'
+                    : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                }`}
+              >
+                Next
+              </button>
+            </div>
           </div>
         )}
       </div>
-
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="mt-6 flex items-center justify-between">
-          <div className="flex-1 flex justify-between sm:hidden">
-            <button
-              onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-              disabled={currentPage === 1}
-              className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Previous
-            </button>
-            <button
-              onClick={() =>
-                setCurrentPage(Math.min(totalPages, currentPage + 1))
-              }
-              disabled={currentPage === totalPages}
-              className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Next
-            </button>
-          </div>
-          <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-            <div>
-              <p className="text-sm text-gray-700">
-                Showing page <span className="font-medium">{currentPage}</span>{' '}
-                of <span className="font-medium">{totalPages}</span>
-              </p>
-            </div>
-            <div>
-              <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
-                <button
-                  onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                  disabled={currentPage === 1}
-                  className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Previous
-                </button>
-                <button
-                  onClick={() =>
-                    setCurrentPage(Math.min(totalPages, currentPage + 1))
-                  }
-                  disabled={currentPage === totalPages}
-                  className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Next
-                </button>
-              </nav>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Suggestion Details Modal */}
       {isDetailsModalOpen && selectedSuggestion && (
@@ -427,9 +483,9 @@ const SuggestionsPage: React.FC = () => {
               </h2>
               <button
                 onClick={handleCloseModal}
-                className="rounded-full p-1 hover:bg-gray-100"
+                className="rounded-full p-1 hover:bg-gray-100 transition-colors"
               >
-                <FaTimes size={20} />
+                <X className="w-5 h-5" />
               </button>
             </div>
 
@@ -557,17 +613,17 @@ const SuggestionsPage: React.FC = () => {
                   <button
                     onClick={() => handleRejectSuggestion(selectedSuggestion)}
                     disabled={isProcessing}
-                    className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                    className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
                   >
-                    <FaTimes className="inline mr-2" />
+                    <X className="w-4 h-4" />
                     {isProcessing ? 'Processing...' : 'Reject'}
                   </button>
                   <button
                     onClick={() => handleAcceptSuggestion(selectedSuggestion)}
                     disabled={isProcessing}
-                    className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                    className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
                   >
-                    <FaCheck className="inline mr-2" />
+                    <Check className="w-4 h-4" />
                     Accept
                   </button>
                 </div>
@@ -591,9 +647,9 @@ const SuggestionsPage: React.FC = () => {
               </h2>
               <button
                 onClick={handleCloseRejectModal}
-                className="rounded-full p-1 hover:bg-gray-100"
+                className="rounded-full p-1 hover:bg-gray-100 transition-colors"
               >
-                <FaTimes size={20} />
+                <X className="w-5 h-5" />
               </button>
             </div>
 
@@ -646,9 +702,9 @@ const SuggestionsPage: React.FC = () => {
               </h2>
               <button
                 onClick={handleCloseAcceptModal}
-                className="rounded-full p-1 hover:bg-gray-100"
+                className="rounded-full p-1 hover:bg-gray-100 transition-colors"
               >
-                <FaTimes size={20} />
+                <X className="w-5 h-5" />
               </button>
             </div>
 

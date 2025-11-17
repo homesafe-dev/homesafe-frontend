@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { FaArrowLeft } from 'react-icons/fa';
+import {
+  ArrowLeft,
+  Shield,
+  CheckCircle,
+  IdCard,
+  User,
+  Save,
+} from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import userApi from '../../api/userApi';
 import Toast from '../../components/common/Toast';
@@ -17,6 +24,7 @@ interface UserProfile {
   address: string;
   dob: string;
   gender: string;
+  status?: number;
   [key: string]: any;
 }
 
@@ -59,8 +67,6 @@ const AgentKYCPage: React.FC = () => {
         if (response.status) {
           const userData = response.data;
           setUserProfile(userData);
-
-          // User profile loaded successfully
         } else {
           setError('Failed to fetch user profile');
         }
@@ -89,13 +95,11 @@ const AgentKYCPage: React.FC = () => {
       setSubmitting(true);
       setError(null);
 
-      // Validate form data
       if (!formData.ninNumber) {
         setError('Please enter your NIN number');
         return;
       }
 
-      // Create payload for KYC API
       const kycPayload = {
         number: formData.ninNumber,
       };
@@ -125,175 +129,185 @@ const AgentKYCPage: React.FC = () => {
     }
   };
 
-  return (
-    <div className="rounded-lg w-full mx-auto">
-      {/* Header */}
-      <div className="mb-6 flex justify-between items-center">
-        <div>
-          <button
-            className="flex items-center text-gray-600 hover:text-gray-800 mb-4"
-            onClick={() => navigate(-1)}
-          >
-            <FaArrowLeft className="mr-2" />
-            <span className="text-gray-800">Back</span>
-          </button>
-          <h1 className="text-2xl font-semibold text-gray-800">
-            KYC Verification
-          </h1>
-          <p className="text-gray-600 mt-2">
-            Please enter your NIN for verification
+  const renderCompletedState = () => (
+    <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6 sm:p-8">
+      <div className="flex items-start gap-4 mb-6">
+        <div className="w-12 h-12 bg-green-50 rounded-lg flex items-center justify-center flex-shrink-0">
+          <CheckCircle className="w-6 h-6 text-green-600" />
+        </div>
+        <div className="flex-1">
+          <h2 className="text-lg font-semibold text-gray-900 mb-1">
+            KYC Verification Complete
+          </h2>
+          <p className="text-sm text-gray-500">
+            Your KYC verification has already been submitted and processed.
           </p>
         </div>
       </div>
 
-      {loading ? (
-        <div className="flex justify-center items-center h-40">
-          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-500"></div>
+      <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+        <div className="flex items-center gap-2 mb-2">
+          <User className="w-4 h-4 text-gray-500" />
+          <label className="text-sm font-medium text-gray-700">Name</label>
         </div>
-      ) : error ? (
-        <div className="bg-red-50 text-red-600 p-4 rounded-lg text-center mb-6">
-          {error}
+        <div className="text-base font-semibold text-gray-900">
+          {userProfile
+            ? `${userProfile.first_name} ${userProfile.last_name}`
+            : 'Loading...'}
         </div>
-      ) : userProfile?.status === 1 ? (
-        <div className="bg-white rounded-lg border-2 border-gray-300 shadow-sm p-12 max-w-3xl">
-          {/* Header Section */}
-          <div className="mb-8">
-            <div className="flex items-center mb-4">
-              <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center mr-3">
-                <span className="text-green-600 font-semibold">✅</span>
-              </div>
-              <div>
-                <h2 className="text-lg font-semibold text-gray-800">
-                  KYC Verification Complete
-                </h2>
-                <p className="text-sm text-green-600">
-                  Your KYC verification has already been submitted and
-                  processed.
-                </p>
-              </div>
-            </div>
-          </div>
+      </div>
 
-          {/* User Name Display */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Name
-            </label>
-            <div className="text-lg font-medium text-gray-800">
-              {userProfile
-                ? `${userProfile.first_name} ${userProfile.last_name}`
-                : 'Loading...'}
-            </div>
-          </div>
-
-          {/* Status Message */}
-          <div className="mb-8">
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-              <p className="text-green-800 font-medium">
-                ✅ KYC Verification Status: Completed
+      <div className="mb-6">
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+          <div className="flex items-start gap-3">
+            <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-green-800 font-medium mb-1">
+                KYC Verification Status: Completed
               </p>
-              <p className="text-green-600 text-sm mt-1">
+              <p className="text-green-700 text-sm">
                 Your identity has been successfully verified. You can now access
                 all platform features.
               </p>
             </div>
           </div>
-
-          {/* Back to Dashboard Button */}
-          <div className="flex justify-start">
-            <button
-              onClick={() => navigate('/agent/dashboard')}
-              className="px-8 py-3 bg-green-300 text-black rounded-md hover:bg-green-400 transition-colors font-medium"
-            >
-              Back to Dashboard
-            </button>
-          </div>
         </div>
+      </div>
+
+      <div className="flex justify-start">
+        <button
+          onClick={() => navigate('/agent/dashboard')}
+          className="px-6 py-2.5 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Back to Dashboard
+        </button>
+      </div>
+    </div>
+  );
+
+  const renderFormState = () => (
+    <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6 sm:p-8">
+      <div className="flex items-start gap-4 mb-6">
+        <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
+          <IdCard className="w-6 h-6 text-blue-600" />
+        </div>
+        <div className="flex-1">
+          <h2 className="text-lg font-semibold text-gray-900 mb-1">
+            ID Verification
+          </h2>
+          <p className="text-sm text-gray-500">
+            Please enter your National Identification Number (NIN) for
+            verification. Use{' '}
+            <span className="font-mono font-medium text-orange-600">
+              70123456789
+            </span>{' '}
+            for testing purposes.
+          </p>
+        </div>
+      </div>
+
+      <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+        <div className="flex items-center gap-2 mb-2">
+          <User className="w-4 h-4 text-gray-500" />
+          <label className="text-sm font-medium text-gray-700">Name</label>
+        </div>
+        <div className="text-base font-semibold text-gray-900">
+          {userProfile
+            ? `${userProfile.first_name} ${userProfile.last_name}`
+            : 'Loading...'}
+        </div>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div>
+          <label
+            htmlFor="ninNumber"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
+            NIN Number
+          </label>
+          <input
+            type="text"
+            id="ninNumber"
+            name="ninNumber"
+            placeholder="Enter your NIN number (e.g. 70123456789)"
+            className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 placeholder-gray-400"
+            value={formData.ninNumber}
+            onChange={handleInputChange}
+            required
+          />
+          <p className="mt-1.5 text-xs text-gray-500">
+            Enter your 11-digit National Identification Number
+          </p>
+        </div>
+
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+            {error}
+          </div>
+        )}
+
+        <div className="flex justify-start pt-4 border-t border-gray-100">
+          <button
+            type="submit"
+            disabled={submitting}
+            className="px-6 py-2.5 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {submitting ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                <span>Processing...</span>
+              </>
+            ) : (
+              <>
+                <Save className="w-4 h-4" />
+                <span>Start Verification Process</span>
+              </>
+            )}
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+
+  return (
+    <div className="p-0">
+      <div className="mb-6 sm:mb-8">
+        <button
+          className="flex items-center text-sm text-gray-600 hover:text-gray-900 mb-4 transition-colors"
+          onClick={() => navigate(-1)}
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back
+        </button>
+        <div className="flex items-center gap-3 mb-2">
+          <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+            <Shield className="w-4 h-4 text-blue-600" />
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+            KYC Verification
+          </h1>
+        </div>
+        <p className="text-sm sm:text-base text-gray-600">
+          Verify your identity using your National Identification Number (NIN)
+        </p>
+      </div>
+
+      {loading ? (
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
+        </div>
+      ) : error ? (
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+          {error}
+        </div>
+      ) : userProfile?.status === 1 ? (
+        renderCompletedState()
       ) : (
-        <div className="bg-white rounded-lg border-2 border-gray-300 shadow-sm p-12 max-w-3xl">
-          {/* Header Section */}
-          <div className="mb-8">
-            <div className="flex items-center mb-4">
-              <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center mr-3">
-                <span className="text-green-600 font-semibold">🆔</span>
-              </div>
-              <div>
-                <h2 className="text-lg font-semibold text-gray-800">
-                  ID Verification
-                </h2>
-                <p className="text-sm text-orange-600">
-                  Please use 70123456789 for NIN number verification
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* User Name Display */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Name
-            </label>
-            <div className="text-lg font-medium text-gray-800">
-              {userProfile
-                ? `${userProfile.first_name} ${userProfile.last_name}`
-                : 'Loading...'}
-            </div>
-          </div>
-
-          {/* Instructional Text */}
-          <div className="mb-8">
-            <p className="text-gray-600">
-              Please enter your NIN for verification
-            </p>
-          </div>
-
-          {/* Form Container with Border */}
-          <div className="border-2 border-gray-300 rounded-lg p-6 mb-6">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* NIN Number */}
-              <div>
-                <label
-                  htmlFor="ninNumber"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  NIN Number
-                </label>
-                <input
-                  type="text"
-                  id="ninNumber"
-                  name="ninNumber"
-                  placeholder="Enter your NIN number"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-700"
-                  value={formData.ninNumber}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-            </form>
-          </div>
-
-          {/* Submit Button */}
-          <div className="flex justify-start">
-            <button
-              type="submit"
-              onClick={handleSubmit}
-              className="px-8 py-3 bg-green-300 text-black rounded-md hover:bg-green-400 transition-colors font-medium"
-              disabled={submitting}
-            >
-              {submitting ? (
-                <div className="flex items-center">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-black mr-2"></div>
-                  Processing...
-                </div>
-              ) : (
-                'Start Verification Process'
-              )}
-            </button>
-          </div>
-        </div>
+        renderFormState()
       )}
 
-      {/* Toast Notification */}
       <Toast
         message={toast.message}
         type={toast.type}

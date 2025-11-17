@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaArrowLeft } from 'react-icons/fa';
+import { ArrowLeft, User, Heart, BookOpen, Star } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
 import StaffProfileAbout from '../../components/Employer/StaffProfileAbout';
 import MedicalHistory from '../../components/Employer/StaffMedicHistory';
@@ -147,24 +147,30 @@ const StaffProfile: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-500"></div>
+      <div className="p-0">
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="bg-red-50 text-red-600 p-4 rounded-lg text-center">
-        {error}
+      <div className="p-0">
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+          {error}
+        </div>
       </div>
     );
   }
 
   if (!employee) {
     return (
-      <div className="bg-gray-50 text-gray-600 p-4 rounded-lg text-center">
-        Employee not found
+      <div className="p-0">
+        <div className="bg-gray-50 border border-gray-200 text-gray-600 px-4 py-3 rounded-lg text-center">
+          Employee not found
+        </div>
       </div>
     );
   }
@@ -183,87 +189,120 @@ const StaffProfile: React.FC = () => {
   ];
 
   return (
-    <div className="rounded-lg p-3 sm:p-4 lg:p-6">
-      <div className="p-3 sm:p-4 border-b border-gray-100">
+    <div className="p-0">
+      {/* Header Section */}
+      <div className="mb-6 sm:mb-8">
         <button
-          className="flex items-center text-gray-600"
+          className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4 transition-colors"
           onClick={() => navigate(-1)}
         >
-          <FaArrowLeft className="mr-2" size={16} />
-          <span className="text-sm sm:text-base">
-            {employee.first_name}'s Profile
-          </span>
+          <ArrowLeft className="w-5 h-5" />
+          <span className="text-sm font-medium">Back to Staff</span>
         </button>
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+            <User className="w-4 h-4 text-blue-600" />
+          </div>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+              {employee.first_name} {employee.last_name}
+            </h1>
+            <p className="text-sm sm:text-base text-gray-600 mt-1">
+              Staff Profile Details
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8 mt-4 sm:mt-6">
-        {/* Left panel */}
-        <div className="w-full lg:w-1/3 lg:border-r bg-white border-gray-100 p-4 sm:p-6 shadow-md rounded-lg lg:rounded-none">
-          <StaffProfileAbout
-            name={`${employee.first_name} ${employee.last_name}`}
-            location={extractLocation(employee.address)}
-            age={calculateAge(employee.dob)}
-            role={
-              employee.occupations.length > 0
-                ? employee.occupations[0].name
-                : 'Staff'
-            }
-            bio={
-              employee.profile_description ||
-              `Meet ${employee.first_name} ${employee.last_name}, a dedicated professional who brings skill and commitment to their work.`
-            }
-            phone={employee.phone}
-            email={employee.email}
-            profileImage={employee.avatar || ArtisanImg}
-            rating={4.0} // Default rating, would come from reviews calculation
-            contractId={contractId}
-            contractStatus={contractStatus}
-            proposalId={proposalId}
-          />
+      <div className="flex flex-col lg:flex-row gap-6">
+        {/* Left panel - Profile About */}
+        <div className="w-full lg:w-1/3">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
+            <StaffProfileAbout
+              name={`${employee.first_name} ${employee.last_name}`}
+              location={extractLocation(employee.address)}
+              age={calculateAge(employee.dob)}
+              role={
+                employee.occupations.length > 0
+                  ? employee.occupations[0].name
+                  : 'Staff'
+              }
+              bio={
+                employee.profile_description ||
+                `Meet ${employee.first_name} ${employee.last_name}, a dedicated professional who brings skill and commitment to their work.`
+              }
+              phone={employee.phone}
+              email={employee.email}
+              profileImage={employee.avatar || ArtisanImg}
+              rating={4.0} // Default rating, would come from reviews calculation
+              contractId={contractId}
+              contractStatus={contractStatus}
+              proposalId={proposalId}
+            />
+          </div>
         </div>
 
-        {/* Right panel */}
+        {/* Right panel - Tabs */}
         <div className="w-full lg:w-2/3">
-          {/* Tabs */}
-          <div className="flex border-b border-gray-200 overflow-x-auto">
-            <button
-              className={`px-3 sm:px-4 py-2 sm:py-3 whitespace-nowrap text-sm sm:text-base ${activeTab === 'medical' ? 'border-b-2 border-green-600 text-green-600' : 'text-gray-600'}`}
-              onClick={() => setActiveTab('medical')}
-            >
-              Medical History
-            </button>
-            <button
-              className={`px-3 sm:px-4 py-2 sm:py-3 whitespace-nowrap text-sm sm:text-base ${activeTab === 'educational' ? 'border-b-2 border-green-600 text-green-600' : 'text-gray-600'}`}
-              onClick={() => setActiveTab('educational')}
-            >
-              Educational Resources
-            </button>
-            <button
-              className={`px-3 sm:px-4 py-2 sm:py-3 whitespace-nowrap text-sm sm:text-base ${activeTab === 'reviews' ? 'border-b-2 border-green-600 text-green-600' : 'text-gray-600'}`}
-              onClick={() => setActiveTab('reviews')}
-            >
-              Reviews
-            </button>
-          </div>
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
+            {/* Tabs */}
+            <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-gray-100">
+              <div className="flex flex-wrap gap-2">
+                <button
+                  className={`px-4 py-2.5 text-sm font-medium rounded-lg transition-colors flex items-center gap-2 ${
+                    activeTab === 'medical'
+                      ? 'bg-green-50 text-green-700 border border-green-200'
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                  }`}
+                  onClick={() => setActiveTab('medical')}
+                >
+                  <Heart className="w-4 h-4" />
+                  Medical History
+                </button>
+                <button
+                  className={`px-4 py-2.5 text-sm font-medium rounded-lg transition-colors flex items-center gap-2 ${
+                    activeTab === 'educational'
+                      ? 'bg-green-50 text-green-700 border border-green-200'
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                  }`}
+                  onClick={() => setActiveTab('educational')}
+                >
+                  <BookOpen className="w-4 h-4" />
+                  Educational Resources
+                </button>
+                <button
+                  className={`px-4 py-2.5 text-sm font-medium rounded-lg transition-colors flex items-center gap-2 ${
+                    activeTab === 'reviews'
+                      ? 'bg-green-50 text-green-700 border border-green-200'
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                  }`}
+                  onClick={() => setActiveTab('reviews')}
+                >
+                  <Star className="w-4 h-4" />
+                  Reviews
+                </button>
+              </div>
+            </div>
 
-          {/* Tab content */}
-          <div className="p-2 sm:p-4">
-            {activeTab === 'medical' && (
-              <MedicalHistory
-                medicalFiles={employee.user_medicals}
-                employeeName={employee.first_name}
-              />
-            )}
-            {activeTab === 'educational' && (
-              <EducationalResources resources={educationalResources} />
-            )}
-            {activeTab === 'reviews' && (
-              <StaffReview
-                reviews={employee.reviews}
-                employeeName={`${employee.first_name} ${employee.last_name}`}
-                employeeId={employee.id}
-              />
-            )}
+            {/* Tab content */}
+            <div className="p-4 sm:p-6">
+              {activeTab === 'medical' && (
+                <MedicalHistory
+                  medicalFiles={employee.user_medicals}
+                  employeeName={employee.first_name}
+                />
+              )}
+              {activeTab === 'educational' && (
+                <EducationalResources resources={educationalResources} />
+              )}
+              {activeTab === 'reviews' && (
+                <StaffReview
+                  reviews={employee.reviews}
+                  employeeName={`${employee.first_name} ${employee.last_name}`}
+                  employeeId={employee.id}
+                />
+              )}
+            </div>
           </div>
         </div>
       </div>

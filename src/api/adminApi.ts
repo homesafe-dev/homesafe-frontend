@@ -259,6 +259,21 @@ const adminApi = {
   },
 
   /**
+   * Get user details by ID (single user endpoint)
+   * @param userId - ID of the user
+   * @returns Promise with the API response containing user details
+   */
+  getUserById: async (userId: string | number) => {
+    try {
+      const response = await axiosInstance.get(`/users/${userId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching user by ID:', error);
+      throw error;
+    }
+  },
+
+  /**
    * Get employee details by ID
    * @param employeeId - ID of the employee
    * @returns Promise with the API response containing employee details

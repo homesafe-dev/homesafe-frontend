@@ -1,286 +1,659 @@
-import { BsPeople } from 'react-icons/bs';
-import { FaUser } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import agentApi from '../../api/agentApi';
+import {
+  Activity,
+  Users,
+  CreditCard,
+  TrendingUp,
+  FileText,
+  DollarSign,
+  UserCheck,
+  UserX,
+  Send,
+  Star,
+  Briefcase,
+  Clock,
+} from 'lucide-react';
+import {
+  PieChart,
+  Pie,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+} from 'recharts';
+import dashboardApi from '../../api/dashboardApi';
+import { useAuth } from '../../contexts/useAuth';
 
-interface Employee {
-  id: number;
-  candidate: string;
-  title: string;
-  email: string;
-  avatar: string;
-  date: string;
-  placement: string;
-  gender: string;
-  phone: string;
-  status: string;
+interface AgentDashboardData {
+  registered_employees: {
+    total_count: number;
+    verified_count: number;
+    unverified_count: number;
+  };
+  placements: {
+    active_count: number;
+    inactive_count: number;
+    total_count: number;
+  };
+  suggestions: {
+    total_count: number;
+    pending_count: number;
+    accepted_count: number;
+    rejected_count: number;
+  };
+  contracts: {
+    employees_with_active_contracts_count: number;
+    employees_with_pending_contracts_count: number;
+  };
+  reviews: {
+    average_rating: number;
+    total_count: number;
+  };
+  financial: {
+    wallet_balance: string;
+    recent_transactions: any[];
+  };
+  notifications: {
+    unread_count: number;
+    recent: any[];
+  };
+  activity: {
+    recent_registrations: any[];
+    recent_placements: any[];
+  };
 }
 
 export default function AgentDashboard() {
   const navigate = useNavigate();
-  const [employees, setEmployees] = useState<Employee[]>([]);
+  const { user } = useAuth();
+  const [dashboardData, setDashboardData] = useState<AgentDashboardData | null>(
+    null
+  );
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchEmployees = async () => {
+    const fetchDashboardData = async () => {
       try {
         setIsLoading(true);
-        const response = await agentApi.getTrackedEmployees();
+        setError(null);
+        const response = await dashboardApi.getDashboard();
+
         if (response.status) {
-          setEmployees(response.data);
+          setDashboardData(response.data);
         } else {
-          setError(response.message || 'Failed to fetch employees');
+          setError(response.message || 'Failed to fetch dashboard data');
         }
-      } catch (err) {
-        setError('Error fetching employees');
-        console.error('Error fetching employees:', err);
+      } catch (err: any) {
+        console.error('Error fetching dashboard data:', err);
+        setError(err.response?.data?.message || 'Error loading dashboard');
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchEmployees();
+    fetchDashboardData();
   }, []);
+
+  const formatCurrency = (amount: number | string) => {
+    const numAmount = typeof amount === 'string' ? parseFloat(amount) : amount;
+    return new Intl.NumberFormat('en-NG', {
+      style: 'currency',
+      currency: 'NGN',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(numAmount);
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    });
+  };
+
+  const formatTime = (dateString: string) => {
+    return new Date(dateString).toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  };
+
+  if (isLoading) {
+    return (
+      <div className="h-screen flex items-center justify-center bg-gray-50">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-6">
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+          {error}
+        </div>
+      </div>
+    );
+  }
+
+  if (!dashboardData) {
+    return null;
+  }
+
+  // Prepare chart data
+  const placementData = [
+    {
+      name: 'Active',
+      value: dashboardData.placements.active_count,
+      color: '#10b981',
+    },
+    {
+      name: 'Inactive',
+      value: dashboardData.placements.inactive_count,
+      color: '#ef4444',
+    },
+  ];
+
+  const suggestionStatusData = [
+    {
+      name: 'Accepted',
+      value: dashboardData.suggestions.accepted_count,
+      color: '#10b981',
+    },
+    {
+      name: 'Pending',
+      value: dashboardData.suggestions.pending_count,
+      color: '#f59e0b',
+    },
+    {
+      name: 'Rejected',
+      value: dashboardData.suggestions.rejected_count,
+      color: '#ef4444',
+    },
+  ];
+
   return (
-    <div className="p-0">
-      {/* Header */}
-      <div className="flex justify-end items-center mb-6 sm:mb-8">
-        {/* <h1 className="text-[16px] text-[#24292E]">Hello John</h1> */}
-        <button className="bg-[#EFAE73] h-[36px] sm:h-[42px] text-[14px] sm:text-[16px] text-[#24292E] px-3 sm:px-4 py-2 w-[140px] sm:w-[165px] rounded-[59px]">
-          <span className="hidden sm:inline">Ruby Subscription</span>
-          <span className="sm:hidden">Ruby Sub</span>
-        </button>
-      </div>
-
-      {/* Statistics Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
-        <div className="bg-white shadow rounded-lg p-4 sm:p-6 h-[160px] sm:h-[208px] flex items-center">
-          <div className="flex items-center gap-3 sm:gap-4">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#E8F5E9] rounded-full flex items-center justify-center flex-shrink-0">
-              <BsPeople className="text-gray-500" size={20} />
-            </div>
-            <div className="min-w-0 flex-1">
-              <h2 className="text-[18px] sm:text-[20px] text-[#24292E] font-normal">
-                {isLoading ? '...' : employees.length}
-              </h2>
-              <p className="text-[#24292E] text-[14px] sm:text-[16px] leading-tight">
-                Total Number of Candidates
-              </p>
-            </div>
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
+      {/* Welcome Section */}
+      <div className="mb-6">
+        <div className="flex justify-between items-start mb-4">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+              Welcome Back, {user?.name || 'Agent'}
+            </h1>
+            <p className="text-sm sm:text-base text-gray-500">
+              Agent Dashboard Overview
+            </p>
           </div>
-        </div>
-
-        <div className="bg-white shadow rounded-lg p-4 sm:p-6 h-[160px] sm:h-[208px] flex items-center">
-          <div className="flex items-center gap-3 sm:gap-4">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#E8E9F5] rounded-full flex items-center justify-center flex-shrink-0">
-              <BsPeople className="text-gray-500" size={20} />
-            </div>
-            <div className="min-w-0 flex-1">
-              <h2 className="text-[18px] sm:text-[20px] text-[#24292E] font-normal">
-                {isLoading
-                  ? '...'
-                  : employees.filter(
-                      (e) =>
-                        e.placement &&
-                        e.placement.toLowerCase() !== 'no employer assigned'
-                    ).length}
-              </h2>
-              <p className="text-[#24292E] text-[14px] sm:text-[16px] leading-tight">
-                Candidates on Placement
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white shadow rounded-lg p-4 sm:p-6 h-[160px] sm:h-[208px] flex items-center sm:col-span-2 lg:col-span-1">
-          <div className="flex items-center gap-3 sm:gap-4">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#F5E8E9] rounded-full flex items-center justify-center flex-shrink-0">
-              <BsPeople className="text-gray-500" size={20} />
-            </div>
-            <div className="min-w-0 flex-1">
-              <h2 className="text-[18px] sm:text-[20px] text-[#24292E] font-normal">
-                {isLoading
-                  ? '...'
-                  : employees.filter(
-                      (e) => e.status && e.status.toLowerCase() === 'terminated'
-                    ).length}
-              </h2>
-              <p className="text-[#24292E] text-[14px] sm:text-[16px] leading-tight">
-                Candidates terminated
-              </p>
-            </div>
-          </div>
+          <button className="bg-[#EFAE73] h-[36px] sm:h-[42px] text-[14px] sm:text-[16px] text-[#24292E] px-3 sm:px-4 py-2 w-[140px] sm:w-[165px] rounded-[59px]">
+            <span className="hidden sm:inline">Ruby Subscription</span>
+            <span className="sm:hidden">Ruby Sub</span>
+          </button>
         </div>
       </div>
 
-      {/* Activities Section */}
-      <div className="">
-        <div className="p-4 sm:p-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
-          <h2 className="text-[#24292E] text-[18px] sm:text-[20px] font-semibold">
-            Candidates
-          </h2>
+      {/* KPI Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6">
+        <div className="bg-white rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-sm font-medium text-gray-600">
+              Total Candidates
+            </span>
+            <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+              <Users className="w-4 h-4 text-blue-600" />
+            </div>
+          </div>
+          <div className="text-2xl font-bold text-gray-900 mb-1">
+            {dashboardData.registered_employees.total_count.toLocaleString()}
+          </div>
+          <div className="text-xs text-gray-500">
+            {dashboardData.registered_employees.verified_count} verified
+          </div>
+        </div>
+
+        <div className="bg-white rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-sm font-medium text-gray-600">
+              On Placement
+            </span>
+            <div className="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
+              <UserCheck className="w-4 h-4 text-green-600" />
+            </div>
+          </div>
+          <div className="text-2xl font-bold text-gray-900 mb-1">
+            {dashboardData.placements.active_count.toLocaleString()}
+          </div>
+          <div className="text-xs text-green-600 font-medium">
+            {dashboardData.placements.total_count} total placements
+          </div>
+        </div>
+
+        <div className="bg-white rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-sm font-medium text-gray-600">
+              Terminated
+            </span>
+            <div className="w-8 h-8 bg-red-50 rounded-lg flex items-center justify-center">
+              <UserX className="w-4 h-4 text-red-600" />
+            </div>
+          </div>
+          <div className="text-2xl font-bold text-gray-900 mb-1">
+            {dashboardData.placements.inactive_count.toLocaleString()}
+          </div>
+          <div className="text-xs text-gray-500">Inactive placements</div>
+        </div>
+
+        <div className="bg-white rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-sm font-medium text-gray-600">
+              Wallet Balance
+            </span>
+            <div className="w-8 h-8 bg-purple-50 rounded-lg flex items-center justify-center">
+              <DollarSign className="w-4 h-4 text-purple-600" />
+            </div>
+          </div>
+          <div className="text-2xl font-bold text-gray-900 mb-1">
+            {formatCurrency(dashboardData.financial.wallet_balance)}
+          </div>
+          <div className="text-xs text-gray-500">Available balance</div>
+        </div>
+      </div>
+
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        {/* Placement Status */}
+        <div className="bg-white rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
+              <UserCheck className="w-4 h-4 text-green-600" />
+            </div>
+            <div>
+              <h2 className="text-base font-semibold text-gray-900">
+                Placement Status
+              </h2>
+              <p className="text-xs text-gray-500 mt-0.5">Active vs Inactive</p>
+            </div>
+          </div>
+          <ResponsiveContainer width="100%" height={280}>
+            <PieChart>
+              <Pie
+                data={placementData}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                label={({ percent }) => `${((percent || 0) * 100).toFixed(0)}%`}
+                outerRadius={80}
+                fill="#8884d8"
+                dataKey="value"
+              >
+                {placementData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: 'white',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '12px',
+                  fontSize: '12px',
+                }}
+              />
+              <Legend
+                verticalAlign="bottom"
+                height={36}
+                wrapperStyle={{ fontSize: '11px' }}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Suggestions Status */}
+        <div className="bg-white rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+              <FileText className="w-4 h-4 text-blue-600" />
+            </div>
+            <div>
+              <h2 className="text-base font-semibold text-gray-900">
+                Suggestions Status
+              </h2>
+              <p className="text-xs text-gray-500 mt-0.5">By status</p>
+            </div>
+          </div>
+          <ResponsiveContainer width="100%" height={280}>
+            <BarChart data={suggestionStatusData}>
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="#f3f4f6"
+                vertical={false}
+              />
+              <XAxis
+                dataKey="name"
+                stroke="#9ca3af"
+                style={{ fontSize: '11px' }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <YAxis
+                stroke="#9ca3af"
+                style={{ fontSize: '11px' }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: 'white',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '12px',
+                  fontSize: '12px',
+                }}
+              />
+              <Bar dataKey="value" fill="#3b82f6" radius={[8, 8, 0, 0]}>
+                {suggestionStatusData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Recent Activities & Transactions */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        {/* Recent Registrations */}
+        <div className="bg-white rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center">
+                <Activity className="w-4 h-4 text-indigo-600" />
+              </div>
+              <h2 className="text-base font-semibold text-gray-900">
+                Recent Registrations
+              </h2>
+            </div>
+            <button
+              onClick={() => navigate('/agent/all-candidates')}
+              className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+            >
+              View All →
+            </button>
+          </div>
+
+          <div className="space-y-3">
+            {dashboardData.activity.recent_registrations
+              .slice(0, 5)
+              .map((registration: any) => (
+                <div
+                  key={registration.id}
+                  className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition"
+                >
+                  <div className="flex items-center gap-3 flex-1 min-w-0">
+                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
+                      <Users className="w-4 h-4 text-gray-600" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-gray-900 truncate">
+                        {registration.name || 'N/A'}
+                      </p>
+                      <p className="text-xs text-gray-500 mt-0.5">
+                        {registration.email || 'N/A'} •{' '}
+                        {formatDate(registration.registered_at)}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex-shrink-0 ml-3">
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        registration.status === 'verified'
+                          ? 'bg-green-50 text-green-700'
+                          : 'bg-orange-50 text-orange-700'
+                      }`}
+                    >
+                      {registration.status || 'Unverified'}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            {dashboardData.activity.recent_registrations.length === 0 && (
+              <p className="text-sm text-gray-500 text-center py-4">
+                No recent registrations
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Recent Transactions */}
+        <div className="bg-white rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
+                <CreditCard className="w-4 h-4 text-green-600" />
+              </div>
+              <h2 className="text-base font-semibold text-gray-900">
+                Recent Transactions
+              </h2>
+            </div>
+            <button
+              onClick={() => navigate('/agent/wallet')}
+              className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+            >
+              View All →
+            </button>
+          </div>
+
+          <div className="space-y-3">
+            {dashboardData.financial.recent_transactions
+              .slice(0, 5)
+              .map((transaction: any) => (
+                <div
+                  key={transaction.id}
+                  className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition"
+                >
+                  <div className="flex items-center gap-3 flex-1 min-w-0">
+                    <div
+                      className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                        transaction.type === 'credit'
+                          ? 'bg-green-50'
+                          : 'bg-red-50'
+                      }`}
+                    >
+                      {transaction.type === 'credit' ? (
+                        <TrendingUp className="w-4 h-4 text-green-600" />
+                      ) : (
+                        <TrendingUp className="w-4 h-4 text-red-600 rotate-180" />
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-gray-900 truncate">
+                        {transaction.description || transaction.source}
+                      </p>
+                      <p className="text-xs text-gray-500 mt-0.5">
+                        {formatTime(transaction.created_at)}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="text-right flex-shrink-0 ml-3">
+                    <p
+                      className={`text-sm font-semibold ${
+                        transaction.type === 'credit'
+                          ? 'text-green-600'
+                          : 'text-red-600'
+                      }`}
+                    >
+                      {transaction.type === 'credit' ? '+' : '-'}
+                      {formatCurrency(transaction.amount)}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            {dashboardData.financial.recent_transactions.length === 0 && (
+              <p className="text-sm text-gray-500 text-center py-4">
+                No recent transactions
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Stats Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+        <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
+          <div className="flex items-center justify-between mb-2">
+            <div className="text-xs text-gray-500">Verified Candidates</div>
+            <div className="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
+              <UserCheck className="w-4 h-4 text-green-600" />
+            </div>
+          </div>
+          <div className="text-lg font-bold text-gray-900">
+            {dashboardData.registered_employees.verified_count}
+          </div>
+        </div>
+        <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
+          <div className="flex items-center justify-between mb-2">
+            <div className="text-xs text-gray-500">Total Suggestions</div>
+            <div className="w-8 h-8 bg-orange-50 rounded-lg flex items-center justify-center">
+              <Send className="w-4 h-4 text-orange-600" />
+            </div>
+          </div>
+          <div className="text-lg font-bold text-gray-900">
+            {dashboardData.suggestions.total_count}
+          </div>
+        </div>
+        <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
+          <div className="flex items-center justify-between mb-2">
+            <div className="text-xs text-gray-500">Active Contracts</div>
+            <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+              <Briefcase className="w-4 h-4 text-blue-600" />
+            </div>
+          </div>
+          <div className="text-lg font-bold text-gray-900">
+            {dashboardData.contracts.employees_with_active_contracts_count}
+          </div>
+        </div>
+        <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
+          <div className="flex items-center justify-between mb-2">
+            <div className="text-xs text-gray-500">Average Rating</div>
+            <div className="w-8 h-8 bg-yellow-50 rounded-lg flex items-center justify-center">
+              <Star className="w-4 h-4 text-yellow-600" />
+            </div>
+          </div>
+          <div className="text-lg font-bold text-gray-900">
+            {dashboardData.reviews.average_rating.toFixed(1) || '0.0'}
+          </div>
+        </div>
+      </div>
+
+      {/* Candidates Table */}
+      <div className="bg-white rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center">
+              <Users className="w-4 h-4 text-indigo-600" />
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900">
+                Candidates
+              </h2>
+              <p className="text-xs text-gray-500 mt-0.5">
+                Recent candidate activity
+              </p>
+            </div>
+          </div>
           <button
             onClick={() => navigate('/agent/all-candidates')}
-            className="text-[#7B858E] hover:text-gray-900 font-semibold text-[12px] sm:text-[13px] self-start sm:self-auto"
+            className="text-sm text-blue-600 hover:text-blue-700 font-medium"
           >
-            View All
+            View All →
           </button>
         </div>
 
-        <div
-          className="overflow-x-auto overflow-y-visible"
-          style={{ marginLeft: '-1rem', marginRight: '-1rem' }}
-        >
-          <div style={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
-            <table className="w-full" style={{ minWidth: '700px' }}>
-              <thead className="bg-[#C8EDDF80] h-[56px] text-left">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50 border-b border-gray-100">
+              <tr>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  Candidate
+                </th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  Date
+                </th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  Placement
+                </th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  Status
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-100">
+              {dashboardData.activity.recent_registrations.length === 0 ? (
                 <tr>
-                  <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal whitespace-nowrap">
-                    New Candidate
-                  </th>
-                  <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal whitespace-nowrap">
-                    Date
-                  </th>
-                  <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal whitespace-nowrap">
-                    Placement
-                  </th>
-                  <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal whitespace-nowrap">
-                    Gender
-                  </th>
-                  <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal whitespace-nowrap">
-                    Phone Number
-                  </th>
-                  <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal whitespace-nowrap">
-                    Status
-                  </th>
+                  <td
+                    colSpan={4}
+                    className="px-4 sm:px-6 py-12 text-center text-gray-500"
+                  >
+                    <div className="flex flex-col items-center gap-3">
+                      <Users className="w-12 h-12 text-gray-300" />
+                      <div>
+                        <p className="font-medium text-gray-900">
+                          No candidates found
+                        </p>
+                        <p className="text-sm text-gray-500 mt-1">
+                          Candidates will appear here once they register
+                        </p>
+                      </div>
+                    </div>
+                  </td>
                 </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {isLoading ? (
-                  // Loading state - show skeleton rows
-                  [...Array(3)].map((_, index) => (
-                    <tr key={index} className="hover:bg-gray-50 animate-pulse">
-                      <td className="px-6 py-4">
-                        <div className="h-8 bg-gray-200 rounded"></div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="h-8 bg-gray-200 rounded"></div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="h-8 bg-gray-200 rounded"></div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="h-8 bg-gray-200 rounded"></div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="h-8 bg-gray-200 rounded"></div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="h-8 bg-gray-200 rounded"></div>
-                      </td>
-                    </tr>
-                  ))
-                ) : error ? (
-                  // Error state
-                  <tr>
-                    <td
-                      colSpan={6}
-                      className="px-6 py-4 text-center text-red-500"
+              ) : (
+                dashboardData.activity.recent_registrations
+                  .slice(0, 5)
+                  .map((registration: any) => (
+                    <tr
+                      key={registration.id}
+                      className="hover:bg-gray-50 transition-colors"
                     >
-                      {error}
-                    </td>
-                  </tr>
-                ) : employees.length === 0 ? (
-                  // Empty state
-                  <tr>
-                    <td
-                      colSpan={6}
-                      className="px-6 py-4 text-center text-gray-500"
-                    >
-                      No employees found
-                    </td>
-                  </tr>
-                ) : (
-                  // Data loaded successfully
-                  employees.map((employee) => (
-                    <tr key={employee.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 flex items-center gap-2 text-[13px] text-[#24292E] font-normal whitespace-nowrap">
-                        <div className="flex items-center gap-2 relative">
-                          {employee.avatar ? (
-                            <div className="w-8 h-8 rounded-full overflow-hidden relative">
-                              <img
-                                src={employee.avatar}
-                                alt={employee.candidate}
-                                className="w-full h-full object-cover"
-                              />
-                              <div className="absolute w-3 h-3 bg-green-500 rounded-full -top-1 -right-1 border-2 border-white" />
-                            </div>
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {registration.name || 'N/A'}
+                      </td>
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                        {formatDate(registration.registered_at)}
+                      </td>
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                        {registration.placement || 'Not on placement'}
+                      </td>
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
+                        <span
+                          className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${
+                            registration.status === 'verified'
+                              ? 'bg-green-50 text-green-700 border-green-200'
+                              : 'bg-orange-50 text-orange-700 border-orange-200'
+                          }`}
+                        >
+                          {registration.status === 'verified' ? (
+                            <UserCheck className="w-3 h-3 mr-1" />
                           ) : (
-                            <div className="bg-[#BDBDBD] rounded-full p-2 flex items-center justify-center relative">
-                              <FaUser className="text-white" />
-                              <div className="absolute w-3 h-3 bg-green-500 rounded-full -top-1 -right-1 border-2 border-white" />
-                            </div>
+                            <Clock className="w-3 h-3 mr-1" />
                           )}
-                        </div>
-                        {employee.candidate}
-                      </td>
-                      <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal whitespace-nowrap">
-                        {new Date(employee.date).toLocaleDateString('en-US', {
-                          day: 'numeric',
-                          month: 'short',
-                          year: 'numeric',
-                        })}
-                      </td>
-                      <td className="px-6 py-4 text-[13px] font-normal whitespace-nowrap">
-                        <span
-                          className={`${
-                            employee.placement &&
-                            employee.placement.toLowerCase() ===
-                              'no employer assigned'
-                              ? 'text-gray-500 italic'
-                              : 'text-[#24292E]'
-                          }`}
-                        >
-                          {employee.placement &&
-                          employee.placement.toLowerCase() ===
-                            'no employer assigned'
-                            ? 'Not on placement'
-                            : employee.placement || 'Not assigned'}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal whitespace-nowrap">
-                        {employee.gender
-                          ? employee.gender.charAt(0).toUpperCase() +
-                            employee.gender.slice(1)
-                          : 'Not specified'}
-                      </td>
-                      <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal whitespace-nowrap">
-                        {employee.phone}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span
-                          className={`px-3 py-1 rounded-full text-[13px] ${
-                            employee.status &&
-                            (employee.status.toLowerCase().includes('not') ||
-                              employee.status.toLowerCase() === 'unverified')
-                              ? 'bg-red-100 text-red-800'
-                              : 'bg-green-100 text-green-800'
-                          }`}
-                        >
-                          {employee.status &&
-                          employee.status.toLowerCase().includes('not')
-                            ? 'Unverified'
-                            : 'Verified'}
+                          {registration.status
+                            ? registration.status.charAt(0).toUpperCase() +
+                              registration.status.slice(1)
+                            : 'Unverified'}
                         </span>
                       </td>
                     </tr>
                   ))
-                )}
-              </tbody>
-            </table>
-          </div>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

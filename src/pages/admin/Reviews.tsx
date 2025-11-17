@@ -1,11 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
+import {
+  Star,
+  Search,
+  Filter,
+  X,
+  ChevronLeft,
+  ChevronRight,
+  MessageSquare,
+} from 'lucide-react';
 import { format } from 'date-fns';
 import reviewApi, { Review, ReviewFilters } from '../../api/reviewApi';
+import Avatar from '../../components/common/Avatar';
 
 interface ReviewCardProps {
   reviewerName: string;
   reviewerAvatar?: string;
+  reviewerEmail?: string;
   comment: string;
   rating: number;
   date: string;
@@ -14,53 +24,53 @@ interface ReviewCardProps {
 const ReviewCard: React.FC<ReviewCardProps> = ({
   reviewerName,
   reviewerAvatar,
+  reviewerEmail,
   comment,
   rating,
   date,
 }) => {
+  const firstName = reviewerName.split(' ')[0] || '';
+  const lastName = reviewerName.split(' ').slice(1).join(' ') || '';
+
   return (
-    <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm border border-gray-200">
-      <div className="flex items-center mb-3">
-        {reviewerAvatar ? (
-          <img
-            src={reviewerAvatar}
-            alt={reviewerName}
-            className="w-8 h-8 sm:w-10 sm:h-10 rounded-full mr-2 sm:mr-3 object-cover"
-          />
-        ) : (
-          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-300 flex items-center justify-center mr-2 sm:mr-3">
-            <span className="text-white font-medium text-xs sm:text-sm">
-              {reviewerName
-                .split(' ')
-                .map((name) => name[0])
-                .join('')}
-            </span>
-          </div>
-        )}
+    <div className="bg-white p-4 sm:p-6 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+      <div className="flex items-start gap-4 mb-4">
+        <Avatar
+          src={reviewerAvatar}
+          firstName={firstName}
+          lastName={lastName}
+          size="md"
+          showStatus={false}
+        />
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-[#24292E] text-[14px] sm:text-[16px] truncate">
+          <h3 className="font-semibold text-gray-900 text-sm sm:text-base truncate">
             {reviewerName}
           </h3>
-          <p className="text-xs text-gray-500">{date}</p>
+          {reviewerEmail && (
+            <p className="text-xs text-gray-500 truncate mt-0.5">
+              {reviewerEmail}
+            </p>
+          )}
+          <p className="text-xs text-gray-500 mt-1">{date}</p>
         </div>
       </div>
-      <p className="text-xs sm:text-sm text-gray-600 mb-3 break-words">
+      <p className="text-sm text-gray-700 mb-4 break-words leading-relaxed">
         {comment}
       </p>
-      <div className="flex">
-        {[...Array(5)].map((_, index) =>
-          index < rating ? (
-            <AiFillStar
-              key={index}
-              className="text-[#EFAE73] w-4 h-4 sm:w-5 sm:h-5"
-            />
-          ) : (
-            <AiOutlineStar
-              key={index}
-              className="text-[#EFAE73] w-4 h-4 sm:w-5 sm:h-5"
-            />
-          )
-        )}
+      <div className="flex items-center gap-1">
+        {[...Array(5)].map((_, index) => (
+          <Star
+            key={index}
+            className={`w-4 h-4 ${
+              index < rating
+                ? 'fill-[#EFAE73] text-[#EFAE73]'
+                : 'fill-gray-200 text-gray-200'
+            }`}
+          />
+        ))}
+        <span className="ml-2 text-sm font-medium text-gray-700">
+          {rating}.0
+        </span>
       </div>
     </div>
   );
@@ -152,7 +162,7 @@ const Reviews: React.FC = () => {
     };
 
     fetchReviews();
-  }, [activeTab, currentPage, searchTerm, ratingFilter]);
+  }, [activeTab, currentPage, searchTerm, ratingFilter, itemsPerPage]);
 
   // Calculate average rating
   const calculateAverageRating = (reviews: Review[]): string => {
@@ -165,168 +175,284 @@ const Reviews: React.FC = () => {
     setCurrentPage(pageNumber);
   };
 
+  const clearFilters = () => {
+    setSearchTerm('');
+    setRatingFilter('');
+  };
+
+  const hasActiveFilters = searchTerm.trim() !== '' || ratingFilter !== '';
+
   return (
-    <div className="bg-white rounded-lg p-4 sm:p-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 sm:gap-0">
-        <h1 className="text-xl sm:text-2xl font-semibold">All Reviews</h1>
-
-        {/* Search and Filter Controls */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search reviews..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="border border-gray-300 rounded-md px-3 py-2 text-sm w-full sm:w-64"
-            />
-          </div>
-
-          <select
-            value={ratingFilter}
-            onChange={(e) =>
-              setRatingFilter(
-                e.target.value === '' ? '' : Number(e.target.value)
-              )
-            }
-            className="border border-gray-300 rounded-md px-3 py-2 text-sm"
-          >
-            <option value="">All Ratings</option>
-            <option value={5}>5 Stars</option>
-            <option value={4}>4 Stars</option>
-            <option value={3}>3 Stars</option>
-            <option value={2}>2 Stars</option>
-            <option value={1}>1 Star</option>
-          </select>
-        </div>
+    <div className="p-0">
+      {/* Header Section */}
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+          Reviews
+        </h1>
+        <p className="text-sm sm:text-base text-gray-600">
+          View and manage all reviews in the system
+        </p>
       </div>
 
-      {/* Tabs */}
-      <div className="mb-6">
-        <div className="inline-flex border border-gray-200 rounded-md overflow-hidden">
-          <button
-            className={`px-4 sm:px-6 py-2 text-sm ${
-              activeTab === 'employers'
-                ? 'bg-[#C8EDDF80] text-green-800'
-                : 'text-gray-600 hover:bg-gray-50'
-            }`}
-            onClick={() => setActiveTab('employers')}
-          >
-            Employers
-          </button>
-          <button
-            className={`px-4 sm:px-6 py-2 text-sm border-l border-r border-gray-200 ${
-              activeTab === 'agents'
-                ? 'bg-[#C8EDDF80] text-green-800'
-                : 'text-gray-600 hover:bg-gray-50'
-            }`}
-            onClick={() => setActiveTab('agents')}
-          >
-            Agents
-          </button>
-          <button
-            className={`px-4 sm:px-6 py-2 text-sm ${
-              activeTab === 'employees'
-                ? 'bg-[#C8EDDF80] text-green-800'
-                : 'text-gray-600 hover:bg-gray-50'
-            }`}
-            onClick={() => setActiveTab('employees')}
-          >
-            Employees
-          </button>
-        </div>
-      </div>
-
-      {/* Reviews Section */}
-      <div className="mb-8">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-semibold">
-            {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Reviews
-          </h2>
-          <div className="flex items-center">
-            <span className="text-lg font-medium mr-2">{averageRating}</span>
-            <div className="flex">
-              {[...Array(5)].map((_, index) => {
-                const ratingValue = parseFloat(averageRating);
-                return (
-                  <AiFillStar
-                    key={index}
-                    className={
-                      index < Math.round(ratingValue)
-                        ? 'text-[#EFAE73]'
-                        : 'text-gray-300'
-                    }
-                  />
-                );
-              })}
-            </div>
-            <span className="text-sm text-gray-500 ml-2">
-              ({reviews.length} reviews)
-            </span>
+      {/* Main Content */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-100">
+        {/* Tabs */}
+        <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-gray-100">
+          <div className="flex flex-wrap gap-2 sm:gap-0 sm:space-x-1">
+            <button
+              className={`px-4 py-2.5 text-sm font-medium rounded-lg transition-colors ${
+                activeTab === 'employers'
+                  ? 'bg-green-50 text-green-700 border border-green-200'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              }`}
+              onClick={() => {
+                setActiveTab('employers');
+                setCurrentPage(1);
+              }}
+            >
+              Employers
+            </button>
+            <button
+              className={`px-4 py-2.5 text-sm font-medium rounded-lg transition-colors ${
+                activeTab === 'agents'
+                  ? 'bg-green-50 text-green-700 border border-green-200'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              }`}
+              onClick={() => {
+                setActiveTab('agents');
+                setCurrentPage(1);
+              }}
+            >
+              Agents
+            </button>
+            <button
+              className={`px-4 py-2.5 text-sm font-medium rounded-lg transition-colors ${
+                activeTab === 'employees'
+                  ? 'bg-green-50 text-green-700 border border-green-200'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              }`}
+              onClick={() => {
+                setActiveTab('employees');
+                setCurrentPage(1);
+              }}
+            >
+              Employees
+            </button>
           </div>
         </div>
 
-        {loading ? (
-          <div className="flex justify-center items-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
-          </div>
-        ) : reviews.length === 0 ? (
-          <div className="text-center py-12 text-gray-500">
-            No reviews available
-          </div>
-        ) : (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {reviews.map((review) => (
-                <ReviewCard
-                  key={review.id}
-                  reviewerName={`${review.reviewer.first_name} ${review.reviewer.last_name}`}
-                  reviewerAvatar={review.reviewer.avatar}
-                  comment={review.comment}
-                  rating={review.rating}
-                  date={formatDate(review.created_at)}
+        {/* Search and Filters Section */}
+        <div className="p-4 sm:p-6">
+          <div className="mb-6 space-y-4">
+            <div className="flex flex-col sm:flex-row gap-4">
+              {/* Search Input */}
+              <div className="flex-1 relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <input
+                  type="text"
+                  placeholder="Search reviews..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
                 />
-              ))}
+              </div>
+
+              {/* Rating Filter */}
+              <div className="relative">
+                <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none" />
+                <select
+                  value={ratingFilter}
+                  onChange={(e) =>
+                    setRatingFilter(
+                      e.target.value === '' ? '' : Number(e.target.value)
+                    )
+                  }
+                  className="pl-10 pr-8 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm appearance-none bg-white"
+                >
+                  <option value="">All Ratings</option>
+                  <option value={5}>5 Stars</option>
+                  <option value={4}>4 Stars</option>
+                  <option value={3}>3 Stars</option>
+                  <option value={2}>2 Stars</option>
+                  <option value={1}>1 Star</option>
+                </select>
+              </div>
+
+              {/* Clear Filters Button */}
+              {hasActiveFilters && (
+                <button
+                  onClick={clearFilters}
+                  className="px-4 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors flex items-center gap-2"
+                >
+                  <X className="w-4 h-4" />
+                  Clear Filters
+                </button>
+              )}
             </div>
 
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <div className="flex justify-center items-center gap-2 mt-8">
-                <button
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className="p-2 rounded-full hover:bg-gray-100 disabled:opacity-50"
-                >
-                  &lt;
-                </button>
+            {/* Results Count and Average Rating */}
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div className="text-sm text-gray-600">
+                Showing {reviews.length} review{reviews.length !== 1 ? 's' : ''}
+              </div>
+              {reviews.length > 0 && (
+                <div className="flex items-center gap-2">
+                  <span className="text-lg font-semibold text-gray-900">
+                    {averageRating}
+                  </span>
+                  <div className="flex items-center gap-0.5">
+                    {[...Array(5)].map((_, index) => {
+                      const ratingValue = parseFloat(averageRating);
+                      return (
+                        <Star
+                          key={index}
+                          className={`w-4 h-4 ${
+                            index < Math.round(ratingValue)
+                              ? 'fill-[#EFAE73] text-[#EFAE73]'
+                              : 'fill-gray-200 text-gray-200'
+                          }`}
+                        />
+                      );
+                    })}
+                  </div>
+                  <span className="text-sm text-gray-500 ml-1">
+                    Average Rating
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
 
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                  (pageNum) => (
+          {/* Reviews Grid */}
+          {loading ? (
+            <div className="flex justify-center items-center py-12">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
+            </div>
+          ) : reviews.length === 0 ? (
+            <div className="text-center py-12">
+              <div className="flex flex-col items-center gap-3">
+                <MessageSquare className="w-12 h-12 text-gray-300" />
+                <div>
+                  <p className="font-medium text-gray-900">
+                    {hasActiveFilters
+                      ? 'No reviews match your filters'
+                      : 'No reviews available'}
+                  </p>
+                  <p className="text-sm text-gray-500 mt-1">
+                    {hasActiveFilters
+                      ? 'Try adjusting your search or filters'
+                      : `No ${activeTab} reviews have been submitted yet`}
+                  </p>
+                </div>
+                {hasActiveFilters && (
+                  <button
+                    onClick={clearFilters}
+                    className="mt-2 px-4 py-2 text-sm font-medium text-green-700 bg-green-50 hover:bg-green-100 rounded-lg transition-colors"
+                  >
+                    Clear all filters
+                  </button>
+                )}
+              </div>
+            </div>
+          ) : (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                {reviews.map((review) => (
+                  <ReviewCard
+                    key={review.id}
+                    reviewerName={`${review.reviewer.first_name} ${review.reviewer.last_name}`}
+                    reviewerAvatar={review.reviewer.avatar}
+                    reviewerEmail={review.reviewer.email}
+                    comment={review.comment}
+                    rating={review.rating}
+                    date={formatDate(review.created_at)}
+                  />
+                ))}
+              </div>
+
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+                  <div className="text-sm text-gray-700">
+                    Showing{' '}
+                    <span className="font-medium">
+                      {Math.min(
+                        (currentPage - 1) * itemsPerPage + 1,
+                        reviews.length
+                      )}
+                    </span>{' '}
+                    to{' '}
+                    <span className="font-medium">
+                      {Math.min(currentPage * itemsPerPage, reviews.length)}
+                    </span>{' '}
+                    of <span className="font-medium">{reviews.length}</span>{' '}
+                    results
+                  </div>
+
+                  <div className="flex items-center gap-2">
                     <button
-                      key={pageNum}
-                      onClick={() => handlePageChange(pageNum)}
-                      className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                        currentPage === pageNum
-                          ? 'bg-gray-200'
-                          : 'hover:bg-gray-100'
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
+                      className={`p-2 rounded-lg border transition-colors ${
+                        currentPage === 1
+                          ? 'border-gray-200 text-gray-300 cursor-not-allowed'
+                          : 'border-gray-300 text-gray-700 hover:bg-gray-50'
                       }`}
                     >
-                      {pageNum}
+                      <ChevronLeft className="w-5 h-5" />
                     </button>
-                  )
-                )}
 
-                <button
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  className="p-2 rounded-full hover:bg-gray-100 disabled:opacity-50"
-                >
-                  &gt;
-                </button>
-              </div>
-            )}
-          </>
-        )}
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                      (page) => {
+                        if (
+                          page === 1 ||
+                          page === totalPages ||
+                          (page >= currentPage - 1 && page <= currentPage + 1)
+                        ) {
+                          return (
+                            <button
+                              key={page}
+                              onClick={() => handlePageChange(page)}
+                              className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                                currentPage === page
+                                  ? 'bg-green-600 text-white'
+                                  : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
+                              }`}
+                            >
+                              {page}
+                            </button>
+                          );
+                        } else if (
+                          page === currentPage - 2 ||
+                          page === currentPage + 2
+                        ) {
+                          return (
+                            <span key={page} className="px-2 text-gray-500">
+                              ...
+                            </span>
+                          );
+                        }
+                        return null;
+                      }
+                    )}
+
+                    <button
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                      className={`p-2 rounded-lg border transition-colors ${
+                        currentPage === totalPages
+                          ? 'border-gray-200 text-gray-300 cursor-not-allowed'
+                          : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      <ChevronRight className="w-5 h-5" />
+                    </button>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
