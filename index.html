@@ -8,6 +8,18 @@
     <link rel="apple-touch-icon" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="/dist/styles.css" rel="stylesheet">
+    <script>
+      (() => {
+        const storedTheme = localStorage.getItem('theme');
+        const systemPrefersDark = window.matchMedia(
+          '(prefers-color-scheme: dark)'
+        ).matches;
+        const useDark =
+          storedTheme === 'dark' ||
+          (storedTheme !== 'light' && systemPrefersDark);
+        document.documentElement.classList.toggle('dark', useDark);
+      })();
+    </script>
     <title>Homesafe</title>
   </head>
   <body>

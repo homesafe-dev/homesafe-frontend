@@ -3,11 +3,13 @@ import { Bell, BellDot, ChevronDown, Menu } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import NotificationsModal from '../../common/NotificationsModal';
 import EnvironmentIndicator from '../../common/EnvironmentIndicator';
+import ThemeToggle from '../../common/ThemeToggle';
 import ProfileIcon from '../../../assets/icons/profile.svg';
 import LogoutIcon from '../../../assets/icons/logout.svg';
 import SecurityIcon from '../../../assets/icons/security.svg';
 import userApi from '../../../api/userApi';
 import notificationApi from '../../../api/notificationApi';
+import { hasUsableAvatarUrl } from '../../../utils/avatarUrl';
 
 interface HeaderProps {
   userEmail?: string;
@@ -41,6 +43,7 @@ const Header: React.FC<HeaderProps> = ({
   // Error state is used in the fetchUserProfile function
   const [, setError] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [avatarLoadFailed, setAvatarLoadFailed] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem('auth_token');
@@ -100,22 +103,24 @@ const Header: React.FC<HeaderProps> = ({
     };
   }, []);
 
+  useEffect(() => {
+    setAvatarLoadFailed(false);
+  }, [userProfile?.avatar]);
+
   // Use profile data or fallback to props
   const userName = userProfile?.first_name || propUserName || 'Admin';
   const fullName = userProfile
     ? `${userProfile.first_name} ${userProfile.last_name}`
     : propUserName || 'Admin User';
-  const userRole =
-    userProfile?.role && userProfile.role.length > 0
-      ? userProfile.role[0].charAt(0).toUpperCase() +
-        userProfile.role[0].slice(1)
-      : 'System Administrator';
   const userInitials = userProfile
     ? `${userProfile.first_name.charAt(0)}${userProfile.last_name.charAt(0)}`
     : 'AU';
+  const avatarUrl = userProfile?.avatar?.trim() ?? '';
+  const showAvatarImage =
+    hasUsableAvatarUrl(userProfile?.avatar) && !avatarLoadFailed;
 
   return (
-    <header className="bg-white border-b border-gray-100">
+    <header className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-700">
       <div className="px-3 sm:px-4 lg:px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Left side - Welcome + Environment */}
@@ -125,12 +130,12 @@ const Header: React.FC<HeaderProps> = ({
               <button
                 id="mobile-menu-button"
                 onClick={onMenuToggle}
-                className="p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-500 lg:hidden flex-shrink-0"
+                className="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-500 lg:hidden flex-shrink-0"
               >
                 <Menu className="w-5 h-5" />
               </button>
             )}
-            <span className="hidden sm:block text-lg font-semibold text-gray-900 truncate">
+            <span className="hidden sm:block text-lg font-semibold text-gray-900 dark:text-gray-100 truncate">
               Welcome, {userName}
             </span>
             <div className="hidden sm:block flex-shrink-0">
@@ -140,9 +145,11 @@ const Header: React.FC<HeaderProps> = ({
 
           {/* Right side - Notifications + Profile */}
           <div className="flex items-center gap-3">
+            <ThemeToggle />
+
             {/* Notification bell with badge */}
             <button
-              className="relative p-2 text-gray-600 hover:bg-gray-50 rounded-full transition-colors"
+              className="relative p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-full transition-colors"
               onClick={() => setIsModalOpen(true)}
             >
               {unreadCount > 0 ? (
@@ -156,43 +163,43 @@ const Header: React.FC<HeaderProps> = ({
             </button>
 
             {/* User profile with border separator */}
-            <div className="flex items-center gap-3 pl-3 border-l border-gray-200">
+            <div className="flex items-center gap-3 pl-3 border-l border-gray-200 dark:border-gray-700">
               <div className="relative" ref={dropdownRef}>
                 <button
                   className="flex items-center gap-3"
                   onClick={() => setShowDropdown(!showDropdown)}
                 >
                   <div className="w-8 h-8 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-xs font-semibold overflow-hidden flex-shrink-0">
-                    {userProfile?.avatar ? (
+                    {showAvatarImage ? (
                       <img
-                        src={userProfile.avatar}
+                        src={avatarUrl}
                         alt={`${fullName}'s avatar`}
                         className="w-full h-full object-cover"
+                        onError={() => setAvatarLoadFailed(true)}
                       />
                     ) : (
                       <span>{userInitials}</span>
                     )}
                   </div>
                   <div className="text-right hidden sm:block">
-                    <div className="text-sm font-medium text-gray-900">
+                    <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
                       {fullName}
                     </div>
-                    <div className="text-xs text-gray-500">{userRole}</div>
                   </div>
-                  <ChevronDown className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                  <ChevronDown className="w-4 h-4 text-gray-400 dark:text-gray-500 flex-shrink-0" />
                 </button>
 
                 {/* Dropdown Menu */}
                 {showDropdown && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 py-1 z-50">
+                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-100 dark:border-gray-700 py-1 z-50">
                     <button
                       onClick={() => {
                         setShowDropdown(false);
                         navigate('/admin/profile');
                       }}
-                      className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                      className="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                     >
-                      <img src={ProfileIcon} className="mr-3 w-4 h-4" alt="" />
+                      <img src={ProfileIcon} className="mr-3 w-4 h-4 dark:invert dark:brightness-200" alt="" />
                       Profile
                     </button>
                     <button
@@ -200,9 +207,9 @@ const Header: React.FC<HeaderProps> = ({
                         setShowDropdown(false);
                         navigate('/admin/security');
                       }}
-                      className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                      className="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                     >
-                      <img src={SecurityIcon} className="mr-3 w-4 h-4" alt="" />
+                      <img src={SecurityIcon} className="mr-3 w-4 h-4 dark:invert dark:brightness-200" alt="" />
                       Security
                     </button>
                     <button
@@ -210,9 +217,9 @@ const Header: React.FC<HeaderProps> = ({
                         setShowDropdown(false);
                         handleLogout();
                       }}
-                      className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                      className="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                     >
-                      <img src={LogoutIcon} className="mr-3 w-4 h-4" alt="" />
+                      <img src={LogoutIcon} className="mr-3 w-4 h-4 dark:invert dark:brightness-200" alt="" />
                       Log Out
                     </button>
                   </div>

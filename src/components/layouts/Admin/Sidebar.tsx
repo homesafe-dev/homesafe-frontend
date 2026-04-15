@@ -30,16 +30,16 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
       <div
         className={`flex items-center gap-3 py-3 px-4 cursor-pointer rounded-lg transition-colors ${
           isActive
-            ? 'bg-green-50 text-green-700 border border-green-200'
-            : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+            ? 'bg-green-50 dark:bg-green-500/20 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-500/40'
+            : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100'
         }`}
       >
-        <div className={isActive ? 'text-green-700' : 'text-gray-500'}>
+        <div className={isActive ? 'text-green-700 dark:text-green-300' : 'text-gray-500 dark:text-gray-400'}>
           {icon}
         </div>
         <span
           className={`text-sm font-medium ${
-            isActive ? 'text-green-700' : 'text-gray-700'
+            isActive ? 'text-green-700 dark:text-green-300' : 'text-gray-700 dark:text-gray-200'
           }`}
         >
           {text}
@@ -102,12 +102,12 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
   return (
     <div
       id="admin-sidebar"
-      className="w-64 h-screen bg-white border-r border-gray-200 flex flex-col"
+      className="w-64 h-screen bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 flex flex-col"
     >
       <img
         src={HomesafeLogo}
         alt="homesafe logo"
-        className="w-[140px] sm:w-[178px] mx-auto mt-[2rem] sm:mt-[3rem] mb-[2rem] sm:mb-[3rem]"
+        className="w-[140px] sm:w-[178px] mx-auto mt-[2rem] sm:mt-[3rem] mb-[2rem] sm:mb-[3rem] dark:brightness-110"
       />
 
       <div className="flex-1 px-3 py-4">

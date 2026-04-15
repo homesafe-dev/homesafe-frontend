@@ -1,6 +1,5 @@
 @import 'tailwindcss';
-@tailwind base;
-@tailwind components;
+@custom-variant dark (&:where(.dark, .dark *));
 @tailwind utilities;
 
 @layer base {
@@ -17,6 +16,28 @@
       'Open Sans',
       'Helvetica Neue',
       sans-serif;
+  }
+
+  body {
+    @apply bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100;
+  }
+
+  /* Global dark-mode table fallback for consistent head/body contrast */
+  .dark table thead tr {
+    background-color: rgb(51 65 85);
+  }
+
+  .dark table thead th {
+    color: rgb(241 245 249);
+    border-color: rgb(55 65 81);
+  }
+
+  .dark table tbody td {
+    color: rgb(226 232 240);
+  }
+
+  .dark table tbody tr {
+    border-color: rgb(55 65 81);
   }
 }
 
