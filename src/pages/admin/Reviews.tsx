@@ -33,7 +33,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
   const lastName = reviewerName.split(' ').slice(1).join(' ') || '';
 
   return (
-    <div className="bg-white p-4 sm:p-6 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+    <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow">
       <div className="flex items-start gap-4 mb-4">
         <Avatar
           src={reviewerAvatar}
@@ -43,18 +43,18 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
           showStatus={false}
         />
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-gray-900 text-sm sm:text-base truncate">
+          <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-sm sm:text-base truncate">
             {reviewerName}
           </h3>
           {reviewerEmail && (
-            <p className="text-xs text-gray-500 truncate mt-0.5">
+            <p className="text-xs text-gray-500 dark:text-gray-400 truncate mt-0.5">
               {reviewerEmail}
             </p>
           )}
-          <p className="text-xs text-gray-500 mt-1">{date}</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{date}</p>
         </div>
       </div>
-      <p className="text-sm text-gray-700 mb-4 break-words leading-relaxed">
+      <p className="text-sm text-gray-700 dark:text-gray-300 mb-4 break-words leading-relaxed">
         {comment}
       </p>
       <div className="flex items-center gap-1">
@@ -68,7 +68,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
             }`}
           />
         ))}
-        <span className="ml-2 text-sm font-medium text-gray-700">
+        <span className="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
           {rating}.0
         </span>
       </div>
@@ -186,24 +186,24 @@ const Reviews: React.FC = () => {
     <div className="p-0">
       {/* Header Section */}
       <div className="mb-6 sm:mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
           Reviews
         </h1>
-        <p className="text-sm sm:text-base text-gray-600">
+        <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
           View and manage all reviews in the system
         </p>
       </div>
 
       {/* Main Content */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-100">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
         {/* Tabs */}
-        <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-gray-100">
+        <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-gray-100 dark:border-gray-700">
           <div className="flex flex-wrap gap-2 sm:gap-0 sm:space-x-1">
             <button
               className={`px-4 py-2.5 text-sm font-medium rounded-lg transition-colors ${
                 activeTab === 'employers'
-                  ? 'bg-green-50 text-green-700 border border-green-200'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                  ? 'bg-green-50 dark:bg-green-500/20 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-500/40'
+                  : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700'
               }`}
               onClick={() => {
                 setActiveTab('employers');
@@ -215,8 +215,8 @@ const Reviews: React.FC = () => {
             <button
               className={`px-4 py-2.5 text-sm font-medium rounded-lg transition-colors ${
                 activeTab === 'agents'
-                  ? 'bg-green-50 text-green-700 border border-green-200'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                  ? 'bg-green-50 dark:bg-green-500/20 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-500/40'
+                  : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700'
               }`}
               onClick={() => {
                 setActiveTab('agents');
@@ -228,8 +228,8 @@ const Reviews: React.FC = () => {
             <button
               className={`px-4 py-2.5 text-sm font-medium rounded-lg transition-colors ${
                 activeTab === 'employees'
-                  ? 'bg-green-50 text-green-700 border border-green-200'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                  ? 'bg-green-50 dark:bg-green-500/20 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-500/40'
+                  : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700'
               }`}
               onClick={() => {
                 setActiveTab('employees');
@@ -253,7 +253,7 @@ const Reviews: React.FC = () => {
                   placeholder="Search reviews..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
+                  className="w-full pl-10 pr-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
                 />
               </div>
 
@@ -267,7 +267,7 @@ const Reviews: React.FC = () => {
                       e.target.value === '' ? '' : Number(e.target.value)
                     )
                   }
-                  className="pl-10 pr-8 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm appearance-none bg-white"
+                  className="pl-10 pr-8 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm appearance-none bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
                 >
                   <option value="">All Ratings</option>
                   <option value={5}>5 Stars</option>
@@ -282,7 +282,7 @@ const Reviews: React.FC = () => {
               {hasActiveFilters && (
                 <button
                   onClick={clearFilters}
-                  className="px-4 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors flex items-center gap-2"
+                  className="px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors flex items-center gap-2"
                 >
                   <X className="w-4 h-4" />
                   Clear Filters
@@ -292,12 +292,12 @@ const Reviews: React.FC = () => {
 
             {/* Results Count and Average Rating */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-gray-600 dark:text-gray-300">
                 Showing {reviews.length} review{reviews.length !== 1 ? 's' : ''}
               </div>
               {reviews.length > 0 && (
                 <div className="flex items-center gap-2">
-                  <span className="text-lg font-semibold text-gray-900">
+                  <span className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                     {averageRating}
                   </span>
                   <div className="flex items-center gap-0.5">
@@ -315,7 +315,7 @@ const Reviews: React.FC = () => {
                       );
                     })}
                   </div>
-                  <span className="text-sm text-gray-500 ml-1">
+                  <span className="text-sm text-gray-500 dark:text-gray-400 ml-1">
                     Average Rating
                   </span>
                 </div>
@@ -331,14 +331,14 @@ const Reviews: React.FC = () => {
           ) : reviews.length === 0 ? (
             <div className="text-center py-12">
               <div className="flex flex-col items-center gap-3">
-                <MessageSquare className="w-12 h-12 text-gray-300" />
+                <MessageSquare className="w-12 h-12 text-gray-300 dark:text-gray-600" />
                 <div>
-                  <p className="font-medium text-gray-900">
+                  <p className="font-medium text-gray-900 dark:text-gray-100">
                     {hasActiveFilters
                       ? 'No reviews match your filters'
                       : 'No reviews available'}
                   </p>
-                  <p className="text-sm text-gray-500 mt-1">
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                     {hasActiveFilters
                       ? 'Try adjusting your search or filters'
                       : `No ${activeTab} reviews have been submitted yet`}
@@ -373,7 +373,7 @@ const Reviews: React.FC = () => {
               {/* Pagination */}
               {totalPages > 1 && (
                 <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-                  <div className="text-sm text-gray-700">
+                  <div className="text-sm text-gray-700 dark:text-gray-300">
                     Showing{' '}
                     <span className="font-medium">
                       {Math.min(

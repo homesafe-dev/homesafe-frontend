@@ -234,26 +234,26 @@ const AdminTrack = () => {
     <div className="p-0">
       {/* Header Section */}
       <div className="mb-6 sm:mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
           Track Employees
         </h1>
-        <p className="text-sm sm:text-base text-gray-500">
+        <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400">
           Manage and monitor all tracked employees
         </p>
       </div>
 
       {/* Search and Filters Section */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-4 sm:p-6 mb-6">
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm p-4 sm:p-6 mb-6">
         <div className="flex flex-col lg:flex-row gap-4">
           {/* Search Bar */}
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 w-5 h-5" />
             <input
               type="text"
               placeholder="Search by name, email, phone, or placement..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
+              className="w-full pl-10 pr-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
             />
           </div>
 
@@ -262,7 +262,7 @@ const AdminTrack = () => {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white"
+              className="px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
             >
               <option value="all">All Status</option>
               <option value="verified">Verified</option>
@@ -273,7 +273,7 @@ const AdminTrack = () => {
             <select
               value={blockedFilter}
               onChange={(e) => setBlockedFilter(e.target.value)}
-              className="px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white"
+              className="px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
             >
               <option value="all">All Users</option>
               <option value="active">Active</option>
@@ -284,7 +284,7 @@ const AdminTrack = () => {
             {hasActiveFilters && (
               <button
                 onClick={clearFilters}
-                className="px-4 py-2.5 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-sm flex items-center gap-2"
+                className="px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm flex items-center gap-2 text-gray-700 dark:text-gray-200"
               >
                 <X className="w-4 h-4" />
                 Clear
@@ -294,10 +294,10 @@ const AdminTrack = () => {
         </div>
 
         {/* Results Count */}
-        <div className="mt-4 pt-4 border-t border-gray-100">
-          <p className="text-sm text-gray-600">
+        <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
+          <p className="text-sm text-gray-600 dark:text-gray-300">
             Showing{' '}
-            <span className="font-semibold text-gray-900">
+            <span className="font-semibold text-gray-900 dark:text-gray-100">
               {filteredEmployees.length}
             </span>{' '}
             {filteredEmployees.length === 1 ? 'employee' : 'employees'}
@@ -308,74 +308,74 @@ const AdminTrack = () => {
 
       {/* Error Message */}
       {error && (
-        <div className="mb-4 p-4 bg-red-50 text-red-700 rounded-lg border border-red-200 text-sm">
+        <div className="mb-4 p-4 bg-red-50 dark:bg-red-500/10 text-red-700 dark:text-red-300 rounded-lg border border-red-200 dark:border-red-500/30 text-sm">
           {error}
         </div>
       )}
 
       {/* Table Section */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-100">
+            <thead className="bg-gray-50 dark:bg-slate-700 border-b border-gray-100 dark:border-slate-500">
               <tr>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-100 uppercase tracking-wider">
                   Candidate
                 </th>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-100 uppercase tracking-wider">
                   Date
                 </th>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-100 uppercase tracking-wider">
                   Placement
                 </th>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-100 uppercase tracking-wider">
                   Gender
                 </th>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-100 uppercase tracking-wider">
                   Phone
                 </th>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-100 uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-100 uppercase tracking-wider">
                   Blocked
                 </th>
-                <th className="px-4 sm:px-6 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                <th className="px-4 sm:px-6 py-3 text-right text-xs font-semibold text-gray-600 dark:text-gray-100 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-100">
+            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700">
               {isLoading ? (
                 // Loading state
                 [...Array(5)].map((_, index) => (
                   <tr key={index} className="animate-pulse">
                     <td className="px-4 sm:px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-gray-200 rounded-full"></div>
-                        <div className="h-4 bg-gray-200 rounded w-32"></div>
+                        <div className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+                        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-32"></div>
                       </div>
                     </td>
                     <td className="px-4 sm:px-6 py-4">
-                      <div className="h-4 bg-gray-200 rounded w-24"></div>
+                      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24"></div>
                     </td>
                     <td className="px-4 sm:px-6 py-4">
-                      <div className="h-4 bg-gray-200 rounded w-32"></div>
+                      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-32"></div>
                     </td>
                     <td className="px-4 sm:px-6 py-4">
-                      <div className="h-4 bg-gray-200 rounded w-16"></div>
+                      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-16"></div>
                     </td>
                     <td className="px-4 sm:px-6 py-4">
-                      <div className="h-4 bg-gray-200 rounded w-24"></div>
+                      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24"></div>
                     </td>
                     <td className="px-4 sm:px-6 py-4">
-                      <div className="h-6 bg-gray-200 rounded-full w-20"></div>
+                      <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded-full w-20"></div>
                     </td>
                     <td className="px-4 sm:px-6 py-4">
-                      <div className="h-6 bg-gray-200 rounded-full w-20"></div>
+                      <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded-full w-20"></div>
                     </td>
                     <td className="px-4 sm:px-6 py-4 text-right">
-                      <div className="h-4 bg-gray-200 rounded w-4 ml-auto"></div>
+                      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-4 ml-auto"></div>
                     </td>
                   </tr>
                 ))
@@ -384,13 +384,13 @@ const AdminTrack = () => {
                 <tr>
                   <td colSpan={8} className="px-4 sm:px-6 py-12 text-center">
                     <div className="flex flex-col items-center justify-center">
-                      <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                        <Users className="w-8 h-8 text-gray-400" />
+                      <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mb-4">
+                        <Users className="w-8 h-8 text-gray-400 dark:text-gray-500" />
                       </div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
                         No employees found
                       </h3>
-                      <p className="text-sm text-gray-500 mb-4">
+                      <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
                         {hasActiveFilters
                           ? 'Try adjusting your filters or search query'
                           : 'No employees have been tracked yet'}
@@ -411,10 +411,7 @@ const AdminTrack = () => {
                 getPaginatedEmployees().map((employee) => {
                   const status = getEmployeeStatus(employee);
                   return (
-                    <tr
-                      key={employee.id}
-                      className="hover:bg-gray-50 transition-colors"
-                    >
+                    <tr key={employee.id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                       <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-3">
                           <Avatar
@@ -429,35 +426,35 @@ const AdminTrack = () => {
                             showStatus={false}
                           />
                           <div>
-                            <div className="text-sm font-medium text-gray-900">
+                            <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
                               {employee.candidate || 'Unknown Candidate'}
                             </div>
                             {employee.email && (
-                              <div className="text-xs text-gray-500">
+                              <div className="text-xs text-gray-500 dark:text-gray-400">
                                 {employee.email}
                               </div>
                             )}
                           </div>
                         </div>
                       </td>
-                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
                         {new Date(employee.date).toLocaleDateString('en-US', {
                           day: 'numeric',
                           month: 'short',
                           year: 'numeric',
                         })}
                       </td>
-                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
                         {employee.placement || (
-                          <span className="text-gray-400">No placement</span>
+                          <span className="text-gray-400 dark:text-gray-500">No placement</span>
                         )}
                       </td>
-                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
                         {formatGender(employee.gender)}
                       </td>
-                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
                         {employee.phone || (
-                          <span className="text-gray-400">N/A</span>
+                          <span className="text-gray-400 dark:text-gray-500">N/A</span>
                         )}
                       </td>
                       <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
@@ -482,13 +479,13 @@ const AdminTrack = () => {
                         <div className="relative" ref={dropdownRef}>
                           <button
                             onClick={() => toggleOptions(employee.id)}
-                            className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                            className="p-1.5 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-lg transition-colors"
                           >
                             <MoreVertical className="w-5 h-5" />
                           </button>
 
                           {showOptionsFor === employee.id && (
-                            <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 py-1 z-50">
+                            <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-100 dark:border-gray-700 py-1 z-50">
                               <button
                                 onClick={() => {
                                   setShowOptionsFor(null);
@@ -496,7 +493,7 @@ const AdminTrack = () => {
                                     `/admin/candidate-profile/${employee.id}`
                                   );
                                 }}
-                                className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                                className="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                               >
                                 <User className="w-4 h-4 mr-3" />
                                 View Profile
@@ -504,7 +501,7 @@ const AdminTrack = () => {
                               {employee.is_blocked ? (
                                 <button
                                   onClick={() => handleUnblockUser(employee.id)}
-                                  className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                                  className="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                                 >
                                   <Shield className="w-4 h-4 mr-3 text-green-600" />
                                   <span className="text-green-600">
@@ -514,7 +511,7 @@ const AdminTrack = () => {
                               ) : (
                                 <button
                                   onClick={() => handleBlockUser(employee.id)}
-                                  className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                                  className="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                                 >
                                   <ShieldOff className="w-4 h-4 mr-3 text-red-600" />
                                   <span className="text-red-600">
@@ -536,8 +533,8 @@ const AdminTrack = () => {
 
         {/* Pagination */}
         {!isLoading && filteredEmployees.length > 0 && totalPages > 1 && (
-          <div className="px-4 sm:px-6 py-4 border-t border-gray-100 flex items-center justify-between">
-            <div className="text-sm text-gray-600">
+          <div className="px-4 sm:px-6 py-4 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between">
+            <div className="text-sm text-gray-600 dark:text-gray-300">
               Showing{' '}
               <span className="font-medium">
                 {(currentPage - 1) * itemsPerPage + 1}
@@ -553,7 +550,7 @@ const AdminTrack = () => {
               <button
                 onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
                 disabled={currentPage === 1}
-                className="p-2 border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="p-2 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-gray-700 dark:text-gray-200"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
@@ -572,7 +569,7 @@ const AdminTrack = () => {
                         className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
                           currentPage === page
                             ? 'bg-green-600 text-white'
-                            : 'border border-gray-200 hover:bg-gray-50'
+                            : 'border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200'
                         }`}
                       >
                         {page}
@@ -583,7 +580,7 @@ const AdminTrack = () => {
                     page === currentPage + 2
                   ) {
                     return (
-                      <span key={page} className="px-2 text-gray-400">
+                      <span key={page} className="px-2 text-gray-400 dark:text-gray-500">
                         ...
                       </span>
                     );
@@ -596,7 +593,7 @@ const AdminTrack = () => {
                   setCurrentPage((prev) => Math.min(totalPages, prev + 1))
                 }
                 disabled={currentPage === totalPages}
-                className="p-2 border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="p-2 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-gray-700 dark:text-gray-200"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>

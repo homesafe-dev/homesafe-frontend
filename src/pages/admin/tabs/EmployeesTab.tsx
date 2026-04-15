@@ -148,30 +148,30 @@ export default function EmployeesTab() {
   return (
     <div className="overflow-x-auto">
       <table className="w-full">
-        <thead className="bg-[#C8EDDF80] h-[56px] text-left">
+        <thead className="bg-[#C8EDDF80] dark:bg-gray-800 h-[56px] text-left border-b border-transparent dark:border-gray-700">
           <tr>
-            <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
+            <th className="px-6 py-3 text-[13px] text-[#174B35] dark:text-gray-200 font-normal">
               Full Name
             </th>
-            <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
+            <th className="px-6 py-3 text-[13px] text-[#174B35] dark:text-gray-200 font-normal">
               Date
             </th>
-            <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
+            <th className="px-6 py-3 text-[13px] text-[#174B35] dark:text-gray-200 font-normal">
               Placement
             </th>
-            <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
+            <th className="px-6 py-3 text-[13px] text-[#174B35] dark:text-gray-200 font-normal">
               Gender
             </th>
-            <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
+            <th className="px-6 py-3 text-[13px] text-[#174B35] dark:text-gray-200 font-normal">
               Phone Number
             </th>
-            <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal">
+            <th className="px-6 py-3 text-[13px] text-[#174B35] dark:text-gray-200 font-normal">
               Status
             </th>
-            <th className="px-6 py-3 text-[13px] text-[#174B35] font-normal"></th>
+            <th className="px-6 py-3 text-[13px] text-[#174B35] dark:text-gray-200 font-normal"></th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-200">
+        <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
           {isLoading ? (
             // Loading state - show skeleton rows
             [...Array(3)].map((_, index) => (
