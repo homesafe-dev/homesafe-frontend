@@ -166,10 +166,10 @@ const ProfilePage: React.FC = () => {
     <div className="p-0">
       {/* Header Section */}
       <div className="mb-6 sm:mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
           Profile Settings
         </h1>
-        <p className="text-sm sm:text-base text-gray-600">
+        <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
           Manage your personal information and profile details
         </p>
       </div>
@@ -179,7 +179,7 @@ const ProfilePage: React.FC = () => {
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
         </div>
       ) : (
-        <div className="bg-white rounded-lg shadow-sm border border-gray-100">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100">
           <form onSubmit={handleSubmit}>
             {/* Profile Image Section */}
             <div className="p-6 sm:p-8 border-b border-gray-100">
@@ -223,7 +223,7 @@ const ProfilePage: React.FC = () => {
                     <button
                       type="button"
                       onClick={handleDeleteImage}
-                      className="px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
+                      className="px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors flex items-center justify-center gap-2"
                     >
                       <Trash2 className="w-4 h-4" />
                       Remove Image
@@ -245,7 +245,7 @@ const ProfilePage: React.FC = () => {
                 <div>
                   <label
                     htmlFor="firstName"
-                    className="block text-sm font-medium text-gray-700 mb-2"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                   >
                     First Name
                   </label>
@@ -256,14 +256,14 @@ const ProfilePage: React.FC = () => {
                     placeholder="e.g. John"
                     value={formData.firstName}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 placeholder-gray-400"
+                    className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400"
                   />
                 </div>
 
                 <div>
                   <label
                     htmlFor="lastName"
-                    className="block text-sm font-medium text-gray-700 mb-2"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                   >
                     Last Name
                   </label>
@@ -274,14 +274,14 @@ const ProfilePage: React.FC = () => {
                     placeholder="e.g. Doe"
                     value={formData.lastName}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 placeholder-gray-400"
+                    className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400"
                   />
                 </div>
 
                 <div>
                   <label
                     htmlFor="phoneNumber"
-                    className="block text-sm font-medium text-gray-700 mb-2"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                   >
                     Phone Number
                   </label>
@@ -292,14 +292,14 @@ const ProfilePage: React.FC = () => {
                     placeholder="e.g. 08012345678"
                     value={formData.phoneNumber}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 placeholder-gray-400"
+                    className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400"
                   />
                 </div>
 
                 <div>
                   <label
                     htmlFor="email"
-                    className="block text-sm font-medium text-gray-700 mb-2"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                   >
                     Email
                   </label>
@@ -310,14 +310,14 @@ const ProfilePage: React.FC = () => {
                     placeholder="example@gmail.com"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 placeholder-gray-400"
+                    className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400"
                   />
                 </div>
 
                 <div>
                   <label
                     htmlFor="gender"
-                    className="block text-sm font-medium text-gray-700 mb-2"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                   >
                     Gender
                   </label>
@@ -326,7 +326,7 @@ const ProfilePage: React.FC = () => {
                     name="gender"
                     value={formData.gender}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 appearance-none bg-white"
+                    className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 dark:text-gray-100 appearance-none bg-white dark:bg-gray-800"
                   >
                     <option value="">Select Gender</option>
                     <option value="male">Male</option>
@@ -338,7 +338,7 @@ const ProfilePage: React.FC = () => {
                 <div>
                   <label
                     htmlFor="dob"
-                    className="block text-sm font-medium text-gray-700 mb-2"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                   >
                     Date of Birth
                   </label>
@@ -348,14 +348,14 @@ const ProfilePage: React.FC = () => {
                     name="dob"
                     value={formData.dob}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
+                    className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 dark:text-gray-100"
                   />
                 </div>
 
                 <div className="md:col-span-2">
                   <label
                     htmlFor="address"
-                    className="block text-sm font-medium text-gray-700 mb-2"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                   >
                     Address
                   </label>
@@ -366,14 +366,14 @@ const ProfilePage: React.FC = () => {
                     placeholder="Your address"
                     value={formData.address}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 placeholder-gray-400"
+                    className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400"
                   />
                 </div>
 
                 <div className="md:col-span-2">
                   <label
                     htmlFor="profileDescription"
-                    className="block text-sm font-medium text-gray-700 mb-2"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                   >
                     Profile Description
                   </label>
@@ -384,7 +384,7 @@ const ProfilePage: React.FC = () => {
                     value={formData.profileDescription}
                     onChange={handleInputChange}
                     rows={4}
-                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 placeholder-gray-400 resize-none"
+                    className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400 resize-none"
                   />
                 </div>
               </div>

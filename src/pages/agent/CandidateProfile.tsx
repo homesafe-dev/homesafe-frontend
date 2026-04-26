@@ -279,7 +279,7 @@ const CandidateProfile: React.FC = () => {
   if (error || !employee) {
     return (
       <div className="p-6">
-        <div className="text-center py-8 text-gray-500">
+        <div className="text-center py-8 text-gray-500 dark:text-gray-400">
           Failed to load employee details
         </div>
         <Toast
@@ -357,13 +357,13 @@ const CandidateProfile: React.FC = () => {
       <div className="space-y-4">
         <button
           onClick={goBack}
-          className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 transition-colors"
+          className="inline-flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-gray-100 transition-colors"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Candidates
         </button>
 
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-6">
           <div className="flex items-start gap-4">
             <div className="w-12 h-12 rounded-xl bg-green-50 text-green-600 flex items-center justify-center">
               <Users className="w-6 h-6" />
@@ -372,10 +372,10 @@ const CandidateProfile: React.FC = () => {
               <p className="text-xs uppercase tracking-wide text-gray-400">
                 Candidate Profile
               </p>
-              <h1 className="text-2xl font-bold text-gray-900">
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                 {candidateName}
               </h1>
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                 Comprehensive overview of placement, health, learning, and
                 performance data
               </p>
@@ -410,7 +410,7 @@ const CandidateProfile: React.FC = () => {
         {quickStats.map(({ label, value, subValue, icon: Icon, iconClass }) => (
           <div
             key={label}
-            className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-4"
+            className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-4"
           >
             <div
               className={`w-12 h-12 rounded-xl flex items-center justify-center ${iconClass}`}
@@ -421,9 +421,13 @@ const CandidateProfile: React.FC = () => {
               <p className="text-xs uppercase tracking-wide text-gray-400">
                 {label}
               </p>
-              <p className="text-lg font-semibold text-gray-900">{value}</p>
+              <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                {value}
+              </p>
               {subValue && (
-                <p className="text-xs text-gray-500 mt-0.5">{subValue}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                  {subValue}
+                </p>
               )}
             </div>
           </div>
@@ -432,7 +436,7 @@ const CandidateProfile: React.FC = () => {
 
       <div className="flex flex-col lg:flex-row gap-6">
         <div className="w-full lg:w-1/3 space-y-6">
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-6">
             <CandidateProfileAbout
               name={employee.candidate}
               location={placementDisplay}
@@ -450,19 +454,19 @@ const CandidateProfile: React.FC = () => {
             />
           </div>
 
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h3 className="text-base font-semibold text-gray-900">
+                <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100">
                   Assigned Employers
                 </h3>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   {employerCount > 0
                     ? 'Employers currently connected to this candidate'
                     : 'No employers assigned yet'}
                 </p>
               </div>
-              <span className="inline-flex items-center gap-1 text-sm font-medium text-gray-600">
+              <span className="inline-flex items-center gap-1 text-sm font-medium text-gray-600 dark:text-gray-400">
                 <Building2 className="w-4 h-4 text-gray-400" />
                 {employerCount}
               </span>
@@ -474,16 +478,16 @@ const CandidateProfile: React.FC = () => {
                     key={employer.id}
                     className="p-3 rounded-xl border border-gray-100 bg-gray-50 flex flex-col gap-1"
                   >
-                    <span className="text-sm font-semibold text-gray-900">
+                    <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                       {employer.name}
                     </span>
-                    <span className="text-xs text-gray-500">
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
                       Employer ID: {employer.id}
                     </span>
                   </div>
                 ))
               ) : (
-                <div className="text-sm text-gray-500">
+                <div className="text-sm text-gray-500 dark:text-gray-400">
                   Once you suggest the candidate to an employer, their details
                   will appear here.
                 </div>
@@ -491,8 +495,8 @@ const CandidateProfile: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-6">
-            <h3 className="text-base font-semibold text-gray-900 mb-3">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-6">
+            <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-3">
               Performance Snapshot
             </h3>
             <div className="flex items-center gap-3">
@@ -500,8 +504,10 @@ const CandidateProfile: React.FC = () => {
                 {averageRating}
               </div>
               <div>
-                <p className="text-sm text-gray-500">Average Rating</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Average Rating
+                </p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                   {averageRating}
                   <span className="text-sm font-medium text-gray-400 ml-1">
                     ({reviewCount} reviews)
@@ -521,7 +527,7 @@ const CandidateProfile: React.FC = () => {
                 className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-colors border ${
                   activeTab === tab.id
                     ? 'bg-green-600 text-white border-green-600'
-                    : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+                    : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/50'
                 }`}
               >
                 {tab.label}
@@ -529,7 +535,7 @@ const CandidateProfile: React.FC = () => {
             ))}
           </div>
 
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-6">
             {activeTab === 'medical' && (
               <CandidateMedicHistory
                 medicalFiles={employee.user_medicals}
@@ -571,19 +577,19 @@ const CandidateProfile: React.FC = () => {
             className="absolute inset-0 bg-black/40 backdrop-blur-sm"
             onClick={() => setIsAssignModalOpen(false)}
           />
-          <div className="relative bg-white rounded-2xl w-full max-w-lg border border-gray-100 shadow-2xl p-6 sm:p-8 space-y-6">
+          <div className="relative bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg border border-gray-100 shadow-2xl p-6 sm:p-8 space-y-6">
             <div className="flex items-start justify-between">
               <div>
-                <h2 className="text-xl font-semibold text-gray-900">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
                   Suggest to Employer
                 </h2>
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                   Connect {candidateName} with a potential employer
                 </p>
               </div>
               <button
                 onClick={() => setIsAssignModalOpen(false)}
-                className="p-2 rounded-full hover:bg-gray-100 text-gray-500"
+                className="p-2 rounded-full hover:bg-gray-100 text-gray-500 dark:text-gray-400"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -591,7 +597,7 @@ const CandidateProfile: React.FC = () => {
 
             <div className="space-y-5">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Search Employer
                 </label>
                 <div className="relative">
@@ -599,7 +605,7 @@ const CandidateProfile: React.FC = () => {
                   <input
                     type="text"
                     placeholder="Search employers"
-                    className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
+                    className="w-full pl-9 pr-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
@@ -607,17 +613,17 @@ const CandidateProfile: React.FC = () => {
                     <div className="mt-3 p-3 rounded-lg border border-gray-100 bg-gray-50 relative">
                       <button
                         type="button"
-                        className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
+                        className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 dark:text-gray-400"
                         onClick={() => setSelectedEmployer(null)}
                       >
                         <X className="w-4 h-4" />
                       </button>
-                      <div className="font-semibold text-gray-900 pr-6">
+                      <div className="font-semibold text-gray-900 dark:text-gray-100 pr-6">
                         {selectedEmployer.first_name}{' '}
                         {selectedEmployer.last_name}
                       </div>
                       {selectedEmployer.company_name && (
-                        <div className="text-sm text-gray-500">
+                        <div className="text-sm text-gray-500 dark:text-gray-400">
                           {selectedEmployer.company_name}
                         </div>
                       )}
@@ -628,23 +634,23 @@ const CandidateProfile: React.FC = () => {
                   )}
 
                   {searchQuery && !selectedEmployer && (
-                    <div className="absolute z-20 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-lg max-h-64 overflow-auto">
+                    <div className="absolute z-20 w-full mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg max-h-64 overflow-auto">
                       {isLoadingEmployers ? (
-                        <div className="p-4 text-center text-sm text-gray-500">
+                        <div className="p-4 text-center text-sm text-gray-500 dark:text-gray-400">
                           Loading employers...
                         </div>
                       ) : filteredEmployers.length > 0 ? (
                         filteredEmployers.map((employer) => (
                           <button
                             key={employer.id}
-                            className="w-full text-left px-4 py-3 hover:bg-gray-50 transition-colors"
+                            className="w-full text-left px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
                             onClick={() => handleEmployerSelect(employer)}
                           >
-                            <div className="font-medium text-gray-900">
+                            <div className="font-medium text-gray-900 dark:text-gray-100">
                               {employer.first_name} {employer.last_name}
                             </div>
                             {employer.company_name && (
-                              <div className="text-sm text-gray-500">
+                              <div className="text-sm text-gray-500 dark:text-gray-400">
                                 {employer.company_name}
                               </div>
                             )}
@@ -654,7 +660,7 @@ const CandidateProfile: React.FC = () => {
                           </button>
                         ))
                       ) : (
-                        <div className="p-4 text-center text-sm text-gray-500">
+                        <div className="p-4 text-center text-sm text-gray-500 dark:text-gray-400">
                           No employers found matching your search
                         </div>
                       )}
@@ -664,12 +670,12 @@ const CandidateProfile: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Suggestion Reason
                 </label>
                 <textarea
                   placeholder="Explain why you're suggesting this candidate to the employer..."
-                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm resize-none"
+                  className="w-full px-4 py-3 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm resize-none"
                   rows={3}
                   value={suggestionReason}
                   onChange={(e) => setSuggestionReason(e.target.value)}
@@ -680,7 +686,7 @@ const CandidateProfile: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsAssignModalOpen(false)}
-                  className="flex-1 px-4 py-2.5 border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="flex-1 px-4 py-2.5 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
                 >
                   Cancel
                 </button>

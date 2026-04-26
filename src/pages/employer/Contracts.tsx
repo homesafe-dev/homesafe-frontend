@@ -119,12 +119,12 @@ const ContractCard: React.FC<ContractCardProps> = ({ proposal, imageUrl }) => {
       case 'rejected':
         return 'bg-red-50 text-red-700 border-red-200';
       default:
-        return 'bg-gray-50 text-gray-700 border-gray-200';
+        return 'bg-gray-50 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700';
     }
   };
 
   return (
-    <div className="bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-all overflow-hidden">
+    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-all overflow-hidden">
       <div className="relative">
         <img
           src={imageUrl}
@@ -141,17 +141,17 @@ const ContractCard: React.FC<ContractCardProps> = ({ proposal, imageUrl }) => {
       <div className="p-4 sm:p-5">
         <div className="flex items-center gap-2 mb-2">
           <User className="w-4 h-4 text-gray-400" />
-          <h3 className="font-semibold text-base text-gray-900 truncate">
+          <h3 className="font-semibold text-base text-gray-900 dark:text-gray-100 truncate">
             {employeeName}
           </h3>
         </div>
 
-        <div className="flex items-center gap-2 mb-3 text-sm text-gray-600">
+        <div className="flex items-center gap-2 mb-3 text-sm text-gray-600 dark:text-gray-400">
           <Briefcase className="w-4 h-4 text-gray-400" />
           <span className="truncate">{position}</span>
         </div>
 
-        <div className="flex items-center gap-2 mb-3 text-xs text-gray-500">
+        <div className="flex items-center gap-2 mb-3 text-xs text-gray-500 dark:text-gray-400">
           <Calendar className="w-3 h-3 text-gray-400" />
           <span>{formattedDate}</span>
         </div>
@@ -174,7 +174,7 @@ const ContractCard: React.FC<ContractCardProps> = ({ proposal, imageUrl }) => {
             <Eye className="w-4 h-4" />
             View Details
           </button>
-          <button className="flex items-center justify-center gap-2 border border-gray-300 text-gray-700 hover:bg-gray-50 text-sm font-medium py-2 px-4 rounded-lg transition-colors">
+          <button className="flex items-center justify-center gap-2 border border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 text-sm font-medium py-2 px-4 rounded-lg transition-colors">
             <Download className="w-4 h-4" />
             <span className="hidden sm:inline">Download</span>
             <span className="sm:hidden">PDF</span>
@@ -263,17 +263,17 @@ const ContractsPage: React.FC<ContractsPageProps> = ({
           <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
             <FileText className="w-4 h-4 text-blue-600" />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">
             {title}
           </h1>
         </div>
-        <p className="text-sm sm:text-base text-gray-600">
+        <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
           Manage and track all your employment contracts
         </p>
       </div>
 
       {/* Main Content */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-100">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100">
         {/* Search Section */}
         <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-gray-100">
           <div className="flex flex-col sm:flex-row gap-4">
@@ -282,7 +282,7 @@ const ContractsPage: React.FC<ContractsPageProps> = ({
               <input
                 type="text"
                 placeholder="Search by name, position, status..."
-                className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
+                className="w-full pl-10 pr-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -291,7 +291,7 @@ const ContractsPage: React.FC<ContractsPageProps> = ({
 
           {/* Results Count */}
           {!loading && !error && (
-            <div className="text-sm text-gray-600 mt-4">
+            <div className="text-sm text-gray-600 dark:text-gray-400 mt-4">
               Showing {filteredProposals.length} of {proposals.length} contract
               {proposals.length !== 1 ? 's' : ''}
             </div>
@@ -317,12 +317,12 @@ const ContractsPage: React.FC<ContractsPageProps> = ({
                   <FileText className="w-8 h-8 text-gray-400" />
                 </div>
                 <div>
-                  <p className="text-lg font-semibold text-gray-900 mb-1">
+                  <p className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-1">
                     {searchTerm
                       ? 'No contracts found'
                       : 'No contract proposals found'}
                   </p>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
                     {searchTerm
                       ? 'Try adjusting your search criteria'
                       : 'Contract proposals will appear here once created'}

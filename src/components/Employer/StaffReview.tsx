@@ -120,12 +120,12 @@ const StaffReview: React.FC<StaffReviewProps> = ({
             className="w-16 h-16 sm:w-auto sm:h-auto"
           />
         </div>
-        <h3 className="font-medium text-gray-700 mb-1 text-sm sm:text-base">
+        <h3 className="font-medium text-gray-700 dark:text-gray-300 mb-1 text-sm sm:text-base">
           No Reviews Yet
         </h3>
-        <p className="text-xs sm:text-sm text-gray-500 text-center">
+        <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 text-center">
           <button
-            className="font-semibold hover:text-gray-700 transition-colors"
+            className="font-semibold hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
             onClick={handleOpenReviewModal}
           >
             Click Here
@@ -147,12 +147,12 @@ const StaffReview: React.FC<StaffReviewProps> = ({
   return (
     <div className="space-y-3 sm:space-y-4 p-2 sm:p-0">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-3 sm:mb-4 gap-3">
-        <h3 className="text-base sm:text-lg font-semibold text-gray-800">
+        <h3 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-200">
           Reviews for {employeeName}
         </h3>
         <button
           onClick={handleOpenReviewModal}
-          className="bg-green-300 text-black px-3 sm:px-4 py-2 rounded-md hover:bg-green-400 transition-colors text-sm sm:text-base w-full sm:w-auto"
+          className="bg-green-300 text-gray-900 dark:text-gray-100 px-3 sm:px-4 py-2 rounded-md hover:bg-green-400 transition-colors text-sm sm:text-base w-full sm:w-auto"
         >
           Add Review
         </button>
@@ -161,16 +161,16 @@ const StaffReview: React.FC<StaffReviewProps> = ({
       {reviews.map((review) => (
         <div
           key={review.id}
-          className="bg-white border border-gray-200 rounded-lg p-3 sm:p-4"
+          className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3 sm:p-4"
         >
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2 gap-2">
             <div className="flex items-center space-x-2">
               <div className="flex">{renderStars(review.rating)}</div>
-              <span className="text-xs sm:text-sm text-gray-600">
+              <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                 ({review.rating}/5)
               </span>
             </div>
-            <span className="text-xs sm:text-sm text-gray-500">
+            <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
               {new Date(review.created_at).toLocaleDateString('en-GB', {
                 day: 'numeric',
                 month: 'long',
@@ -180,13 +180,13 @@ const StaffReview: React.FC<StaffReviewProps> = ({
           </div>
 
           {review.comment && (
-            <p className="text-gray-700 text-xs sm:text-sm leading-relaxed">
+            <p className="text-gray-700 dark:text-gray-300 text-xs sm:text-sm leading-relaxed">
               {review.comment}
             </p>
           )}
 
           {(review.reviewer || review.reviewer_name) && (
-            <div className="flex items-center mt-2 sm:mt-3 pt-2 border-t border-gray-100">
+            <div className="flex items-center mt-2 sm:mt-3 pt-2 border-t border-gray-200 dark:border-gray-700">
               {review.reviewer?.avatar && (
                 <img
                   src={review.reviewer.avatar}
@@ -194,7 +194,7 @@ const StaffReview: React.FC<StaffReviewProps> = ({
                   className="w-5 h-5 sm:w-6 sm:h-6 rounded-full object-cover mr-2"
                 />
               )}
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-gray-500 dark:text-gray-400">
                 Reviewed by{' '}
                 {review.reviewer
                   ? `${review.reviewer.first_name} ${review.reviewer.last_name}`

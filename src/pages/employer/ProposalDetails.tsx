@@ -208,9 +208,11 @@ const EmployerProposalDetailsPage: React.FC = () => {
   if (!proposalData) {
     return (
       <div className="p-0">
-        <div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm text-center">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 border border-gray-100 shadow-sm text-center">
           <FileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-          <p className="text-gray-500 font-medium">No proposal data found.</p>
+          <p className="text-gray-500 dark:text-gray-400 font-medium">
+            No proposal data found.
+          </p>
         </div>
       </div>
     );
@@ -236,7 +238,7 @@ const EmployerProposalDetailsPage: React.FC = () => {
       <div className="mb-6 sm:mb-8">
         <button
           onClick={() => navigate('/employer/contracts')}
-          className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4 sm:mb-6 transition-colors"
+          className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-gray-100 mb-4 sm:mb-6 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span className="text-sm font-medium">Back to Contracts</span>
@@ -246,10 +248,10 @@ const EmployerProposalDetailsPage: React.FC = () => {
             <FileText className="w-4 h-4 text-blue-600" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">
               Contract Proposal
             </h1>
-            <p className="text-sm sm:text-base text-gray-500 mt-1">
+            <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 mt-1">
               Review proposal details for {employeeName}
             </p>
           </div>
@@ -259,7 +261,7 @@ const EmployerProposalDetailsPage: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Employee Profile Card */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 shadow-sm">
             <div className="flex flex-col items-center">
               {/* Profile Image */}
               <div className="mb-4">
@@ -274,7 +276,7 @@ const EmployerProposalDetailsPage: React.FC = () => {
               </div>
 
               {/* Name */}
-              <h2 className="text-xl font-bold text-gray-900 mb-2">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
                 {employeeName}
               </h2>
 
@@ -296,7 +298,7 @@ const EmployerProposalDetailsPage: React.FC = () => {
                     }`}
                   />
                 ))}
-                <span className="ml-2 text-sm text-gray-600">
+                <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">
                   {rating.toFixed(1)}
                 </span>
               </div>
@@ -308,8 +310,10 @@ const EmployerProposalDetailsPage: React.FC = () => {
                     <Phone className="w-4 h-4 text-blue-600" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs text-gray-500 mb-0.5">Phone</p>
-                    <p className="text-sm font-medium text-gray-900 truncate">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-0.5">
+                      Phone
+                    </p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
                       {employee.phone}
                     </p>
                   </div>
@@ -320,8 +324,10 @@ const EmployerProposalDetailsPage: React.FC = () => {
                     <Mail className="w-4 h-4 text-green-600" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs text-gray-500 mb-0.5">Email</p>
-                    <p className="text-sm font-medium text-gray-900 truncate">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-0.5">
+                      Email
+                    </p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
                       {employee.email}
                     </p>
                   </div>
@@ -330,11 +336,11 @@ const EmployerProposalDetailsPage: React.FC = () => {
 
               {/* About Section */}
               <div className="w-full mt-6 pt-6 border-t border-gray-100">
-                <h3 className="text-sm font-semibold text-gray-900 mb-2 flex items-center gap-2">
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2 flex items-center gap-2">
                   <User className="w-4 h-4 text-gray-400" />
                   About
                 </h3>
-                <p className="text-sm text-gray-600 leading-relaxed">
+                <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                   Meet {employee.first_name}, a dedicated professional with
                   experience in {contract.position}. With a commitment to
                   excellence and reliability, {employee.first_name} brings
@@ -348,16 +354,16 @@ const EmployerProposalDetailsPage: React.FC = () => {
 
         {/* Contract Details Card */}
         <div className="lg:col-span-2">
-          <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 shadow-sm">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center">
                 <Briefcase className="w-4 h-4 text-indigo-600" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-gray-900">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                   Contract Details
                 </h2>
-                <p className="text-xs text-gray-500 mt-0.5">
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
                   Proposal information and terms
                 </p>
               </div>
@@ -367,11 +373,11 @@ const EmployerProposalDetailsPage: React.FC = () => {
               <div className="p-4 bg-gray-50 rounded-lg">
                 <div className="flex items-center gap-2 mb-2">
                   <Briefcase className="w-4 h-4 text-gray-400" />
-                  <span className="text-xs font-medium text-gray-500">
+                  <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
                     Position
                   </span>
                 </div>
-                <p className="text-sm font-semibold text-gray-900">
+                <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                   {contract.position || 'N/A'}
                 </p>
               </div>
@@ -379,11 +385,11 @@ const EmployerProposalDetailsPage: React.FC = () => {
               <div className="p-4 bg-gray-50 rounded-lg">
                 <div className="flex items-center gap-2 mb-2">
                   <Calendar className="w-4 h-4 text-gray-400" />
-                  <span className="text-xs font-medium text-gray-500">
+                  <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
                     Start Date
                   </span>
                 </div>
-                <p className="text-sm font-semibold text-gray-900">
+                <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                   {contract.start_date
                     ? format(new Date(contract.start_date), 'MMM dd, yyyy')
                     : 'N/A'}
@@ -393,11 +399,11 @@ const EmployerProposalDetailsPage: React.FC = () => {
               <div className="p-4 bg-gray-50 rounded-lg">
                 <div className="flex items-center gap-2 mb-2">
                   <Clock className="w-4 h-4 text-gray-400" />
-                  <span className="text-xs font-medium text-gray-500">
+                  <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
                     Duration
                   </span>
                 </div>
-                <p className="text-sm font-semibold text-gray-900">
+                <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                   {contract.duration_months ||
                     proposal.proposal_details.duration_months ||
                     0}{' '}
@@ -408,11 +414,11 @@ const EmployerProposalDetailsPage: React.FC = () => {
               <div className="p-4 bg-gray-50 rounded-lg">
                 <div className="flex items-center gap-2 mb-2">
                   <Clock className="w-4 h-4 text-gray-400" />
-                  <span className="text-xs font-medium text-gray-500">
+                  <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
                     Working Days/Month
                   </span>
                 </div>
-                <p className="text-sm font-semibold text-gray-900">
+                <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                   {contract.working_days_per_month ||
                     proposal.proposal_details.working_days_per_month ||
                     0}{' '}
@@ -423,11 +429,11 @@ const EmployerProposalDetailsPage: React.FC = () => {
               <div className="p-4 bg-gray-50 rounded-lg">
                 <div className="flex items-center gap-2 mb-2">
                   <Clock className="w-4 h-4 text-gray-400" />
-                  <span className="text-xs font-medium text-gray-500">
+                  <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
                     Working Hours/Week
                   </span>
                 </div>
-                <p className="text-sm font-semibold text-gray-900">
+                <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                   {contract.working_hours_per_week ||
                     proposal.proposal_details.working_hours_per_week ||
                     0}{' '}
@@ -438,7 +444,7 @@ const EmployerProposalDetailsPage: React.FC = () => {
               <div className="p-4 bg-gray-50 rounded-lg">
                 <div className="flex items-center gap-2 mb-2">
                   <FileText className="w-4 h-4 text-gray-400" />
-                  <span className="text-xs font-medium text-gray-500">
+                  <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
                     Status
                   </span>
                 </div>
@@ -448,7 +454,7 @@ const EmployerProposalDetailsPage: React.FC = () => {
                       ? 'bg-yellow-50 text-yellow-700 border border-yellow-200'
                       : contract.status?.toLowerCase() === 'active'
                         ? 'bg-green-50 text-green-700 border border-green-200'
-                        : 'bg-gray-50 text-gray-700 border border-gray-200'
+                        : 'bg-gray-50 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700'
                   }`}
                 >
                   {contract.status || proposal.status || 'Pending'}
@@ -515,19 +521,19 @@ const EmployerProposalDetailsPage: React.FC = () => {
       {/* Confirmation Dialog */}
       {showConfirmation && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-xl">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-md w-full shadow-xl">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center">
                 <Trash2 className="w-5 h-5 text-red-600" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                 Confirm Contract{' '}
                 {proposalData?.contract.status?.toLowerCase() === 'pending'
                   ? 'Cancellation'
                   : 'Termination'}
               </h3>
             </div>
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
               Are you sure you want to{' '}
               {proposalData?.contract.status?.toLowerCase() === 'pending'
                 ? 'cancel'
@@ -538,7 +544,7 @@ const EmployerProposalDetailsPage: React.FC = () => {
             <div className="flex gap-3">
               <button
                 onClick={() => setShowConfirmation(false)}
-                className="flex-1 px-4 py-2.5 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors font-medium flex items-center justify-center gap-2"
+                className="flex-1 px-4 py-2.5 text-gray-700 dark:text-gray-300 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors font-medium flex items-center justify-center gap-2"
               >
                 <X className="w-4 h-4" />
                 Cancel

@@ -282,7 +282,7 @@ export default function AgentsTab() {
           {hasActiveFilters && (
             <button
               onClick={clearFilters}
-              className="px-4 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors flex items-center gap-2"
+              className="px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors flex items-center gap-2"
             >
               <X className="w-4 h-4" />
               Clear Filters
@@ -291,7 +291,7 @@ export default function AgentsTab() {
         </div>
 
         {/* Results Count */}
-        <div className="text-sm text-gray-600">
+        <div className="text-sm text-gray-600 dark:text-gray-300">
           Showing {filteredAgents.length} of {agents.length} agents
         </div>
       </div>
@@ -304,25 +304,25 @@ export default function AgentsTab() {
               <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                 Agent
               </th>
-              <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+              <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                 Email
               </th>
-              <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+              <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                 Location
               </th>
-              <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+              <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                 Total Employees
               </th>
-              <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+              <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                 Phone
               </th>
-              <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+              <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                 Status
               </th>
-              <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+              <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                 Blocked
               </th>
-              <th className="px-4 sm:px-6 py-3 text-right text-xs font-semibold text-gray-700 uppercase tracking-wider">
+              <th className="px-4 sm:px-6 py-3 text-right text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                 Actions
               </th>
             </tr>
@@ -367,7 +367,7 @@ export default function AgentsTab() {
                 >
                   <div className="flex flex-col items-center gap-2">
                     <p className="font-medium">{error}</p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
                       Please try refreshing the page
                     </p>
                   </div>
@@ -378,12 +378,12 @@ export default function AgentsTab() {
               <tr>
                 <td
                   colSpan={8}
-                  className="px-4 sm:px-6 py-12 text-center text-gray-500"
+                  className="px-4 sm:px-6 py-12 text-center text-gray-500 dark:text-gray-400"
                 >
                   <div className="flex flex-col items-center gap-3">
                     <Users className="w-12 h-12 text-gray-300" />
                     <div>
-                      <p className="font-medium text-gray-900">
+                      <p className="font-medium text-gray-900 dark:text-gray-100">
                         {hasActiveFilters
                           ? 'No agents match your filters'
                           : 'No agents found'}
@@ -410,7 +410,7 @@ export default function AgentsTab() {
               getPaginatedAgents().map((agent) => (
                 <tr
                   key={agent.id}
-                  className="hover:bg-gray-50 transition-colors"
+                  className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                 >
                   <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center gap-3">
@@ -422,24 +422,24 @@ export default function AgentsTab() {
                         showStatus={false}
                       />
                       <div>
-                        <div className="text-sm font-medium text-gray-900">
+                        <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
                           {`${agent.first_name} ${agent.last_name}`}
                         </div>
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                     {agent.email || 'N/A'}
                   </td>
-                  <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                     {agent.address ? agent.address.split(',')[0] : 'Lagos'}
                   </td>
-                  <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                     {agent.total_employees !== undefined
                       ? agent.total_employees
                       : 'N/A'}
                   </td>
-                  <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                     {agent.phone || 'N/A'}
                   </td>
                   <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
@@ -476,20 +476,20 @@ export default function AgentsTab() {
                             showOptionsFor === agent.id ? null : agent.id
                           )
                         }
-                        className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                        className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-lg transition-colors"
                       >
                         <MoreVertical className="w-5 h-5" />
                       </button>
 
                       {showOptionsFor === agent.id && (
-                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 z-10">
+                        <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-100 dark:border-gray-700 z-10">
                           <div className="py-1">
                             <button
                               onClick={() => {
                                 navigate(`/admin/user/${agent.id}`);
                                 setShowOptionsFor(null);
                               }}
-                              className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                              className="w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-2"
                             >
                               <User className="w-4 h-4" />
                               View Profile
@@ -502,7 +502,7 @@ export default function AgentsTab() {
                                   handleBlockUser(agent.id);
                                 }
                               }}
-                              className={`w-full px-4 py-2 text-sm hover:bg-gray-50 flex items-center gap-2 ${
+                              className={`w-full px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-2 ${
                                 agent.is_blocked
                                   ? 'text-green-700'
                                   : 'text-red-700'
@@ -535,7 +535,7 @@ export default function AgentsTab() {
       {/* Pagination */}
       {!isLoading && !error && filteredAgents.length > 0 && (
         <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="text-sm text-gray-700">
+          <div className="text-sm text-gray-700 dark:text-gray-300">
             Showing{' '}
             <span className="font-medium">
               {Math.min(
@@ -558,7 +558,7 @@ export default function AgentsTab() {
               className={`p-2 rounded-lg border transition-colors ${
                 currentPage === 1
                   ? 'border-gray-200 text-gray-300 cursor-not-allowed'
-                  : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                  : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700'
               }`}
             >
               <ChevronLeft className="w-5 h-5" />
@@ -577,7 +577,7 @@ export default function AgentsTab() {
                     className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
                       currentPage === page
                         ? 'bg-green-600 text-white'
-                        : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
+                        : 'border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700'
                     }`}
                   >
                     {page}
@@ -585,7 +585,10 @@ export default function AgentsTab() {
                 );
               } else if (page === currentPage - 2 || page === currentPage + 2) {
                 return (
-                  <span key={page} className="px-2 text-gray-500">
+                  <span
+                    key={page}
+                    className="px-2 text-gray-500 dark:text-gray-400"
+                  >
                     ...
                   </span>
                 );
@@ -601,7 +604,7 @@ export default function AgentsTab() {
               className={`p-2 rounded-lg border transition-colors ${
                 currentPage === totalPages
                   ? 'border-gray-200 text-gray-300 cursor-not-allowed'
-                  : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                  : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700'
               }`}
             >
               <ChevronRight className="w-5 h-5" />
