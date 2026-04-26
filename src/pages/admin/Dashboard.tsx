@@ -193,6 +193,29 @@ export default function AdminDashboard() {
       registrations: item.count,
     })) || [];
 
+  const isDarkMode =
+    typeof document !== 'undefined' &&
+    document.documentElement.classList.contains('dark');
+  const chartTooltipContentStyle = {
+    backgroundColor: isDarkMode ? '#111827' : '#ffffff',
+    border: `1px solid ${isDarkMode ? '#374151' : '#e5e7eb'}`,
+    borderRadius: '12px',
+    fontSize: '12px',
+    color: isDarkMode ? '#e5e7eb' : '#111827',
+    boxShadow: isDarkMode
+      ? '0 10px 15px -3px rgb(0 0 0 / 0.35)'
+      : '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+  };
+  const chartTooltipLabelStyle = {
+    color: isDarkMode ? '#e5e7eb' : '#111827',
+  };
+  const chartTooltipItemStyle = {
+    color: isDarkMode ? '#e5e7eb' : '#111827',
+  };
+  const chartTooltipCursor = {
+    fill: isDarkMode ? 'rgba(148, 163, 184, 0.14)' : 'rgba(59, 130, 246, 0.08)',
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 sm:p-6 lg:p-8">
       {/* Welcome Section */}
@@ -277,7 +300,9 @@ export default function AdminDashboard() {
           <div className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-1">
             {formatCurrency(dashboardData.financial.total_wallet_balance)}
           </div>
-          <div className="text-xs text-gray-500 dark:text-gray-400">Platform total</div>
+          <div className="text-xs text-gray-500 dark:text-gray-400">
+            Platform total
+          </div>
         </div>
       </div>
 
@@ -293,7 +318,9 @@ export default function AdminDashboard() {
               <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100">
                 User Distribution
               </h2>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Breakdown by role</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                Breakdown by role
+              </p>
             </div>
           </div>
           <ResponsiveContainer width="100%" height={280}>
@@ -313,13 +340,10 @@ export default function AdminDashboard() {
                 ))}
               </Pie>
               <Tooltip
-                contentStyle={{
-                  backgroundColor: '#111827',
-                  border: '1px solid #374151',
-                  borderRadius: '12px',
-                  fontSize: '12px',
-                  color: '#e5e7eb',
-                }}
+                contentStyle={chartTooltipContentStyle}
+                labelStyle={chartTooltipLabelStyle}
+                itemStyle={chartTooltipItemStyle}
+                cursor={chartTooltipCursor}
               />
               <Legend
                 verticalAlign="bottom"
@@ -366,14 +390,10 @@ export default function AdminDashboard() {
                 tickLine={false}
               />
               <Tooltip
-                contentStyle={{
-                  backgroundColor: '#111827',
-                  border: '1px solid #374151',
-                  borderRadius: '12px',
-                  fontSize: '12px',
-                  boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
-                  color: '#e5e7eb',
-                }}
+                contentStyle={chartTooltipContentStyle}
+                labelStyle={chartTooltipLabelStyle}
+                itemStyle={chartTooltipItemStyle}
+                cursor={chartTooltipCursor}
               />
               <Legend wrapperStyle={{ fontSize: '12px' }} />
               <Line
@@ -515,7 +535,9 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
         <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 shadow-sm">
           <div className="flex items-center justify-between mb-2">
-            <div className="text-xs text-gray-500 dark:text-gray-400">Verified Users</div>
+            <div className="text-xs text-gray-500 dark:text-gray-400">
+              Verified Users
+            </div>
             <div className="w-6 h-6 bg-green-50 rounded-lg flex items-center justify-center">
               <CheckCircle className="w-3.5 h-3.5 text-green-600" />
             </div>
@@ -526,7 +548,9 @@ export default function AdminDashboard() {
         </div>
         <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 shadow-sm">
           <div className="flex items-center justify-between mb-2">
-            <div className="text-xs text-gray-500 dark:text-gray-400">Approved This Month</div>
+            <div className="text-xs text-gray-500 dark:text-gray-400">
+              Approved This Month
+            </div>
             <div className="w-6 h-6 bg-blue-50 rounded-lg flex items-center justify-center">
               <UserCheck className="w-3.5 h-3.5 text-blue-600" />
             </div>
@@ -537,7 +561,9 @@ export default function AdminDashboard() {
         </div>
         <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 shadow-sm">
           <div className="flex items-center justify-between mb-2">
-            <div className="text-xs text-gray-500 dark:text-gray-400">New This Week</div>
+            <div className="text-xs text-gray-500 dark:text-gray-400">
+              New This Week
+            </div>
             <div className="w-6 h-6 bg-purple-50 rounded-lg flex items-center justify-center">
               <TrendingUp className="w-3.5 h-3.5 text-purple-600" />
             </div>
@@ -548,7 +574,9 @@ export default function AdminDashboard() {
         </div>
         <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 shadow-sm">
           <div className="flex items-center justify-between mb-2">
-            <div className="text-xs text-gray-500 dark:text-gray-400">Unread Notifications</div>
+            <div className="text-xs text-gray-500 dark:text-gray-400">
+              Unread Notifications
+            </div>
             <div className="w-6 h-6 bg-orange-50 rounded-lg flex items-center justify-center">
               <Bell className="w-3.5 h-3.5 text-orange-600" />
             </div>

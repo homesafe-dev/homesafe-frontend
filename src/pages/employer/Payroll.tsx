@@ -100,7 +100,7 @@ const PayrollPage: React.FC = () => {
     } else if (statusLower === 'pending') {
       return 'bg-yellow-50 text-yellow-700';
     } else {
-      return 'bg-gray-50 text-gray-700';
+      return 'bg-gray-50 text-gray-700 dark:text-gray-300';
     }
   };
 
@@ -112,21 +112,21 @@ const PayrollPage: React.FC = () => {
           <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
             <CalendarSync className="w-4 h-4 text-blue-600" />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">
             Payroll
           </h1>
         </div>
-        <p className="text-sm sm:text-base text-gray-600">
+        <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
           Manage and view payroll history
         </p>
       </div>
 
       {/* Main Content */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-100">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100">
         {/* Header with View All */}
         <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-gray-100">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-            <h2 className="text-lg font-semibold text-gray-900">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
               Payroll History
             </h2>
             <Link to="/employer/payroll/all">
@@ -155,36 +155,36 @@ const PayrollPage: React.FC = () => {
               <table className="w-full">
                 <thead className="bg-gray-50 border-b border-gray-100">
                   <tr>
-                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                       Staff
                     </th>
-                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                       Position
                     </th>
-                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                       Amount
                     </th>
-                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                       Payment Date
                     </th>
-                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                       Advance Salary
                     </th>
-                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                       Status
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-100">
+                <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-100">
                   {payrollEntries.map((entry, index) => (
                     <tr
                       key={entry.id || index}
-                      className="hover:bg-gray-50 transition-colors"
+                      className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
                     >
                       <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-2">
                           <User className="w-4 h-4 text-gray-400" />
-                          <span className="text-sm text-gray-900">
+                          <span className="text-sm text-gray-900 dark:text-gray-100">
                             {entry.staff?.name || entry.employee_name || 'N/A'}
                           </span>
                         </div>
@@ -192,20 +192,20 @@ const PayrollPage: React.FC = () => {
                       <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-2">
                           <Briefcase className="w-4 h-4 text-gray-400" />
-                          <span className="text-sm text-gray-900">
+                          <span className="text-sm text-gray-900 dark:text-gray-100">
                             {entry.position || 'N/A'}
                           </span>
                         </div>
                       </td>
                       <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
-                        <span className="text-sm font-semibold text-gray-900">
+                        <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                           {formatCurrency(entry.amount)}
                         </span>
                       </td>
                       <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-2">
                           <Calendar className="w-4 h-4 text-gray-400" />
-                          <span className="text-sm text-gray-900">
+                          <span className="text-sm text-gray-900 dark:text-gray-100">
                             {formatDate(entry.payment_date)}
                           </span>
                         </div>
@@ -214,7 +214,7 @@ const PayrollPage: React.FC = () => {
                         {entry.advanced_salary ? (
                           <div className="flex items-center gap-2">
                             <TrendingUp className="w-4 h-4 text-orange-400" />
-                            <span className="text-sm text-gray-900">
+                            <span className="text-sm text-gray-900 dark:text-gray-100">
                               {typeof entry.advanced_salary === 'number'
                                 ? formatCurrency(entry.advanced_salary)
                                 : entry.advanced_salary}
@@ -241,7 +241,7 @@ const PayrollPage: React.FC = () => {
               {/* Pagination */}
               {totalPages > 1 && (
                 <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-gray-100 px-4 sm:px-6">
-                  <div className="text-sm text-gray-700">
+                  <div className="text-sm text-gray-700 dark:text-gray-300">
                     Page <span className="font-medium">{currentPage}</span> of{' '}
                     <span className="font-medium">{totalPages}</span>
                   </div>
@@ -252,8 +252,8 @@ const PayrollPage: React.FC = () => {
                       disabled={currentPage === 1}
                       className={`px-4 py-2 rounded-lg border transition-colors ${
                         currentPage === 1
-                          ? 'border-gray-200 text-gray-300 cursor-not-allowed'
-                          : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                          ? 'border-gray-200 dark:border-gray-700 text-gray-300 cursor-not-allowed'
+                          : 'border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
                       }`}
                     >
                       <ChevronLeft className="w-5 h-5" />
@@ -273,7 +273,7 @@ const PayrollPage: React.FC = () => {
                               className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
                                 currentPage === page
                                   ? 'bg-green-600 text-white'
-                                  : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
+                                  : 'border border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
                               }`}
                             >
                               {page}
@@ -284,7 +284,10 @@ const PayrollPage: React.FC = () => {
                           page === currentPage + 2
                         ) {
                           return (
-                            <span key={page} className="px-2 text-gray-500">
+                            <span
+                              key={page}
+                              className="px-2 text-gray-500 dark:text-gray-400"
+                            >
                               ...
                             </span>
                           );
@@ -298,8 +301,8 @@ const PayrollPage: React.FC = () => {
                       disabled={currentPage === totalPages}
                       className={`px-4 py-2 rounded-lg border transition-colors ${
                         currentPage === totalPages
-                          ? 'border-gray-200 text-gray-300 cursor-not-allowed'
-                          : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                          ? 'border-gray-200 dark:border-gray-700 text-gray-300 cursor-not-allowed'
+                          : 'border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
                       }`}
                     >
                       <ChevronRight className="w-5 h-5" />
@@ -311,10 +314,10 @@ const PayrollPage: React.FC = () => {
           ) : (
             <div className="p-12 text-center">
               <CalendarSync className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <p className="text-lg font-medium text-gray-900 mb-2">
+              <p className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
                 No payroll entries found
               </p>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500 dark:text-gray-400">
                 Payroll history will appear here once entries are created
               </p>
             </div>

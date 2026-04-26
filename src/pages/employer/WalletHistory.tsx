@@ -47,19 +47,19 @@ const WalletHistory: React.FC = () => {
   };
 
   return (
-    <div className="bg-white rounded-lg border-gray-200 p-3 sm:p-4 lg:p-6">
+    <div className="bg-white dark:bg-gray-800 rounded-lg border-gray-200 dark:border-gray-700 p-3 sm:p-4 lg:p-6">
       <div className="flex items-center mb-1">
         <IoArrowBack
-          className="text-gray-600 mr-2 cursor-pointer"
+          className="text-gray-600 dark:text-gray-400 dark:text-gray-300 mr-2 cursor-pointer"
           size={18}
           onClick={handleBack}
         />
-        <h1 className="text-[18px] sm:text-[20px] font-semibold text-[#24292E]">
+        <h1 className="text-[18px] sm:text-[20px] font-semibold text-gray-900 dark:text-gray-100">
           See All
         </h1>
       </div>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-[14px] sm:text-[16px] text-[#24292E] font-semibold mt-[1rem]">
+        <h2 className="text-[14px] sm:text-[16px] text-gray-900 dark:text-gray-100 font-semibold mt-[1rem]">
           Transaction History
         </h2>
       </div>
@@ -76,7 +76,7 @@ const WalletHistory: React.FC = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-xs sm:text-sm min-w-[600px]">
             <thead>
-              <tr className="text-left text-gray-500 border-b border-gray-200">
+              <tr className="text-left text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
                 <th className="py-2 sm:py-3 px-2 bg-[#C8EDDF80] text-xs sm:text-sm">
                   Transaction Type
                 </th>
@@ -102,7 +102,7 @@ const WalletHistory: React.FC = () => {
                 transactions.map((transaction) => (
                   <tr
                     key={transaction.id}
-                    className="border-b border-gray-200 hover:bg-gray-50"
+                    className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50"
                   >
                     <td className="py-2 sm:py-3 px-2 capitalize text-xs sm:text-sm">
                       {transaction.type}
@@ -148,7 +148,7 @@ const WalletHistory: React.FC = () => {
                 <tr>
                   <td
                     colSpan={6}
-                    className="py-8 px-6 text-center text-gray-500"
+                    className="py-8 px-6 text-center text-gray-500 dark:text-gray-400"
                   >
                     No transactions found
                   </td>

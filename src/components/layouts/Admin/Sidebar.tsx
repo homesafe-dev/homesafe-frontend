@@ -7,6 +7,7 @@ import {
   CreditCard,
   Star,
   Shield,
+  BadgeDollarSign,
 } from 'lucide-react';
 import HomesafeLogo from '../../../assets/images/HomesafeLogo2.svg';
 
@@ -34,12 +35,20 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
             : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100'
         }`}
       >
-        <div className={isActive ? 'text-green-700 dark:text-green-300' : 'text-gray-500 dark:text-gray-400'}>
+        <div
+          className={
+            isActive
+              ? 'text-green-700 dark:text-green-300'
+              : 'text-gray-500 dark:text-gray-400'
+          }
+        >
           {icon}
         </div>
         <span
           className={`text-sm font-medium ${
-            isActive ? 'text-green-700 dark:text-green-300' : 'text-gray-700 dark:text-gray-200'
+            isActive
+              ? 'text-green-700 dark:text-green-300'
+              : 'text-gray-700 dark:text-gray-200'
           }`}
         >
           {text}
@@ -86,6 +95,11 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
       name: 'Admin Settings',
       icon: <Shield className="w-5 h-5" />,
       path: '/admin/admin-settings',
+    },
+    {
+      name: 'Subscription Plans',
+      icon: <BadgeDollarSign className="w-5 h-5" />,
+      path: '/admin/subscription-plans',
     },
   ];
 

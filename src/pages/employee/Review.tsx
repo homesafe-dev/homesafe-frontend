@@ -45,7 +45,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
   const lastName = reviewerName.split(' ').slice(1).join(' ') || '';
 
   return (
-    <div className="bg-white p-5 sm:p-6 rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-all">
+    <div className="bg-white dark:bg-gray-800 p-5 sm:p-6 rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-all">
       <div className="flex items-start gap-4 mb-4">
         <Avatar
           src={reviewerAvatar}
@@ -56,19 +56,21 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
         />
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <h3 className="font-semibold text-gray-900 text-base truncate">
+            <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-base truncate">
               {reviewerName}
             </h3>
           </div>
           {reviewerEmail && (
             <div className="flex items-center gap-1.5 mb-2">
               <User className="w-3 h-3 text-gray-400" />
-              <p className="text-xs text-gray-500 truncate">{reviewerEmail}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                {reviewerEmail}
+              </p>
             </div>
           )}
           <div className="flex items-center gap-1.5">
             <Calendar className="w-3 h-3 text-gray-400" />
-            <p className="text-xs text-gray-500">{date}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">{date}</p>
           </div>
         </div>
       </div>
@@ -84,13 +86,13 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
               }`}
             />
           ))}
-          <span className="ml-2 text-sm font-semibold text-gray-900">
+          <span className="ml-2 text-sm font-semibold text-gray-900 dark:text-gray-100">
             {rating}.0
           </span>
         </div>
         <div className="flex items-start gap-2">
           <MessageSquare className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
-          <p className="text-sm text-gray-700 break-words leading-relaxed flex-1">
+          <p className="text-sm text-gray-700 dark:text-gray-300 break-words leading-relaxed flex-1">
             {comment}
           </p>
         </div>
@@ -206,7 +208,7 @@ const ReviewsPage: React.FC<ReviewsPageProps> = ({
             <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
               <MessageSquare className="w-4 h-4 text-blue-600" />
             </div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">
               {title}
             </h1>
           </div>
@@ -220,8 +222,8 @@ const ReviewsPage: React.FC<ReviewsPageProps> = ({
         </div>
         {!loading && !error && (
           <div className="flex items-center gap-4 mt-4">
-            <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-4 py-2">
-              <span className="text-xl font-bold text-gray-900">
+            <div className="flex items-center gap-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-2">
+              <span className="text-xl font-bold text-gray-900 dark:text-gray-100">
                 {!isNaN(parseFloat(averageRating))
                   ? parseFloat(averageRating).toFixed(1)
                   : '0.0'}
@@ -244,7 +246,7 @@ const ReviewsPage: React.FC<ReviewsPageProps> = ({
                 })}
               </div>
             </div>
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-gray-600 dark:text-gray-400">
               <span className="font-medium">{reviews.length}</span> review
               {reviews.length !== 1 ? 's' : ''}
             </div>
@@ -259,7 +261,7 @@ const ReviewsPage: React.FC<ReviewsPageProps> = ({
       />
 
       {/* Content Section */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-100">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100">
         {loading && (
           <div className="flex justify-center items-center py-16">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
@@ -281,10 +283,10 @@ const ReviewsPage: React.FC<ReviewsPageProps> = ({
                 <MessageSquare className="w-8 h-8 text-gray-400" />
               </div>
               <div>
-                <p className="text-lg font-semibold text-gray-900 mb-1">
+                <p className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-1">
                   No reviews available
                 </p>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   Reviews from your employers will appear here once they are
                   submitted
                 </p>

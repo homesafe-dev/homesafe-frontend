@@ -239,7 +239,7 @@ const ArtisanProfileView: React.FC = () => {
           <div className="mb-6 sm:mb-8">
             <button
               onClick={goBack}
-              className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4 transition-colors"
+              className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-gray-100 mb-4 transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
               <span className="text-sm font-medium">Back to Artisans</span>
@@ -248,16 +248,16 @@ const ArtisanProfileView: React.FC = () => {
               <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
                 <User className="w-4 h-4 text-blue-600" />
               </div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">
                 {artisan.first_name}'s Profile
               </h1>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 overflow-hidden">
             <div className="flex flex-col lg:flex-row">
               {/* Profile section */}
-              <div className="w-full lg:w-1/2 lg:border-r border-gray-200 p-6 sm:p-8 flex flex-col items-center bg-gradient-to-br from-gray-50 to-white">
+              <div className="w-full lg:w-1/2 lg:border-r border-gray-200 dark:border-gray-700 p-6 sm:p-8 flex flex-col items-center bg-gradient-to-br from-gray-50 to-white">
                 <div className="mb-6">
                   <Avatar
                     src={artisan.avatar}
@@ -269,11 +269,11 @@ const ArtisanProfileView: React.FC = () => {
                   />
                 </div>
 
-                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
                   {artisan.first_name} {artisan.last_name}
                 </h2>
 
-                <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
+                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-3">
                   <MapPin className="w-4 h-4 text-gray-400" />
                   <span>{extractLocation(artisan.address)}</span>
                   <span className="text-gray-300">•</span>
@@ -301,7 +301,7 @@ const ArtisanProfileView: React.FC = () => {
                     />
                   ))}
                   {artisan.average_rating && (
-                    <span className="ml-2 text-sm font-medium text-gray-600">
+                    <span className="ml-2 text-sm font-medium text-gray-600 dark:text-gray-400">
                       ({artisan.average_rating.toFixed(1)})
                     </span>
                   )}
@@ -312,17 +312,17 @@ const ArtisanProfileView: React.FC = () => {
                     <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
                       <FileText className="w-4 h-4 text-blue-600" />
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-900">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                       About
                     </h3>
                   </div>
-                  <div className="bg-white border border-gray-100 rounded-lg p-4">
+                  <div className="bg-white dark:bg-gray-800 border border-gray-100 rounded-lg p-4">
                     {artisan.profile_description ? (
-                      <p className="text-sm text-gray-700 leading-relaxed">
+                      <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                         {artisan.profile_description}
                       </p>
                     ) : (
-                      <p className="text-sm text-gray-700 leading-relaxed">
+                      <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                         Meet {artisan.first_name} {artisan.last_name}, a
                         passionate{' '}
                         {artisan.occupations && artisan.occupations.length > 0
@@ -349,7 +349,7 @@ const ArtisanProfileView: React.FC = () => {
                   <div className="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
                     <FileText className="w-4 h-4 text-green-600" />
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-900">
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
                     Employment Form
                   </h3>
                 </div>
@@ -357,14 +357,14 @@ const ArtisanProfileView: React.FC = () => {
                 <div className="space-y-5">
                   {/* Employment Start Date */}
                   <div>
-                    <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-                      <Calendar className="w-4 h-4 text-gray-500" />
+                    <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                      <Calendar className="w-4 h-4 text-gray-500 dark:text-gray-400" />
                       Employment Start Date
                     </label>
                     <input
                       type="date"
                       name="start_date"
-                      className="w-full border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
+                      className="w-full border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
                       value={formData.start_date}
                       onChange={handleInputChange}
                     />
@@ -372,14 +372,14 @@ const ArtisanProfileView: React.FC = () => {
 
                   {/* Employment Period */}
                   <div>
-                    <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-                      <Calendar className="w-4 h-4 text-gray-500" />
+                    <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                      <Calendar className="w-4 h-4 text-gray-500 dark:text-gray-400" />
                       Employment Period
                     </label>
                     <div className="relative">
                       <select
                         name="duration_months"
-                        className="appearance-none w-full border border-gray-200 rounded-lg px-4 py-2.5 pr-10 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white"
+                        className="appearance-none w-full border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-2.5 pr-10 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white dark:bg-gray-800"
                         value={formData.duration_months}
                         onChange={handleInputChange}
                       >
@@ -403,14 +403,14 @@ const ArtisanProfileView: React.FC = () => {
 
                   {/* Working Hours - Start */}
                   <div>
-                    <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-                      <Clock className="w-4 h-4 text-gray-500" />
+                    <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                      <Clock className="w-4 h-4 text-gray-500 dark:text-gray-400" />
                       Working Hours (Start)
                     </label>
                     <div className="relative">
                       <select
                         name="working_hours_start"
-                        className="appearance-none w-full border border-gray-200 rounded-lg px-4 py-2.5 pr-10 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white"
+                        className="appearance-none w-full border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-2.5 pr-10 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white dark:bg-gray-800"
                         value={formData.working_hours_start}
                         onChange={handleInputChange}
                       >
@@ -427,14 +427,14 @@ const ArtisanProfileView: React.FC = () => {
 
                   {/* Working Hours - End */}
                   <div>
-                    <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-                      <Clock className="w-4 h-4 text-gray-500" />
+                    <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                      <Clock className="w-4 h-4 text-gray-500 dark:text-gray-400" />
                       Working Hours (End)
                     </label>
                     <div className="relative">
                       <select
                         name="working_hours_end"
-                        className="appearance-none w-full border border-gray-200 rounded-lg px-4 py-2.5 pr-10 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white"
+                        className="appearance-none w-full border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-2.5 pr-10 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white dark:bg-gray-800"
                         value={formData.working_hours_end}
                         onChange={handleInputChange}
                       >
@@ -468,7 +468,7 @@ const ArtisanProfileView: React.FC = () => {
                 </div>
 
                 {/* Submit Button */}
-                <div className="pt-4 border-t border-gray-200">
+                <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
                   <button
                     onClick={handleSubmitProposal}
                     disabled={submitting || !formData.start_date}
@@ -494,10 +494,10 @@ const ArtisanProfileView: React.FC = () => {
       ) : (
         <div className="text-center py-16">
           <User className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <p className="text-lg font-medium text-gray-900 mb-2">
+          <p className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
             No artisan found
           </p>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
             No artisan found with the provided ID.
           </p>
         </div>

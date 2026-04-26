@@ -120,17 +120,17 @@ const NotificationsPage: React.FC = () => {
   }, [fetchNotifications]);
 
   return (
-    <div className="bg-white p-6">
+    <div className="bg-white dark:bg-gray-800 p-6">
       <div className="flex items-center mb-1">
         <IoArrowBack
-          className="text-gray-600 mr-2 cursor-pointer"
+          className="text-gray-600 dark:text-gray-400 mr-2 cursor-pointer"
           size={20}
           onClick={handleBack}
         />
         <h1 className="text-lg font-medium">Notifications</h1>
       </div>
 
-      <p className="text-sm text-gray-500 mb-6">
+      <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
         Keep track of all your notifications
       </p>
 
@@ -143,7 +143,7 @@ const NotificationsPage: React.FC = () => {
             className={`px-4 py-2 rounded-md text-sm ${
               activeTab === 'unread'
                 ? 'bg-orange-100 text-orange-800'
-                : 'bg-white text-gray-600 hover:bg-gray-100'
+                : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-100'
             }`}
             onClick={() => setActiveTab('unread')}
           >
@@ -152,8 +152,8 @@ const NotificationsPage: React.FC = () => {
           <button
             className={`px-4 py-2 rounded-md text-sm ${
               activeTab === 'read'
-                ? 'bg-gray-200 text-gray-800'
-                : 'bg-white text-gray-600 hover:bg-gray-100'
+                ? 'bg-gray-200 text-gray-800 dark:text-gray-200'
+                : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-100'
             }`}
             onClick={() => setActiveTab('read')}
           >
@@ -162,7 +162,7 @@ const NotificationsPage: React.FC = () => {
         </div>
 
         <button
-          className="flex items-center gap-1 border border-gray-300 rounded-md px-3 py-1 text-sm text-gray-600 hover:bg-gray-50 disabled:opacity-50"
+          className="flex items-center gap-1 border border-gray-300 rounded-md px-3 py-1 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/50 disabled:opacity-50"
           onClick={handleMarkAllAsRead}
           disabled={loading || unreadCount === 0}
         >
@@ -172,11 +172,11 @@ const NotificationsPage: React.FC = () => {
       </div>
 
       {loading ? (
-        <div className="text-center py-8 text-gray-500">
+        <div className="text-center py-8 text-gray-500 dark:text-gray-400">
           Loading notifications...
         </div>
       ) : filteredNotifications.length === 0 ? (
-        <div className="text-center py-8 text-gray-500">
+        <div className="text-center py-8 text-gray-500 dark:text-gray-400">
           <IoNotificationsOutline
             size={48}
             className="mx-auto mb-4 text-gray-300"
@@ -184,13 +184,13 @@ const NotificationsPage: React.FC = () => {
           <p>No {activeTab} notifications</p>
         </div>
       ) : (
-        <div className="shadow-lg rounded-md overflow-hidden border border-gray-200">
+        <div className="shadow-lg rounded-md overflow-hidden border border-gray-200 dark:border-gray-700">
           {filteredNotifications.map((notification, index) => (
             <div
               key={notification.id}
-              className={`p-4 hover:bg-gray-50 cursor-pointer relative ${
+              className={`p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer relative ${
                 index !== filteredNotifications.length - 1
-                  ? 'border-b border-gray-200'
+                  ? 'border-b border-gray-200 dark:border-gray-700'
                   : ''
               }`}
               onClick={() => handleNotificationClick(notification.id)}
@@ -208,7 +208,7 @@ const NotificationsPage: React.FC = () => {
                     ) : (
                       <IoNotificationsOutline
                         size={20}
-                        className="text-gray-500"
+                        className="text-gray-500 dark:text-gray-400"
                       />
                     )}
                   </div>
@@ -222,11 +222,11 @@ const NotificationsPage: React.FC = () => {
                   <div className="flex justify-between items-start">
                     <div>
                       <h3
-                        className={`font-medium ${notification.read ? 'text-gray-600' : 'text-gray-800'}`}
+                        className={`font-medium ${notification.read ? 'text-gray-600 dark:text-gray-400' : 'text-gray-800 dark:text-gray-200'}`}
                       >
                         {notification.title}
                       </h3>
-                      <p className="text-gray-600 text-sm mt-1 line-clamp-2">
+                      <p className="text-gray-600 dark:text-gray-400 text-sm mt-1 line-clamp-2">
                         {notification.message}
                       </p>
                       <div className="flex items-center gap-2 mt-2">
@@ -240,14 +240,14 @@ const NotificationsPage: React.FC = () => {
                                   ? 'bg-yellow-100 text-yellow-800'
                                   : notification.type === 'contract'
                                     ? 'bg-purple-100 text-purple-800'
-                                    : 'bg-gray-100 text-gray-800'
+                                    : 'bg-gray-100 text-gray-800 dark:text-gray-200'
                           }`}
                         >
                           {notification.type}
                         </span>
                       </div>
                     </div>
-                    <span className="text-xs text-gray-500 whitespace-nowrap ml-2">
+                    <span className="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap ml-2">
                       {notification.date}
                     </span>
                   </div>

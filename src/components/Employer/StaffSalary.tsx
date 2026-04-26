@@ -56,25 +56,37 @@ const Salary: React.FC<SalaryProps> = ({
             </svg>
           </div>
 
-          <h3 className="text-gray-600 text-lg">Salary</h3>
+          <h3 className="text-gray-600 dark:text-gray-400 text-lg">Salary</h3>
           <p className="text-4xl font-semibold mb-8">₦ {currentSalary}</p>
 
           <div className="flex justify-between">
             <div>
-              <h4 className="text-gray-500 text-sm mb-1">Account Details:</h4>
-              <p className="text-gray-700">{accountDetails.bank}</p>
-              <p className="text-gray-700">{accountDetails.accountNumber}</p>
+              <h4 className="text-gray-500 dark:text-gray-400 text-sm mb-1">
+                Account Details:
+              </h4>
+              <p className="text-gray-700 dark:text-gray-300">
+                {accountDetails.bank}
+              </p>
+              <p className="text-gray-700 dark:text-gray-300">
+                {accountDetails.accountNumber}
+              </p>
             </div>
             <div>
-              <h4 className="text-gray-500 text-sm mb-1">Payment Date:</h4>
-              <p className="text-gray-700">{nextPaymentDate}</p>
-              <p className="text-gray-500 text-sm">Payment is automated</p>
+              <h4 className="text-gray-500 dark:text-gray-400 text-sm mb-1">
+                Payment Date:
+              </h4>
+              <p className="text-gray-700 dark:text-gray-300">
+                {nextPaymentDate}
+              </p>
+              <p className="text-gray-500 dark:text-gray-400 text-sm">
+                Payment is automated
+              </p>
             </div>
           </div>
         </div>
 
         {/* Salary Advanced/Loan Card */}
-        <div className="flex-1 bg-white rounded-xl p-6 relative overflow-hidden">
+        <div className="flex-1 bg-white dark:bg-gray-800 rounded-xl p-6 relative overflow-hidden">
           {/* Smooth S-curves decoration */}
           <div className="absolute bottom-0 right-0">
             <svg width="280" height="200" viewBox="0 0 280 200" fill="none">
@@ -101,7 +113,9 @@ const Salary: React.FC<SalaryProps> = ({
             </svg>
           </div>
 
-          <h3 className="text-gray-600 text-lg">Salary Advanced/Loan</h3>
+          <h3 className="text-gray-600 dark:text-gray-400 text-lg">
+            Salary Advanced/Loan
+          </h3>
           <p className="text-4xl font-semibold">₦ {advancedLoan || '-'}</p>
         </div>
       </div>
@@ -110,36 +124,41 @@ const Salary: React.FC<SalaryProps> = ({
       <div className="mt-8">
         <div className="flex justify-between items-center mb-4">
           <h3 className="font-medium">Salary History</h3>
-          <button className="text-sm text-gray-600">View All</button>
+          <button className="text-sm text-gray-600 dark:text-gray-400">
+            View All
+          </button>
         </div>
 
         <div className="overflow-x-auto">
           <table className="min-w-full">
             <thead className="bg-[#C8EDDF80] h-[56px]">
               <tr>
-                <th className="text-left px-4 py-2 text-xs font-medium text-gray-600">
+                <th className="text-left px-4 py-2 text-xs font-medium text-gray-600 dark:text-gray-400">
                   Payment Date
                 </th>
-                <th className="text-left px-4 py-2 text-xs font-medium text-gray-600">
+                <th className="text-left px-4 py-2 text-xs font-medium text-gray-600 dark:text-gray-400">
                   Account Details
                 </th>
-                <th className="text-left px-4 py-2 text-xs font-medium text-gray-600">
+                <th className="text-left px-4 py-2 text-xs font-medium text-gray-600 dark:text-gray-400">
                   Amount
                 </th>
-                <th className="text-left px-4 py-2 text-xs font-medium text-gray-600">
+                <th className="text-left px-4 py-2 text-xs font-medium text-gray-600 dark:text-gray-400">
                   Salary Advance
                 </th>
-                <th className="text-left px-4 py-2 text-xs font-medium text-gray-600">
+                <th className="text-left px-4 py-2 text-xs font-medium text-gray-600 dark:text-gray-400">
                   Redeem Salary
                 </th>
-                <th className="text-left px-4 py-2 text-xs font-medium text-gray-600">
+                <th className="text-left px-4 py-2 text-xs font-medium text-gray-600 dark:text-gray-400">
                   Status
                 </th>
               </tr>
             </thead>
             <tbody>
               {salaryHistory.map((item, index) => (
-                <tr key={index} className="border-b border-gray-100">
+                <tr
+                  key={index}
+                  className="border-b border-gray-200 dark:border-gray-700"
+                >
                   <td className="px-4 py-3 text-sm">{item.paymentDate}</td>
                   <td className="px-4 py-3">
                     <p className="text-xs">{item.accountDetails.bank}</p>

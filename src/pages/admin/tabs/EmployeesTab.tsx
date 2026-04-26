@@ -150,25 +150,25 @@ export default function EmployeesTab() {
       <table className="w-full">
         <thead className="bg-[#C8EDDF80] dark:bg-gray-800 h-[56px] text-left border-b border-transparent dark:border-gray-700">
           <tr>
-            <th className="px-6 py-3 text-[13px] text-[#174B35] dark:text-gray-200 font-normal">
+            <th className="px-6 py-3 text-[13px] text-gray-700 dark:text-gray-300 font-normal">
               Full Name
             </th>
-            <th className="px-6 py-3 text-[13px] text-[#174B35] dark:text-gray-200 font-normal">
+            <th className="px-6 py-3 text-[13px] text-gray-700 dark:text-gray-300 font-normal">
               Date
             </th>
-            <th className="px-6 py-3 text-[13px] text-[#174B35] dark:text-gray-200 font-normal">
+            <th className="px-6 py-3 text-[13px] text-gray-700 dark:text-gray-300 font-normal">
               Placement
             </th>
-            <th className="px-6 py-3 text-[13px] text-[#174B35] dark:text-gray-200 font-normal">
+            <th className="px-6 py-3 text-[13px] text-gray-700 dark:text-gray-300 font-normal">
               Gender
             </th>
-            <th className="px-6 py-3 text-[13px] text-[#174B35] dark:text-gray-200 font-normal">
+            <th className="px-6 py-3 text-[13px] text-gray-700 dark:text-gray-300 font-normal">
               Phone Number
             </th>
-            <th className="px-6 py-3 text-[13px] text-[#174B35] dark:text-gray-200 font-normal">
+            <th className="px-6 py-3 text-[13px] text-gray-700 dark:text-gray-300 font-normal">
               Status
             </th>
-            <th className="px-6 py-3 text-[13px] text-[#174B35] dark:text-gray-200 font-normal"></th>
+            <th className="px-6 py-3 text-[13px] text-gray-700 dark:text-gray-300 font-normal"></th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -209,15 +209,21 @@ export default function EmployeesTab() {
           ) : employees.length === 0 ? (
             // Empty state
             <tr>
-              <td colSpan={7} className="px-6 py-4 text-center text-gray-500">
+              <td
+                colSpan={7}
+                className="px-6 py-4 text-center text-gray-500 dark:text-gray-400"
+              >
                 No employees found
               </td>
             </tr>
           ) : (
             // Data loaded successfully
             employees.map((employee) => (
-              <tr key={employee.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 flex items-center gap-2 text-[13px] text-[#24292E] font-normal">
+              <tr
+                key={employee.id}
+                className="hover:bg-gray-50 dark:hover:bg-gray-700"
+              >
+                <td className="px-6 py-4 flex items-center gap-2 text-[13px] text-gray-900 dark:text-gray-100 font-normal">
                   <Avatar
                     src={employee.avatar}
                     firstName={employee.first_name}
@@ -227,21 +233,21 @@ export default function EmployeesTab() {
                   />
                   {`${employee.first_name} ${employee.last_name}`}
                 </td>
-                <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
+                <td className="px-6 py-4 text-[13px] text-gray-900 dark:text-gray-100 font-normal">
                   {new Date(employee.created_at).toLocaleDateString('en-US', {
                     day: 'numeric',
                     month: 'short',
                     year: 'numeric',
                   })}
                 </td>
-                <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
+                <td className="px-6 py-4 text-[13px] text-gray-900 dark:text-gray-100 font-normal">
                   {employee.address ? employee.address.split(',')[0] : 'Lagos'}
                 </td>
-                <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
+                <td className="px-6 py-4 text-[13px] text-gray-900 dark:text-gray-100 font-normal">
                   {employee.gender.charAt(0).toUpperCase() +
                     employee.gender.slice(1)}
                 </td>
-                <td className="px-6 py-4 text-[13px] text-[#24292E] font-normal">
+                <td className="px-6 py-4 text-[13px] text-gray-900 dark:text-gray-100 font-normal">
                   {employee.phone}
                 </td>
                 <td className="px-6 py-4">

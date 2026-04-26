@@ -130,27 +130,29 @@ const AgentKYCPage: React.FC = () => {
   };
 
   const renderCompletedState = () => (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6 sm:p-8">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 p-6 sm:p-8">
       <div className="flex items-start gap-4 mb-6">
         <div className="w-12 h-12 bg-green-50 rounded-lg flex items-center justify-center flex-shrink-0">
           <CheckCircle className="w-6 h-6 text-green-600" />
         </div>
         <div className="flex-1">
-          <h2 className="text-lg font-semibold text-gray-900 mb-1">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-1">
             KYC Verification Complete
           </h2>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
             Your KYC verification has already been submitted and processed.
           </p>
         </div>
       </div>
 
-      <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+      <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200 dark:border-gray-700">
         <div className="flex items-center gap-2 mb-2">
-          <User className="w-4 h-4 text-gray-500" />
-          <label className="text-sm font-medium text-gray-700">Name</label>
+          <User className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            Name
+          </label>
         </div>
-        <div className="text-base font-semibold text-gray-900">
+        <div className="text-base font-semibold text-gray-900 dark:text-gray-100">
           {userProfile
             ? `${userProfile.first_name} ${userProfile.last_name}`
             : 'Loading...'}
@@ -187,16 +189,16 @@ const AgentKYCPage: React.FC = () => {
   );
 
   const renderFormState = () => (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6 sm:p-8">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 p-6 sm:p-8">
       <div className="flex items-start gap-4 mb-6">
         <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
           <IdCard className="w-6 h-6 text-blue-600" />
         </div>
         <div className="flex-1">
-          <h2 className="text-lg font-semibold text-gray-900 mb-1">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-1">
             ID Verification
           </h2>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
             Please enter your National Identification Number (NIN) for
             verification. Use{' '}
             <span className="font-mono font-medium text-orange-600">
@@ -207,12 +209,14 @@ const AgentKYCPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+      <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200 dark:border-gray-700">
         <div className="flex items-center gap-2 mb-2">
-          <User className="w-4 h-4 text-gray-500" />
-          <label className="text-sm font-medium text-gray-700">Name</label>
+          <User className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            Name
+          </label>
         </div>
-        <div className="text-base font-semibold text-gray-900">
+        <div className="text-base font-semibold text-gray-900 dark:text-gray-100">
           {userProfile
             ? `${userProfile.first_name} ${userProfile.last_name}`
             : 'Loading...'}
@@ -223,7 +227,7 @@ const AgentKYCPage: React.FC = () => {
         <div>
           <label
             htmlFor="ninNumber"
-            className="block text-sm font-medium text-gray-700 mb-2"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
           >
             NIN Number
           </label>
@@ -232,12 +236,12 @@ const AgentKYCPage: React.FC = () => {
             id="ninNumber"
             name="ninNumber"
             placeholder="Enter your NIN number (e.g. 70123456789)"
-            className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 placeholder-gray-400"
+            className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400"
             value={formData.ninNumber}
             onChange={handleInputChange}
             required
           />
-          <p className="mt-1.5 text-xs text-gray-500">
+          <p className="mt-1.5 text-xs text-gray-500 dark:text-gray-400">
             Enter your 11-digit National Identification Number
           </p>
         </div>
@@ -275,7 +279,7 @@ const AgentKYCPage: React.FC = () => {
     <div className="p-0">
       <div className="mb-6 sm:mb-8">
         <button
-          className="flex items-center text-sm text-gray-600 hover:text-gray-900 mb-4 transition-colors"
+          className="flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-gray-100 mb-4 transition-colors"
           onClick={() => navigate(-1)}
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
@@ -285,11 +289,11 @@ const AgentKYCPage: React.FC = () => {
           <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
             <Shield className="w-4 h-4 text-blue-600" />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">
             KYC Verification
           </h1>
         </div>
-        <p className="text-sm sm:text-base text-gray-600">
+        <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
           Verify your identity using your National Identification Number (NIN)
         </p>
       </div>

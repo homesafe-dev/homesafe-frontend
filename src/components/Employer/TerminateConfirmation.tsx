@@ -17,10 +17,10 @@ const TerminateContractConfirmation: React.FC<
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
       <div className="absolute inset-0 bg-black/30 backdrop-blur-sm"></div>
-      <div className="bg-white rounded-lg w-[520px] relative z-10 p-8">
+      <div className="bg-white dark:bg-gray-800 rounded-lg w-[520px] relative z-10 p-8">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+          className="absolute top-4 right-4 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
         >
           <IoCloseOutline size={24} />
         </button>
@@ -34,14 +34,14 @@ const TerminateContractConfirmation: React.FC<
             Terminate Contract
           </h2>
 
-          <p className="text-center text-gray-700 mb-8">
+          <p className="text-center text-gray-700 dark:text-gray-300 mb-8">
             Your contract with Cali foster an Employee, will be terminated in 1
             week, 6 days.
           </p>
 
           <button
             onClick={onClose}
-            className="w-full py-3 border border-green-400 text-gray-700 rounded-md hover:bg-gray-50 transition duration-200"
+            className="w-full py-3 border border-green-400 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700/50 transition duration-200"
           >
             Closed
           </button>

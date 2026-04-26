@@ -31,10 +31,10 @@ const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
       <div className="absolute inset-0 bg-black/30 backdrop-blur-sm"></div>
-      <div className="bg-white rounded-lg w-full max-w-md relative z-10">
+      <div className="bg-white dark:bg-gray-800 rounded-lg w-full max-w-md relative z-10">
         <div className="p-6">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-medium text-gray-800">
+            <h2 className="text-2xl font-medium text-gray-800 dark:text-gray-200">
               Payment Method
             </h2>
             <button
@@ -71,7 +71,7 @@ const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
             {selectedMethod === 'debit' && (
               <div className="mt-4 space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Card Number
                   </label>
                   <input
@@ -84,7 +84,7 @@ const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Card Holder
                   </label>
                   <input
@@ -98,7 +98,7 @@ const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
 
                 <div className="flex gap-4">
                   <div className="flex-1">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Expiry Date
                     </label>
                     <input
@@ -111,7 +111,7 @@ const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
                   </div>
 
                   <div className="flex-1">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Security Code
                     </label>
                     <input
@@ -134,7 +134,7 @@ const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
                   />
                   <label
                     htmlFor="saveCard"
-                    className="ml-2 text-sm text-gray-600"
+                    className="ml-2 text-sm text-gray-600 dark:text-gray-400"
                   >
                     Save card for future use?
                   </label>
@@ -170,7 +170,9 @@ const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
               <div className="mt-4">
                 <div className="bg-green-50 rounded-lg p-4 text-center mb-4">
                   <div className="text-xl font-medium">1234567890</div>
-                  <div className="text-sm text-gray-600">Wema Bank</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                    Wema Bank
+                  </div>
                 </div>
               </div>
             )}
@@ -179,7 +181,9 @@ const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
               <div className="mt-4">
                 <div className="bg-green-50 rounded-lg p-4 text-center mb-4">
                   <div className="text-xl font-medium">1234567890</div>
-                  <div className="text-sm text-gray-600">Wema Bank</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                    Wema Bank
+                  </div>
                 </div>
               </div>
             )}
@@ -187,7 +191,7 @@ const PaymentMethodModal: React.FC<PaymentMethodModalProps> = ({
 
           <button
             onClick={handlePayment}
-            className="w-full bg-green-400 hover:bg-green-500 text-center py-4 rounded-md text-gray-800 font-medium"
+            className="w-full bg-green-400 hover:bg-green-500 text-center py-4 rounded-md text-gray-800 dark:text-gray-200 font-medium"
           >
             {selectedMethod === 'debit'
               ? 'Make Payment'

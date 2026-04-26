@@ -36,7 +36,7 @@ export default function ThemeToggle() {
       onClick={() => setTheme(nextTheme)}
       aria-label={`Switch to ${nextTheme} mode`}
       title={`Switch to ${nextTheme} mode`}
-      className="relative p-2 text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700 rounded-full transition-colors"
+      className="relative p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/50 dark:text-gray-300 dark:hover:bg-gray-700 rounded-full transition-colors"
     >
       {theme === 'dark' ? (
         <Sun className="w-5 h-5" />

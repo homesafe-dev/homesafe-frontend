@@ -136,7 +136,7 @@ const SigninPasswordPage: React.FC = () => {
         <div className="flex flex-col items-center w-full max-w-[545px] space-y-4">
           <div className="w-full bg-white rounded-lg shadow-lg p-4 md:p-8">
             <div className="text-center mb-6 flex flex-row items-center justify-center space-x-2">
-              <h1 className="text-xl md:text-2xl font-semibold text-gray-800">
+              <h1 className="hidden md:block md:text-2xl font-semibold text-gray-800">
                 Sign in on
               </h1>
               <Link to="/">
@@ -161,7 +161,7 @@ const SigninPasswordPage: React.FC = () => {
                     type={showPassword ? 'text' : 'password'}
                     id="password"
                     placeholder="*******"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-sm md:text-base"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm md:text-base"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required

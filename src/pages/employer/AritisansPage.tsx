@@ -315,17 +315,17 @@ const ArtisansPage: React.FC = () => {
           <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
             <Users className="w-4 h-4 text-blue-600" />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">
             Artisans
           </h1>
         </div>
-        <p className="text-sm sm:text-base text-gray-600">
+        <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
           Browse and discover available artisans
         </p>
       </div>
 
       {/* Main Content */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-100">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100">
         {/* Search and Filters Section */}
         <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-gray-100">
           <div className="flex flex-col sm:flex-row gap-4 mb-4">
@@ -335,7 +335,7 @@ const ArtisansPage: React.FC = () => {
               <input
                 type="text"
                 placeholder="Search by name, occupation or location..."
-                className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
+                className="w-full pl-10 pr-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -348,7 +348,7 @@ const ArtisansPage: React.FC = () => {
                   setShowSalaryDropdown(!showSalaryDropdown);
                   setShowJobTypeDropdown(false);
                 }}
-                className="flex items-center gap-2 px-4 py-2.5 border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-50 min-w-[160px] justify-between"
+                className="flex items-center gap-2 px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 min-w-[160px] justify-between"
               >
                 <span className="truncate">
                   {salaryFilter
@@ -360,13 +360,13 @@ const ArtisansPage: React.FC = () => {
                 />
               </button>
               {showSalaryDropdown && (
-                <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+                <div className="absolute top-full left-0 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-10">
                   <button
                     onClick={() => {
                       setSalaryFilter('');
                       setShowSalaryDropdown(false);
                     }}
-                    className="w-full px-3 sm:px-4 py-2 text-left text-xs sm:text-sm hover:bg-gray-50 first:rounded-t-lg"
+                    className="w-full px-3 sm:px-4 py-2 text-left text-xs sm:text-sm hover:bg-gray-50 dark:hover:bg-gray-700/50 first:rounded-t-lg"
                   >
                     All Salaries
                   </button>
@@ -375,7 +375,7 @@ const ArtisansPage: React.FC = () => {
                       setSalaryFilter('under-50k');
                       setShowSalaryDropdown(false);
                     }}
-                    className="w-full px-3 sm:px-4 py-2 text-left text-xs sm:text-sm hover:bg-gray-50"
+                    className="w-full px-3 sm:px-4 py-2 text-left text-xs sm:text-sm hover:bg-gray-50 dark:hover:bg-gray-700/50"
                   >
                     Under ₦50,000
                   </button>
@@ -384,7 +384,7 @@ const ArtisansPage: React.FC = () => {
                       setSalaryFilter('50k-100k');
                       setShowSalaryDropdown(false);
                     }}
-                    className="w-full px-3 sm:px-4 py-2 text-left text-xs sm:text-sm hover:bg-gray-50"
+                    className="w-full px-3 sm:px-4 py-2 text-left text-xs sm:text-sm hover:bg-gray-50 dark:hover:bg-gray-700/50"
                   >
                     ₦50,000 - ₦100,000
                   </button>
@@ -393,7 +393,7 @@ const ArtisansPage: React.FC = () => {
                       setSalaryFilter('100k-200k');
                       setShowSalaryDropdown(false);
                     }}
-                    className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50"
+                    className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-700/50"
                   >
                     ₦100,000 - ₦200,000
                   </button>
@@ -402,7 +402,7 @@ const ArtisansPage: React.FC = () => {
                       setSalaryFilter('over-200k');
                       setShowSalaryDropdown(false);
                     }}
-                    className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 last:rounded-b-lg"
+                    className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-700/50 last:rounded-b-lg"
                   >
                     Over ₦200,000
                   </button>
@@ -417,7 +417,7 @@ const ArtisansPage: React.FC = () => {
                   setShowJobTypeDropdown(!showJobTypeDropdown);
                   setShowSalaryDropdown(false);
                 }}
-                className="flex items-center gap-2 px-4 py-2.5 border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-50 min-w-[160px] justify-between"
+                className="flex items-center gap-2 px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 min-w-[160px] justify-between"
               >
                 <span className="truncate">
                   {jobTypeFilter || 'Filter by Job Type'}
@@ -427,13 +427,13 @@ const ArtisansPage: React.FC = () => {
                 />
               </button>
               {showJobTypeDropdown && (
-                <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto">
+                <div className="absolute top-full left-0 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto">
                   <button
                     onClick={() => {
                       setJobTypeFilter('');
                       setShowJobTypeDropdown(false);
                     }}
-                    className="w-full px-3 sm:px-4 py-2 text-left text-xs sm:text-sm hover:bg-gray-50 first:rounded-t-lg"
+                    className="w-full px-3 sm:px-4 py-2 text-left text-xs sm:text-sm hover:bg-gray-50 dark:hover:bg-gray-700/50 first:rounded-t-lg"
                   >
                     All Job Types
                   </button>
@@ -444,7 +444,7 @@ const ArtisansPage: React.FC = () => {
                         setJobTypeFilter(jobType);
                         setShowJobTypeDropdown(false);
                       }}
-                      className="w-full px-3 sm:px-4 py-2 text-left text-xs sm:text-sm hover:bg-gray-50 last:rounded-b-lg"
+                      className="w-full px-3 sm:px-4 py-2 text-left text-xs sm:text-sm hover:bg-gray-50 dark:hover:bg-gray-700/50 last:rounded-b-lg"
                     >
                       {jobType}
                     </button>
@@ -455,7 +455,7 @@ const ArtisansPage: React.FC = () => {
           </div>
 
           {/* Results Count */}
-          <div className="text-sm text-gray-600">
+          <div className="text-sm text-gray-600 dark:text-gray-400">
             Showing {filteredArtisans.length} of {artisans.length} artisans
           </div>
         </div>
@@ -469,10 +469,10 @@ const ArtisansPage: React.FC = () => {
           ) : filteredArtisans.length === 0 ? (
             <div className="text-center py-16">
               <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <p className="text-lg font-medium text-gray-900 mb-2">
+              <p className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
                 No artisans found
               </p>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500 dark:text-gray-400">
                 {searchQuery || salaryFilter || jobTypeFilter
                   ? 'Try adjusting your search or filters'
                   : 'No artisans available at the moment'}
@@ -483,7 +483,7 @@ const ArtisansPage: React.FC = () => {
               {filteredArtisans.map((artisan) => (
                 <div
                   key={artisan.id}
-                  className={`bg-white rounded-lg border border-gray-100 shadow-sm p-6 relative transition-all hover:shadow-md ${
+                  className={`bg-white dark:bg-gray-800 rounded-lg border border-gray-100 shadow-sm p-6 relative transition-all hover:shadow-md ${
                     artisan.is_employed ? 'opacity-60' : ''
                   }`}
                 >
@@ -513,12 +513,12 @@ const ArtisansPage: React.FC = () => {
                     />
                   </div>
 
-                  <h3 className="font-semibold text-center text-lg text-gray-900 mb-2">
+                  <h3 className="font-semibold text-center text-lg text-gray-900 dark:text-gray-100 mb-2">
                     {artisan.first_name} {artisan.last_name}
                   </h3>
 
                   {getLocationAgeDisplay(artisan.address, artisan.dob) && (
-                    <div className="flex items-center justify-center gap-1 text-sm text-gray-500 mb-3">
+                    <div className="flex items-center justify-center gap-1 text-sm text-gray-500 dark:text-gray-400 mb-3">
                       <MapPin className="w-4 h-4" />
                       <span>
                         {getLocationAgeDisplay(artisan.address, artisan.dob)}
@@ -535,7 +535,7 @@ const ArtisansPage: React.FC = () => {
                   <div className="flex items-center justify-center gap-1 mb-4">
                     {renderStars(getRating(artisan))}
                     {getRating(artisan) > 0 && (
-                      <span className="text-sm text-gray-600 ml-1">
+                      <span className="text-sm text-gray-600 dark:text-gray-400 ml-1">
                         ({getRating(artisan).toFixed(1)})
                       </span>
                     )}
@@ -564,7 +564,7 @@ const ArtisansPage: React.FC = () => {
           {/* Pagination */}
           {!loading && !error && totalPages > 1 && (
             <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-gray-100">
-              <div className="text-sm text-gray-700">
+              <div className="text-sm text-gray-700 dark:text-gray-300">
                 Page <span className="font-medium">{currentPage}</span> of{' '}
                 <span className="font-medium">{totalPages}</span>
               </div>
@@ -577,8 +577,8 @@ const ArtisansPage: React.FC = () => {
                   disabled={currentPage === 1}
                   className={`px-4 py-2 rounded-lg border transition-colors ${
                     currentPage === 1
-                      ? 'border-gray-200 text-gray-300 cursor-not-allowed'
-                      : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                      ? 'border-gray-200 dark:border-gray-700 text-gray-300 cursor-not-allowed'
+                      : 'border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
                   }`}
                 >
                   Previous
@@ -598,7 +598,7 @@ const ArtisansPage: React.FC = () => {
                           className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
                             currentPage === page
                               ? 'bg-green-600 text-white'
-                              : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
+                              : 'border border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
                           }`}
                         >
                           {page}
@@ -609,7 +609,10 @@ const ArtisansPage: React.FC = () => {
                       page === currentPage + 2
                     ) {
                       return (
-                        <span key={page} className="px-2 text-gray-500">
+                        <span
+                          key={page}
+                          className="px-2 text-gray-500 dark:text-gray-400"
+                        >
                           ...
                         </span>
                       );
@@ -625,8 +628,8 @@ const ArtisansPage: React.FC = () => {
                   disabled={currentPage === totalPages}
                   className={`px-4 py-2 rounded-lg border transition-colors ${
                     currentPage === totalPages
-                      ? 'border-gray-200 text-gray-300 cursor-not-allowed'
-                      : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                      ? 'border-gray-200 dark:border-gray-700 text-gray-300 cursor-not-allowed'
+                      : 'border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
                   }`}
                 >
                   Next

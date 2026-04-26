@@ -90,7 +90,7 @@ const PaymentVerification: React.FC = () => {
   };
 
   return (
-    <div className="bg-white w-full h-full p-8">
+    <div className="bg-white dark:bg-gray-800 w-full h-full p-8">
       <div className="max-w-md mx-auto mt-20">
         <div className="text-center">
           <div className="mb-6">
@@ -133,13 +133,13 @@ const PaymentVerification: React.FC = () => {
             )}
           </div>
 
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+          <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
             {status === 'verifying' && 'Verifying Payment'}
             {status === 'success' && 'Payment Successful'}
             {status === 'error' && 'Verification Failed'}
           </h2>
 
-          <p className="text-gray-600 mb-6">{message}</p>
+          <p className="text-gray-600 dark:text-gray-400 mb-6">{message}</p>
 
           {status === 'success' && (
             <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
