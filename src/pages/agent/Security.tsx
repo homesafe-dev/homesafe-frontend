@@ -20,11 +20,30 @@ const AgentSecurityPage: React.FC = () => {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [tfaLoading, setTfaLoading] = useState(false);
+  const [tfaStatus, setTfaStatus] = useState<{
+    has_tfa: boolean;
+    tfa_method: string | null;
+  }>({
+    has_tfa: false,
+    tfa_method: null,
+  });
   const [toast, setToast] = useState({
     message: '',
     type: 'success' as 'success' | 'error' | 'info',
     isVisible: false,
   });
+  const [tfaMethodDraft, setTfaMethodDraft] = useState<
+    'email' | 'authenticator'
+  >('email');
+  const [tfaCodeInput, setTfaCodeInput] = useState('');
+  const [tfaModalOpen, setTfaModalOpen] = useState(false);
+  const [tfaModalLoading, setTfaModalLoading] = useState(false);
+  const [tfaModalStep, setTfaModalStep] = useState<
+    'method' | 'enable' | 'disable'
+  >('method');
+  const [tfaQrCode, setTfaQrCode] = useState<string | null>(null);
+  const [tfaSecret, setTfaSecret] = useState<string | null>(null);
 
   const showToast = (message: string, type: 'success' | 'error' | 'info') => {
     setToast({ message, type, isVisible: true });
@@ -87,6 +106,171 @@ const AgentSecurityPage: React.FC = () => {
       confirmPassword: '',
     });
   };
+
+  const fetchTfaStatus = async () => {
+    try {
+      const response = await userApi.getTfaStatus();
+      if (response.status && response.data) {
+        setTfaStatus({
+          has_tfa: !!response.data.has_tfa,
+          tfa_method: response.data.tfa_method || null,
+        });
+      }
+    } catch (err) {
+      console.error('Unable to fetch TFA status:', err);
+    }
+  };
+
+  const closeTfaModal = () => {
+    if (tfaModalLoading) {
+      return;
+    }
+    setTfaModalOpen(false);
+    setTfaModalStep('method');
+    setTfaCodeInput('');
+    setTfaQrCode(null);
+    setTfaSecret(null);
+    setTfaMethodDraft('email');
+  };
+
+  const openEnableTfaFlow = () => {
+    setTfaModalOpen(true);
+    setTfaModalStep('method');
+    setTfaCodeInput('');
+    setTfaQrCode(null);
+    setTfaSecret(null);
+    setTfaMethodDraft('email');
+  };
+
+  const startEnableTfa = async () => {
+    setTfaModalLoading(true);
+
+    try {
+      const setupResponse = await userApi.setupTfa(tfaMethodDraft);
+      if (!setupResponse.status) {
+        showToast(
+          setupResponse.message || 'Unable to start TFA setup',
+          'error'
+        );
+        return;
+      }
+
+      setTfaQrCode(setupResponse.data?.qr_code || null);
+      setTfaSecret(setupResponse.data?.secret || null);
+      setTfaCodeInput('');
+      setTfaModalStep('enable');
+    } catch (err: any) {
+      showToast(
+        err.response?.data?.message || 'Unable to start TFA setup.',
+        'error'
+      );
+    } finally {
+      setTfaModalLoading(false);
+    }
+  };
+
+  const submitEnableTfa = async () => {
+    if (tfaCodeInput.trim().length !== 6) {
+      showToast('Enter a valid 6-digit code.', 'error');
+      return;
+    }
+
+    setTfaModalLoading(true);
+
+    try {
+      const enableResponse = await userApi.enableTfa(
+        tfaMethodDraft,
+        tfaCodeInput.trim()
+      );
+
+      if (!enableResponse.status) {
+        showToast(enableResponse.message || 'Unable to enable 2FA', 'error');
+        return;
+      }
+
+      showToast(
+        enableResponse.message || 'Two-factor authentication enabled.',
+        'success'
+      );
+      await fetchTfaStatus();
+      closeTfaModal();
+    } catch (err: any) {
+      showToast(
+        err.response?.data?.message || 'Unable to enable 2FA.',
+        'error'
+      );
+    } finally {
+      setTfaModalLoading(false);
+    }
+  };
+
+  const openDisableTfaFlow = async () => {
+    setTfaLoading(true);
+
+    try {
+      const sendCodeResponse = await userApi.sendDisableTfaCode();
+      if (!sendCodeResponse.status) {
+        showToast(sendCodeResponse.message || 'Unable to continue.', 'error');
+        return;
+      }
+
+      setTfaModalStep('disable');
+      setTfaCodeInput('');
+      setTfaModalOpen(true);
+    } catch (err: any) {
+      showToast(
+        err.response?.data?.message || 'Unable to update 2FA settings.',
+        'error'
+      );
+    } finally {
+      setTfaLoading(false);
+    }
+  };
+
+  const submitDisableTfa = async () => {
+    if (tfaCodeInput.trim().length !== 6) {
+      showToast('Enter a valid 6-digit code.', 'error');
+      return;
+    }
+
+    setTfaModalLoading(true);
+
+    try {
+      const disableResponse = await userApi.disableTfa(tfaCodeInput.trim());
+
+      if (!disableResponse.status) {
+        showToast(disableResponse.message || 'Unable to disable 2FA', 'error');
+        return;
+      }
+
+      showToast(
+        disableResponse.message || 'Two-factor authentication disabled.',
+        'success'
+      );
+      await fetchTfaStatus();
+      closeTfaModal();
+    } catch (err: any) {
+      showToast(
+        err.response?.data?.message || 'Unable to disable 2FA settings.',
+        'error'
+      );
+    } finally {
+      setTfaModalLoading(false);
+    }
+  };
+
+  const handleToggleTfa = async () => {
+    if (!tfaStatus.has_tfa) {
+      openEnableTfaFlow();
+      return;
+    }
+
+    await openDisableTfaFlow();
+  };
+
+  React.useEffect(() => {
+    fetchTfaStatus();
+  }, []);
 
   return (
     <div className="p-0">
@@ -283,19 +467,202 @@ const AgentSecurityPage: React.FC = () => {
                   enter a verification code in addition to your password when
                   logging in.
                 </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                  Current status:{' '}
+                  <span className="font-medium">
+                    {tfaStatus.has_tfa
+                      ? `Enabled (${tfaStatus.tfa_method || 'email'})`
+                      : 'Disabled'}
+                  </span>
+                </p>
               </div>
             </div>
 
             <button
               type="button"
-              className="px-5 py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+              onClick={handleToggleTfa}
+              disabled={tfaLoading}
+              className="px-5 py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
             >
               <Shield className="w-4 h-4" />
-              Enable 2FA
+              {tfaLoading
+                ? 'Processing...'
+                : tfaStatus.has_tfa
+                  ? 'Disable 2FA'
+                  : 'Enable 2FA'}
             </button>
           </div>
         </div>
       </div>
+
+      {tfaModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="w-full max-w-lg rounded-xl bg-white p-6 shadow-2xl dark:bg-gray-900 dark:border dark:border-gray-700">
+            <div className="mb-4">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                {tfaModalStep === 'method'
+                  ? 'Choose 2FA Method'
+                  : tfaModalStep === 'enable'
+                    ? 'Enable Two-Factor Authentication'
+                    : 'Disable Two-Factor Authentication'}
+              </h3>
+              <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                {tfaModalStep === 'method'
+                  ? 'Select how you want to receive verification codes.'
+                  : tfaModalStep === 'enable'
+                    ? tfaMethodDraft === 'email'
+                      ? 'Enter the 6-digit code sent to your email.'
+                      : 'Scan QR, save backup secret, then enter your app code.'
+                    : tfaStatus.tfa_method
+                          ?.toLowerCase()
+                          .includes('authenticator')
+                      ? 'Enter the 6-digit code from your authenticator app to disable 2FA.'
+                      : 'Enter the 6-digit code sent to your email to disable 2FA.'}
+              </p>
+            </div>
+
+            {tfaModalStep === 'method' && (
+              <div className="space-y-3">
+                <button
+                  type="button"
+                  onClick={() => setTfaMethodDraft('email')}
+                  className={`w-full rounded-lg border px-4 py-3 text-left text-sm transition ${
+                    tfaMethodDraft === 'email'
+                      ? 'border-purple-500 bg-purple-50 text-purple-700 dark:bg-purple-900/30 dark:text-purple-200'
+                      : 'border-gray-200 text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800'
+                  }`}
+                >
+                  <p className="font-medium">Email OTP</p>
+                  <p className="mt-1 text-xs opacity-80">
+                    Receive a one-time code in your email inbox.
+                  </p>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setTfaMethodDraft('authenticator')}
+                  className={`w-full rounded-lg border px-4 py-3 text-left text-sm transition ${
+                    tfaMethodDraft === 'authenticator'
+                      ? 'border-purple-500 bg-purple-50 text-purple-700 dark:bg-purple-900/30 dark:text-purple-200'
+                      : 'border-gray-200 text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800'
+                  }`}
+                >
+                  <p className="font-medium">Authenticator App</p>
+                  <p className="mt-1 text-xs opacity-80">
+                    Use Google Authenticator, Authy, or similar app.
+                  </p>
+                </button>
+              </div>
+            )}
+
+            {tfaModalStep === 'enable' && (
+              <div className="space-y-4">
+                {tfaMethodDraft === 'authenticator' && (
+                  <div className="rounded-lg border border-gray-200 p-4 dark:border-gray-700">
+                    {tfaQrCode ? (
+                      <div className="flex justify-center">
+                        <img
+                          src={tfaQrCode}
+                          alt="Authenticator QR"
+                          className="h-52 w-52"
+                        />
+                      </div>
+                    ) : (
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                        QR code unavailable. Use the backup secret below.
+                      </p>
+                    )}
+                    {tfaSecret && (
+                      <p className="mt-3 break-all rounded bg-gray-100 px-3 py-2 text-xs font-mono text-gray-700 dark:bg-gray-800 dark:text-gray-200">
+                        {tfaSecret}
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                <div>
+                  <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Verification code
+                  </label>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    maxLength={6}
+                    value={tfaCodeInput}
+                    onChange={(e) =>
+                      setTfaCodeInput(
+                        e.target.value.replace(/[^0-9]/g, '').slice(0, 6)
+                      )
+                    }
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+                    placeholder="Enter 6-digit code"
+                  />
+                </div>
+              </div>
+            )}
+
+            {tfaModalStep === 'disable' && (
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Verification code
+                </label>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={6}
+                  value={tfaCodeInput}
+                  onChange={(e) =>
+                    setTfaCodeInput(
+                      e.target.value.replace(/[^0-9]/g, '').slice(0, 6)
+                    )
+                  }
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+                  placeholder="Enter 6-digit code"
+                />
+              </div>
+            )}
+
+            <div className="mt-6 flex items-center justify-end gap-3">
+              <button
+                type="button"
+                onClick={closeTfaModal}
+                disabled={tfaModalLoading}
+                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-60 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-800"
+              >
+                Cancel
+              </button>
+
+              {tfaModalStep === 'method' ? (
+                <button
+                  type="button"
+                  onClick={startEnableTfa}
+                  disabled={tfaModalLoading}
+                  className="rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white hover:bg-purple-700 disabled:opacity-60"
+                >
+                  {tfaModalLoading ? 'Starting...' : 'Continue'}
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={
+                    tfaModalStep === 'enable'
+                      ? submitEnableTfa
+                      : submitDisableTfa
+                  }
+                  disabled={tfaModalLoading}
+                  className="rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white hover:bg-purple-700 disabled:opacity-60"
+                >
+                  {tfaModalLoading
+                    ? 'Processing...'
+                    : tfaModalStep === 'enable'
+                      ? 'Enable 2FA'
+                      : 'Disable 2FA'}
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       <Toast
         message={toast.message}
