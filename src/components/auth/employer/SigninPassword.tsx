@@ -7,14 +7,23 @@ import HomesafeLogo from '../../../assets/images/HomesafeLogo.png';
 import HomesafeLogo2 from '../../../assets/images/HomesafeLogo2.svg';
 import { useAuth } from '../../../contexts/AuthContext';
 import { getBackendBaseUrl } from '../../../utils/config';
+import authApi from '../../../api/authApi';
 
 const SigninPasswordPage: React.FC = () => {
   const [password, setPassword] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [tfaCode, setTfaCode] = useState<string>('');
+  const [pendingTfaToken, setPendingTfaToken] = useState<string | null>(null);
+  const [pendingTfaEmail, setPendingTfaEmail] = useState<string>('');
+  const [pendingTfaMethod, setPendingTfaMethod] = useState<
+    'email' | 'authenticator'
+  >('email');
+  const [isVerifyingTfa, setIsVerifyingTfa] = useState<boolean>(false);
+  const [isResendingTfa, setIsResendingTfa] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const { login, loading } = useAuth();
+  const { login, completeTfaLogin, loading } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -44,6 +53,18 @@ const SigninPasswordPage: React.FC = () => {
       const response = await login(email, password, 'employer');
 
       if (response.success && response.data) {
+        if (response.data.requires_tfa) {
+          setPendingTfaToken(response.data.tfa_token || null);
+          setPendingTfaEmail(response.data.email || email);
+          setPendingTfaMethod(
+            response.data.tfa_method === 'authenticator'
+              ? 'authenticator'
+              : 'email'
+          );
+          setErrorMessage(null);
+          return;
+        }
+
         // Check if there's a redirect URL stored from a previous protected route access
         const redirectUrl = sessionStorage.getItem('redirectAfterLogin');
 
@@ -76,6 +97,11 @@ const SigninPasswordPage: React.FC = () => {
           navigate('/employer/dashboard');
         }
       } else {
+        if (response.data?.requires_password_change) {
+          sessionStorage.setItem('firstTimeLoginEmail', email);
+          navigate('/signin/create-password');
+          return;
+        }
         setErrorMessage(response.message || 'Invalid email or password');
       }
     } catch (err) {
@@ -88,6 +114,86 @@ const SigninPasswordPage: React.FC = () => {
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+
+  const handleVerifyTfa = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!pendingTfaToken || !pendingTfaEmail) {
+      setErrorMessage('TFA session expired. Please login again.');
+      return;
+    }
+
+    if (!tfaCode.trim()) {
+      setErrorMessage(
+        pendingTfaMethod === 'email'
+          ? 'Please enter the verification code sent to your email.'
+          : 'Please enter the code from your authenticator app.'
+      );
+      return;
+    }
+
+    setIsVerifyingTfa(true);
+    setErrorMessage(null);
+
+    try {
+      const result = await completeTfaLogin(
+        pendingTfaEmail,
+        pendingTfaToken,
+        tfaCode.trim(),
+        'employer'
+      );
+
+      if (!result.success || !result.data) {
+        setErrorMessage(result.message || 'Invalid verification code');
+        return;
+      }
+
+      const userRole = result.data.role;
+      if (userRole === 'employer') {
+        navigate('/employer/dashboard');
+      } else if (userRole === 'employee') {
+        navigate('/employee/dashboard');
+      } else if (userRole === 'agent') {
+        navigate('/agent/dashboard');
+      } else if (userRole === 'admin') {
+        navigate('/admin/dashboard');
+      } else {
+        navigate('/employer/dashboard');
+      }
+    } catch {
+      setErrorMessage('Unable to verify code. Please try again.');
+    } finally {
+      setIsVerifyingTfa(false);
+    }
+  };
+
+  const handleResendTfaCode = async () => {
+    if (!pendingTfaToken || !pendingTfaEmail) {
+      setErrorMessage('TFA session expired. Please login again.');
+      return;
+    }
+
+    setIsResendingTfa(true);
+    setErrorMessage(null);
+
+    try {
+      const response = await authApi.resendTfaLoginCode(
+        pendingTfaEmail,
+        pendingTfaToken
+      );
+      if (!response.status) {
+        setErrorMessage(
+          response.message || 'Failed to resend verification code.'
+        );
+      }
+    } catch (err: any) {
+      setErrorMessage(
+        err.response?.data?.message || 'Failed to resend verification code.'
+      );
+    } finally {
+      setIsResendingTfa(false);
+    }
   };
 
   return (
@@ -148,101 +254,181 @@ const SigninPasswordPage: React.FC = () => {
               </Link>
             </div>
 
-            <form onSubmit={handleSubmit}>
-              <div className="mb-4">
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Password
-                </label>
-                <div className="relative">
+            {pendingTfaToken ? (
+              <form onSubmit={handleVerifyTfa}>
+                <div className="mb-4">
+                  <p className="text-sm text-gray-600 mb-3">
+                    {pendingTfaMethod === 'email' ? (
+                      <>
+                        We sent a verification code to{' '}
+                        <span className="font-medium">{pendingTfaEmail}</span>.
+                      </>
+                    ) : (
+                      <>Enter the 6-digit code from your authenticator app.</>
+                    )}
+                  </p>
+                  <label
+                    htmlFor="tfaCode"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    Verification Code
+                  </label>
                   <input
-                    type={showPassword ? 'text' : 'password'}
-                    id="password"
-                    placeholder="*******"
+                    type="text"
+                    id="tfaCode"
+                    placeholder="Enter 6-digit code"
                     className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm md:text-base"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    value={tfaCode}
+                    onChange={(e) => setTfaCode(e.target.value)}
                     required
                   />
+                  {errorMessage && (
+                    <p className="mt-2 text-xs text-red-500">{errorMessage}</p>
+                  )}
+                </div>
+
+                <button
+                  type="submit"
+                  className={`w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors ${
+                    isVerifyingTfa ? 'opacity-70 cursor-not-allowed' : ''
+                  }`}
+                  disabled={isVerifyingTfa}
+                >
+                  {isVerifyingTfa ? 'Verifying...' : 'Verify Code'}
+                </button>
+
+                <div className="mt-4 flex items-center justify-between">
+                  {pendingTfaMethod === 'email' ? (
+                    <button
+                      type="button"
+                      className="text-sm text-green-600 hover:underline disabled:opacity-60"
+                      onClick={handleResendTfaCode}
+                      disabled={isResendingTfa}
+                    >
+                      {isResendingTfa ? 'Resending...' : 'Resend code'}
+                    </button>
+                  ) : (
+                    <span className="text-xs text-gray-500">
+                      Open your authenticator app for a new code.
+                    </span>
+                  )}
+
                   <button
                     type="button"
-                    onClick={togglePasswordVisibility}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                    className="text-sm text-gray-600 hover:underline"
+                    onClick={() => {
+                      setPendingTfaToken(null);
+                      setPendingTfaEmail('');
+                      setPendingTfaMethod('email');
+                      setTfaCode('');
+                      setErrorMessage(null);
+                    }}
                   >
-                    {showPassword ? (
-                      <FaEyeSlash size={20} />
-                    ) : (
-                      <FaEye size={20} />
-                    )}
+                    Back
                   </button>
                 </div>
-                {errorMessage && (
-                  <p className="mt-2 text-xs text-red-500">{errorMessage}</p>
-                )}
-              </div>
+              </form>
+            ) : (
+              <form onSubmit={handleSubmit}>
+                <div className="mb-4">
+                  <label
+                    htmlFor="password"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    Password
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      id="password"
+                      placeholder="*******"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm md:text-base"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={togglePasswordVisibility}
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                    >
+                      {showPassword ? (
+                        <FaEyeSlash size={20} />
+                      ) : (
+                        <FaEye size={20} />
+                      )}
+                    </button>
+                  </div>
+                  {errorMessage && (
+                    <p className="mt-2 text-xs text-red-500">{errorMessage}</p>
+                  )}
+                </div>
 
-              <button
-                type="submit"
-                className={`w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors ${
-                  isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
-                }`}
-                disabled={isSubmitting}
-              >
-                {isSubmitting || loading ? 'Signing in...' : 'Continue'}
-              </button>
-            </form>
-            <p className="text-right mt-4 md:mt-[1rem]">
-              <Link
-                to="/signin/forgot-password"
-                className="text-[#24292E] text-[13px] font-medium hover:text-green-600"
-              >
-                Forgot Password?
-              </Link>
-            </p>
+                <button
+                  type="submit"
+                  className={`w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors ${
+                    isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
+                  }`}
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting || loading ? 'Signing in...' : 'Continue'}
+                </button>
+              </form>
+            )}
+            {!pendingTfaToken && (
+              <>
+                <p className="text-right mt-4 md:mt-[1rem]">
+                  <Link
+                    to="/signin/forgot-password"
+                    className="text-[#24292E] text-[13px] font-medium hover:text-green-600"
+                  >
+                    Forgot Password?
+                  </Link>
+                </p>
 
-            <div className="my-4 text-center">
-              <span className="text-sm text-gray-500">Or</span>
-            </div>
+                <div className="my-4 text-center">
+                  <span className="text-sm text-gray-500">Or</span>
+                </div>
 
-            <button
-              type="button"
-              onClick={() => {
-                const baseUrl = getBackendBaseUrl();
-                const currentOrigin = window.location.origin;
-                const callbackPath = '/auth/google/callback';
-                const redirectUrl = `${currentOrigin}${callbackPath}`;
-                const encodedRedirect = encodeURIComponent(redirectUrl);
-                const loginUrl = `${baseUrl}/auth/google/login?redirect_url=${encodedRedirect}`;
-                window.location.href = loginUrl;
-              }}
-              className="w-full flex items-center justify-center py-2 px-4 border border-gray-300 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
-            >
-              <svg
-                className="h-4 w-4 mr-2"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill="#4285F4"
-                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                />
-                <path
-                  fill="#34A853"
-                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                />
-                <path
-                  fill="#FBBC05"
-                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                />
-                <path
-                  fill="#EA4335"
-                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                />
-              </svg>
-              Sign in with Google
-            </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const baseUrl = getBackendBaseUrl();
+                    const currentOrigin = window.location.origin;
+                    const callbackPath = '/auth/google/callback';
+                    const redirectUrl = `${currentOrigin}${callbackPath}`;
+                    const encodedRedirect = encodeURIComponent(redirectUrl);
+                    const loginUrl = `${baseUrl}/auth/google/login?redirect_url=${encodedRedirect}`;
+                    window.location.href = loginUrl;
+                  }}
+                  className="w-full flex items-center justify-center py-2 px-4 border border-gray-300 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
+                >
+                  <svg
+                    className="h-4 w-4 mr-2"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fill="#4285F4"
+                      d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                    />
+                    <path
+                      fill="#34A853"
+                      d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                    />
+                    <path
+                      fill="#FBBC05"
+                      d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                    />
+                    <path
+                      fill="#EA4335"
+                      d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                    />
+                  </svg>
+                  Sign in with Google
+                </button>
+              </>
+            )}
           </div>
 
           {/* <div className="w-[416px] text-[13px] text-[#24292E] text-center mt-[3rem]">
