@@ -347,7 +347,9 @@ const Transactions: React.FC = () => {
             <div className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-1">
               {formatCurrency(stats.summary.total_credits)}
             </div>
-            <div className="text-xs text-gray-500 dark:text-gray-400">Inflows</div>
+            <div className="text-xs text-gray-500 dark:text-gray-400">
+              Inflows
+            </div>
           </div>
 
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 p-6">
@@ -362,7 +364,9 @@ const Transactions: React.FC = () => {
             <div className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-1">
               {formatCurrency(stats.summary.total_withdrawals)}
             </div>
-            <div className="text-xs text-gray-500 dark:text-gray-400">Outflows</div>
+            <div className="text-xs text-gray-500 dark:text-gray-400">
+              Outflows
+            </div>
           </div>
 
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 p-6">
@@ -388,7 +392,10 @@ const Transactions: React.FC = () => {
       {loadingStats && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 p-6 animate-pulse">
+            <div
+              key={i}
+              className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 p-6 animate-pulse"
+            >
               <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-3"></div>
               <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-2"></div>
               <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-2/3"></div>
@@ -402,7 +409,9 @@ const Transactions: React.FC = () => {
         {/* Period Filter */}
         <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-gray-100 dark:border-gray-700">
           <div className="flex flex-wrap items-center gap-3 mb-4">
-            <span className="text-sm font-medium text-gray-700 dark:text-gray-200">Period:</span>
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
+              Period:
+            </span>
             <div className="flex flex-wrap gap-2">
               {(['today', 'week', 'month', 'year', 'all'] as PeriodType[]).map(
                 (period) => (
@@ -669,7 +678,10 @@ const Transactions: React.FC = () => {
                 ) : (
                   // Data rows
                   getPaginatedTransactions().map((transaction) => (
-                    <tr key={transaction.id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                    <tr
+                      key={transaction.id}
+                      className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                    >
                       <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-3">
                           <Avatar
@@ -846,7 +858,10 @@ const Transactions: React.FC = () => {
                       page === currentPage + 2
                     ) {
                       return (
-                        <span key={page} className="px-2 text-gray-500 dark:text-gray-400">
+                        <span
+                          key={page}
+                          className="px-2 text-gray-500 dark:text-gray-400"
+                        >
                           ...
                         </span>
                       );
