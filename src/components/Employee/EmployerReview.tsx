@@ -171,7 +171,7 @@ const EmployerReview: React.FC<EmployerReviewProps> = ({
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
       <div className="absolute inset-0 bg-black/30 backdrop-blur-sm"></div>
-      <div className="bg-white rounded-lg w-full max-w-md relative z-10 p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg w-full max-w-md relative z-10 p-6">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-medium">Review Employer</h2>
           <button
@@ -216,10 +216,10 @@ const EmployerReview: React.FC<EmployerReviewProps> = ({
                 </div>
 
                 {selectedEmployer && (
-                  <div className="mt-2 p-3 bg-gray-50 border border-gray-200 rounded-lg relative">
+                  <div className="mt-2 p-3 bg-gray-50 border border-gray-200 dark:border-gray-700 rounded-lg relative">
                     <button
                       type="button"
-                      className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
+                      className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 dark:text-gray-400"
                       onClick={() => setSelectedEmployer(null)}
                     >
                       <FiX size={18} />
@@ -228,7 +228,7 @@ const EmployerReview: React.FC<EmployerReviewProps> = ({
                       {selectedEmployer.first_name} {selectedEmployer.last_name}
                     </div>
                     {selectedEmployer.company_name && (
-                      <div className="text-sm text-gray-500">
+                      <div className="text-sm text-gray-500 dark:text-gray-400">
                         {selectedEmployer.company_name}
                       </div>
                     )}
@@ -239,9 +239,9 @@ const EmployerReview: React.FC<EmployerReviewProps> = ({
                 )}
 
                 {searchQuery && !selectedEmployer && (
-                  <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                  <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
                     {isLoading ? (
-                      <div className="p-4 text-center text-gray-500">
+                      <div className="p-4 text-center text-gray-500 dark:text-gray-400">
                         Loading employers...
                       </div>
                     ) : filteredEmployers.length > 0 ? (
@@ -255,7 +255,7 @@ const EmployerReview: React.FC<EmployerReviewProps> = ({
                             {employer.first_name} {employer.last_name}
                           </div>
                           {employer.company_name && (
-                            <div className="text-sm text-gray-500">
+                            <div className="text-sm text-gray-500 dark:text-gray-400">
                               {employer.company_name}
                             </div>
                           )}
@@ -265,7 +265,7 @@ const EmployerReview: React.FC<EmployerReviewProps> = ({
                         </div>
                       ))
                     ) : (
-                      <div className="p-4 text-center text-gray-500">
+                      <div className="p-4 text-center text-gray-500 dark:text-gray-400">
                         No employers found matching your search
                       </div>
                     )}
@@ -290,7 +290,7 @@ const EmployerReview: React.FC<EmployerReviewProps> = ({
 
             <button
               type="submit"
-              className="w-full bg-[#A5EA91] hover:bg-[#95ddb1] text-[#24292E] py-3 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-[#A5EA91] hover:bg-[#95ddb1] text-gray-900 dark:text-gray-100 py-3 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={isSubmitting}
             >
               {isSubmitting ? 'Submitting...' : 'Submit Review'}

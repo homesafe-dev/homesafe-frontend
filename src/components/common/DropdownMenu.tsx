@@ -35,7 +35,7 @@ export default function DropdownMenu({ options }: DropdownMenuProps) {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={toggleDropdown}
-        className="text-gray-500 hover:text-gray-700 focus:outline-none"
+        className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 focus:outline-none"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -48,7 +48,7 @@ export default function DropdownMenu({ options }: DropdownMenuProps) {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
+        <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 z-10">
           <div
             className="py-1"
             role="menu"
@@ -62,7 +62,7 @@ export default function DropdownMenu({ options }: DropdownMenuProps) {
                   option.onClick();
                   setIsOpen(false);
                 }}
-                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                className="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-100"
                 role="menuitem"
               >
                 {option.label}

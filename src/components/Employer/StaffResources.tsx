@@ -27,11 +27,13 @@ const ResourceCard: React.FC<ResourceProps> = ({
         <h3 className="font-medium text-green-700 text-sm sm:text-base">
           {title}
         </h3>
-        <p className="text-xs text-gray-500 mt-1">Started: {startDate}</p>
-        <p className="text-xs sm:text-sm text-gray-700 mt-1 leading-relaxed">
+        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+          Started: {startDate}
+        </p>
+        <p className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 mt-1 leading-relaxed">
           {description}
         </p>
-        <p className="text-xs sm:text-sm text-gray-700 mt-1 leading-relaxed">
+        <p className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 mt-1 leading-relaxed">
           It has {chapterCount} chapters and {recipeCount} different recipes on
           how well to make pasta with oor with cheese.
         </p>

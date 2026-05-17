@@ -15,23 +15,26 @@ const WalletTopUp: React.FC = () => {
   };
 
   return (
-    <div className="bg-white w-full h-full p-4 sm:p-6 lg:p-8">
+    <div className="bg-white dark:bg-gray-800 w-full h-full p-4 sm:p-6 lg:p-8">
       <div className="flex items-center mb-6 sm:mb-8">
-        <IoIosArrowBack className="text-gray-600 mr-2" size={20} />
-        <h2 className="text-gray-800 font-medium text-lg sm:text-xl">
+        <IoIosArrowBack
+          className="text-gray-600 dark:text-gray-400 mr-2"
+          size={20}
+        />
+        <h2 className="text-gray-800 dark:text-gray-200 font-medium text-lg sm:text-xl">
           Wallet Top Up
         </h2>
       </div>
 
       <div className="mb-6 sm:mb-8">
-        <p className="text-gray-600 text-sm sm:text-base">
+        <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base">
           Top up your wallet securely with Paystack
         </p>
       </div>
 
       <div className="space-y-4 w-full max-w-[470px]">
         <div
-          className="flex items-center justify-between border border-gray-200 rounded-lg p-3 sm:p-4 cursor-pointer hover:bg-gray-50 hover:border-green-300 transition-colors"
+          className="flex items-center justify-between border border-gray-200 dark:border-gray-700 rounded-lg p-3 sm:p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 hover:border-green-300 transition-colors"
           onClick={handleOpenModal}
         >
           <div className="flex items-center">
@@ -39,10 +42,10 @@ const WalletTopUp: React.FC = () => {
               <FaCreditCard className="text-green-600" size={16} />
             </div>
             <div>
-              <span className="text-gray-800 font-medium block text-sm sm:text-base">
+              <span className="text-gray-800 dark:text-gray-200 font-medium block text-sm sm:text-base">
                 Pay with Paystack
               </span>
-              <span className="text-gray-500 text-xs sm:text-sm">
+              <span className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm">
                 Secure payment with cards, bank transfer & more
               </span>
             </div>

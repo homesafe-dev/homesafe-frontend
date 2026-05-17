@@ -98,10 +98,10 @@ const PaystackPaymentModal: React.FC<PaystackPaymentModalProps> = ({
         className="absolute inset-0 bg-black/30 backdrop-blur-sm"
         onClick={onClose}
       ></div>
-      <div className="bg-white rounded-lg w-full max-w-md relative z-10 max-h-[90vh] overflow-y-auto">
+      <div className="bg-white dark:bg-gray-800 rounded-lg w-full max-w-md relative z-10 max-h-[90vh] overflow-y-auto">
         <div className="p-4 sm:p-6">
           <div className="flex justify-between items-center mb-4 sm:mb-6">
-            <h2 className="text-xl sm:text-2xl font-medium text-gray-800">
+            <h2 className="text-xl sm:text-2xl font-medium text-gray-800 dark:text-gray-200">
               Top Up Wallet
             </h2>
             <button
@@ -117,7 +117,7 @@ const PaystackPaymentModal: React.FC<PaystackPaymentModalProps> = ({
 
           <div className="space-y-3 sm:space-y-4">
             <div>
-              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Amount (NGN)
               </label>
               <input
@@ -157,7 +157,7 @@ const PaystackPaymentModal: React.FC<PaystackPaymentModalProps> = ({
             <button
               onClick={onClose}
               disabled={loading}
-              className="w-full bg-gray-100 hover:bg-gray-200 disabled:bg-gray-50 text-gray-700 py-2 sm:py-3 rounded-lg font-medium transition-colors text-sm sm:text-base"
+              className="w-full bg-gray-100 hover:bg-gray-200 disabled:bg-gray-50 text-gray-700 dark:text-gray-300 py-2 sm:py-3 rounded-lg font-medium transition-colors text-sm sm:text-base"
             >
               Cancel
             </button>

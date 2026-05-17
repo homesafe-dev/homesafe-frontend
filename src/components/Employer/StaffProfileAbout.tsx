@@ -144,7 +144,7 @@ const StaffProfileAbout: React.FC<StaffProfileAboutProps> = ({
   };
 
   return (
-    <div className="flex flex-col items-center bg-white rounded-lg p-3 sm:p-4 h-full">
+    <div className="flex flex-col items-center bg-white dark:bg-gray-800 rounded-lg p-3 sm:p-4 h-full">
       <div className="mb-3 sm:mb-4">
         <Avatar
           src={profileImage}
@@ -157,10 +157,10 @@ const StaffProfileAbout: React.FC<StaffProfileAboutProps> = ({
         />
       </div>
 
-      <h2 className="text-sm sm:text-[16px] text-gray-700 mt-2 sm:mt-[0.5rem] font-medium text-center">
+      <h2 className="text-sm sm:text-[16px] text-gray-700 dark:text-gray-300 mt-2 sm:mt-[0.5rem] font-medium text-center">
         {name}
       </h2>
-      <p className="text-xs sm:text-[13px] mt-2 sm:mt-[0.5rem] text-[#24292E] mb-2 text-center">
+      <p className="text-xs sm:text-[13px] mt-2 sm:mt-[0.5rem] text-gray-900 dark:text-gray-100 mb-2 text-center">
         {location} | {age} yrs old
       </p>
 

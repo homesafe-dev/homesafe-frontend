@@ -9,6 +9,11 @@ const USER_ENDPOINTS = {
   EMPLOYER_LIST: '/users',
   CHANGE_PASSWORD: '/change-password',
   SALARY: (userId: number) => `/profile/${userId}/salary`,
+  TFA_STATUS: '/tfa/status',
+  TFA_SETUP: '/tfa/setup',
+  TFA_ENABLE: '/tfa/enable',
+  TFA_SEND_DISABLE_CODE: '/tfa/send-disable-code',
+  TFA_DISABLE: '/tfa/disable',
 };
 
 // User API service
@@ -254,6 +259,55 @@ const userApi = {
       console.error('Error updating salary:', error);
       throw error;
     }
+  },
+
+  /**
+   * Get current TFA status
+   */
+  getTfaStatus: async () => {
+    const response = await axiosInstance.get(USER_ENDPOINTS.TFA_STATUS);
+    return response.data;
+  },
+
+  /**
+   * Start TFA setup by sending verification code
+   */
+  setupTfa: async (method: 'email' | 'authenticator') => {
+    const response = await axiosInstance.post(USER_ENDPOINTS.TFA_SETUP, {
+      method,
+    });
+    return response.data;
+  },
+
+  /**
+   * Enable TFA with verification code
+   */
+  enableTfa: async (method: 'email' | 'authenticator', code: string) => {
+    const response = await axiosInstance.post(USER_ENDPOINTS.TFA_ENABLE, {
+      method,
+      code,
+    });
+    return response.data;
+  },
+
+  /**
+   * Send disable code to email
+   */
+  sendDisableTfaCode: async () => {
+    const response = await axiosInstance.post(
+      USER_ENDPOINTS.TFA_SEND_DISABLE_CODE
+    );
+    return response.data;
+  },
+
+  /**
+   * Disable TFA with verification code
+   */
+  disableTfa: async (code: string) => {
+    const response = await axiosInstance.post(USER_ENDPOINTS.TFA_DISABLE, {
+      code,
+    });
+    return response.data;
   },
 };
 

@@ -172,10 +172,10 @@ const AllCandidatesPage = () => {
               <Users className="w-4 h-4 text-blue-600" />
             </div>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">
                 Candidates
               </h1>
-              <p className="text-sm sm:text-base text-gray-500 mt-1">
+              <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 mt-1">
                 View and manage all your tracked candidates
               </p>
             </div>
@@ -199,7 +199,7 @@ const AllCandidatesPage = () => {
       )}
 
       {/* Main Content */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-100">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100">
         {/* Search and Filters Section */}
         <div className="p-4 sm:p-6 border-b border-gray-100">
           <div className="flex flex-col lg:flex-row gap-4">
@@ -211,7 +211,7 @@ const AllCandidatesPage = () => {
                 placeholder="Search by name, email, phone, or placement..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
+                className="w-full pl-10 pr-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
               />
             </div>
 
@@ -220,7 +220,7 @@ const AllCandidatesPage = () => {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white"
+                className="px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white dark:bg-gray-800"
               >
                 <option value="all">All Status</option>
                 <option value="verified">Verified</option>
@@ -230,7 +230,7 @@ const AllCandidatesPage = () => {
               <select
                 value={placementFilter}
                 onChange={(e) => setPlacementFilter(e.target.value)}
-                className="px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white"
+                className="px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white dark:bg-gray-800"
               >
                 <option value="all">All Placements</option>
                 <option value="placed">Placed</option>
@@ -241,7 +241,7 @@ const AllCandidatesPage = () => {
               {hasActiveFilters && (
                 <button
                   onClick={clearFilters}
-                  className="px-4 py-2.5 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-sm flex items-center gap-2"
+                  className="px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors text-sm flex items-center gap-2"
                 >
                   <X className="w-4 h-4" />
                   Clear
@@ -252,9 +252,9 @@ const AllCandidatesPage = () => {
 
           {/* Results Count */}
           <div className="mt-4 pt-4 border-t border-gray-100">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
               Showing{' '}
-              <span className="font-semibold text-gray-900">
+              <span className="font-semibold text-gray-900 dark:text-gray-100">
                 {filteredEmployees.length}
               </span>{' '}
               {filteredEmployees.length === 1 ? 'candidate' : 'candidates'}
@@ -268,30 +268,30 @@ const AllCandidatesPage = () => {
           <table className="w-full">
             <thead className="bg-gray-50 border-b border-gray-100">
               <tr>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
                   Candidate
                 </th>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
                   Date
                 </th>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
                   Placement
                 </th>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
                   Gender
                 </th>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
                   Phone Number
                 </th>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-4 sm:px-6 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                <th className="px-4 sm:px-6 py-3 text-right text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
                   Action
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-100">
+            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-100">
               {isLoading ? (
                 // Loading state
                 [...Array(5)].map((_, index) => (
@@ -330,10 +330,10 @@ const AllCandidatesPage = () => {
                       <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
                         <Users className="w-8 h-8 text-gray-400" />
                       </div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
                         No candidates found
                       </h3>
-                      <p className="text-sm text-gray-500 mb-4">
+                      <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
                         {hasActiveFilters
                           ? 'Try adjusting your filters or search query'
                           : 'No candidates have been tracked yet'}
@@ -360,7 +360,7 @@ const AllCandidatesPage = () => {
                   return (
                     <tr
                       key={employee.id}
-                      className="hover:bg-gray-50 transition-colors"
+                      className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
                     >
                       <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-3">
@@ -372,11 +372,11 @@ const AllCandidatesPage = () => {
                             showStatus={false}
                           />
                           <div>
-                            <div className="text-sm font-medium text-gray-900">
+                            <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
                               {employee.candidate}
                             </div>
                             {employee.email && (
-                              <div className="text-xs text-gray-500">
+                              <div className="text-xs text-gray-500 dark:text-gray-400">
                                 {employee.email}
                               </div>
                             )}
@@ -384,7 +384,7 @@ const AllCandidatesPage = () => {
                         </div>
                       </td>
                       <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center gap-1.5 text-sm text-gray-700">
+                        <div className="flex items-center gap-1.5 text-sm text-gray-700 dark:text-gray-300">
                           <Calendar className="w-4 h-4 text-gray-400" />
                           {new Date(employee.date).toLocaleDateString('en-US', {
                             day: 'numeric',
@@ -394,7 +394,7 @@ const AllCandidatesPage = () => {
                         </div>
                       </td>
                       <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center gap-1.5 text-sm text-gray-700">
+                        <div className="flex items-center gap-1.5 text-sm text-gray-700 dark:text-gray-300">
                           <MapPin className="w-4 h-4 text-gray-400" />
                           {placement === 'Not on placement' ||
                           placement === 'Not assigned' ? (
@@ -405,7 +405,7 @@ const AllCandidatesPage = () => {
                         </div>
                       </td>
                       <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center gap-1.5 text-sm text-gray-700">
+                        <div className="flex items-center gap-1.5 text-sm text-gray-700 dark:text-gray-300">
                           <User className="w-4 h-4 text-gray-400" />
                           {employee.gender
                             ? employee.gender.charAt(0).toUpperCase() +
@@ -414,7 +414,7 @@ const AllCandidatesPage = () => {
                         </div>
                       </td>
                       <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center gap-1.5 text-sm text-gray-700">
+                        <div className="flex items-center gap-1.5 text-sm text-gray-700 dark:text-gray-300">
                           <Phone className="w-4 h-4 text-gray-400" />
                           {employee.phone || 'N/A'}
                         </div>
@@ -452,7 +452,7 @@ const AllCandidatesPage = () => {
         {/* Pagination */}
         {!isLoading && filteredEmployees.length > 0 && totalPages > 1 && (
           <div className="px-4 sm:px-6 py-4 border-t border-gray-100 flex items-center justify-between">
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-gray-600 dark:text-gray-400">
               Showing{' '}
               <span className="font-medium">{(currentPage - 1) * 10 + 1}</span>{' '}
               to{' '}
@@ -466,7 +466,7 @@ const AllCandidatesPage = () => {
               <button
                 onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
                 disabled={currentPage === 1}
-                className="p-2 border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="p-2 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
@@ -485,7 +485,7 @@ const AllCandidatesPage = () => {
                         className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
                           currentPage === page
                             ? 'bg-green-600 text-white'
-                            : 'border border-gray-200 hover:bg-gray-50'
+                            : 'border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50'
                         }`}
                       >
                         {page}
@@ -509,7 +509,7 @@ const AllCandidatesPage = () => {
                   handlePageChange(Math.min(totalPages, currentPage + 1))
                 }
                 disabled={currentPage === totalPages}
-                className="p-2 border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="p-2 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>

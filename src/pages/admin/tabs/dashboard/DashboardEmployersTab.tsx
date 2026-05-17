@@ -65,60 +65,60 @@ export default function DashboardEmployersTab() {
   return (
     <div className="overflow-x-auto">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg sm:text-xl font-semibold">Employers</h2>
+        <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100">Employers</h2>
       </div>
 
       <table className="w-full min-w-[800px]">
-        <thead className="bg-[#C8EDDF80] h-[48px] sm:h-[56px] text-left">
+        <thead className="bg-[#C8EDDF80] dark:bg-gray-800 h-[48px] sm:h-[56px] text-left border-b border-transparent dark:border-gray-700">
           <tr>
-            <th className="px-3 sm:px-6 py-3 text-[11px] sm:text-[13px] text-[#174B35] font-normal">
+            <th className="px-3 sm:px-6 py-3 text-[11px] sm:text-[13px] text-[#174B35] dark:text-gray-200 font-normal">
               Full Name
             </th>
-            <th className="px-3 sm:px-6 py-3 text-[11px] sm:text-[13px] text-[#174B35] font-normal">
+            <th className="px-3 sm:px-6 py-3 text-[11px] sm:text-[13px] text-[#174B35] dark:text-gray-200 font-normal">
               Date
             </th>
-            <th className="px-3 sm:px-6 py-3 text-[11px] sm:text-[13px] text-[#174B35] font-normal">
+            <th className="px-3 sm:px-6 py-3 text-[11px] sm:text-[13px] text-[#174B35] dark:text-gray-200 font-normal">
               Location
             </th>
-            <th className="px-3 sm:px-6 py-3 text-[11px] sm:text-[13px] text-[#174B35] font-normal">
+            <th className="px-3 sm:px-6 py-3 text-[11px] sm:text-[13px] text-[#174B35] dark:text-gray-200 font-normal">
               Gender
             </th>
-            <th className="px-3 sm:px-6 py-3 text-[11px] sm:text-[13px] text-[#174B35] font-normal">
+            <th className="px-3 sm:px-6 py-3 text-[11px] sm:text-[13px] text-[#174B35] dark:text-gray-200 font-normal">
               Phone Number
             </th>
-            <th className="px-3 sm:px-6 py-3 text-[11px] sm:text-[13px] text-[#174B35] font-normal">
+            <th className="px-3 sm:px-6 py-3 text-[11px] sm:text-[13px] text-[#174B35] dark:text-gray-200 font-normal">
               Status
             </th>
-            <th className="px-3 sm:px-6 py-3 text-[11px] sm:text-[13px] text-[#174B35] font-normal">
+            <th className="px-3 sm:px-6 py-3 text-[11px] sm:text-[13px] text-[#174B35] dark:text-gray-200 font-normal">
               Blocked Status
             </th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-200">
+        <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
           {isLoading ? (
             // Loading state - show skeleton rows
             [...Array(3)].map((_, index) => (
-              <tr key={index} className="hover:bg-gray-50 animate-pulse">
+              <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-700 animate-pulse">
                 <td className="px-3 sm:px-6 py-3 sm:py-4">
-                  <div className="h-6 sm:h-8 bg-gray-200 rounded"></div>
+                  <div className="h-6 sm:h-8 bg-gray-200 dark:bg-gray-700 rounded"></div>
                 </td>
                 <td className="px-3 sm:px-6 py-3 sm:py-4">
-                  <div className="h-6 sm:h-8 bg-gray-200 rounded"></div>
+                  <div className="h-6 sm:h-8 bg-gray-200 dark:bg-gray-700 rounded"></div>
                 </td>
                 <td className="px-3 sm:px-6 py-3 sm:py-4">
-                  <div className="h-6 sm:h-8 bg-gray-200 rounded"></div>
+                  <div className="h-6 sm:h-8 bg-gray-200 dark:bg-gray-700 rounded"></div>
                 </td>
                 <td className="px-3 sm:px-6 py-3 sm:py-4">
-                  <div className="h-6 sm:h-8 bg-gray-200 rounded"></div>
+                  <div className="h-6 sm:h-8 bg-gray-200 dark:bg-gray-700 rounded"></div>
                 </td>
                 <td className="px-3 sm:px-6 py-3 sm:py-4">
-                  <div className="h-6 sm:h-8 bg-gray-200 rounded"></div>
+                  <div className="h-6 sm:h-8 bg-gray-200 dark:bg-gray-700 rounded"></div>
                 </td>
                 <td className="px-3 sm:px-6 py-3 sm:py-4">
-                  <div className="h-6 sm:h-8 bg-gray-200 rounded"></div>
+                  <div className="h-6 sm:h-8 bg-gray-200 dark:bg-gray-700 rounded"></div>
                 </td>
                 <td className="px-3 sm:px-6 py-3 sm:py-4">
-                  <div className="h-6 sm:h-8 bg-gray-200 rounded"></div>
+                  <div className="h-6 sm:h-8 bg-gray-200 dark:bg-gray-700 rounded"></div>
                 </td>
               </tr>
             ))
@@ -137,7 +137,7 @@ export default function DashboardEmployersTab() {
             <tr>
               <td
                 colSpan={7}
-                className="px-3 sm:px-6 py-4 text-center text-gray-500 text-sm"
+                className="px-3 sm:px-6 py-4 text-center text-gray-500 dark:text-gray-400 text-sm"
               >
                 No employers found
               </td>
@@ -147,10 +147,10 @@ export default function DashboardEmployersTab() {
             employers.map((employer) => (
               <tr
                 key={employer.id}
-                className="hover:bg-gray-50 cursor-pointer"
+                className="hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer"
                 onClick={() => navigate(`/admin/user/${employer.id}`)}
               >
-                <td className="px-3 sm:px-6 py-3 sm:py-4 flex items-center gap-2 text-[11px] sm:text-[13px] text-[#24292E] font-normal">
+                <td className="px-3 sm:px-6 py-3 sm:py-4 flex items-center gap-2 text-[11px] sm:text-[13px] text-[#24292E] dark:text-gray-200 font-normal">
                   <Avatar
                     src={employer.avatar}
                     firstName={employer.first_name}
@@ -160,25 +160,25 @@ export default function DashboardEmployersTab() {
                   />
                   <span className="truncate">{`${employer.first_name} ${employer.last_name}`}</span>
                 </td>
-                <td className="px-3 sm:px-6 py-3 sm:py-4 text-[11px] sm:text-[13px] text-[#24292E] font-normal">
+                <td className="px-3 sm:px-6 py-3 sm:py-4 text-[11px] sm:text-[13px] text-[#24292E] dark:text-gray-200 font-normal">
                   {new Date(employer.created_at).toLocaleDateString('en-US', {
                     day: 'numeric',
                     month: 'short',
                     year: 'numeric',
                   })}
                 </td>
-                <td className="px-3 sm:px-6 py-3 sm:py-4 text-[11px] sm:text-[13px] text-[#24292E] font-normal">
+                <td className="px-3 sm:px-6 py-3 sm:py-4 text-[11px] sm:text-[13px] text-[#24292E] dark:text-gray-200 font-normal">
                   <span className="truncate">
                     {employer.address
                       ? employer.address.split(',')[0]
                       : 'Lagos'}
                   </span>
                 </td>
-                <td className="px-3 sm:px-6 py-3 sm:py-4 text-[11px] sm:text-[13px] text-[#24292E] font-normal">
+                <td className="px-3 sm:px-6 py-3 sm:py-4 text-[11px] sm:text-[13px] text-[#24292E] dark:text-gray-200 font-normal">
                   {employer.gender.charAt(0).toUpperCase() +
                     employer.gender.slice(1)}
                 </td>
-                <td className="px-3 sm:px-6 py-3 sm:py-4 text-[11px] sm:text-[13px] text-[#24292E] font-normal">
+                <td className="px-3 sm:px-6 py-3 sm:py-4 text-[11px] sm:text-[13px] text-[#24292E] dark:text-gray-200 font-normal">
                   <span className="truncate">{employer.phone}</span>
                 </td>
                 <td className="px-3 sm:px-6 py-3 sm:py-4">

@@ -109,6 +109,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const response = await authApi.login(email, password);
       setLoading(false);
 
+      // Handle TFA challenge without creating an authenticated session yet
+      if (response.status && response.data?.requires_tfa) {
+        return {
+          success: true,
+          message: response.message,
+          data: response.data,
+        };
+      }
+
       // Handle successful login
       if (response.status && response.data) {
         // Create user object based on the response data
@@ -153,6 +162,64 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.error('[AuthContext] Login error:', err);
       setLoading(false);
       const errorMessage = err.response?.data?.message || 'Failed to login';
+      const errorData = err.response?.data?.data;
+      setError(errorMessage);
+      return {
+        success: false,
+        message: errorMessage,
+        data: errorData,
+      };
+    }
+  };
+
+  const completeTfaLogin = async (
+    email: string,
+    tfaToken: string,
+    code: string,
+    type: UserType
+  ): Promise<OtpResponse> => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await authApi.verifyTfaLogin(email, tfaToken, code);
+      setLoading(false);
+
+      if (response.status && response.data) {
+        const userObj = {
+          id: response.data.id || '1',
+          email: email,
+          name: `${response.data.first_name || ''}`,
+          type: (response.data.role as UserType) || type,
+        };
+
+        setUser(userObj);
+
+        if (response.data.token) {
+          localStorage.setItem('auth_token', response.data.token);
+          localStorage.setItem('auth_user', JSON.stringify(userObj));
+        } else {
+          console.warn('[AuthContext] No token in TFA response data');
+        }
+
+        setAuthInitialized(true);
+
+        return {
+          success: true,
+          message: response.message,
+          data: response.data,
+        };
+      }
+
+      return {
+        success: false,
+        message: response.message || 'TFA verification failed',
+        data: response.data,
+      };
+    } catch (err: any) {
+      setLoading(false);
+      const errorMessage =
+        err.response?.data?.message || 'Failed to verify login code';
       setError(errorMessage);
       return {
         success: false,
@@ -333,6 +400,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       value={{
         user,
         login,
+        completeTfaLogin,
         logout,
         isAuthenticated: !!user,
         hasRole,

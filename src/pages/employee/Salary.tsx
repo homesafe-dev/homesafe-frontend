@@ -136,12 +136,14 @@ const Salary: React.FC = () => {
   // Removed fallback data as it's not being used
 
   return (
-    <div className="rounded-lg border-gray-200">
+    <div className="rounded-lg border-gray-200 dark:border-gray-700">
       <div className="flex items-center mb-1">
-        <h1 className="text-[20px] font-semibold text-[#24292E]">Salary</h1>
+        <h1 className="text-[20px] font-semibold text-gray-900 dark:text-gray-100">
+          Salary
+        </h1>
       </div>
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-3">
-        <h2 className="text-[16px] text-[#24292E] font-semibold mt-[1rem]">
+        <h2 className="text-[16px] text-gray-900 dark:text-gray-100 font-semibold mt-[1rem]">
           Transaction History
         </h2>
         {pagination.last_page > 1 && (
@@ -151,8 +153,8 @@ const Salary: React.FC = () => {
               disabled={pagination.current_page === 1}
               className={`px-2 sm:px-3 py-1 rounded text-sm ${
                 pagination.current_page === 1
-                  ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                  : 'bg-[#A5EA91] text-gray-700 hover:bg-green-200'
+                  ? 'bg-gray-200 text-gray-500 dark:text-gray-400 cursor-not-allowed'
+                  : 'bg-[#A5EA91] text-gray-700 dark:text-gray-300 hover:bg-green-200'
               }`}
             >
               <span className="hidden sm:inline">Previous</span>
@@ -166,8 +168,8 @@ const Salary: React.FC = () => {
               disabled={pagination.current_page === pagination.last_page}
               className={`px-2 sm:px-3 py-1 rounded text-sm ${
                 pagination.current_page === pagination.last_page
-                  ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                  : 'bg-[#A5EA91] text-gray-700 hover:bg-green-200'
+                  ? 'bg-gray-200 text-gray-500 dark:text-gray-400 cursor-not-allowed'
+                  : 'bg-[#A5EA91] text-gray-700 dark:text-gray-300 hover:bg-green-200'
               }`}
             >
               Next
@@ -188,7 +190,7 @@ const Salary: React.FC = () => {
           <div style={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
             <table className="w-full text-sm" style={{ minWidth: '800px' }}>
               <thead>
-                <tr className="text-left text-gray-500 border-b border-gray-200">
+                <tr className="text-left text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
                   <th className="py-3 px-2 bg-[#E7F6F0] whitespace-nowrap">
                     Transaction Type
                   </th>
@@ -214,7 +216,7 @@ const Salary: React.FC = () => {
                   transactions.map((transaction, index) => (
                     <tr
                       key={index}
-                      className="border-b border-gray-200 hover:bg-gray-50"
+                      className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50"
                     >
                       <td className="py-3 px-2 whitespace-nowrap">
                         {transaction.type}
@@ -238,7 +240,10 @@ const Salary: React.FC = () => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={6} className="py-4 text-center text-gray-500">
+                    <td
+                      colSpan={6}
+                      className="py-4 text-center text-gray-500 dark:text-gray-400"
+                    >
                       No transactions found
                     </td>
                   </tr>
