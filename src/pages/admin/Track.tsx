@@ -411,7 +411,10 @@ const AdminTrack = () => {
                 getPaginatedEmployees().map((employee) => {
                   const status = getEmployeeStatus(employee);
                   return (
-                    <tr key={employee.id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                    <tr
+                      key={employee.id}
+                      className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                    >
                       <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-3">
                           <Avatar
@@ -446,7 +449,9 @@ const AdminTrack = () => {
                       </td>
                       <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
                         {employee.placement || (
-                          <span className="text-gray-400 dark:text-gray-500">No placement</span>
+                          <span className="text-gray-400 dark:text-gray-500">
+                            No placement
+                          </span>
                         )}
                       </td>
                       <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
@@ -454,7 +459,9 @@ const AdminTrack = () => {
                       </td>
                       <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
                         {employee.phone || (
-                          <span className="text-gray-400 dark:text-gray-500">N/A</span>
+                          <span className="text-gray-400 dark:text-gray-500">
+                            N/A
+                          </span>
                         )}
                       </td>
                       <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
@@ -580,7 +587,10 @@ const AdminTrack = () => {
                     page === currentPage + 2
                   ) {
                     return (
-                      <span key={page} className="px-2 text-gray-400 dark:text-gray-500">
+                      <span
+                        key={page}
+                        className="px-2 text-gray-400 dark:text-gray-500"
+                      >
                         ...
                       </span>
                     );
