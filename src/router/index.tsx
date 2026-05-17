@@ -52,6 +52,7 @@ import AdminReviews from '../pages/admin/Reviews';
 import AdminProfile from '../pages/admin/Profile';
 import AdminSecurity from '../pages/admin/Security';
 import AdminSettings from '../pages/admin/AdminSettings';
+import SubscriptionPlans from '../pages/admin/SubscriptionPlans';
 import CreateAdmin from '../pages/admin/CreateAdmin';
 import AllAdmins from '../pages/admin/AllAdmins';
 import FacialCapturePage from '../components/auth/employer/FacialCapture';
@@ -728,6 +729,14 @@ export const router = createBrowserRouter([
         element: protectAdminRoute(
           <AdminLayout>
             <AdminSettings />
+          </AdminLayout>
+        ),
+      },
+      {
+        path: 'subscription-plans',
+        element: protectAdminRoute(
+          <AdminLayout>
+            <SubscriptionPlans />
           </AdminLayout>
         ),
       },

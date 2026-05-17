@@ -137,7 +137,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
       <img
         src={HomesafeLogo}
         alt="homesafe logo"
-        className="w-[140px] sm:w-[178px] mx-auto mt-[2rem] sm:mt-[3rem] mb-[2rem] sm:mb-[3rem]"
+        className="w-[140px] sm:w-[178px] mx-auto mt-[2rem] sm:mt-[3rem] mb-[2rem] sm:mb-[3rem] dark:brightness-110"
       />
 
       <div className="flex-1 px-3 py-4">

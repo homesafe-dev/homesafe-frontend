@@ -36,14 +36,16 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
       onClick={onClose}
     >
       <div
-        className="w-full max-w-md bg-white shadow-lg mt-16"
+        className="w-full max-w-md bg-white dark:bg-gray-800 shadow-lg mt-16"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-          <h2 className="text-lg font-medium text-gray-800">Notifications</h2>
+        <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+          <h2 className="text-lg font-medium text-gray-800 dark:text-gray-200">
+            Notifications
+          </h2>
           <button
-            className="text-gray-600 hover:text-gray-800 flex items-center gap-2"
+            className="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:text-gray-200 flex items-center gap-2"
             onClick={onMarkAllAsRead}
           >
             <span className="text-sm">Mark all as Read</span>
@@ -56,7 +58,7 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
           {notifications.map((notification) => (
             <div
               key={notification.id}
-              className="border-b border-gray-200 px-6 py-4 relative"
+              className="border-b border-gray-200 dark:border-gray-700 px-6 py-4 relative"
             >
               {/* Notification content */}
               <div className="flex justify-between items-start">
@@ -65,7 +67,7 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
                     <div className="bg-gray-100 rounded-full p-2">
                       <IoNotificationsOutline
                         size={18}
-                        className="text-gray-500"
+                        className="text-gray-500 dark:text-gray-400"
                       />
                     </div>
                     {!notification.read && (
@@ -73,22 +75,22 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
                     )}
                   </div>
                   <div>
-                    <h3 className="font-medium text-gray-800">
+                    <h3 className="font-medium text-gray-800 dark:text-gray-200">
                       {notification.title}
                     </h3>
-                    <p className="text-gray-600 text-sm mt-1">
+                    <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">
                       {notification.message}
                     </p>
                     <button
                       onClick={() => onViewNotification(notification.id)}
-                      className="mt-3 flex items-center gap-2 text-gray-500 hover:text-gray-700 py-2 px-4 border border-gray-300 rounded-md text-sm"
+                      className="mt-3 flex items-center gap-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 py-2 px-4 border border-gray-300 rounded-md text-sm"
                     >
                       <IoEyeOutline size={16} />
                       <span>View</span>
                     </button>
                   </div>
                 </div>
-                <span className="text-gray-500 text-sm">
+                <span className="text-gray-500 dark:text-gray-400 text-sm">
                   {notification.date}
                 </span>
               </div>

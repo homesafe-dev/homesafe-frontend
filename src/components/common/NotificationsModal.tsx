@@ -115,14 +115,16 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
       onClick={onClose}
     >
       <div
-        className="w-full max-w-lg min-w-[400px] bg-white shadow-lg mt-16 rounded-lg"
+        className="w-full max-w-lg min-w-[400px] bg-white dark:bg-gray-800 shadow-lg mt-16 rounded-lg"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-          <h2 className="text-lg font-medium text-gray-800">Notifications</h2>
+        <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+          <h2 className="text-lg font-medium text-gray-800 dark:text-gray-200">
+            Notifications
+          </h2>
           <button
-            className="text-gray-600 hover:text-gray-800 flex items-center gap-2 disabled:opacity-50"
+            className="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:text-gray-200 flex items-center gap-2 disabled:opacity-50"
             onClick={handleMarkAllAsRead}
             disabled={loading || notifications.every((n) => n.read)}
           >
@@ -134,13 +136,13 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
         {/* Notifications List */}
         <div className="max-h-[600px] overflow-y-auto">
           {loading ? (
-            <div className="px-6 py-8 text-center text-gray-500">
+            <div className="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
               Loading notifications...
             </div>
           ) : error ? (
             <div className="px-6 py-8 text-center text-red-500">{error}</div>
           ) : notifications.length === 0 ? (
-            <div className="px-6 py-12 text-center text-gray-500 min-h-[200px] flex flex-col justify-center">
+            <div className="px-6 py-12 text-center text-gray-500 dark:text-gray-400 min-h-[200px] flex flex-col justify-center">
               <IoNotificationsOutline
                 size={48}
                 className="mx-auto mb-4 text-gray-300"
@@ -154,7 +156,7 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
             notifications.slice(0, 5).map((notification) => (
               <div
                 key={notification.id}
-                className="border-b border-gray-200 px-6 py-4 relative"
+                className="border-b border-gray-200 dark:border-gray-700 px-6 py-4 relative"
               >
                 {/* Notification content */}
                 <div className="flex justify-between items-start">
@@ -170,7 +172,7 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
                         ) : (
                           <IoNotificationsOutline
                             size={18}
-                            className="text-gray-500"
+                            className="text-gray-500 dark:text-gray-400"
                           />
                         )}
                       </div>
@@ -179,22 +181,22 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
                       )}
                     </div>
                     <div className="flex-1">
-                      <h3 className="font-medium text-gray-800">
+                      <h3 className="font-medium text-gray-800 dark:text-gray-200">
                         {notification.title}
                       </h3>
-                      <p className="text-gray-600 text-sm mt-1 line-clamp-2">
+                      <p className="text-gray-600 dark:text-gray-400 text-sm mt-1 line-clamp-2">
                         {notification.message}
                       </p>
                       <button
                         onClick={() => handleViewNotification(notification.id)}
-                        className="mt-3 flex items-center gap-2 text-gray-500 hover:text-gray-700 py-2 px-4 border border-gray-300 rounded-md text-sm transition-colors"
+                        className="mt-3 flex items-center gap-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 py-2 px-4 border border-gray-300 rounded-md text-sm transition-colors"
                       >
                         <IoEyeOutline size={16} />
                         <span>View</span>
                       </button>
                     </div>
                   </div>
-                  <span className="text-gray-500 text-sm whitespace-nowrap ml-2">
+                  <span className="text-gray-500 dark:text-gray-400 text-sm whitespace-nowrap ml-2">
                     {notification.date}
                   </span>
                 </div>

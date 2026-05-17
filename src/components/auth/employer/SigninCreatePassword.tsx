@@ -1,20 +1,81 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import signupImg1 from '../../../assets/images/signupImg1.png';
 import signupImg2 from '../../../assets/images/signupImg2.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import HomesafeLogo from '../../../assets/images/HomesafeLogo.png';
+import authApi from '../../../api/authApi';
 
 const SigninCreatePasswordPage: React.FC = () => {
+  const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    const firstTimeEmail = sessionStorage.getItem('firstTimeLoginEmail');
+    if (!firstTimeEmail) {
+      navigate('/login');
+      return;
+    }
+
+    setEmail(firstTimeEmail);
+  }, [navigate]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!email) {
+      setError('Login session expired. Please sign in again.');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters long');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await authApi.resetPassword(email, password);
+      if (response.status) {
+        sessionStorage.removeItem('firstTimeLoginEmail');
+        navigate('/login', {
+          state: {
+            message:
+              'Password set successfully. Please login with your new password.',
+          },
+        });
+      } else {
+        setError(response.message || 'Failed to set password. Please try again.');
+      }
+    } catch (err: any) {
+      setError(
+        err.response?.data?.message || 'An error occurred. Please try again.'
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
   };
 
   return (
@@ -102,18 +163,52 @@ const SigninCreatePasswordPage: React.FC = () => {
                 </p>
               </div>
 
-              <Link to="/employer/dashboard" className="block w-full">
-                <button
-                  type="submit"
-                  className="w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors"
+              <div className="mb-4">
+                <label
+                  htmlFor="confirmPassword"
+                  className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Continue
-                </button>
-              </Link>
+                  Confirm Password
+                </label>
+                <div className="relative">
+                  <input
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    id="confirmPassword"
+                    placeholder="*******"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-sm md:text-base"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={toggleConfirmPasswordVisibility}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  >
+                    {showConfirmPassword ? (
+                      <FaEyeSlash size={20} />
+                    ) : (
+                      <FaEye size={20} />
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              {error && <div className="mb-4 text-red-500 text-sm">{error}</div>}
+
+              <button
+                type="submit"
+                className="w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+                disabled={loading}
+              >
+                {loading ? 'Saving...' : 'Continue'}
+              </button>
             </form>
-            <p className="text-right text-[#24292E] text-[13px] font-medium mt-4 md:mt-[1rem]">
-              Forgot Password?
-            </p>
+            <div className="mt-4 text-center">
+              <Link to="/login" className="text-green-600 hover:text-green-800">
+                Back to Sign in
+              </Link>
+            </div>
           </div>
         </div>
       </div>

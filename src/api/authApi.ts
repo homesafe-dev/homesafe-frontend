@@ -12,6 +12,8 @@ const AUTH_ENDPOINTS = {
   VERIFY_FORGOT_PASSWORD_OTP: '/verify-forgot-password-otp',
   RESET_PASSWORD: '/reset-password',
   LOGOUT: '/logout',
+  VERIFY_TFA_LOGIN: '/tfa/verify-login',
+  RESEND_TFA_LOGIN_CODE: '/tfa/resend-login-code',
 };
 
 // Auth API service
@@ -191,6 +193,32 @@ const authApi = {
       email,
       password,
     });
+    return response.data;
+  },
+
+  /**
+   * Verify TFA login challenge
+   */
+  verifyTfaLogin: async (email: string, tfaToken: string, code: string) => {
+    const response = await axiosInstance.post(AUTH_ENDPOINTS.VERIFY_TFA_LOGIN, {
+      email,
+      tfa_token: tfaToken,
+      code,
+    });
+    return response.data;
+  },
+
+  /**
+   * Resend TFA login code for pending challenge
+   */
+  resendTfaLoginCode: async (email: string, tfaToken: string) => {
+    const response = await axiosInstance.post(
+      AUTH_ENDPOINTS.RESEND_TFA_LOGIN_CODE,
+      {
+        email,
+        tfa_token: tfaToken,
+      }
+    );
     return response.data;
   },
 };

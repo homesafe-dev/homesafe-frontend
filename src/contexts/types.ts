@@ -39,6 +39,12 @@ export interface AuthContextType {
     password: string,
     type: UserType
   ) => Promise<OtpResponse>;
+  completeTfaLogin: (
+    email: string,
+    tfaToken: string,
+    code: string,
+    type: UserType
+  ) => Promise<OtpResponse>;
   logout: () => void;
   isAuthenticated: boolean;
   hasRole: (role: UserType | UserType[]) => boolean;

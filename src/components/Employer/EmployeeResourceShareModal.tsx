@@ -168,10 +168,10 @@ const EmployeeResourceShareModal: React.FC<EmployeeResourceShareModalProps> = ({
         className="absolute inset-0 bg-black/30 backdrop-blur-sm"
         onClick={handleClose}
       ></div>
-      <div className="bg-white rounded-lg w-full max-w-md relative z-10">
+      <div className="bg-white dark:bg-gray-800 rounded-lg w-full max-w-md relative z-10">
         <div className="p-6">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-[25px] font-semibold text-[#24292E]">
+            <h2 className="text-[25px] font-semibold text-gray-900 dark:text-gray-100">
               Share Resource
             </h2>
             <button
@@ -183,13 +183,13 @@ const EmployeeResourceShareModal: React.FC<EmployeeResourceShareModalProps> = ({
           </div>
 
           <div className="mb-4">
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
               Share "{resourceTitle}" with an employee
             </p>
           </div>
 
           <div className="mb-5">
-            <label className="block text-[13px] font-medium text-[#24292E] mb-2">
+            <label className="block text-[13px] font-medium text-gray-900 dark:text-gray-100 mb-2">
               Search Employee
             </label>
             <div className="relative" ref={dropdownRef}>
@@ -205,10 +205,10 @@ const EmployeeResourceShareModal: React.FC<EmployeeResourceShareModalProps> = ({
               </div>
 
               {selectedEmployee && (
-                <div className="mt-2 p-3 bg-gray-50 border border-gray-200 rounded-lg relative">
+                <div className="mt-2 p-3 bg-gray-50 border border-gray-200 dark:border-gray-700 rounded-lg relative">
                   <button
                     type="button"
-                    className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
+                    className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 dark:text-gray-400"
                     onClick={() => setSelectedEmployee(null)}
                   >
                     <FiX size={18} />
@@ -218,7 +218,7 @@ const EmployeeResourceShareModal: React.FC<EmployeeResourceShareModalProps> = ({
                   </div>
                   {selectedEmployee.occupations &&
                     selectedEmployee.occupations.length > 0 && (
-                      <div className="text-sm text-gray-500">
+                      <div className="text-sm text-gray-500 dark:text-gray-400">
                         {selectedEmployee.occupations
                           .map((occ) => occ.name)
                           .join(', ')}
@@ -231,9 +231,9 @@ const EmployeeResourceShareModal: React.FC<EmployeeResourceShareModalProps> = ({
               )}
 
               {searchQuery && !selectedEmployee && (
-                <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
                   {isLoadingEmployees ? (
-                    <div className="p-4 text-center text-gray-500">
+                    <div className="p-4 text-center text-gray-500 dark:text-gray-400">
                       Loading employees...
                     </div>
                   ) : filteredEmployees.length > 0 ? (
@@ -248,7 +248,7 @@ const EmployeeResourceShareModal: React.FC<EmployeeResourceShareModalProps> = ({
                         </div>
                         {employee.occupations &&
                           employee.occupations.length > 0 && (
-                            <div className="text-sm text-gray-500">
+                            <div className="text-sm text-gray-500 dark:text-gray-400">
                               {employee.occupations
                                 .map((occ) => occ.name)
                                 .join(', ')}
@@ -260,7 +260,7 @@ const EmployeeResourceShareModal: React.FC<EmployeeResourceShareModalProps> = ({
                       </div>
                     ))
                   ) : (
-                    <div className="p-4 text-center text-gray-500">
+                    <div className="p-4 text-center text-gray-500 dark:text-gray-400">
                       No employees found matching your search
                     </div>
                   )}
@@ -272,14 +272,14 @@ const EmployeeResourceShareModal: React.FC<EmployeeResourceShareModalProps> = ({
           <div className="flex gap-3">
             <button
               onClick={handleClose}
-              className="flex-1 border border-gray-300 hover:bg-gray-50 rounded-md py-3 font-medium text-gray-700"
+              className="flex-1 border border-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-md py-3 font-medium text-gray-700 dark:text-gray-300"
             >
               Cancel
             </button>
             <button
               onClick={handleShareResource}
               disabled={!selectedEmployee || isSharing}
-              className="flex-1 bg-[#A5EA91] hover:bg-green-500 disabled:bg-gray-300 disabled:cursor-not-allowed rounded-md py-3 font-medium text-gray-800"
+              className="flex-1 bg-[#A5EA91] hover:bg-green-500 disabled:bg-gray-300 disabled:cursor-not-allowed rounded-md py-3 font-medium text-gray-800 dark:text-gray-200"
             >
               {isSharing ? 'Sharing...' : 'Share Resource'}
             </button>

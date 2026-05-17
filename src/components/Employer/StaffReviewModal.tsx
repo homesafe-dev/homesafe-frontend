@@ -45,14 +45,14 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
     >
       <div className="absolute inset-0 bg-black/30 backdrop-blur-sm"></div>
       <div
-        className="bg-white rounded-lg p-6 w-full max-w-md relative z-10"
+        className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md relative z-10"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-medium">Review {staffName}</h2>
           <button
             onClick={handleClose}
-            className="text-gray-500 hover:text-gray-700"
+            className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
             disabled={isSubmitting}
           >
             <FaTimes />
@@ -78,14 +78,14 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
         </div>
 
         <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Additional Feedback
           </label>
           <textarea
             value={feedback}
             onChange={(e) => setFeedback(e.target.value)}
             placeholder="Tell us more"
-            className="w-full border border-gray-300 rounded-md py-3 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full border border-gray-300 rounded-md py-3 px-4 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
             rows={4}
           />
         </div>
@@ -93,7 +93,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
         <button
           onClick={handleSubmit}
           disabled={rating === 0 || isSubmitting}
-          className="w-full py-3 bg-[#A5EA91] text-[#24292E] rounded-md font-medium hover:bg-green-500 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full py-3 bg-[#A5EA91] text-gray-900 dark:text-gray-100 rounded-md font-medium hover:bg-green-500 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isSubmitting ? (
             <div className="flex items-center justify-center">

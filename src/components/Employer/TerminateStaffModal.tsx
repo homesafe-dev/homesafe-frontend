@@ -33,13 +33,13 @@ const TerminateStaffModal: React.FC<NoticeOfTerminationProps> = ({
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
       <div className="absolute inset-0 bg-black/30 backdrop-blur-sm"></div>
-      <div className="bg-white rounded-lg w-[520px] relative z-10">
+      <div className="bg-white dark:bg-gray-800 rounded-lg w-[520px] relative z-10">
         <div className="p-6">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-semibold">Notice of Termination</h2>
             <button
               onClick={onClose}
-              className="text-gray-500 hover:text-gray-700"
+              className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
             >
               <IoCloseOutline size={24} />
             </button>
@@ -47,7 +47,7 @@ const TerminateStaffModal: React.FC<NoticeOfTerminationProps> = ({
 
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label className="block text-sm text-gray-700 mb-2">
+              <label className="block text-sm text-gray-700 dark:text-gray-300 mb-2">
                 Notice Period
               </label>
               <div className="relative">
@@ -74,7 +74,7 @@ const TerminateStaffModal: React.FC<NoticeOfTerminationProps> = ({
                 </button>
 
                 {isDropdownOpen && (
-                  <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg">
+                  <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 rounded-md shadow-lg">
                     <div
                       className="py-2 px-4 hover:bg-gray-100 cursor-pointer"
                       onClick={() => handleSelectPeriod('Two (2) Weeks Notice')}
@@ -103,7 +103,7 @@ const TerminateStaffModal: React.FC<NoticeOfTerminationProps> = ({
             </div>
 
             <div className="mb-6">
-              <label className="block text-sm text-gray-700 mb-2">
+              <label className="block text-sm text-gray-700 dark:text-gray-300 mb-2">
                 Why do you want to leave?
               </label>
               <textarea
@@ -117,7 +117,7 @@ const TerminateStaffModal: React.FC<NoticeOfTerminationProps> = ({
 
             <button
               type="submit"
-              className="w-full py-3 bg-green-300 text-gray-800 rounded-md hover:bg-green-400 transition duration-200"
+              className="w-full py-3 bg-green-300 text-gray-800 dark:text-gray-200 rounded-md hover:bg-green-400 transition duration-200"
             >
               Submit
             </button>

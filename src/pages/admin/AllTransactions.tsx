@@ -177,14 +177,14 @@ const AllTransactions: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 sm:px-0">
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-0 text-gray-900 dark:text-gray-100">
       <div className="flex items-center mb-1">
         <IoArrowBack
-          className="text-gray-600 mr-2 cursor-pointer"
+          className="text-gray-600 dark:text-gray-300 mr-2 cursor-pointer"
           size={18}
           onClick={handleBack}
         />
-        <h1 className="text-[18px] sm:text-[20px] font-semibold text-[#24292E]">
+        <h1 className="text-[18px] sm:text-[20px] font-semibold text-[#24292E] dark:text-gray-100">
           See All
         </h1>
       </div>
@@ -199,7 +199,7 @@ const AllTransactions: React.FC = () => {
               placeholder="Search transactions..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="border border-gray-300 rounded-md px-3 py-2 text-sm w-full"
+              className="border border-gray-300 dark:border-gray-700 rounded-md px-3 py-2 text-sm w-full bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
             />
           </div>
 
@@ -209,7 +209,7 @@ const AllTransactions: React.FC = () => {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="border border-gray-300 rounded-md px-3 py-2 text-sm flex-1"
+              className="border border-gray-300 dark:border-gray-700 rounded-md px-3 py-2 text-sm flex-1 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
             >
               <option value="">All Status</option>
               <option value="successful">Successful</option>
@@ -221,7 +221,7 @@ const AllTransactions: React.FC = () => {
             <select
               value={paymentMethodFilter}
               onChange={(e) => setPaymentMethodFilter(e.target.value)}
-              className="border border-gray-300 rounded-md px-3 py-2 text-sm flex-1"
+              className="border border-gray-300 dark:border-gray-700 rounded-md px-3 py-2 text-sm flex-1 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
             >
               <option value="">All Payment Methods</option>
               <option value="external_funding">External Funding</option>
@@ -233,7 +233,7 @@ const AllTransactions: React.FC = () => {
             <select
               value={walletSourceFilter}
               onChange={(e) => setWalletSourceFilter(e.target.value)}
-              className="border border-gray-300 rounded-md px-3 py-2 text-sm flex-1"
+              className="border border-gray-300 dark:border-gray-700 rounded-md px-3 py-2 text-sm flex-1 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
             >
               <option value="">All Sources</option>
               <option value="top-up">Top-up</option>
@@ -244,7 +244,7 @@ const AllTransactions: React.FC = () => {
 
           {/* Date Range Row */}
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-start sm:items-center">
-            <span className="text-gray-600 text-sm whitespace-nowrap">
+            <span className="text-gray-600 dark:text-gray-300 text-sm whitespace-nowrap">
               Date Range:
             </span>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-2 flex-1">
@@ -252,7 +252,7 @@ const AllTransactions: React.FC = () => {
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="border border-gray-300 rounded-md px-3 py-2 text-sm flex-1"
+                className="border border-gray-300 dark:border-gray-700 rounded-md px-3 py-2 text-sm flex-1 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
               />
               <span className="hidden sm:block text-gray-400 self-center">
                 to
@@ -261,12 +261,12 @@ const AllTransactions: React.FC = () => {
                 type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="border border-gray-300 rounded-md px-3 py-2 text-sm flex-1"
+                className="border border-gray-300 dark:border-gray-700 rounded-md px-3 py-2 text-sm flex-1 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
               />
             </div>
             <button
               onClick={clearFilters}
-              className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 border border-gray-300 rounded-md hover:bg-gray-50 whitespace-nowrap"
+              className="px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 whitespace-nowrap"
             >
               Clear Filters
             </button>
@@ -276,39 +276,39 @@ const AllTransactions: React.FC = () => {
 
       <div className="mb-6 sm:mb-8">
         <div className="flex justify-between items-center mb-2">
-          <h2 className="text-lg sm:text-xl font-semibold text-[#24292E]">
+          <h2 className="text-lg sm:text-xl font-semibold text-[#24292E] dark:text-gray-100">
             All Transactions
           </h2>
         </div>
 
         {/* Tabs with border around all */}
         <div className="mb-6">
-          <div className="flex flex-col sm:flex-row border border-gray-200 rounded-md overflow-hidden">
+          <div className="flex flex-col sm:flex-row border border-gray-200 dark:border-gray-700 rounded-md overflow-hidden">
             <button
               className={`px-3 sm:px-4 py-2 text-sm flex-1 ${
                 activeTab === 'top-up'
-                  ? 'bg-[#C8EDDF80] text-green-800'
-                  : 'text-gray-600 hover:bg-gray-50'
+                  ? 'bg-[#C8EDDF80] dark:bg-green-500/20 text-green-800 dark:text-green-300'
+                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
               }`}
               onClick={() => setActiveTab('top-up')}
             >
               Wallets Top-up
             </button>
             <button
-              className={`px-3 sm:px-4 py-2 text-sm flex-1 border-t sm:border-t-0 sm:border-l border-gray-200 ${
+              className={`px-3 sm:px-4 py-2 text-sm flex-1 border-t sm:border-t-0 sm:border-l border-gray-200 dark:border-gray-700 ${
                 activeTab === 'salaries'
-                  ? 'bg-[#C8EDDF80] text-green-800'
-                  : 'text-gray-600 hover:bg-gray-50'
+                  ? 'bg-[#C8EDDF80] dark:bg-green-500/20 text-green-800 dark:text-green-300'
+                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
               }`}
               onClick={() => setActiveTab('salaries')}
             >
               Salaries
             </button>
             <button
-              className={`px-3 sm:px-4 py-2 text-sm flex-1 border-t sm:border-t-0 sm:border-l border-gray-200 ${
+              className={`px-3 sm:px-4 py-2 text-sm flex-1 border-t sm:border-t-0 sm:border-l border-gray-200 dark:border-gray-700 ${
                 activeTab === 'withdrawals'
-                  ? 'bg-[#C8EDDF80] text-green-800'
-                  : 'text-gray-600 hover:bg-gray-50'
+                  ? 'bg-[#C8EDDF80] dark:bg-green-500/20 text-green-800 dark:text-green-300'
+                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
               }`}
               onClick={() => setActiveTab('withdrawals')}
             >
@@ -328,7 +328,7 @@ const AllTransactions: React.FC = () => {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm min-w-[1000px]">
                   <thead>
-                    <tr className="text-left text-gray-700 bg-[#C8EDDF80]">
+                    <tr className="text-left text-gray-700 dark:text-gray-300 bg-[#C8EDDF80] dark:bg-gray-800 border-b border-transparent dark:border-gray-700">
                       <th className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
                         Name
                       </th>
@@ -361,7 +361,7 @@ const AllTransactions: React.FC = () => {
                       transactions.map((transaction) => (
                         <tr
                           key={transaction.id}
-                          className="border-b border-gray-200 hover:bg-gray-50"
+                          className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
                         >
                           <td className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">
                             <span className="truncate block">
@@ -424,7 +424,7 @@ const AllTransactions: React.FC = () => {
                             </button>
 
                             {showOptionsFor === transaction.id && (
-                              <div className="absolute right-8 top-10 bg-white shadow-lg rounded-md py-2 w-48 z-10">
+                              <div className="absolute right-8 top-10 bg-white dark:bg-gray-800 shadow-lg rounded-md py-2 w-48 z-10 border border-gray-100 dark:border-gray-700">
                                 <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm">
                                   View Details
                                 </div>

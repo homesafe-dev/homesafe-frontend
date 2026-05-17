@@ -124,7 +124,7 @@ const SuggestionsPage: React.FC = () => {
         );
       default:
         return (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:text-gray-200">
             {status}
           </span>
         );
@@ -274,17 +274,17 @@ const SuggestionsPage: React.FC = () => {
           <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
             <Send className="w-4 h-4 text-blue-600" />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">
             Employee Suggestions
           </h1>
         </div>
-        <p className="text-sm sm:text-base text-gray-600">
+        <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
           Review employee suggestions from agents ({totalSuggestions} total)
         </p>
       </div>
 
       {/* Main Content */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-100">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100">
         {/* Search Section */}
         <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-gray-100">
           <div className="flex flex-col sm:flex-row gap-4 mb-4">
@@ -293,7 +293,7 @@ const SuggestionsPage: React.FC = () => {
               <input
                 type="text"
                 placeholder="Search by employee name, agent name, email, or reason..."
-                className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
+                className="w-full pl-10 pr-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -301,7 +301,7 @@ const SuggestionsPage: React.FC = () => {
           </div>
 
           {/* Results Count */}
-          <div className="text-sm text-gray-600">
+          <div className="text-sm text-gray-600 dark:text-gray-400">
             Showing {filteredSuggestions.length} of {totalSuggestions}{' '}
             suggestions
           </div>
@@ -320,10 +320,10 @@ const SuggestionsPage: React.FC = () => {
           {filteredSuggestions.length === 0 ? (
             <div className="text-center py-16">
               <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <p className="text-lg font-medium text-gray-900 mb-2">
+              <p className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
                 No suggestions found
               </p>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500 dark:text-gray-400">
                 {searchTerm
                   ? 'Try adjusting your search criteria'
                   : 'No employee suggestions available at the moment'}
@@ -334,7 +334,7 @@ const SuggestionsPage: React.FC = () => {
               {filteredSuggestions.map((suggestion) => (
                 <div
                   key={suggestion.id}
-                  className="p-4 sm:p-6 hover:bg-gray-50 transition-colors"
+                  className="p-4 sm:p-6 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div className="flex items-start sm:items-center gap-4 flex-1 min-w-0">
@@ -347,13 +347,13 @@ const SuggestionsPage: React.FC = () => {
                       />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-2 flex-wrap">
-                          <p className="text-sm font-semibold text-gray-900">
+                          <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                             {suggestion.employee.first_name}{' '}
                             {suggestion.employee.last_name}
                           </p>
                           {getStatusBadge(suggestion.status)}
                         </div>
-                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-gray-600">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-gray-600 dark:text-gray-400">
                           <div className="flex items-center gap-1">
                             <Mail className="w-4 h-4 text-gray-400" />
                             <span className="truncate">
@@ -373,7 +373,7 @@ const SuggestionsPage: React.FC = () => {
                           </div>
                         </div>
                         <div className="mt-3">
-                          <p className="text-sm text-gray-600 line-clamp-2">
+                          <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
                             <span className="font-medium">Reason:</span>{' '}
                             {suggestion.suggestion_reason}
                           </p>
@@ -383,7 +383,7 @@ const SuggestionsPage: React.FC = () => {
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => handleViewDetails(suggestion)}
-                        className="inline-flex items-center gap-2 px-4 py-2 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                        className="inline-flex items-center gap-2 px-4 py-2 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
                       >
                         <Eye className="w-4 h-4" />
                         View Details
@@ -399,7 +399,7 @@ const SuggestionsPage: React.FC = () => {
         {/* Pagination */}
         {totalPages > 1 && (
           <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-gray-100 px-4 sm:px-6">
-            <div className="text-sm text-gray-700">
+            <div className="text-sm text-gray-700 dark:text-gray-300">
               Page <span className="font-medium">{currentPage}</span> of{' '}
               <span className="font-medium">{totalPages}</span>
             </div>
@@ -410,8 +410,8 @@ const SuggestionsPage: React.FC = () => {
                 disabled={currentPage === 1}
                 className={`px-4 py-2 rounded-lg border transition-colors ${
                   currentPage === 1
-                    ? 'border-gray-200 text-gray-300 cursor-not-allowed'
-                    : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                    ? 'border-gray-200 dark:border-gray-700 text-gray-300 cursor-not-allowed'
+                    : 'border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
                 }`}
               >
                 Previous
@@ -431,7 +431,7 @@ const SuggestionsPage: React.FC = () => {
                         className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
                           currentPage === page
                             ? 'bg-green-600 text-white'
-                            : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
+                            : 'border border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
                         }`}
                       >
                         {page}
@@ -442,7 +442,10 @@ const SuggestionsPage: React.FC = () => {
                     page === currentPage + 2
                   ) {
                     return (
-                      <span key={page} className="px-2 text-gray-500">
+                      <span
+                        key={page}
+                        className="px-2 text-gray-500 dark:text-gray-400"
+                      >
                         ...
                       </span>
                     );
@@ -458,8 +461,8 @@ const SuggestionsPage: React.FC = () => {
                 disabled={currentPage === totalPages}
                 className={`px-4 py-2 rounded-lg border transition-colors ${
                   currentPage === totalPages
-                    ? 'border-gray-200 text-gray-300 cursor-not-allowed'
-                    : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                    ? 'border-gray-200 dark:border-gray-700 text-gray-300 cursor-not-allowed'
+                    : 'border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
                 }`}
               >
                 Next
@@ -476,9 +479,9 @@ const SuggestionsPage: React.FC = () => {
             className="absolute inset-0 bg-black/30 backdrop-blur-sm"
             onClick={handleCloseModal}
           ></div>
-          <div className="bg-white rounded-lg w-full max-w-2xl relative z-10 p-6 m-4 max-h-[90vh] overflow-y-auto border border-gray-300">
+          <div className="bg-white dark:bg-gray-800 rounded-lg w-full max-w-2xl relative z-10 p-6 m-4 max-h-[90vh] overflow-y-auto border border-gray-300">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-medium text-gray-800">
+              <h2 className="text-2xl font-medium text-gray-800 dark:text-gray-200">
                 Suggestion Details
               </h2>
               <button
@@ -492,7 +495,7 @@ const SuggestionsPage: React.FC = () => {
             <div className="space-y-6">
               {/* Employee Information */}
               <div className="border border-gray-300 rounded-lg p-4">
-                <h3 className="text-lg font-medium text-gray-800 mb-3">
+                <h3 className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-3">
                   Employee Information
                 </h3>
                 <div className="flex items-center space-x-4 mb-4">
@@ -504,15 +507,15 @@ const SuggestionsPage: React.FC = () => {
                     showStatus={false}
                   />
                   <div>
-                    <p className="text-lg font-medium text-gray-900">
+                    <p className="text-lg font-medium text-gray-900 dark:text-gray-100">
                       {selectedSuggestion.employee.first_name}{' '}
                       {selectedSuggestion.employee.last_name}
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
                       {selectedSuggestion.employee.email}
                     </p>
                     {selectedSuggestion.employee.phone && (
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
                         {selectedSuggestion.employee.phone}
                       </p>
                     )}
@@ -520,8 +523,10 @@ const SuggestionsPage: React.FC = () => {
                 </div>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <span className="font-medium text-gray-700">Salary:</span>
-                    <span className="ml-2 text-gray-600">
+                    <span className="font-medium text-gray-700 dark:text-gray-300">
+                      Salary:
+                    </span>
+                    <span className="ml-2 text-gray-600 dark:text-gray-400">
                       ₦
                       {parseFloat(
                         selectedSuggestion.employee.salary
@@ -529,17 +534,19 @@ const SuggestionsPage: React.FC = () => {
                     </span>
                   </div>
                   <div>
-                    <span className="font-medium text-gray-700">Status:</span>
-                    <span className="ml-2 text-gray-600">
+                    <span className="font-medium text-gray-700 dark:text-gray-300">
+                      Status:
+                    </span>
+                    <span className="ml-2 text-gray-600 dark:text-gray-400">
                       {selectedSuggestion.status}
                     </span>
                   </div>
                   {selectedSuggestion.employee.address && (
                     <div className="col-span-2">
-                      <span className="font-medium text-gray-700">
+                      <span className="font-medium text-gray-700 dark:text-gray-300">
                         Address:
                       </span>
-                      <span className="ml-2 text-gray-600">
+                      <span className="ml-2 text-gray-600 dark:text-gray-400">
                         {selectedSuggestion.employee.address}
                       </span>
                     </div>
@@ -549,7 +556,7 @@ const SuggestionsPage: React.FC = () => {
 
               {/* Agent Information */}
               <div className="border border-gray-300 rounded-lg p-4">
-                <h3 className="text-lg font-medium text-gray-800 mb-3">
+                <h3 className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-3">
                   Suggested by Agent
                 </h3>
                 <div className="flex items-center space-x-4">
@@ -561,11 +568,11 @@ const SuggestionsPage: React.FC = () => {
                     showStatus={false}
                   />
                   <div>
-                    <p className="text-base font-medium text-gray-900">
+                    <p className="text-base font-medium text-gray-900 dark:text-gray-100">
                       {selectedSuggestion.agent.first_name}{' '}
                       {selectedSuggestion.agent.last_name}
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
                       {selectedSuggestion.agent.email}
                     </p>
                   </div>
@@ -574,27 +581,31 @@ const SuggestionsPage: React.FC = () => {
 
               {/* Suggestion Details */}
               <div className="border border-gray-300 rounded-lg p-4">
-                <h3 className="text-lg font-medium text-gray-800 mb-3">
+                <h3 className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-3">
                   Suggestion Details
                 </h3>
                 <div className="space-y-3">
                   <div>
-                    <span className="font-medium text-gray-700">Status:</span>
+                    <span className="font-medium text-gray-700 dark:text-gray-300">
+                      Status:
+                    </span>
                     <span className="ml-2">
                       {getStatusBadge(selectedSuggestion.status)}
                     </span>
                   </div>
                   <div>
-                    <span className="font-medium text-gray-700">
+                    <span className="font-medium text-gray-700 dark:text-gray-300">
                       Date Submitted:
                     </span>
-                    <span className="ml-2 text-gray-600">
+                    <span className="ml-2 text-gray-600 dark:text-gray-400">
                       {formatDate(selectedSuggestion.created_at)}
                     </span>
                   </div>
                   <div>
-                    <span className="font-medium text-gray-700">Reason:</span>
-                    <p className="mt-2 text-gray-600 bg-gray-50 p-3 rounded">
+                    <span className="font-medium text-gray-700 dark:text-gray-300">
+                      Reason:
+                    </span>
+                    <p className="mt-2 text-gray-600 dark:text-gray-400 bg-gray-50 p-3 rounded">
                       {selectedSuggestion.suggestion_reason}
                     </p>
                   </div>
@@ -606,7 +617,7 @@ const SuggestionsPage: React.FC = () => {
                 <div className="flex gap-3 pt-4">
                   <button
                     onClick={handleCloseModal}
-                    className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                    className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50"
                   >
                     Close
                   </button>
@@ -640,9 +651,9 @@ const SuggestionsPage: React.FC = () => {
             className="absolute inset-0 bg-black/30 backdrop-blur-sm"
             onClick={handleCloseRejectModal}
           ></div>
-          <div className="bg-white rounded-lg w-full max-w-md relative z-10 p-6 m-4 border border-gray-300">
+          <div className="bg-white dark:bg-gray-800 rounded-lg w-full max-w-md relative z-10 p-6 m-4 border border-gray-300">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-medium text-gray-800">
+              <h2 className="text-xl font-medium text-gray-800 dark:text-gray-200">
                 Reject Suggestion
               </h2>
               <button
@@ -654,15 +665,15 @@ const SuggestionsPage: React.FC = () => {
             </div>
 
             <div className="space-y-4">
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-400">
                 Are you sure you want to reject the suggestion for{' '}
-                <span className="font-medium text-gray-900">
+                <span className="font-medium text-gray-900 dark:text-gray-100">
                   {selectedSuggestion.employee.first_name}{' '}
                   {selectedSuggestion.employee.last_name}
                 </span>
                 ?
               </p>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500 dark:text-gray-400">
                 This action cannot be undone. The agent will be notified of the
                 rejection.
               </p>
@@ -671,7 +682,7 @@ const SuggestionsPage: React.FC = () => {
                 <button
                   onClick={handleCloseRejectModal}
                   disabled={isProcessing}
-                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 disabled:opacity-50"
                 >
                   Cancel
                 </button>
@@ -695,9 +706,9 @@ const SuggestionsPage: React.FC = () => {
             className="absolute inset-0 bg-black/30 backdrop-blur-sm"
             onClick={handleCloseAcceptModal}
           ></div>
-          <div className="bg-white rounded-lg w-full max-w-2xl relative z-10 p-6 m-4 max-h-[90vh] overflow-y-auto border border-gray-300">
+          <div className="bg-white dark:bg-gray-800 rounded-lg w-full max-w-2xl relative z-10 p-6 m-4 max-h-[90vh] overflow-y-auto border border-gray-300">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-medium text-gray-800">
+              <h2 className="text-2xl font-medium text-gray-800 dark:text-gray-200">
                 Accept Suggestion & Create Contract
               </h2>
               <button
@@ -710,8 +721,8 @@ const SuggestionsPage: React.FC = () => {
 
             <div className="space-y-6">
               {/* Employee Summary */}
-              <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-                <h3 className="text-lg font-medium text-gray-800 mb-2">
+              <div className="bg-gray-50 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                <h3 className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-2">
                   Employee
                 </h3>
                 <div className="flex items-center space-x-3">
@@ -723,11 +734,11 @@ const SuggestionsPage: React.FC = () => {
                     showStatus={false}
                   />
                   <div>
-                    <p className="font-medium text-gray-900">
+                    <p className="font-medium text-gray-900 dark:text-gray-100">
                       {selectedSuggestion.employee.first_name}{' '}
                       {selectedSuggestion.employee.last_name}
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
                       {selectedSuggestion.employee.email}
                     </p>
                   </div>
@@ -736,13 +747,13 @@ const SuggestionsPage: React.FC = () => {
 
               {/* Contract Terms Form */}
               <div className="space-y-4">
-                <h3 className="text-lg font-medium text-gray-800">
+                <h3 className="text-lg font-medium text-gray-800 dark:text-gray-200">
                   Contract Terms
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Working Days per Month
                     </label>
                     <input
@@ -761,7 +772,7 @@ const SuggestionsPage: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Working Hours per Week
                     </label>
                     <input
@@ -780,7 +791,7 @@ const SuggestionsPage: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Start Date
                     </label>
                     <input
@@ -797,7 +808,7 @@ const SuggestionsPage: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Duration (Months)
                     </label>
                     <input
@@ -817,12 +828,12 @@ const SuggestionsPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Working Hours Schedule
                   </label>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <div>
-                      <label className="block text-xs text-gray-500 mb-1">
+                      <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">
                         Days
                       </label>
                       <select
@@ -861,7 +872,7 @@ const SuggestionsPage: React.FC = () => {
                       </select>
                     </div>
                     <div>
-                      <label className="block text-xs text-gray-500 mb-1">
+                      <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">
                         Start Time
                       </label>
                       <select
@@ -896,7 +907,7 @@ const SuggestionsPage: React.FC = () => {
                       </select>
                     </div>
                     <div>
-                      <label className="block text-xs text-gray-500 mb-1">
+                      <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">
                         End Time
                       </label>
                       <select
@@ -935,7 +946,7 @@ const SuggestionsPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Terms and Conditions
                   </label>
                   <textarea
@@ -958,7 +969,7 @@ const SuggestionsPage: React.FC = () => {
                 <button
                   onClick={handleCloseAcceptModal}
                   disabled={isProcessing}
-                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 disabled:opacity-50"
                 >
                   Cancel
                 </button>

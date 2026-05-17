@@ -188,7 +188,7 @@ const ContractViewPage: React.FC = () => {
     !proposalData.employee
   ) {
     return (
-      <div className="text-center py-12 text-gray-500">
+      <div className="text-center py-12 text-gray-500 dark:text-gray-400">
         No contract data found.
       </div>
     );
@@ -221,7 +221,7 @@ const ContractViewPage: React.FC = () => {
       <div className="max-w-4xl mx-auto px-4 mb-4 sm:mb-6">
         <button
           onClick={handleBack}
-          className="flex items-center text-gray-600 hover:text-gray-800 transition-colors text-sm sm:text-base"
+          className="flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:text-gray-200 transition-colors text-sm sm:text-base"
         >
           <IoArrowBack className="mr-2" size={16} />
           <span className="sm:inline">Back</span>
@@ -230,20 +230,20 @@ const ContractViewPage: React.FC = () => {
 
       {/* Contract Document */}
       <div className="max-w-4xl mx-auto px-4">
-        <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8">
           {/* Header */}
           <div className="text-center mb-6 sm:mb-8">
             <h1 className="text-xl sm:text-2xl font-bold text-[#246D51] mb-2">
               homesafe
             </h1>
-            <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
               Employment Contract Form
             </h2>
             <div className="w-full h-0.5 bg-[#246D51] mb-4 sm:mb-6"></div>
           </div>
 
           {/* Contract Content */}
-          <div className="space-y-6 text-gray-700 leading-relaxed">
+          <div className="space-y-6 text-gray-700 dark:text-gray-300 leading-relaxed">
             <p>
               Homesafe Technology, a provider of Artisans and {employerName}{' '}
               (Employer) of No 5 thompson street, Lagos State and {employeeName}{' '}
@@ -258,7 +258,7 @@ const ContractViewPage: React.FC = () => {
 
             <div className="space-y-4">
               <div>
-                <h3 className="font-semibold text-gray-800 mb-2">
+                <h3 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">
                   1. Position and Duties
                 </h3>
                 <p>
@@ -271,7 +271,7 @@ const ContractViewPage: React.FC = () => {
               </div>
 
               <div>
-                <h3 className="font-semibold text-gray-800 mb-2">
+                <h3 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">
                   2. Term of Employment
                 </h3>
                 <p>
@@ -285,7 +285,9 @@ const ContractViewPage: React.FC = () => {
               </div>
 
               <div>
-                <h3 className="font-semibold text-gray-800 mb-2">2b.</h3>
+                <h3 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">
+                  2b.
+                </h3>
                 <p>
                   The employment period for this role is{' '}
                   {contract?.duration_months || 'TBD'} months and can be renewed
@@ -295,7 +297,7 @@ const ContractViewPage: React.FC = () => {
               </div>
 
               <div>
-                <h3 className="font-semibold text-gray-800 mb-2">
+                <h3 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">
                   3. Compensation and Benefits
                 </h3>
                 <p>
@@ -305,7 +307,7 @@ const ContractViewPage: React.FC = () => {
               </div>
 
               <div>
-                <h3 className="font-semibold text-gray-800 mb-2">
+                <h3 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">
                   4. Working Hours
                 </h3>
                 <p>
@@ -321,19 +323,19 @@ const ContractViewPage: React.FC = () => {
         </div>
 
         {/* Second Page */}
-        <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 mb-8">
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-2xl font-bold text-[#246D51] mb-2">homesafe</h1>
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+            <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
               Employment Contract Form
             </h2>
             <div className="w-full h-0.5 bg-[#246D51] mb-6"></div>
           </div>
 
-          <div className="space-y-6 text-gray-700 leading-relaxed">
+          <div className="space-y-6 text-gray-700 dark:text-gray-300 leading-relaxed">
             <div>
-              <h3 className="font-semibold text-gray-800 mb-2">
+              <h3 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">
                 5. Termination of Employment
               </h3>
               <p className="mb-4">
@@ -348,7 +350,7 @@ const ContractViewPage: React.FC = () => {
             </div>
 
             <div>
-              <h3 className="font-semibold text-gray-800 mb-2">
+              <h3 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">
                 6. Amendments
               </h3>
               <p className="mb-4">
@@ -364,7 +366,9 @@ const ContractViewPage: React.FC = () => {
             {/* Signature Section */}
             <div className="mt-12 space-y-8">
               <div>
-                <h4 className="font-semibold text-gray-800 mb-4">Employer</h4>
+                <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-4">
+                  Employer
+                </h4>
                 <div className="space-y-2">
                   <p>Signature: _________________________</p>
                   <p>Name: {employerName}</p>
@@ -373,7 +377,9 @@ const ContractViewPage: React.FC = () => {
               </div>
 
               <div>
-                <h4 className="font-semibold text-gray-800 mb-4">Employee</h4>
+                <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-4">
+                  Employee
+                </h4>
                 <div className="space-y-2">
                   <p>Signature: _________________________</p>
                   <p>Name: {employeeName}</p>
@@ -428,7 +434,7 @@ const ContractViewPage: React.FC = () => {
           ) : (
             // Show status message for declined or other statuses
             <div className="text-center py-4">
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-400">
                 Contract status:{' '}
                 <span className="font-semibold capitalize">
                   {proposalData.proposal.status}

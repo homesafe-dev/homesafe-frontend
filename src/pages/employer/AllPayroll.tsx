@@ -73,18 +73,18 @@ const AllPayrollPage: React.FC = () => {
     <div className="w-full max-w-7xl mx-auto p-3 sm:p-4 lg:p-6">
       <div className="flex items-center mb-1">
         <IoArrowBack
-          className="text-gray-600 mr-2 cursor-pointer"
+          className="text-gray-600 dark:text-gray-400 mr-2 cursor-pointer"
           size={18}
           onClick={handleBack}
         />
-        <h1 className="text-lg sm:text-[20px] font-semibold text-[#24292E]">
+        <h1 className="text-lg sm:text-[20px] font-semibold text-gray-900 dark:text-gray-100">
           See All
         </h1>
       </div>
 
       <div className="mb-6 sm:mb-8">
         <div className="flex justify-between items-center mb-2 mt-6 sm:mt-8">
-          <h2 className="text-lg sm:text-xl font-semibold text-[#24292E]">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100">
             Payroll History
           </h2>
         </div>
@@ -102,50 +102,50 @@ const AllPayrollPage: React.FC = () => {
             <>
               {/* Table Header */}
               <div className="grid grid-cols-6 bg-[#C8EDDF80] rounded-t-lg min-w-[700px]">
-                <div className="p-2 sm:p-3 text-xs sm:text-sm font-medium text-gray-600">
+                <div className="p-2 sm:p-3 text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400">
                   Staff
                 </div>
-                <div className="p-2 sm:p-3 text-xs sm:text-sm font-medium text-gray-600">
+                <div className="p-2 sm:p-3 text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400">
                   Position
                 </div>
-                <div className="p-2 sm:p-3 text-xs sm:text-sm font-medium text-gray-600">
+                <div className="p-2 sm:p-3 text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400">
                   Amount
                 </div>
-                <div className="p-2 sm:p-3 text-xs sm:text-sm font-medium text-gray-600">
+                <div className="p-2 sm:p-3 text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400">
                   Payment Date
                 </div>
-                <div className="p-2 sm:p-3 text-xs sm:text-sm font-medium text-gray-600">
+                <div className="p-2 sm:p-3 text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400">
                   Advance Salary
                 </div>
-                <div className="p-2 sm:p-3 text-xs sm:text-sm font-medium text-gray-600">
+                <div className="p-2 sm:p-3 text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400">
                   Status
                 </div>
               </div>
 
               {/* Table Body */}
-              <div className="bg-white min-w-[700px]">
+              <div className="bg-white dark:bg-gray-800 min-w-[700px]">
                 {payrollEntries.length > 0 ? (
                   payrollEntries.map((entry, index) => (
                     <div
                       key={entry.id || index}
                       className="grid grid-cols-6 border-b border-[#DEE0E3]"
                     >
-                      <div className="p-3 text-sm text-gray-800">
+                      <div className="p-3 text-sm text-gray-800 dark:text-gray-200">
                         {entry.staff?.name || entry.employee_name || 'N/A'}
                       </div>
-                      <div className="p-3 text-sm text-gray-800">
+                      <div className="p-3 text-sm text-gray-800 dark:text-gray-200">
                         {entry.position || 'N/A'}
                       </div>
-                      <div className="p-3 text-sm text-gray-800">
+                      <div className="p-3 text-sm text-gray-800 dark:text-gray-200">
                         ₦{' '}
                         {typeof entry.amount === 'number'
                           ? entry.amount.toLocaleString()
                           : entry.amount}
                       </div>
-                      <div className="p-3 text-sm text-gray-800">
+                      <div className="p-3 text-sm text-gray-800 dark:text-gray-200">
                         {entry.payment_date || 'N/A'}
                       </div>
-                      <div className="p-3 text-sm text-gray-800">
+                      <div className="p-3 text-sm text-gray-800 dark:text-gray-200">
                         {entry.advanced_salary
                           ? typeof entry.advanced_salary === 'number'
                             ? `₦ ${entry.advanced_salary.toLocaleString()}`
@@ -159,7 +159,7 @@ const AllPayrollPage: React.FC = () => {
                               ? 'bg-[#C8EDDF80] text-green-800'
                               : entry.status?.toLowerCase() === 'pending'
                                 ? 'bg-yellow-100 text-yellow-800'
-                                : 'bg-gray-100 text-gray-800'
+                                : 'bg-gray-100 text-gray-800 dark:text-gray-200'
                           }`}
                         >
                           {entry.status || 'N/A'}
@@ -168,7 +168,7 @@ const AllPayrollPage: React.FC = () => {
                     </div>
                   ))
                 ) : (
-                  <div className="py-8 text-center text-gray-500">
+                  <div className="py-8 text-center text-gray-500 dark:text-gray-400">
                     No payroll entries found
                   </div>
                 )}
@@ -185,7 +185,9 @@ const AllPayrollPage: React.FC = () => {
                     <FaChevronLeft
                       size={14}
                       className={
-                        currentPage === 1 ? 'text-gray-300' : 'text-gray-500'
+                        currentPage === 1
+                          ? 'text-gray-300'
+                          : 'text-gray-500 dark:text-gray-400'
                       }
                     />
                   </button>

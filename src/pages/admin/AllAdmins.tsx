@@ -94,20 +94,20 @@ const AllAdmins: React.FC = () => {
   };
 
   return (
-    <div className="bg-white rounded-lg p-6">
+    <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-100 dark:border-gray-700">
       <div className="mb-6">
         <button
-          className="flex items-center text-gray-600 hover:text-gray-800"
+          className="flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100"
           onClick={() => navigate(-1)}
         >
           <FaArrowLeft className="mr-2" />
-          <span className="text-gray-800">Admin</span>
+          <span className="text-gray-800 dark:text-gray-100">Admin</span>
         </button>
       </div>
 
       {/* Header with Create New Admin button */}
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-xl font-semibold">All Admins</h1>
+        <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">All Admins</h1>
         <button
           onClick={() => navigate('/admin/create-admin')}
           className="px-4 py-2 bg-[#A5EA91] text-[#174B35] rounded-md flex items-center"
@@ -131,7 +131,7 @@ const AllAdmins: React.FC = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-left text-gray-700 bg-[#C8EDDF80]">
+              <tr className="text-left text-gray-700 dark:text-gray-300 bg-[#C8EDDF80] dark:bg-gray-800 border-b border-transparent dark:border-gray-700">
                 <th className="py-3 px-4">Full Name</th>
                 <th className="py-3 px-4">Email</th>
                 <th className="py-3 px-4">Phone Number</th>
@@ -145,7 +145,7 @@ const AllAdmins: React.FC = () => {
               {admins.map((admin) => (
                 <tr
                   key={admin.id}
-                  className="border-b border-gray-200 hover:bg-gray-50"
+                  className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
                   <td className="py-3 px-4 flex items-center">
                     <div className="mr-2">
@@ -176,7 +176,7 @@ const AllAdmins: React.FC = () => {
                     </button>
 
                     {showOptionsFor === admin.id && (
-                      <div className="absolute right-8 top-10 bg-white shadow-lg rounded-md py-2 w-48 z-10">
+                      <div className="absolute right-8 top-10 bg-white dark:bg-gray-800 shadow-lg rounded-md py-2 w-48 z-10 border border-gray-100 dark:border-gray-700">
                         <div
                           className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                           onClick={() => handleRemoveAdmin(admin.id)}
