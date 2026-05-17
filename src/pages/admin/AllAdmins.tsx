@@ -107,7 +107,9 @@ const AllAdmins: React.FC = () => {
 
       {/* Header with Create New Admin button */}
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">All Admins</h1>
+        <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+          All Admins
+        </h1>
         <button
           onClick={() => navigate('/admin/create-admin')}
           className="px-4 py-2 bg-[#A5EA91] text-[#174B35] rounded-md flex items-center"

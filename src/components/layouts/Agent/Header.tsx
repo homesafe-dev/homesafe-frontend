@@ -150,7 +150,9 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, isMobile = false }) => {
   return (
     <header className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-700">
       {error && (
-        <div className="text-red-500 dark:text-red-400 text-sm p-2 text-center">{error}</div>
+        <div className="text-red-500 dark:text-red-400 text-sm p-2 text-center">
+          {error}
+        </div>
       )}
       <div className="px-3 sm:px-4 lg:px-6 py-4">
         <div className="flex items-center justify-between">
@@ -275,7 +277,11 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, isMobile = false }) => {
                         }}
                         className="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                       >
-                        <img src={LogoutIcon} className="mr-3 w-4 h-4 dark:invert dark:brightness-200" alt="" />
+                        <img
+                          src={LogoutIcon}
+                          className="mr-3 w-4 h-4 dark:invert dark:brightness-200"
+                          alt=""
+                        />
                         Log Out
                       </button>
                     </div>

@@ -65,7 +65,9 @@ export default function DashboardEmployersTab() {
   return (
     <div className="overflow-x-auto">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100">Employers</h2>
+        <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100">
+          Employers
+        </h2>
       </div>
 
       <table className="w-full min-w-[800px]">
@@ -98,7 +100,10 @@ export default function DashboardEmployersTab() {
           {isLoading ? (
             // Loading state - show skeleton rows
             [...Array(3)].map((_, index) => (
-              <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-700 animate-pulse">
+              <tr
+                key={index}
+                className="hover:bg-gray-50 dark:hover:bg-gray-700 animate-pulse"
+              >
                 <td className="px-3 sm:px-6 py-3 sm:py-4">
                   <div className="h-6 sm:h-8 bg-gray-200 dark:bg-gray-700 rounded"></div>
                 </td>

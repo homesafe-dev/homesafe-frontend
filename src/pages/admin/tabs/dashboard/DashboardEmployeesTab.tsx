@@ -105,7 +105,9 @@ export default function DashboardEmployeesTab() {
   return (
     <div className="overflow-x-auto">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Employees</h2>
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+          Employees
+        </h2>
         <button
           onClick={() => setShowCreateModal(true)}
           className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md flex items-center"
@@ -144,7 +146,10 @@ export default function DashboardEmployeesTab() {
           {isLoading ? (
             // Loading state - show skeleton rows
             [...Array(3)].map((_, index) => (
-              <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-700 animate-pulse">
+              <tr
+                key={index}
+                className="hover:bg-gray-50 dark:hover:bg-gray-700 animate-pulse"
+              >
                 <td className="px-6 py-4">
                   <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded"></div>
                 </td>
@@ -178,7 +183,10 @@ export default function DashboardEmployeesTab() {
           ) : employees.length === 0 ? (
             // Empty state
             <tr>
-              <td colSpan={7} className="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
+              <td
+                colSpan={7}
+                className="px-6 py-4 text-center text-gray-500 dark:text-gray-400"
+              >
                 No employees found
               </td>
             </tr>
