@@ -251,7 +251,11 @@ const Header: React.FC<HeaderProps> = ({
                         }}
                         className="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                       >
-                        <img src={LogoutIcon} className="mr-3 w-4 h-4 dark:invert dark:brightness-200" alt="" />
+                        <img
+                          src={LogoutIcon}
+                          className="mr-3 w-4 h-4 dark:invert dark:brightness-200"
+                          alt=""
+                        />
                         Log Out
                       </button>
                     </div>

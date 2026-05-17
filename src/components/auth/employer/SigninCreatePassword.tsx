@@ -59,7 +59,9 @@ const SigninCreatePasswordPage: React.FC = () => {
           },
         });
       } else {
-        setError(response.message || 'Failed to set password. Please try again.');
+        setError(
+          response.message || 'Failed to set password. Please try again.'
+        );
       }
     } catch (err: any) {
       setError(
@@ -194,7 +196,9 @@ const SigninCreatePasswordPage: React.FC = () => {
                 </div>
               </div>
 
-              {error && <div className="mb-4 text-red-500 text-sm">{error}</div>}
+              {error && (
+                <div className="mb-4 text-red-500 text-sm">{error}</div>
+              )}
 
               <button
                 type="submit"
