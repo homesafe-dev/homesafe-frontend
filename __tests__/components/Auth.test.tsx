@@ -1,21 +1,35 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { BrowserRouter } from 'react-router-dom';
 import React from 'react';
 import HomesafeSigninCreatePasswordPage from '../../src/components/auth/employee/CreatePassword';
 
+const mockNavigate = vi.fn();
+
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
+
 describe('CreatePassword Component', () => {
   const renderWithRouter = (ui: React.ReactElement) => {
     return render(<BrowserRouter>{ui}</BrowserRouter>);
   };
 
+  beforeEach(() => {
+    mockNavigate.mockClear();
+  });
+
   it('should render create password form with all required elements', () => {
     renderWithRouter(<HomesafeSigninCreatePasswordPage />);
 
-    expect(screen.getByText('Create Password')).toBeInTheDocument();
+    expect(screen.getByText('Create password')).toBeInTheDocument();
 
-    const passwordInput = screen.getByPlaceholderText('*******');
+    const passwordInput = screen.getByPlaceholderText('Enter password');
     expect(passwordInput).toBeInTheDocument();
 
     expect(
@@ -31,16 +45,16 @@ describe('CreatePassword Component', () => {
     renderWithRouter(<HomesafeSigninCreatePasswordPage />);
 
     const passwordInput = screen.getByPlaceholderText(
-      '*******'
+      'Enter password'
     ) as HTMLInputElement;
-    const toggleButton = screen.getByRole('button', { name: '' }); // Eye icon button
+    const toggleButton = screen.getByRole('button', { name: /show password/i });
 
     expect(passwordInput.type).toBe('password');
 
     fireEvent.click(toggleButton);
     expect(passwordInput.type).toBe('text');
 
-    fireEvent.click(toggleButton);
+    fireEvent.click(screen.getByRole('button', { name: /hide password/i }));
     expect(passwordInput.type).toBe('password');
   });
 
@@ -48,7 +62,7 @@ describe('CreatePassword Component', () => {
     renderWithRouter(<HomesafeSigninCreatePasswordPage />);
 
     const passwordInput = screen.getByPlaceholderText(
-      '*******'
+      'Enter password'
     ) as HTMLInputElement;
     const testPassword = 'TestPass123!';
 
@@ -73,26 +87,18 @@ describe('CreatePassword Component', () => {
     );
     expect(missionText).toBeInTheDocument();
 
-    const logo = screen.getByAltText('Homesafe Logo');
+    const logo = screen.getByAltText('Homesafe');
     expect(logo).toBeInTheDocument();
   });
 
   it('should handle form submission', () => {
-    const consoleSpy = vi.spyOn(console, 'log');
     renderWithRouter(<HomesafeSigninCreatePasswordPage />);
 
-    const form = screen.getByRole('form');
-    const passwordInput = screen.getByPlaceholderText('*******');
+    const passwordInput = screen.getByPlaceholderText('Enter password');
 
     fireEvent.change(passwordInput, { target: { value: 'SecurePass123!' } });
+    fireEvent.click(screen.getByRole('button', { name: /continue/i }));
 
-    fireEvent.submit(form);
-
-    expect(consoleSpy).toHaveBeenCalledWith(
-      'Password submitted:',
-      'SecurePass123!'
-    );
-
-    consoleSpy.mockRestore();
+    expect(mockNavigate).toHaveBeenCalledWith('/employee/dashboard');
   });
 });
