@@ -45,7 +45,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose }) => {
             Share Link
           </button>
 
-          <button className="w-full border border-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-md py-4 font-medium flex items-center justify-center">
+          <button className="w-full border border-gray-300 hover:bg-elevated/50 rounded-md py-4 font-medium flex items-center justify-center">
             <IoAdd size={18} className="mr-2" />
             Add Staff
           </button>

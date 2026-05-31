@@ -19,9 +19,9 @@ export default function AllUsersPage() {
       </div>
 
       {/* Main Content */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
+      <div className="bg-surface rounded-lg shadow-sm border border-border-default dark:border-gray-700">
         {/* Tabs */}
-        <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-gray-100 dark:border-gray-700">
+        <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-border-default dark:border-gray-700">
           <div className="flex flex-wrap gap-2 sm:gap-0 sm:space-x-1">
             <button
               className={`px-4 py-2.5 text-sm font-medium rounded-lg transition-colors ${

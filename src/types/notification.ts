@@ -26,9 +26,52 @@ export interface NotificationUser {
 
 // Notification data interface based on API response
 export interface NotificationData {
-  user: NotificationUser;
+  user?: NotificationUser;
   message: string;
+  type?: string;
 }
+
+export interface NotificationListFilters {
+  read?: boolean;
+  type?: string;
+  from_date?: string;
+  to_date?: string;
+  sort_by?: 'created_at' | 'read_at';
+  sort_order?: 'asc' | 'desc';
+  per_page?: number;
+  page?: number;
+}
+
+export interface PaginatedNotifications {
+  data: ApiNotification[];
+  current_page?: number;
+  last_page?: number;
+  per_page?: number;
+  total?: number;
+}
+
+/** Extract notifications array from paginated or flat API `data`. */
+export const extractNotificationsList = (response: {
+  status?: boolean;
+  data?: unknown;
+}): ApiNotification[] => {
+  if (!response?.data) return [];
+
+  if (Array.isArray(response.data)) {
+    return response.data as ApiNotification[];
+  }
+
+  if (
+    typeof response.data === 'object' &&
+    response.data !== null &&
+    'data' in response.data &&
+    Array.isArray((response.data as PaginatedNotifications).data)
+  ) {
+    return (response.data as PaginatedNotifications).data;
+  }
+
+  return [];
+};
 
 // Main notification interface based on API response
 export interface ApiNotification {
@@ -96,8 +139,7 @@ export const convertApiNotificationToUI = (
   };
 
   // Generate title based on notification type
-  const generateTitle = (type: string, data: NotificationData): string => {
-    console.log(data);
+  const generateTitle = (type: string): string => {
     const notificationType = getNotificationType(type);
     switch (notificationType) {
       case 'wallet':
@@ -138,17 +180,23 @@ export const convertApiNotificationToUI = (
     return date.toLocaleDateString();
   };
 
+  const data: NotificationData = apiNotification.data ?? {
+    message: 'Notification',
+  };
+
   return {
     id: apiNotification.id,
-    title: generateTitle(apiNotification.type, apiNotification.data),
-    message: apiNotification.data.message,
+    title: generateTitle(apiNotification.type),
+    message: data.message ?? 'Notification',
     date: formatDate(apiNotification.created_at),
     read: !!apiNotification.read_at,
     type: getNotificationType(apiNotification.type),
-    avatar: apiNotification.data.user?.avatar,
-    user: {
-      name: `${apiNotification.data.user?.first_name} ${apiNotification.data.user?.last_name}`,
-      avatar: apiNotification.data.user?.avatar || '',
-    },
+    avatar: data.user?.avatar,
+    user: data.user
+      ? {
+          name: `${data.user.first_name} ${data.user.last_name}`.trim(),
+          avatar: data.user.avatar || '',
+        }
+      : undefined,
   };
 };

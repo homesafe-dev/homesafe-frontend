@@ -15,12 +15,10 @@ import Toast from '../common/Toast';
 const NotificationsPage: React.FC = () => {
   const navigate = useNavigate();
 
-  // State for notifications
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  // State for active tab
+  const [unreadCount, setUnreadCount] = useState(0);
   const [activeTab, setActiveTab] = useState<'unread' | 'read'>('unread');
 
   // Toast state
@@ -39,17 +37,33 @@ const NotificationsPage: React.FC = () => {
     setToast((prev) => ({ ...prev, isVisible: false }));
   };
 
-  // Memoize fetchNotifications
+  const fetchUnreadCount = useCallback(async () => {
+    try {
+      const response = await notificationApi.getUnreadCount();
+      if (response.status && response.data) {
+        setUnreadCount(response.data.unread_count ?? 0);
+      }
+    } catch (err) {
+      console.error('Error fetching unread count:', err);
+    }
+  }, []);
+
   const fetchNotifications = useCallback(async () => {
     setLoading(true);
     setError(null);
 
     try {
-      const response = await notificationApi.getNotifications();
+      const response =
+        activeTab === 'unread'
+          ? await notificationApi.getUnreadNotifications(15)
+          : await notificationApi.getNotifications({
+              read: true,
+              per_page: 15,
+            });
 
-      if (response.status && response.data) {
-        const uiNotifications = response.data.map(convertApiNotificationToUI);
-        setNotifications(uiNotifications);
+      if (response.status) {
+        const list = notificationApi.parseNotificationList(response);
+        setNotifications(list.map(convertApiNotificationToUI));
       } else {
         const errorMessage =
           response.message || 'Failed to fetch notifications';
@@ -64,20 +78,17 @@ const NotificationsPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [activeTab]);
 
   // Mark all as read
   const handleMarkAllAsRead = async () => {
     try {
       await notificationApi.markAllAsRead();
-
-      // Update local state
-      setNotifications(
-        notifications.map((notification) => ({
-          ...notification,
-          read: true,
-        }))
-      );
+      setNotifications([]);
+      await fetchUnreadCount();
+      if (activeTab === 'unread') {
+        await fetchNotifications();
+      }
     } catch (err) {
       console.error('Error marking all as read:', err);
       const errorMessage = 'Failed to mark notifications as read';
@@ -92,13 +103,18 @@ const NotificationsPage: React.FC = () => {
       await notificationApi.markAsRead(id);
 
       // Update local state
-      setNotifications(
-        notifications.map((notification) =>
-          notification.id === id
-            ? { ...notification, read: true }
-            : notification
-        )
-      );
+      if (activeTab === 'unread') {
+        setNotifications((prev) => prev.filter((n) => n.id !== id));
+      } else {
+        setNotifications((prev) =>
+          prev.map((notification) =>
+            notification.id === id
+              ? { ...notification, read: true }
+              : notification
+          )
+        );
+      }
+      await fetchUnreadCount();
     } catch (err) {
       console.error('Error marking notification as read:', err);
       showToast('Failed to mark notification as read', 'error');
@@ -109,17 +125,13 @@ const NotificationsPage: React.FC = () => {
     navigate(-1); // Goes back one step in history
   };
 
-  // Filter notifications based on active tab
-  const filteredNotifications = notifications.filter((notification) =>
-    activeTab === 'unread' ? !notification.read : notification.read
-  );
-
-  const unreadCount = notifications.filter((n) => !n.read).length;
-
-  // Fetch notifications on component mount
   useEffect(() => {
     fetchNotifications();
   }, [fetchNotifications]);
+
+  useEffect(() => {
+    fetchUnreadCount();
+  }, [fetchUnreadCount]);
 
   return (
     <div className="bg-white p-6">
@@ -177,7 +189,7 @@ const NotificationsPage: React.FC = () => {
         <div className="text-center py-8 text-gray-500">
           Loading notifications...
         </div>
-      ) : filteredNotifications.length === 0 ? (
+      ) : notifications.length === 0 ? (
         <div className="text-center py-8 text-gray-500">
           <IoNotificationsOutline
             size={48}
@@ -187,11 +199,11 @@ const NotificationsPage: React.FC = () => {
         </div>
       ) : (
         <div className="shadow-lg rounded-md overflow-hidden border border-gray-200">
-          {filteredNotifications.map((notification, index) => (
+          {notifications.map((notification, index) => (
             <div
               key={notification.id}
               className={`p-4 hover:bg-gray-50 cursor-pointer relative ${
-                index !== filteredNotifications.length - 1
+                index !== notifications.length - 1
                   ? 'border-b border-gray-200'
                   : ''
               }`}

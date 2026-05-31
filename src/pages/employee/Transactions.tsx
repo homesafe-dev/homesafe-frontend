@@ -298,7 +298,7 @@ const Transactions: React.FC = () => {
       {/* Summary Cards */}
       {stats && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 p-6">
+          <div className="bg-surface rounded-lg shadow-sm border border-border-default p-6">
             <div className="flex items-center justify-between mb-3">
               <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
                 Total Volume
@@ -315,7 +315,7 @@ const Transactions: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 p-6">
+          <div className="bg-surface rounded-lg shadow-sm border border-border-default p-6">
             <div className="flex items-center justify-between mb-3">
               <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
                 Total Credits
@@ -332,7 +332,7 @@ const Transactions: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 p-6">
+          <div className="bg-surface rounded-lg shadow-sm border border-border-default p-6">
             <div className="flex items-center justify-between mb-3">
               <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
                 Total Withdrawals
@@ -349,7 +349,7 @@ const Transactions: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 p-6">
+          <div className="bg-surface rounded-lg shadow-sm border border-border-default p-6">
             <div className="flex items-center justify-between mb-3">
               <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
                 Success Rate
@@ -367,7 +367,7 @@ const Transactions: React.FC = () => {
           </div>
 
           {stats.summary.wallet_balance !== undefined && (
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 p-6">
+            <div className="bg-surface rounded-lg shadow-sm border border-border-default p-6">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
                   Wallet Balance
@@ -393,7 +393,7 @@ const Transactions: React.FC = () => {
           {[...Array(4)].map((_, i) => (
             <div
               key={i}
-              className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 p-6 animate-pulse"
+              className="bg-surface rounded-lg shadow-sm border border-border-default p-6 animate-pulse"
             >
               <div className="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
               <div className="h-8 bg-gray-200 rounded w-1/2 mb-2"></div>
@@ -404,9 +404,9 @@ const Transactions: React.FC = () => {
       )}
 
       {/* Main Content */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100">
+      <div className="bg-surface rounded-lg shadow-sm border border-border-default">
         {/* Period Filter */}
-        <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-gray-100">
+        <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-border-default">
           <div className="flex flex-wrap items-center gap-3 mb-4">
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
               Period:
@@ -420,7 +420,7 @@ const Transactions: React.FC = () => {
                     className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
                       selectedPeriod === period
                         ? 'bg-green-50 text-green-700 border border-green-200'
-                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700/50 border border-transparent'
+                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-gray-100 hover:bg-elevated/50 border border-transparent'
                     }`}
                   >
                     {period.charAt(0).toUpperCase() + period.slice(1)}
@@ -432,7 +432,7 @@ const Transactions: React.FC = () => {
                 className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
                   selectedPeriod === 'custom'
                     ? 'bg-green-50 text-green-700 border border-green-200'
-                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700/50 border border-transparent'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-gray-100 hover:bg-elevated/50 border border-transparent'
                 }`}
               >
                 Custom
@@ -453,7 +453,7 @@ const Transactions: React.FC = () => {
                   placeholder="Search by reference code or description..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
+                  className="w-full pl-10 pr-4 py-2.5 border border-border-default rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
                 />
               </div>
 
@@ -463,7 +463,7 @@ const Transactions: React.FC = () => {
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="pl-10 pr-8 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm appearance-none bg-white dark:bg-gray-800"
+                  className="pl-10 pr-8 py-2.5 border border-border-default rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm appearance-none bg-white dark:bg-gray-800"
                 >
                   <option value="all">All Status</option>
                   <option value="successful">Successful</option>
@@ -477,7 +477,7 @@ const Transactions: React.FC = () => {
                 <select
                   value={paymentMethodFilter}
                   onChange={(e) => setPaymentMethodFilter(e.target.value)}
-                  className="pl-4 pr-8 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm appearance-none bg-white dark:bg-gray-800"
+                  className="pl-4 pr-8 py-2.5 border border-border-default rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm appearance-none bg-white dark:bg-gray-800"
                 >
                   <option value="all">All Methods</option>
                   <option value="external_funding">External Funding</option>
@@ -509,7 +509,7 @@ const Transactions: React.FC = () => {
                   type="date"
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
-                  className="px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
+                  className="px-3 py-2 border border-border-default rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
                 />
                 <span className="hidden sm:block text-gray-400 self-center">
                   to
@@ -518,7 +518,7 @@ const Transactions: React.FC = () => {
                   type="date"
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
-                  className="px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
+                  className="px-3 py-2 border border-border-default rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
                 />
               </div>
             </div>
@@ -533,7 +533,7 @@ const Transactions: React.FC = () => {
           {/* Table */}
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-100">
+              <thead className="bg-elevated border-b border-border-default">
                 <tr>
                   <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                     Type
@@ -558,7 +558,7 @@ const Transactions: React.FC = () => {
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-100">
+              <tbody className="bg-surface divide-y divide-border-default">
                 {loading ? (
                   // Loading state
                   [...Array(5)].map((_, index) => (
@@ -638,7 +638,7 @@ const Transactions: React.FC = () => {
                   getPaginatedTransactions().map((transaction) => (
                     <tr
                       key={transaction.id}
-                      className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                      className="hover:bg-elevated/50 transition-colors"
                     >
                       <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                         <div className="flex items-center gap-2">
@@ -698,14 +698,14 @@ const Transactions: React.FC = () => {
                           </button>
 
                           {showOptionsFor === transaction.id.toString() && (
-                            <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-100 z-10">
+                            <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-border-default z-10">
                               <div className="py-1">
                                 <button
                                   onClick={() => {
                                     // Navigate to transaction details
                                     setShowOptionsFor(null);
                                   }}
-                                  className="w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 flex items-center gap-2"
+                                  className="w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-elevated/50 flex items-center gap-2"
                                 >
                                   <Eye className="w-4 h-4" />
                                   View Details
@@ -715,7 +715,7 @@ const Transactions: React.FC = () => {
                                     // Download receipt
                                     setShowOptionsFor(null);
                                   }}
-                                  className="w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 flex items-center gap-2"
+                                  className="w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-elevated/50 flex items-center gap-2"
                                 >
                                   <Download className="w-4 h-4" />
                                   Download Receipt
@@ -766,7 +766,7 @@ const Transactions: React.FC = () => {
                   className={`p-2 rounded-lg border transition-colors ${
                     currentPage === 1
                       ? 'border-gray-200 dark:border-gray-700 text-gray-300 cursor-not-allowed'
-                      : 'border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                      : 'border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-elevated/50'
                   }`}
                 >
                   <ChevronLeft className="w-5 h-5" />
@@ -786,7 +786,7 @@ const Transactions: React.FC = () => {
                           className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
                             currentPage === page
                               ? 'bg-green-600 text-white'
-                              : 'border border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                              : 'border border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-elevated/50'
                           }`}
                         >
                           {page}
@@ -817,7 +817,7 @@ const Transactions: React.FC = () => {
                   className={`p-2 rounded-lg border transition-colors ${
                     currentPage === totalPages
                       ? 'border-gray-200 dark:border-gray-700 text-gray-300 cursor-not-allowed'
-                      : 'border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                      : 'border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-elevated/50'
                   }`}
                 >
                   <ChevronRight className="w-5 h-5" />

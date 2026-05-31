@@ -1,74 +1,71 @@
 import React, { useState, useRef, useEffect } from 'react';
-import signupImg1 from '../../../assets/images/signupImg1.png';
-import signupImg2 from '../../../assets/images/signupImg2.png';
-import { useNavigate, Link } from 'react-router-dom';
-import HomesafeLogo from '../../../assets/images/HomesafeLogo.png';
-import HomesafeLogo2 from '../../../assets/images/HomesafeLogo2.svg';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
+import { useOtpCountdown } from '../../../hooks/useOtpCountdown';
+import {
+  OTP_LENGTH,
+  OTP_STORAGE_KEYS,
+  sanitizeOtpDigit,
+  sanitizeOtpPaste,
+} from '../../../utils/otpInput';
+import {
+  AuthSplitPage,
+  AuthHeader,
+  AuthPrimaryButton,
+  AuthBackLink,
+} from '../shared/AuthLayout';
+import {
+  authOtpInputClass,
+  authPillInputBorderStyle,
+} from '../shared/authStyles.ts';
+import { authTokens } from '../shared/authTokens.ts';
 
 const SignupOTPPage: React.FC = () => {
-  const [otp, setOtp] = useState<string[]>(new Array(6).fill(''));
+  const [otp, setOtp] = useState<string[]>(new Array(OTP_LENGTH).fill(''));
   const [email, setEmail] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [infoMessage, setInfoMessage] = useState<string | null>(null);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const { sendOTP, verifyOTP, loading } = useAuth();
   const navigate = useNavigate();
+  const { formattedCountdown, isExpired, resetCountdown, expiryMinutes } =
+    useOtpCountdown(OTP_STORAGE_KEYS.signupSentAt);
 
   useEffect(() => {
-    // Get email from session storage
     const storedEmail = sessionStorage.getItem('signupEmail');
     if (!storedEmail) {
-      // Redirect back to signup page if email is not found
       navigate('/signup');
       return;
     }
     setEmail(storedEmail);
+    const resumeMsg = sessionStorage.getItem('signupResumeMessage');
+    if (resumeMsg) {
+      setInfoMessage(resumeMsg);
+      sessionStorage.removeItem('signupResumeMessage');
+    }
   }, [navigate]);
 
   const handleChange = (element: HTMLInputElement, index: number) => {
-    // Allow both numbers and alphabets
-    const value = element.value.slice(-1); // Only take the last character entered
-
+    const value = sanitizeOtpDigit(element.value);
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
-
-    if (value && index < 5) {
+    if (value && index < OTP_LENGTH - 1) {
       inputRefs.current[index + 1]?.focus();
     }
   };
 
-  // Handle paste event for OTP
   const handlePaste = (e: React.ClipboardEvent) => {
     e.preventDefault();
-    const pastedData = e.clipboardData.getData('text').trim().toUpperCase();
-
-    // If pasted data matches expected length, fill all inputs
-    if (pastedData.length === 6) {
-      const otpArray = pastedData.split('');
-      setOtp(otpArray);
-
-      // Focus on the last input after paste
-      inputRefs.current[5]?.focus();
-    }
-    // If pasted data is shorter, fill as many inputs as possible
-    else if (pastedData.length > 0) {
-      const currentIndex = otp.findIndex((val) => val === '');
-      const availableSlots = 6 - currentIndex;
-      const dataToUse = pastedData.slice(0, availableSlots);
-
-      const newOtp = [...otp];
-      for (let i = 0; i < dataToUse.length; i++) {
-        newOtp[currentIndex + i] = dataToUse[i];
-      }
-
-      setOtp(newOtp);
-
-      // Focus on the next empty input or the last one
-      const nextIndex = Math.min(currentIndex + dataToUse.length, 5);
-      inputRefs.current[nextIndex]?.focus();
-    }
+    const pasted = sanitizeOtpPaste(e.clipboardData.getData('text'));
+    if (!pasted.some((d) => d !== '')) return;
+    setOtp(pasted);
+    const lastFilled = pasted.reduce(
+      (idx: number, d: string, i: number) => (d !== '' ? i : idx),
+      0
+    );
+    inputRefs.current[Math.min(lastFilled + 1, OTP_LENGTH - 1)]?.focus();
   };
 
   const handleKeyDown = (
@@ -82,27 +79,27 @@ const SignupOTPPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const otpString = otp.join('');
-
-    if (otpString.length !== 6) {
-      setErrorMessage('Please enter a valid 6-character OTP');
+    if (isExpired) {
+      setErrorMessage(
+        'This code has expired. Please request a new one to continue.'
+      );
       return;
     }
-
+    const otpString = otp.join('');
+    if (otpString.length !== OTP_LENGTH) {
+      setErrorMessage('Please enter the full 6-digit code');
+      return;
+    }
     setIsSubmitting(true);
     setErrorMessage(null);
-
     try {
       const response = await verifyOTP(email, otpString);
-
       if (response.success) {
-        // Navigate to password creation page
         navigate('/signup/password');
       } else {
         setErrorMessage(response.message);
       }
-    } catch (err) {
-      console.error('Error verifying OTP:', err);
+    } catch {
       setErrorMessage('An unexpected error occurred. Please try again.');
     } finally {
       setIsSubmitting(false);
@@ -111,178 +108,104 @@ const SignupOTPPage: React.FC = () => {
 
   const handleResetCode = async () => {
     setErrorMessage(null);
-
     try {
       const response = await sendOTP(email);
-
       if (response.success) {
-        // Clear OTP fields
-        setOtp(new Array(6).fill(''));
-        // Focus on first input
+        setOtp(new Array(OTP_LENGTH).fill(''));
+        resetCountdown();
         inputRefs.current[0]?.focus();
       } else {
         setErrorMessage(response.message);
       }
-    } catch (err) {
-      console.error('Error resending OTP:', err);
+    } catch {
       setErrorMessage('Failed to resend OTP. Please try again.');
     }
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      <div className="hidden md:flex md:w-1/2 bg-white relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-1/2">
-          <div className="relative w-full h-full">
-            <img
-              src={signupImg1}
-              alt="Top signup image"
-              className="w-full h-full object-cover object-[center_10%]"
+    <AuthSplitPage>
+      <AuthHeader
+        title="Verify email"
+        subtitle={`Enter the code we sent to ${email || 'your email'}.`}
+      />
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <p
+          className="text-center text-xs"
+          style={{ color: authTokens.bodyColor }}
+        >
+          Numbers only. Expires in {expiryMinutes} minutes.
+        </p>
+        <p
+          className={`text-center text-xs font-medium ${
+            isExpired ? 'text-red-600' : ''
+          }`}
+          style={isExpired ? undefined : { color: authTokens.bodyColor }}
+          aria-live="polite"
+        >
+          {isExpired
+            ? 'Code expired — request a new one below'
+            : `Time remaining: ${formattedCountdown}`}
+        </p>
+
+        <div className="flex justify-between gap-2">
+          {otp.map((digit, index) => (
+            <input
+              key={index}
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              maxLength={1}
+              value={digit}
+              ref={(el) => {
+                inputRefs.current[index] = el;
+              }}
+              onChange={(e) => handleChange(e.target, index)}
+              onKeyDown={(e) => handleKeyDown(e, index)}
+              onPaste={handlePaste}
+              className={authOtpInputClass}
+              style={authPillInputBorderStyle}
+              disabled={isSubmitting || isExpired}
+              autoComplete="one-time-code"
             />
-            <div className="absolute inset-0 bg-[#1D2125D9]" />
-          </div>
+          ))}
         </div>
 
-        <div className="absolute bottom-0 left-0 w-full h-1/2">
-          <div className="relative w-full h-full">
-            <img
-              src={signupImg2}
-              alt="Bottom signup image"
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-[#1D2125D9]" />
-          </div>
+        {infoMessage && (
+          <p
+            className="text-sm text-center"
+            style={{ color: authTokens.primaryDark }}
+          >
+            {infoMessage}
+          </p>
+        )}
+        {errorMessage && (
+          <p className="text-sm text-red-600 text-center">{errorMessage}</p>
+        )}
+
+        <div className="text-right">
+          <button
+            type="button"
+            onClick={handleResetCode}
+            className="text-sm font-semibold hover:underline disabled:opacity-50"
+            style={{ color: authTokens.primaryDark }}
+            disabled={isSubmitting || loading}
+          >
+            {loading ? 'Sending...' : 'Resend code'}
+          </button>
         </div>
 
-        <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
-          <div className="mb-8">
-            <Link to="/">
-              <img src={HomesafeLogo} alt="Homesafe Logo" className="" />
-            </Link>
-          </div>
+        <AuthPrimaryButton
+          loading={isSubmitting}
+          loadingLabel="Verifying..."
+          disabled={isExpired}
+        >
+          Continue
+        </AuthPrimaryButton>
+      </form>
 
-          <div className="max-w-md">
-            <p className="text-center text-[#F4F4F4] text-[24px] font-normal">
-              "Our Mission at Homesafe is to make hiring safe, simple, and
-              efficient for every Living Space, and to create a job search space
-              for Artisans to apply through".
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="w-full md:w-1/2 flex items-center justify-center px-4 py-6 md:p-6">
-        <div className="flex flex-col items-center w-full max-w-[545px] space-y-4">
-          <div className="w-full bg-white rounded-lg shadow-lg p-4 md:p-8">
-            <div className="text-center mb-6 flex flex-row items-center justify-center space-x-2">
-              <h1 className="text-xl md:text-2xl font-semibold text-gray-800">
-                Sign up on
-              </h1>
-              <Link to="/">
-                <img
-                  src={HomesafeLogo2}
-                  className="w-[120px] md:w-[178px] max-h-[30px]"
-                  alt="Homesafe Logo"
-                />
-              </Link>
-            </div>
-
-            <form onSubmit={handleSubmit}>
-              <div className="mb-4">
-                <p className="block text-sm font-medium text-gray-700 mb-2 text-center">
-                  Kindly enter the OTP sent to {email}
-                </p>
-                <p className="block text-xs text-gray-500 mb-4 text-center">
-                  The OTP contains 6 characters (letters and/or numbers)
-                </p>
-                <div className="flex justify-between gap-2 md:gap-4 mb-4">
-                  {otp.map((digit, index) => (
-                    <input
-                      key={index}
-                      type="text"
-                      maxLength={1}
-                      value={digit}
-                      ref={(el) => {
-                        inputRefs.current[index] = el;
-                      }}
-                      onChange={(e) => handleChange(e.target, index)}
-                      onKeyDown={(e) => handleKeyDown(e, index)}
-                      onPaste={handlePaste}
-                      className="w-8 h-8 md:w-12 md:h-12 text-center border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-base md:text-lg font-semibold"
-                      disabled={isSubmitting}
-                      autoComplete="one-time-code"
-                    />
-                  ))}
-                </div>
-                {errorMessage && (
-                  <p className="mb-2 text-sm text-red-600 text-center">
-                    {errorMessage}
-                  </p>
-                )}
-                <div className="text-right">
-                  <button
-                    type="button"
-                    onClick={handleResetCode}
-                    className="text-green-500 text-sm hover:text-green-600"
-                    disabled={isSubmitting || loading}
-                  >
-                    {loading ? 'Sending...' : 'Resend code'}
-                  </button>
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                className={`w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors ${
-                  isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
-                }`}
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? 'Verifying...' : 'Continue'}
-              </button>
-            </form>
-
-            <div className="my-4 text-center">
-              <span className="text-sm text-gray-500">Or</span>
-            </div>
-
-            <button
-              type="button"
-              className="w-full flex items-center justify-center py-2 px-4 border border-gray-300 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
-            >
-              <svg
-                className="h-4 w-4 mr-2"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill="#4285F4"
-                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                />
-                <path
-                  fill="#34A853"
-                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                />
-                <path
-                  fill="#FBBC05"
-                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                />
-                <path
-                  fill="#EA4335"
-                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                />
-              </svg>
-              Sign up with Google
-            </button>
-          </div>
-
-          <div className="w-full max-w-[416px] text-[13px] text-[#24292E] text-center mt-4 md:mt-[3rem] px-4">
-            By clicking "Continue" you have read and understand the Terms &
-            Conditions of Homesafe and agreed to it.
-          </div>
-        </div>
-      </div>
-    </div>
+      <AuthBackLink to="/signup" label="Back to sign up" />
+    </AuthSplitPage>
   );
 };
 

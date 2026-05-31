@@ -204,7 +204,7 @@ const AdminCandidateProfile: React.FC = () => {
 
   return (
     <div className="rounded-lg">
-      <div className="p-3 sm:p-4 border-b border-gray-100">
+      <div className="p-3 sm:p-4 border-b border-border-default">
         <button
           className="flex items-center text-gray-600 text-sm sm:text-base"
           onClick={goBack}

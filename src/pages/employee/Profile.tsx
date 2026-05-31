@@ -252,10 +252,10 @@ const EmployeeProfilePage: React.FC = () => {
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
         </div>
       ) : (
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100">
+        <div className="bg-surface rounded-lg shadow-sm border border-border-default">
           <form onSubmit={handleSubmit}>
             {/* Profile Image Section */}
-            <div className="p-6 sm:p-8 border-b border-gray-100">
+            <div className="p-6 sm:p-8 border-b border-border-default">
               <div className="flex flex-col items-center">
                 <div className="relative mb-6">
                   <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-gray-100">
@@ -296,7 +296,7 @@ const EmployeeProfilePage: React.FC = () => {
                     <button
                       type="button"
                       onClick={handleDeleteImage}
-                      className="px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors flex items-center justify-center gap-2"
+                      className="px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-elevated/50 transition-colors flex items-center justify-center gap-2"
                     >
                       <Trash2 className="w-4 h-4" />
                       Remove Image
@@ -329,7 +329,7 @@ const EmployeeProfilePage: React.FC = () => {
                     placeholder="e.g. John"
                     value={formData.firstName}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400"
+                    className="w-full px-4 py-2.5 border border-border-default rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400"
                   />
                 </div>
 
@@ -347,7 +347,7 @@ const EmployeeProfilePage: React.FC = () => {
                     placeholder="e.g. Doe"
                     value={formData.lastName}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400"
+                    className="w-full px-4 py-2.5 border border-border-default rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400"
                   />
                 </div>
 
@@ -365,7 +365,7 @@ const EmployeeProfilePage: React.FC = () => {
                     placeholder="e.g. 08012345678"
                     value={formData.phoneNumber}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400"
+                    className="w-full px-4 py-2.5 border border-border-default rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400"
                   />
                 </div>
 
@@ -383,7 +383,7 @@ const EmployeeProfilePage: React.FC = () => {
                     placeholder="example@gmail.com"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400"
+                    className="w-full px-4 py-2.5 border border-border-default rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400"
                   />
                 </div>
 
@@ -399,7 +399,7 @@ const EmployeeProfilePage: React.FC = () => {
                     name="gender"
                     value={formData.gender}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 dark:text-gray-100 appearance-none bg-white dark:bg-gray-800"
+                    className="w-full px-4 py-2.5 border border-border-default rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 dark:text-gray-100 appearance-none bg-white dark:bg-gray-800"
                   >
                     <option value="">Select Gender</option>
                     <option value="male">Male</option>
@@ -421,7 +421,7 @@ const EmployeeProfilePage: React.FC = () => {
                     name="dob"
                     value={formData.dob}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 dark:text-gray-100"
+                    className="w-full px-4 py-2.5 border border-border-default rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 dark:text-gray-100"
                   />
                 </div>
 
@@ -439,7 +439,7 @@ const EmployeeProfilePage: React.FC = () => {
                     placeholder="Your address"
                     value={formData.address}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400"
+                    className="w-full px-4 py-2.5 border border-border-default rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400"
                   />
                 </div>
 
@@ -457,13 +457,13 @@ const EmployeeProfilePage: React.FC = () => {
                     value={formData.profileDescription}
                     onChange={handleInputChange}
                     rows={4}
-                    className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400 resize-none"
+                    className="w-full px-4 py-2.5 border border-border-default rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400 resize-none"
                   />
                 </div>
               </div>
 
               {/* Save Button */}
-              <div className="flex justify-end mt-8 pt-6 border-t border-gray-100">
+              <div className="flex justify-end mt-8 pt-6 border-t border-border-default">
                 <button
                   type="submit"
                   disabled={submitting}
@@ -489,7 +489,7 @@ const EmployeeProfilePage: React.FC = () => {
 
       {/* Salary Section */}
       {!loading && (
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 mt-6">
+        <div className="bg-surface rounded-lg shadow-sm border border-border-default mt-6">
           <div className="p-6 sm:p-8">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
@@ -504,7 +504,7 @@ const EmployeeProfilePage: React.FC = () => {
               </button>
             </div>
 
-            <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+            <div className="bg-gray-50 p-4 rounded-lg border border-border-default">
               <div className="flex justify-between items-center">
                 <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
                   Current Salary:
@@ -592,7 +592,7 @@ const EmployeeProfilePage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowSalaryModal(false)}
-                  className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                  className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-elevated/50 transition-colors"
                 >
                   Cancel
                 </button>

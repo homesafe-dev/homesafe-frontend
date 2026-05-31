@@ -1,41 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import walletApi from '../../api/walletApi';
+import { format, parseISO } from 'date-fns';
+import userApi from '../../api/userApi';
 import Toast from '../../components/common/Toast';
 
-interface TransactionUser {
+interface SalaryHistoryItem {
   id: number;
-  first_name: string;
-  last_name: string;
-  email: string;
-  avatar: string;
-}
-
-interface TransactionDetails {
-  id: number;
-  reference_code: string;
-  type: string;
-  status: string;
-  amount: string;
-  category: string;
-}
-
-interface ApiTransaction {
-  id: number;
-  type: string;
-  source: string;
-  description: string;
-  user: TransactionUser;
-  recipient?: TransactionUser;
-  transaction: TransactionDetails;
-}
-
-interface Transaction {
-  id: string;
-  type: string;
-  date: string;
-  amount: number;
-  description: string;
-  from: string;
+  previous_salary: string;
+  new_salary: string;
+  change_reason: string;
+  effective_date: string;
+  created_at: string;
+  updated_at: string;
 }
 
 interface PaginationMeta {
@@ -45,14 +20,30 @@ interface PaginationMeta {
   per_page: number;
 }
 
+const PER_PAGE = 15;
+
+const formatSalary = (value: string | number): string => {
+  const amount = parseFloat(String(value));
+  if (Number.isNaN(amount)) return '—';
+  return `₦ ${amount.toLocaleString()}`;
+};
+
+const formatDate = (value: string): string => {
+  try {
+    return format(parseISO(value), 'd MMM yyyy');
+  } catch {
+    return value;
+  }
+};
+
 const Salary: React.FC = () => {
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [salaryHistory, setSalaryHistory] = useState<SalaryHistoryItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [pagination, setPagination] = useState<PaginationMeta>({
     current_page: 1,
     last_page: 1,
     total: 0,
-    per_page: 15,
+    per_page: PER_PAGE,
   });
   const [toast, setToast] = useState({
     message: '',
@@ -60,7 +51,6 @@ const Salary: React.FC = () => {
     isVisible: false,
   });
 
-  // Toast helper functions
   const showToast = (message: string, type: 'success' | 'error' | 'info') => {
     setToast({ message, type, isVisible: true });
   };
@@ -69,42 +59,22 @@ const Salary: React.FC = () => {
     setToast((prev) => ({ ...prev, isVisible: false }));
   };
 
-  // Memoize fetchTransactions
-  const fetchTransactions = useCallback(async (page: number) => {
+  const fetchSalaryHistory = useCallback(async (page: number) => {
     try {
       setLoading(true);
-      const response = await walletApi.getTransactions(page);
 
-      if (response.status) {
-        // Transform API data to match our component's expected format
-        const formattedTransactions = response.data.data.map(
-          (item: ApiTransaction) => {
-            // Format date - assuming we need to create a date string
-            // In a real app, the API might provide a timestamp we'd format
-            const date = new Date().toLocaleDateString('en-GB', {
-              day: 'numeric',
-              month: 'short',
-              year: 'numeric',
-            });
+      const profileResponse = await userApi.getProfile();
+      if (!profileResponse.status || !profileResponse.data?.id) {
+        showToast('Failed to load profile', 'error');
+        return;
+      }
 
-            return {
-              id: item.transaction.reference_code,
-              type: item.type === 'credit' ? 'Credit' : 'Debit',
-              date: date,
-              amount: parseFloat(item.transaction.amount),
-              description: item.description,
-              from: item.recipient
-                ? `${item.recipient.first_name} ${item.recipient.last_name}`
-                : item.source === 'salary'
-                  ? 'Employer'
-                  : item.source,
-            };
-          }
-        );
+      const userId = profileResponse.data.id;
+      const response = await userApi.getSalaryHistory(userId, page, PER_PAGE);
 
-        setTransactions(formattedTransactions);
+      if (response.status && response.data?.data) {
+        setSalaryHistory(response.data.data);
 
-        // Set pagination data
         if (response.data.meta) {
           setPagination({
             current_page: response.data.meta.current_page,
@@ -114,26 +84,25 @@ const Salary: React.FC = () => {
           });
         }
       } else {
-        const errorMessage = 'Failed to fetch transactions';
-        // setError(errorMessage); // This line was removed as per the new_code
-        showToast(errorMessage, 'error');
+        showToast(
+          response.message || 'Failed to fetch salary history',
+          'error'
+        );
       }
     } catch (err) {
-      console.error('Error fetching transactions:', err);
-      const errorMessage =
-        'Error fetching transactions. Please try again later.';
-      // setError(errorMessage); // This line was removed as per the new_code
-      showToast(errorMessage, 'error');
+      console.error('Error fetching salary history:', err);
+      showToast(
+        'Error fetching salary history. Please try again later.',
+        'error'
+      );
     } finally {
       setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    fetchTransactions(1);
-  }, [fetchTransactions]);
-
-  // Removed fallback data as it's not being used
+    fetchSalaryHistory(1);
+  }, [fetchSalaryHistory]);
 
   return (
     <div className="rounded-lg border-gray-200 dark:border-gray-700">
@@ -144,12 +113,12 @@ const Salary: React.FC = () => {
       </div>
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-3">
         <h2 className="text-[16px] text-gray-900 dark:text-gray-100 font-semibold mt-[1rem]">
-          Transaction History
+          Salary History
         </h2>
         {pagination.last_page > 1 && (
           <div className="flex flex-wrap items-center gap-2">
             <button
-              onClick={() => fetchTransactions(pagination.current_page - 1)}
+              onClick={() => fetchSalaryHistory(pagination.current_page - 1)}
               disabled={pagination.current_page === 1}
               className={`px-2 sm:px-3 py-1 rounded text-sm ${
                 pagination.current_page === 1
@@ -164,7 +133,7 @@ const Salary: React.FC = () => {
               Page {pagination.current_page} of {pagination.last_page}
             </span>
             <button
-              onClick={() => fetchTransactions(pagination.current_page + 1)}
+              onClick={() => fetchSalaryHistory(pagination.current_page + 1)}
               disabled={pagination.current_page === pagination.last_page}
               className={`px-2 sm:px-3 py-1 rounded text-sm ${
                 pagination.current_page === pagination.last_page
@@ -192,59 +161,53 @@ const Salary: React.FC = () => {
               <thead>
                 <tr className="text-left text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
                   <th className="py-3 px-2 bg-[#E7F6F0] whitespace-nowrap">
-                    Transaction Type
+                    Effective Date
                   </th>
                   <th className="py-3 px-2 bg-[#E7F6F0] whitespace-nowrap">
-                    Transaction ID
+                    Previous Salary
                   </th>
                   <th className="py-3 px-2 bg-[#E7F6F0] whitespace-nowrap">
-                    Date
+                    New Salary
                   </th>
                   <th className="py-3 px-2 bg-[#E7F6F0] whitespace-nowrap">
-                    Amount
+                    Change Reason
                   </th>
                   <th className="py-3 px-2 bg-[#E7F6F0] whitespace-nowrap">
-                    Description
-                  </th>
-                  <th className="py-3 px-2 bg-[#E7F6F0] whitespace-nowrap">
-                    From/To
+                    Recorded On
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {transactions.length > 0 ? (
-                  transactions.map((transaction, index) => (
+                {salaryHistory.length > 0 ? (
+                  salaryHistory.map((item) => (
                     <tr
-                      key={index}
-                      className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                      key={item.id}
+                      className="border-b border-gray-200 dark:border-gray-700 hover:bg-elevated/50"
                     >
                       <td className="py-3 px-2 whitespace-nowrap">
-                        {transaction.type}
+                        {formatDate(item.effective_date)}
                       </td>
                       <td className="py-3 px-2 whitespace-nowrap">
-                        {transaction.id}
+                        {formatSalary(item.previous_salary)}
                       </td>
                       <td className="py-3 px-2 whitespace-nowrap">
-                        {transaction.date}
+                        {formatSalary(item.new_salary)}
                       </td>
                       <td className="py-3 px-2 whitespace-nowrap">
-                        ₦ {transaction.amount.toLocaleString()}
+                        {item.change_reason}
                       </td>
                       <td className="py-3 px-2 whitespace-nowrap">
-                        {transaction.description}
-                      </td>
-                      <td className="py-3 px-2 whitespace-nowrap">
-                        {transaction.from}
+                        {formatDate(item.created_at)}
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
                     <td
-                      colSpan={6}
+                      colSpan={5}
                       className="py-4 text-center text-gray-500 dark:text-gray-400"
                     >
-                      No transactions found
+                      No salary history found
                     </td>
                   </tr>
                 )}
@@ -254,7 +217,6 @@ const Salary: React.FC = () => {
         </div>
       )}
 
-      {/* Toast Notification */}
       <Toast
         message={toast.message}
         type={toast.type}

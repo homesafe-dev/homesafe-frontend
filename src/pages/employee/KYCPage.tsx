@@ -158,7 +158,7 @@ const EmployeeKYCPage: React.FC = () => {
           {error}
         </div>
       ) : userProfile?.status === 1 ? (
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 p-6 sm:p-8">
+        <div className="bg-surface rounded-lg shadow-sm border border-border-default p-6 sm:p-8">
           {/* Success Header */}
           <div className="flex items-start gap-4 mb-6">
             <div className="w-12 h-12 bg-green-50 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -175,7 +175,7 @@ const EmployeeKYCPage: React.FC = () => {
           </div>
 
           {/* User Name Display */}
-          <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200 dark:border-gray-700">
+          <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-border-default">
             <div className="flex items-center gap-2 mb-2">
               <User className="w-4 h-4 text-gray-500 dark:text-gray-400" />
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -219,7 +219,7 @@ const EmployeeKYCPage: React.FC = () => {
           </div>
         </div>
       ) : (
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 p-6 sm:p-8">
+        <div className="bg-surface rounded-lg shadow-sm border border-border-default p-6 sm:p-8">
           {/* Header Section */}
           <div className="flex items-start gap-4 mb-6">
             <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -241,7 +241,7 @@ const EmployeeKYCPage: React.FC = () => {
           </div>
 
           {/* User Name Display */}
-          <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200 dark:border-gray-700">
+          <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-border-default">
             <div className="flex items-center gap-2 mb-2">
               <User className="w-4 h-4 text-gray-500 dark:text-gray-400" />
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -270,7 +270,7 @@ const EmployeeKYCPage: React.FC = () => {
                 id="ninNumber"
                 name="ninNumber"
                 placeholder="Enter your NIN number (e.g. 70123456789)"
-                className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400"
+                className="w-full px-4 py-2.5 border border-border-default rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400"
                 value={formData.ninNumber}
                 onChange={handleInputChange}
                 required
@@ -287,7 +287,7 @@ const EmployeeKYCPage: React.FC = () => {
             )}
 
             {/* Submit Button */}
-            <div className="flex justify-start pt-4 border-t border-gray-100">
+            <div className="flex justify-start pt-4 border-t border-border-default">
               <button
                 type="submit"
                 disabled={submitting}

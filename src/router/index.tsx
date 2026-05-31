@@ -22,7 +22,6 @@ import EmployerLoginForm from '../components/auth/employer/LoginForm';
 import EmployerSignupForm from '../components/auth/employer/SignupFrom';
 import EmployerSignupOTP from '../components/auth/employer/SignupOTP';
 import EmployerSignupPassword from '../components/auth/employer/SignupPassword';
-import EmployerSigninPassword from '../components/auth/employer/SigninPassword';
 import EmployerSigninCreatePassword from '../components/auth/employer/SigninCreatePassword';
 // Removed unused imports: EmployeeLoginForm, EmployeeOTP, AgentLoginForm
 import EmployerForgotPassword from '../components/auth/employer/ForgotPassword';
@@ -196,10 +195,6 @@ export const router = createBrowserRouter([
   {
     path: 'signup/facial-capture',
     element: <FacialCapturePage />,
-  },
-  {
-    path: 'signin/password',
-    element: <EmployerSigninPassword />,
   },
   {
     path: 'signin/forgot-password',
@@ -521,6 +516,22 @@ export const router = createBrowserRouter([
         element: protectEmployeeRoute(
           <EmployeeLayout>
             <EmployeeWalletPage />
+          </EmployeeLayout>
+        ),
+      },
+      {
+        path: 'wallet/top-up',
+        element: protectEmployeeRoute(
+          <EmployeeLayout>
+            <WalletTopUp />
+          </EmployeeLayout>
+        ),
+      },
+      {
+        path: 'wallet/payment/verify',
+        element: protectEmployeeRoute(
+          <EmployeeLayout>
+            <PaymentVerification />
           </EmployeeLayout>
         ),
       },

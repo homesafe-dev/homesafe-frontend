@@ -43,7 +43,7 @@ const CandidateMedicHistory: React.FC<CandidateMedicHistoryProps> = ({
       {medicalFiles.map((medical) => (
         <div
           key={medical.id}
-          className="flex flex-col sm:flex-row sm:items-center justify-start p-3 sm:p-4 border border-gray-200 dark:border-gray-700 rounded-lg gap-3 sm:gap-4"
+          className="flex flex-col sm:flex-row sm:items-center justify-start p-3 sm:p-4 border border-border-default rounded-lg gap-3 sm:gap-4"
         >
           <img
             src={MedicalImg}

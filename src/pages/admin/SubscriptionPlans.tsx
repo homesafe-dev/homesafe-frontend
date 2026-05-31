@@ -205,7 +205,7 @@ const SubscriptionPlans: React.FC = () => {
         </button>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 p-4 sm:p-6">
+      <div className="bg-surface rounded-lg shadow-sm border border-border-default dark:border-gray-700 p-4 sm:p-6">
         {isLoading ? (
           <div className="flex justify-center items-center py-12">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
@@ -221,7 +221,7 @@ const SubscriptionPlans: React.FC = () => {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 dark:bg-slate-700 border-b border-gray-100 dark:border-slate-500">
+              <thead className="bg-gray-50 dark:bg-slate-700 border-b border-border-default dark:border-slate-500">
                 <tr>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-100 uppercase">
                     Plan
@@ -243,7 +243,7 @@ const SubscriptionPlans: React.FC = () => {
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
+              <tbody className="divide-y divide-border-default dark:divide-gray-700">
                 {sortedPlans.map((plan) => (
                   <tr
                     key={plan.id}

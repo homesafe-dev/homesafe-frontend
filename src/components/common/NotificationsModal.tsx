@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   IoEyeOutline,
   IoNotificationsOutline,
@@ -11,22 +11,26 @@ import {
   convertApiNotificationToUI,
 } from '../../types/notification';
 
+type NotificationFilter = 'unread' | 'all';
+
 interface NotificationsModalProps {
   isOpen: boolean;
   onClose: () => void;
   portalType: 'employer' | 'employee' | 'agent' | 'admin';
+  onUnreadCountChange?: () => void;
 }
 
 const NotificationsModal: React.FC<NotificationsModalProps> = ({
   isOpen,
   onClose,
   portalType,
+  onUnreadCountChange,
 }) => {
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [filter, setFilter] = useState<NotificationFilter>('unread');
 
-  // Get the appropriate route for "View all" based on portal type
   const getViewAllRoute = () => {
     switch (portalType) {
       case 'employer':
@@ -42,17 +46,19 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
     }
   };
 
-  // Fetch notifications from API
-  const fetchNotifications = async () => {
+  const fetchNotifications = useCallback(async () => {
     setLoading(true);
     setError(null);
 
     try {
-      const response = await notificationApi.getNotifications();
+      const response =
+        filter === 'unread'
+          ? await notificationApi.getUnreadNotifications(5)
+          : await notificationApi.getNotifications({ per_page: 5 });
 
-      if (response.status && response.data) {
-        const uiNotifications = response.data.map(convertApiNotificationToUI);
-        setNotifications(uiNotifications);
+      if (response.status) {
+        const list = notificationApi.parseNotificationList(response);
+        setNotifications(list.map(convertApiNotificationToUI));
       } else {
         setError(response.message || 'Failed to fetch notifications');
       }
@@ -62,52 +68,54 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [filter]);
 
-  // Mark all notifications as read
   const handleMarkAllAsRead = async () => {
     try {
-      await notificationApi.markAllAsRead();
-
-      // Update local state
-      setNotifications(
-        notifications.map((notification) => ({
-          ...notification,
-          read: true,
-        }))
-      );
+      const response = await notificationApi.markAllAsRead();
+      if (response.status) {
+        setNotifications((prev) =>
+          prev.map((notification) => ({ ...notification, read: true }))
+        );
+        onUnreadCountChange?.();
+        if (filter === 'unread') {
+          setNotifications([]);
+        }
+      }
     } catch (err) {
       console.error('Error marking all as read:', err);
       setError('Failed to mark notifications as read');
     }
   };
 
-  // Mark individual notification as read
   const handleViewNotification = async (id: string) => {
     try {
       await notificationApi.markAsRead(id);
-
-      // Update local state
-      setNotifications(
-        notifications.map((notification) =>
+      setNotifications((prev) =>
+        prev.map((notification) =>
           notification.id === id
             ? { ...notification, read: true }
             : notification
         )
       );
+      onUnreadCountChange?.();
+      if (filter === 'unread') {
+        setNotifications((prev) => prev.filter((n) => n.id !== id));
+      }
     } catch (err) {
       console.error('Error marking notification as read:', err);
     }
   };
 
-  // Fetch notifications when modal opens
   useEffect(() => {
     if (isOpen) {
       fetchNotifications();
     }
-  }, [isOpen]);
+  }, [isOpen, fetchNotifications]);
 
   if (!isOpen) return null;
+
+  const unreadInList = notifications.filter((n) => !n.read).length;
 
   return (
     <div
@@ -118,22 +126,47 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
         className="w-full max-w-lg min-w-[400px] bg-white dark:bg-gray-800 shadow-lg mt-16 rounded-lg"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-          <h2 className="text-lg font-medium text-gray-800 dark:text-gray-200">
-            Notifications
-          </h2>
-          <button
-            className="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:text-gray-200 flex items-center gap-2 disabled:opacity-50"
-            onClick={handleMarkAllAsRead}
-            disabled={loading || notifications.every((n) => n.read)}
-          >
-            <span className="text-sm">Mark all as Read</span>
-            <IoCheckmarkCircleOutline size={20} />
-          </button>
+        <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex justify-between items-center mb-3">
+            <h2 className="text-lg font-medium text-gray-800 dark:text-gray-200">
+              Notifications
+            </h2>
+            <button
+              type="button"
+              className="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 flex items-center gap-2 disabled:opacity-50"
+              onClick={handleMarkAllAsRead}
+              disabled={loading || unreadInList === 0}
+            >
+              <span className="text-sm">Mark all as Read</span>
+              <IoCheckmarkCircleOutline size={20} />
+            </button>
+          </div>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => setFilter('unread')}
+              className={`px-3 py-1.5 rounded-md text-sm font-medium ${
+                filter === 'unread'
+                  ? 'bg-orange-100 text-orange-800'
+                  : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300'
+              }`}
+            >
+              Unread
+            </button>
+            <button
+              type="button"
+              onClick={() => setFilter('all')}
+              className={`px-3 py-1.5 rounded-md text-sm font-medium ${
+                filter === 'all'
+                  ? 'bg-gray-200 text-gray-800 dark:bg-gray-600 dark:text-gray-100'
+                  : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300'
+              }`}
+            >
+              All
+            </button>
+          </div>
         </div>
 
-        {/* Notifications List */}
         <div className="max-h-[600px] overflow-y-auto">
           {loading ? (
             <div className="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
@@ -147,26 +180,29 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
                 size={48}
                 className="mx-auto mb-4 text-gray-300"
               />
-              <p className="text-base">No notifications yet</p>
+              <p className="text-base">
+                {filter === 'unread'
+                  ? 'No unread notifications'
+                  : 'No notifications yet'}
+              </p>
               <p className="text-sm text-gray-400 mt-2">
-                You'll see your notifications here when they arrive
+                You&apos;ll see your notifications here when they arrive
               </p>
             </div>
           ) : (
-            notifications.slice(0, 5).map((notification) => (
+            notifications.map((notification) => (
               <div
                 key={notification.id}
                 className="border-b border-gray-200 dark:border-gray-700 px-6 py-4 relative"
               >
-                {/* Notification content */}
                 <div className="flex justify-between items-start">
                   <div className="flex gap-3">
                     <div className="relative">
-                      <div className="bg-gray-100 rounded-full p-2">
+                      <div className="bg-gray-100 dark:bg-gray-700 rounded-full p-2">
                         {notification.avatar ? (
                           <img
                             src={notification.avatar}
-                            alt="User"
+                            alt=""
                             className="w-5 h-5 rounded-full object-cover"
                           />
                         ) : (
@@ -177,7 +213,7 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
                         )}
                       </div>
                       {!notification.read && (
-                        <div className="absolute -left-1 top-0 w-2 h-2 bg-blue-600 rounded-full"></div>
+                        <div className="absolute -left-1 top-0 w-2 h-2 bg-blue-600 rounded-full" />
                       )}
                     </div>
                     <div className="flex-1">
@@ -188,11 +224,12 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
                         {notification.message}
                       </p>
                       <button
+                        type="button"
                         onClick={() => handleViewNotification(notification.id)}
-                        className="mt-3 flex items-center gap-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 py-2 px-4 border border-gray-300 rounded-md text-sm transition-colors"
+                        className="mt-3 flex items-center gap-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-md text-sm transition-colors"
                       >
                         <IoEyeOutline size={16} />
-                        <span>View</span>
+                        <span>Mark as read</span>
                       </button>
                     </div>
                   </div>
@@ -208,8 +245,9 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
             <div className="px-6 mt-8 mb-4 flex justify-end">
               <Link to={getViewAllRoute()}>
                 <button
+                  type="button"
                   onClick={onClose}
-                  className="text-[#48525B] hover:text-blue-700 text-sm font-medium transition-colors"
+                  className="text-[#48525B] dark:text-gray-300 hover:text-blue-700 text-sm font-medium transition-colors"
                 >
                   View all
                 </button>

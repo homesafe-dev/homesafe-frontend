@@ -363,7 +363,7 @@ const CandidateProfile: React.FC = () => {
           Back to Candidates
         </button>
 
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-surface rounded-2xl border border-border-default shadow-sm p-4 sm:p-6">
           <div className="flex items-start gap-4">
             <div className="w-12 h-12 rounded-xl bg-green-50 text-green-600 flex items-center justify-center">
               <Users className="w-6 h-6" />
@@ -410,7 +410,7 @@ const CandidateProfile: React.FC = () => {
         {quickStats.map(({ label, value, subValue, icon: Icon, iconClass }) => (
           <div
             key={label}
-            className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-4"
+            className="bg-surface rounded-2xl border border-border-default shadow-sm p-4 flex items-center gap-4"
           >
             <div
               className={`w-12 h-12 rounded-xl flex items-center justify-center ${iconClass}`}
@@ -436,7 +436,7 @@ const CandidateProfile: React.FC = () => {
 
       <div className="flex flex-col lg:flex-row gap-6">
         <div className="w-full lg:w-1/3 space-y-6">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-6">
+          <div className="bg-surface rounded-2xl border border-border-default shadow-sm p-4 sm:p-6">
             <CandidateProfileAbout
               name={employee.candidate}
               location={placementDisplay}
@@ -454,7 +454,7 @@ const CandidateProfile: React.FC = () => {
             />
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-6">
+          <div className="bg-surface rounded-2xl border border-border-default shadow-sm p-4 sm:p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100">
@@ -476,7 +476,7 @@ const CandidateProfile: React.FC = () => {
                 employee.employers.map((employer) => (
                   <div
                     key={employer.id}
-                    className="p-3 rounded-xl border border-gray-100 bg-gray-50 flex flex-col gap-1"
+                    className="p-3 rounded-xl border border-border-default bg-gray-50 flex flex-col gap-1"
                   >
                     <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                       {employer.name}
@@ -495,7 +495,7 @@ const CandidateProfile: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-6">
+          <div className="bg-surface rounded-2xl border border-border-default shadow-sm p-4 sm:p-6">
             <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-3">
               Performance Snapshot
             </h3>
@@ -527,7 +527,7 @@ const CandidateProfile: React.FC = () => {
                 className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-colors border ${
                   activeTab === tab.id
                     ? 'bg-green-600 text-white border-green-600'
-                    : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                    : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-elevated/50'
                 }`}
               >
                 {tab.label}
@@ -535,7 +535,7 @@ const CandidateProfile: React.FC = () => {
             ))}
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-6">
+          <div className="bg-surface rounded-2xl border border-border-default shadow-sm p-4 sm:p-6">
             {activeTab === 'medical' && (
               <CandidateMedicHistory
                 medicalFiles={employee.user_medicals}
@@ -577,7 +577,7 @@ const CandidateProfile: React.FC = () => {
             className="absolute inset-0 bg-black/40 backdrop-blur-sm"
             onClick={() => setIsAssignModalOpen(false)}
           />
-          <div className="relative bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg border border-gray-100 shadow-2xl p-6 sm:p-8 space-y-6">
+          <div className="relative bg-surface rounded-2xl w-full max-w-lg border border-border-default shadow-2xl p-6 sm:p-8 space-y-6">
             <div className="flex items-start justify-between">
               <div>
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
@@ -605,12 +605,12 @@ const CandidateProfile: React.FC = () => {
                   <input
                     type="text"
                     placeholder="Search employers"
-                    className="w-full pl-9 pr-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
+                    className="w-full pl-9 pr-4 py-2.5 border border-border-default rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
                   {selectedEmployer && (
-                    <div className="mt-3 p-3 rounded-lg border border-gray-100 bg-gray-50 relative">
+                    <div className="mt-3 p-3 rounded-lg border border-border-default bg-gray-50 relative">
                       <button
                         type="button"
                         className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 dark:text-gray-400"
@@ -634,7 +634,7 @@ const CandidateProfile: React.FC = () => {
                   )}
 
                   {searchQuery && !selectedEmployer && (
-                    <div className="absolute z-20 w-full mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg max-h-64 overflow-auto">
+                    <div className="absolute z-20 w-full mt-2 bg-white dark:bg-gray-800 border border-border-default rounded-xl shadow-lg max-h-64 overflow-auto">
                       {isLoadingEmployers ? (
                         <div className="p-4 text-center text-sm text-gray-500 dark:text-gray-400">
                           Loading employers...
@@ -643,7 +643,7 @@ const CandidateProfile: React.FC = () => {
                         filteredEmployers.map((employer) => (
                           <button
                             key={employer.id}
-                            className="w-full text-left px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                            className="w-full text-left px-4 py-3 hover:bg-elevated/50 transition-colors"
                             onClick={() => handleEmployerSelect(employer)}
                           >
                             <div className="font-medium text-gray-900 dark:text-gray-100">
@@ -675,7 +675,7 @@ const CandidateProfile: React.FC = () => {
                 </label>
                 <textarea
                   placeholder="Explain why you're suggesting this candidate to the employer..."
-                  className="w-full px-4 py-3 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm resize-none"
+                  className="w-full px-4 py-3 border border-border-default rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm resize-none"
                   rows={3}
                   value={suggestionReason}
                   onChange={(e) => setSuggestionReason(e.target.value)}
@@ -686,7 +686,7 @@ const CandidateProfile: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsAssignModalOpen(false)}
-                  className="flex-1 px-4 py-2.5 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                  className="flex-1 px-4 py-2.5 border border-border-default text-gray-700 dark:text-gray-300 rounded-lg hover:bg-elevated/50 transition-colors"
                 >
                   Cancel
                 </button>

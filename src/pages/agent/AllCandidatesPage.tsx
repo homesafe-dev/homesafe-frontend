@@ -199,9 +199,9 @@ const AllCandidatesPage = () => {
       )}
 
       {/* Main Content */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100">
+      <div className="bg-surface rounded-lg shadow-sm border border-border-default">
         {/* Search and Filters Section */}
-        <div className="p-4 sm:p-6 border-b border-gray-100">
+        <div className="p-4 sm:p-6 border-b border-border-default">
           <div className="flex flex-col lg:flex-row gap-4">
             {/* Search Bar */}
             <div className="flex-1 relative">
@@ -211,7 +211,7 @@ const AllCandidatesPage = () => {
                 placeholder="Search by name, email, phone, or placement..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
+                className="w-full pl-10 pr-4 py-2.5 border border-border-default rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
               />
             </div>
 
@@ -220,7 +220,7 @@ const AllCandidatesPage = () => {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white dark:bg-gray-800"
+                className="px-4 py-2.5 border border-border-default rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white dark:bg-gray-800"
               >
                 <option value="all">All Status</option>
                 <option value="verified">Verified</option>
@@ -230,7 +230,7 @@ const AllCandidatesPage = () => {
               <select
                 value={placementFilter}
                 onChange={(e) => setPlacementFilter(e.target.value)}
-                className="px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white dark:bg-gray-800"
+                className="px-4 py-2.5 border border-border-default rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white dark:bg-gray-800"
               >
                 <option value="all">All Placements</option>
                 <option value="placed">Placed</option>
@@ -241,7 +241,7 @@ const AllCandidatesPage = () => {
               {hasActiveFilters && (
                 <button
                   onClick={clearFilters}
-                  className="px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors text-sm flex items-center gap-2"
+                  className="px-4 py-2.5 border border-border-default rounded-lg hover:bg-elevated/50 transition-colors text-sm flex items-center gap-2"
                 >
                   <X className="w-4 h-4" />
                   Clear
@@ -251,7 +251,7 @@ const AllCandidatesPage = () => {
           </div>
 
           {/* Results Count */}
-          <div className="mt-4 pt-4 border-t border-gray-100">
+          <div className="mt-4 pt-4 border-t border-border-default">
             <p className="text-sm text-gray-600 dark:text-gray-400">
               Showing{' '}
               <span className="font-semibold text-gray-900 dark:text-gray-100">
@@ -266,7 +266,7 @@ const AllCandidatesPage = () => {
         {/* Table */}
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-100">
+            <thead className="bg-elevated border-b border-border-default">
               <tr>
                 <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
                   Candidate
@@ -291,7 +291,7 @@ const AllCandidatesPage = () => {
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-100">
+            <tbody className="bg-surface divide-y divide-border-default">
               {isLoading ? (
                 // Loading state
                 [...Array(5)].map((_, index) => (
@@ -360,7 +360,7 @@ const AllCandidatesPage = () => {
                   return (
                     <tr
                       key={employee.id}
-                      className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                      className="hover:bg-elevated/50 transition-colors"
                     >
                       <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-3">
@@ -451,7 +451,7 @@ const AllCandidatesPage = () => {
 
         {/* Pagination */}
         {!isLoading && filteredEmployees.length > 0 && totalPages > 1 && (
-          <div className="px-4 sm:px-6 py-4 border-t border-gray-100 flex items-center justify-between">
+          <div className="px-4 sm:px-6 py-4 border-t border-border-default flex items-center justify-between">
             <div className="text-sm text-gray-600 dark:text-gray-400">
               Showing{' '}
               <span className="font-medium">{(currentPage - 1) * 10 + 1}</span>{' '}
@@ -466,7 +466,7 @@ const AllCandidatesPage = () => {
               <button
                 onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
                 disabled={currentPage === 1}
-                className="p-2 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="p-2 border border-border-default rounded-lg hover:bg-elevated/50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
@@ -485,7 +485,7 @@ const AllCandidatesPage = () => {
                         className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
                           currentPage === page
                             ? 'bg-green-600 text-white'
-                            : 'border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                            : 'border border-border-default hover:bg-elevated/50'
                         }`}
                       >
                         {page}
@@ -509,7 +509,7 @@ const AllCandidatesPage = () => {
                   handlePageChange(Math.min(totalPages, currentPage + 1))
                 }
                 disabled={currentPage === totalPages}
-                className="p-2 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="p-2 border border-border-default rounded-lg hover:bg-elevated/50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>

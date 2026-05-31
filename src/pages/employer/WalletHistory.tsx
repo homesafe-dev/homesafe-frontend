@@ -102,7 +102,7 @@ const WalletHistory: React.FC = () => {
                 transactions.map((transaction) => (
                   <tr
                     key={transaction.id}
-                    className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                    className="border-b border-gray-200 dark:border-gray-700 hover:bg-elevated/50"
                   >
                     <td className="py-2 sm:py-3 px-2 capitalize text-xs sm:text-sm">
                       {transaction.type}

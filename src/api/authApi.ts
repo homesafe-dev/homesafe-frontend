@@ -11,6 +11,7 @@ const AUTH_ENDPOINTS = {
   FORGOT_PASSWORD: '/forgot-password',
   VERIFY_FORGOT_PASSWORD_OTP: '/verify-forgot-password-otp',
   RESET_PASSWORD: '/reset-password',
+  CHANGE_PASSWORD: '/change-password',
   LOGOUT: '/logout',
   VERIFY_TFA_LOGIN: '/tfa/verify-login',
   RESEND_TFA_LOGIN_CODE: '/tfa/resend-login-code',
@@ -193,6 +194,34 @@ const authApi = {
       email,
       password,
     });
+    return response.data;
+  },
+
+  /**
+   * Change password (authenticated — e.g. first-login with temp password).
+   * @param oldPassword - Current or temporary password
+   * @param newPassword - New password
+   * @param token - Optional bearer token when session is not stored yet
+   */
+  changePassword: async (
+    oldPassword: string,
+    newPassword: string,
+    token?: string
+  ) => {
+    const response = await axiosInstance.post(
+      AUTH_ENDPOINTS.CHANGE_PASSWORD,
+      {
+        old_password: oldPassword,
+        new_password: newPassword,
+      },
+      token
+        ? {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        : undefined
+    );
     return response.data;
   },
 

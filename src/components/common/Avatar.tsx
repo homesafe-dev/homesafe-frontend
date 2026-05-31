@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { resolveMediaUrl } from '../../utils/avatarUrl';
 
 interface AvatarProps {
   src?: string | null;
@@ -19,6 +20,13 @@ const Avatar: React.FC<AvatarProps> = ({
   showStatus = false,
   isOnline = false,
 }) => {
+  const [imageFailed, setImageFailed] = useState(false);
+  const resolvedSrc = resolveMediaUrl(src);
+
+  useEffect(() => {
+    setImageFailed(false);
+  }, [src]);
+
   // Generate initials from first and last name
   const getInitials = (first: string, last: string): string => {
     const firstInitial = first ? first.charAt(0).toUpperCase() : '';
@@ -70,12 +78,7 @@ const Avatar: React.FC<AvatarProps> = ({
   };
 
   // Check if avatar is valid
-  const hasValidAvatar =
-    src &&
-    src !== '' &&
-    src !== 'https://via.placeholder.com/150' &&
-    src !== 'https://via.placeholder.com/100' &&
-    !src.includes('placeholder');
+  const hasValidAvatar = Boolean(resolvedSrc) && !imageFailed;
 
   const baseClasses = `${sizeClasses[size]} rounded-full flex items-center justify-center font-semibold ${className}`;
 
@@ -83,21 +86,10 @@ const Avatar: React.FC<AvatarProps> = ({
     return (
       <div className="relative">
         <img
-          src={src}
+          src={resolvedSrc!}
           alt={`${firstName} ${lastName}`}
           className={`${baseClasses} object-cover`}
-          onError={(e) => {
-            // If image fails to load, replace with initials
-            const target = e.target as HTMLImageElement;
-            const parent = target.parentElement;
-            if (parent) {
-              target.style.display = 'none';
-              const initialsDiv = document.createElement('div');
-              initialsDiv.className = `${baseClasses} text-white ${getInitialsColor(firstName, lastName)}`;
-              initialsDiv.textContent = getInitials(firstName, lastName);
-              parent.appendChild(initialsDiv);
-            }
-          }}
+          onError={() => setImageFailed(true)}
         />
         {showStatus && (
           <div

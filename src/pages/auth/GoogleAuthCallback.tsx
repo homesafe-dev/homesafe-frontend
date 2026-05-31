@@ -1,5 +1,10 @@
 import React from 'react';
 import axiosInstance from '../../api/axiosConfig';
+import {
+  AuthSplitPage,
+  AuthHeader,
+} from '../../components/auth/shared/AuthLayout';
+import { authTokens } from '../../components/auth/shared/authTokens.ts';
 
 const GoogleAuthCallback: React.FC = () => {
   const [message, setMessage] = React.useState<string>('Completing sign-in...');
@@ -54,10 +59,8 @@ const GoogleAuthCallback: React.FC = () => {
             return;
           }
 
-          // Check if this is a new Google signup user
           if (googleSignup === 'true') {
             setMessage('Redirecting to profile completion...');
-            // Preserve all URL parameters when redirecting to profile completion
             const currentParams = window.location.search;
             window.location.replace(
               `/auth/google/profile-completion${currentParams}`
@@ -65,10 +68,8 @@ const GoogleAuthCallback: React.FC = () => {
             return;
           }
 
-          // Check if this is an existing user with incomplete profile
           if (profileIncomplete === 'true') {
             setMessage('Redirecting to profile completion...');
-            // Preserve all URL parameters when redirecting to profile completion
             const currentParams = window.location.search;
             window.location.replace(
               `/auth/google/profile-completion${currentParams}`
@@ -121,7 +122,7 @@ const GoogleAuthCallback: React.FC = () => {
 
             const dashboardUrl = `/${userObj.type}/dashboard`;
             window.location.replace(dashboardUrl);
-          } catch (profileError: any) {
+          } catch (profileError: unknown) {
             console.error('Failed to fetch user profile:', profileError);
             localStorage.removeItem('auth_token');
             localStorage.removeItem('auth_user');
@@ -146,12 +147,19 @@ const GoogleAuthCallback: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="text-center">
-        <p className="text-gray-700 text-sm mb-4">{message}</p>
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500 mx-auto"></div>
+    <AuthSplitPage hideBrandLogo>
+      <div className="flex flex-col items-center justify-center py-12 text-center">
+        <AuthHeader title="Signing you in" subtitle={message} />
+        <div
+          className="animate-spin rounded-full h-8 w-8 border-2 border-t-transparent mx-auto"
+          style={{
+            borderColor: authTokens.fieldBorder,
+            borderTopColor: authTokens.primaryDark,
+          }}
+          aria-hidden
+        />
       </div>
-    </div>
+    </AuthSplitPage>
   );
 };
 

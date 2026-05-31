@@ -124,7 +124,7 @@ const CreatePayrollModal: React.FC<CreatePayrollModalProps> = ({
 
             <button
               type="button"
-              className="w-full border border-gray-300 h-[50px] text-gray-700 dark:text-gray-300 font-medium py-3 rounded-lg flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+              className="w-full border border-gray-300 h-[50px] text-gray-700 dark:text-gray-300 font-medium py-3 rounded-lg flex items-center justify-center hover:bg-elevated/50 transition-colors"
             >
               <FaPlus size={12} className="mr-2" />
               Add Staff

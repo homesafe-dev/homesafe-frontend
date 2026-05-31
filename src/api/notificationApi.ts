@@ -1,76 +1,56 @@
 import axiosInstance from './axiosConfig';
+import {
+  extractNotificationsList,
+  type NotificationListFilters,
+} from '../types/notification';
 
-// Notification API endpoints
 const NOTIFICATION_ENDPOINTS = {
-  GET_NOTIFICATIONS: '/notifications',
+  LIST: '/notifications',
+  UNREAD: '/notifications/unread',
+  UNREAD_COUNT: '/notifications/unread-count',
+  MARK_ALL_AS_READ: '/notifications/mark-all-as-read',
   MARK_AS_READ: (id: string) => `/notifications/${id}/mark-as-read`,
 };
 
-// Notification API service
 const notificationApi = {
-  /**
-   * Get all notifications for the current user
-   * @returns Promise with the API response containing notifications data
-   */
-  getNotifications: async () => {
-    try {
-      const response = await axiosInstance.get(
-        NOTIFICATION_ENDPOINTS.GET_NOTIFICATIONS
-      );
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching notifications:', error);
-      throw error;
-    }
+  getNotifications: async (filters: NotificationListFilters = {}) => {
+    const response = await axiosInstance.get(NOTIFICATION_ENDPOINTS.LIST, {
+      params: filters,
+    });
+    return response.data;
   },
 
-  /**
-   * Mark a specific notification as read
-   * @param notificationId - ID of the notification to mark as read
-   * @returns Promise with the API response
-   */
+  getUnreadNotifications: async (perPage = 15, page = 1) => {
+    const response = await axiosInstance.get(NOTIFICATION_ENDPOINTS.UNREAD, {
+      params: { per_page: perPage, page },
+    });
+    return response.data;
+  },
+
+  getUnreadCount: async () => {
+    const response = await axiosInstance.get(
+      NOTIFICATION_ENDPOINTS.UNREAD_COUNT
+    );
+    return response.data;
+  },
+
   markAsRead: async (notificationId: string) => {
-    try {
-      const response = await axiosInstance.patch(
-        NOTIFICATION_ENDPOINTS.MARK_AS_READ(notificationId)
-      );
-      return response.data;
-    } catch (error) {
-      console.error('Error marking notification as read:', error);
-      throw error;
-    }
+    const response = await axiosInstance.patch(
+      NOTIFICATION_ENDPOINTS.MARK_AS_READ(notificationId)
+    );
+    return response.data;
   },
 
-  /**
-   * Mark all notifications as read
-   * @returns Promise with the API response
-   */
   markAllAsRead: async () => {
-    try {
-      // First get all notifications
-      const notificationsResponse = await notificationApi.getNotifications();
-
-      if (notificationsResponse.status && notificationsResponse.data) {
-        // Mark each unread notification as read
-        const unreadNotifications = notificationsResponse.data.filter(
-          (notification: any) => !notification.read_at
-        );
-
-        const markAsReadPromises = unreadNotifications.map(
-          (notification: any) => notificationApi.markAsRead(notification.id)
-        );
-
-        await Promise.all(markAsReadPromises);
-
-        return { status: true, message: 'All notifications marked as read' };
-      }
-
-      return notificationsResponse;
-    } catch (error) {
-      console.error('Error marking all notifications as read:', error);
-      throw error;
-    }
+    const response = await axiosInstance.patch(
+      NOTIFICATION_ENDPOINTS.MARK_ALL_AS_READ
+    );
+    return response.data;
   },
+
+  /** Parse notification array from list/unread API responses. */
+  parseNotificationList: (response: { status?: boolean; data?: unknown }) =>
+    extractNotificationsList(response),
 };
 
 export default notificationApi;

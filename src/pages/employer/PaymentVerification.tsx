@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import walletApi from '../../api/walletApi';
+import { getWalletBasePath, walletRoutes } from '../../utils/walletPaths';
 
 const PaymentVerification: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const routes = walletRoutes(getWalletBasePath(pathname));
   const [verifying, setVerifying] = useState(true);
   const [verificationAttempted, setVerificationAttempted] = useState(false);
   const [status, setStatus] = useState<'verifying' | 'success' | 'error'>(
@@ -52,7 +55,7 @@ const PaymentVerification: React.FC = () => {
 
           // Redirect to wallet page after 3 seconds
           setTimeout(() => {
-            navigate('/employer/wallet?payment_success=true', {
+            navigate(`${routes.wallet}?payment_success=true`, {
               replace: true,
             });
           }, 3000);
@@ -75,7 +78,7 @@ const PaymentVerification: React.FC = () => {
 
         // Redirect to wallet page after 5 seconds
         setTimeout(() => {
-          navigate('/employer/wallet', { replace: true });
+          navigate(routes.wallet, { replace: true });
         }, 5000);
       } finally {
         setVerifying(false);
@@ -83,10 +86,10 @@ const PaymentVerification: React.FC = () => {
     };
 
     verifyPayment();
-  }, [searchParams, navigate, verificationAttempted]);
+  }, [searchParams, navigate, verificationAttempted, routes.wallet]);
 
   const handleGoToWallet = () => {
-    navigate('/employer/wallet?payment_success=true', { replace: true });
+    navigate(`${routes.wallet}?payment_success=true`, { replace: true });
   };
 
   return (

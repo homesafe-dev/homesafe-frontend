@@ -208,7 +208,7 @@ const EmployerProposalDetailsPage: React.FC = () => {
   if (!proposalData) {
     return (
       <div className="p-0">
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 border border-gray-100 shadow-sm text-center">
+        <div className="bg-surface rounded-2xl p-8 border border-border-default shadow-sm text-center">
           <FileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
           <p className="text-gray-500 dark:text-gray-400 font-medium">
             No proposal data found.
@@ -261,7 +261,7 @@ const EmployerProposalDetailsPage: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Employee Profile Card */}
         <div className="lg:col-span-1">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 shadow-sm">
+          <div className="bg-surface rounded-2xl p-6 border border-border-default shadow-sm">
             <div className="flex flex-col items-center">
               {/* Profile Image */}
               <div className="mb-4">
@@ -335,7 +335,7 @@ const EmployerProposalDetailsPage: React.FC = () => {
               </div>
 
               {/* About Section */}
-              <div className="w-full mt-6 pt-6 border-t border-gray-100">
+              <div className="w-full mt-6 pt-6 border-t border-border-default">
                 <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2 flex items-center gap-2">
                   <User className="w-4 h-4 text-gray-400" />
                   About
@@ -354,7 +354,7 @@ const EmployerProposalDetailsPage: React.FC = () => {
 
         {/* Contract Details Card */}
         <div className="lg:col-span-2">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 shadow-sm">
+          <div className="bg-surface rounded-2xl p-6 border border-border-default shadow-sm">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center">
                 <Briefcase className="w-4 h-4 text-indigo-600" />
@@ -454,7 +454,7 @@ const EmployerProposalDetailsPage: React.FC = () => {
                       ? 'bg-yellow-50 text-yellow-700 border border-yellow-200'
                       : contract.status?.toLowerCase() === 'active'
                         ? 'bg-green-50 text-green-700 border border-green-200'
-                        : 'bg-gray-50 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700'
+                        : 'bg-gray-50 text-gray-700 dark:text-gray-300 border border-border-default'
                   }`}
                 >
                   {contract.status || proposal.status || 'Pending'}
@@ -480,7 +480,7 @@ const EmployerProposalDetailsPage: React.FC = () => {
             ) : null}
 
             {/* Action Buttons */}
-            <div className="pt-6 border-t border-gray-100 flex flex-col sm:flex-row gap-3">
+            <div className="pt-6 border-t border-border-default flex flex-col sm:flex-row gap-3">
               <button
                 onClick={() => navigate(`/employer/${contractId}/contract`)}
                 className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors"
@@ -521,7 +521,7 @@ const EmployerProposalDetailsPage: React.FC = () => {
       {/* Confirmation Dialog */}
       {showConfirmation && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-md w-full shadow-xl">
+          <div className="bg-surface rounded-2xl p-6 max-w-md w-full shadow-xl">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center">
                 <Trash2 className="w-5 h-5 text-red-600" />

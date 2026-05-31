@@ -10,6 +10,10 @@ const CONTRACT_ENDPOINTS = {
   GET_PROPOSALS: '/contracts/proposals',
   GET_SINGLE_PROPOSAL: '/contracts',
   RESPOND_TO_PROPOSAL: '/contracts/proposals',
+  DOWNLOAD_CONTRACT: (contractId: number) =>
+    `/contracts/${contractId}/download`,
+  DOWNLOAD_PROPOSAL: (proposalId: number) =>
+    `/contracts/proposals/${proposalId}/download`,
 };
 
 // Contract API service
@@ -222,6 +226,24 @@ const contractApi = {
       console.error('Error responding to proposal:', error);
       throw error;
     }
+  },
+
+  /**
+   * Download contract PDF by contract ID
+   */
+  downloadContract: async (contractId: number) => {
+    return axiosInstance.get(CONTRACT_ENDPOINTS.DOWNLOAD_CONTRACT(contractId), {
+      responseType: 'blob',
+    });
+  },
+
+  /**
+   * Download contract PDF by proposal ID
+   */
+  downloadProposal: async (proposalId: number) => {
+    return axiosInstance.get(CONTRACT_ENDPOINTS.DOWNLOAD_PROPOSAL(proposalId), {
+      responseType: 'blob',
+    });
   },
 };
 

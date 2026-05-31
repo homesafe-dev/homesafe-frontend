@@ -96,7 +96,7 @@ export default function DashboardEmployersTab() {
             </th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+        <tbody className="divide-y divide-border-default dark:divide-gray-700">
           {isLoading ? (
             // Loading state - show skeleton rows
             [...Array(3)].map((_, index) => (

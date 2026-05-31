@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Bell, BellDot, ChevronDown, Menu } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import NotificationsModal from '../../common/NotificationsModal';
@@ -66,7 +66,17 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, isMobile = false }) => {
     setToast((prev) => ({ ...prev, isVisible: false }));
   };
 
-  // Fetch user profile data when component mounts
+  const fetchUnreadCount = useCallback(async () => {
+    try {
+      const response = await notificationApi.getUnreadCount();
+      if (response.status && response.data) {
+        setUnreadCount(response.data.unread_count ?? 0);
+      }
+    } catch (err) {
+      console.error('Error fetching unread count:', err);
+    }
+  }, []);
+
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
@@ -90,23 +100,9 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, isMobile = false }) => {
       }
     };
 
-    const fetchUnreadCount = async () => {
-      try {
-        const response = await notificationApi.getNotifications();
-        if (response.status && response.data) {
-          const unread = response.data.filter(
-            (notif: any) => !notif.read_at
-          ).length;
-          setUnreadCount(unread);
-        }
-      } catch (err) {
-        console.error('Error fetching notifications:', err);
-      }
-    };
-
     fetchUserProfile();
     fetchUnreadCount();
-  }, []);
+  }, [fetchUnreadCount]);
 
   // Handle click outside dropdown to close it
   useEffect(() => {
@@ -148,7 +144,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, isMobile = false }) => {
     hasUsableAvatarUrl(userProfile?.avatar) && !avatarLoadFailed;
 
   return (
-    <header className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-700">
+    <header className="bg-surface border-b border-border-default">
       {error && (
         <div className="text-red-500 dark:text-red-400 text-sm p-2 text-center">
           {error}
@@ -231,7 +227,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, isMobile = false }) => {
 
                   {/* Dropdown Menu */}
                   {showDropdown && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-100 dark:border-gray-700 py-1 z-50">
+                    <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-border-default dark:border-gray-700 py-1 z-50">
                       <button
                         onClick={() => {
                           setShowDropdown(false);
@@ -296,7 +292,11 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, isMobile = false }) => {
       {/* Notifications Modal */}
       <NotificationsModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          setIsModalOpen(false);
+          fetchUnreadCount();
+        }}
+        onUnreadCountChange={fetchUnreadCount}
         portalType="agent"
       />
 

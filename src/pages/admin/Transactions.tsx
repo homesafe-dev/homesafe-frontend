@@ -318,7 +318,7 @@ const Transactions: React.FC = () => {
       {/* Summary Cards */}
       {stats && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+          <div className="bg-surface rounded-lg shadow-sm border border-border-default dark:border-gray-700 p-6">
             <div className="flex items-center justify-between mb-3">
               <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
                 Total Volume
@@ -335,7 +335,7 @@ const Transactions: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+          <div className="bg-surface rounded-lg shadow-sm border border-border-default dark:border-gray-700 p-6">
             <div className="flex items-center justify-between mb-3">
               <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
                 Total Credits
@@ -352,7 +352,7 @@ const Transactions: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+          <div className="bg-surface rounded-lg shadow-sm border border-border-default dark:border-gray-700 p-6">
             <div className="flex items-center justify-between mb-3">
               <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
                 Total Withdrawals
@@ -369,7 +369,7 @@ const Transactions: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+          <div className="bg-surface rounded-lg shadow-sm border border-border-default dark:border-gray-700 p-6">
             <div className="flex items-center justify-between mb-3">
               <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
                 Success Rate
@@ -394,7 +394,7 @@ const Transactions: React.FC = () => {
           {[...Array(4)].map((_, i) => (
             <div
               key={i}
-              className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 p-6 animate-pulse"
+              className="bg-surface rounded-lg shadow-sm border border-border-default dark:border-gray-700 p-6 animate-pulse"
             >
               <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-3"></div>
               <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-2"></div>
@@ -405,9 +405,9 @@ const Transactions: React.FC = () => {
       )}
 
       {/* Main Content */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
+      <div className="bg-surface rounded-lg shadow-sm border border-border-default dark:border-gray-700">
         {/* Period Filter */}
-        <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-gray-100 dark:border-gray-700">
+        <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-border-default dark:border-gray-700">
           <div className="flex flex-wrap items-center gap-3 mb-4">
             <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
               Period:
@@ -442,7 +442,7 @@ const Transactions: React.FC = () => {
           </div>
         </div>
         {/* Tabs */}
-        <div className="px-4 sm:px-6 pb-4 border-b border-gray-100 dark:border-gray-700">
+        <div className="px-4 sm:px-6 pb-4 border-b border-border-default dark:border-gray-700">
           <div className="flex flex-wrap gap-2 sm:gap-0 sm:space-x-1">
             <button
               className={`px-4 py-2.5 text-sm font-medium rounded-lg transition-colors ${
@@ -489,7 +489,7 @@ const Transactions: React.FC = () => {
                   placeholder="Search by name, email, or reference code..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
+                  className="w-full pl-10 pr-4 py-2.5 border border-border-default rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
                 />
               </div>
 
@@ -499,7 +499,7 @@ const Transactions: React.FC = () => {
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="pl-10 pr-8 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm appearance-none bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
+                  className="pl-10 pr-8 py-2.5 border border-border-default rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm appearance-none bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
                 >
                   <option value="all">All Status</option>
                   <option value="successful">Successful</option>
@@ -513,7 +513,7 @@ const Transactions: React.FC = () => {
                 <select
                   value={paymentMethodFilter}
                   onChange={(e) => setPaymentMethodFilter(e.target.value)}
-                  className="pl-4 pr-8 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm appearance-none bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
+                  className="pl-4 pr-8 py-2.5 border border-border-default rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm appearance-none bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
                 >
                   <option value="all">All Methods</option>
                   <option value="external_funding">External Funding</option>
@@ -545,7 +545,7 @@ const Transactions: React.FC = () => {
                   type="date"
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
-                  className="px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
+                  className="px-3 py-2 border border-border-default rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
                 />
                 <span className="hidden sm:block text-gray-400 dark:text-gray-500 self-center">
                   to
@@ -554,7 +554,7 @@ const Transactions: React.FC = () => {
                   type="date"
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
-                  className="px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
+                  className="px-3 py-2 border border-border-default rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
                 />
               </div>
             </div>
@@ -569,7 +569,7 @@ const Transactions: React.FC = () => {
           {/* Table */}
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 dark:bg-slate-700 border-b border-gray-100 dark:border-slate-500">
+              <thead className="bg-gray-50 dark:bg-slate-700 border-b border-border-default dark:border-slate-500">
                 <tr>
                   <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-100 uppercase tracking-wider">
                     User
@@ -597,7 +597,7 @@ const Transactions: React.FC = () => {
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700">
+              <tbody className="bg-white dark:bg-gray-800 divide-y divide-border-default dark:divide-gray-700">
                 {loading ? (
                   // Loading state
                   [...Array(5)].map((_, index) => (
@@ -759,7 +759,7 @@ const Transactions: React.FC = () => {
                           </button>
 
                           {showOptionsFor === transaction.id && (
-                            <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-100 dark:border-gray-700 z-10">
+                            <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-border-default dark:border-gray-700 z-10">
                               <div className="py-1">
                                 <button
                                   onClick={() => {

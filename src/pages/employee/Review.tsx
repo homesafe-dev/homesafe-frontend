@@ -45,7 +45,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
   const lastName = reviewerName.split(' ').slice(1).join(' ') || '';
 
   return (
-    <div className="bg-white dark:bg-gray-800 p-5 sm:p-6 rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-all">
+    <div className="bg-white dark:bg-gray-800 p-5 sm:p-6 rounded-lg border border-border-default shadow-sm hover:shadow-md transition-all">
       <div className="flex items-start gap-4 mb-4">
         <Avatar
           src={reviewerAvatar}
@@ -222,7 +222,7 @@ const ReviewsPage: React.FC<ReviewsPageProps> = ({
         </div>
         {!loading && !error && (
           <div className="flex items-center gap-4 mt-4">
-            <div className="flex items-center gap-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-2">
+            <div className="flex items-center gap-2 bg-white dark:bg-gray-800 border border-border-default rounded-lg px-4 py-2">
               <span className="text-xl font-bold text-gray-900 dark:text-gray-100">
                 {!isNaN(parseFloat(averageRating))
                   ? parseFloat(averageRating).toFixed(1)
@@ -261,7 +261,7 @@ const ReviewsPage: React.FC<ReviewsPageProps> = ({
       />
 
       {/* Content Section */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100">
+      <div className="bg-surface rounded-lg shadow-sm border border-border-default">
         {loading && (
           <div className="flex justify-center items-center py-16">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>

@@ -118,6 +118,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         };
       }
 
+      // First-time login or incomplete self-signup — do not create a session yet
+      if (
+        response.status &&
+        response.data &&
+        (response.data.requires_password_change ||
+          response.data.requires_profile_completion)
+      ) {
+        return {
+          success: true,
+          message: response.message,
+          data: response.data,
+        };
+      }
+
       // Handle successful login
       if (response.status && response.data) {
         // Create user object based on the response data
@@ -251,9 +265,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const response = await authApi.sendOTP(email);
       setLoading(false);
       return {
-        success: true,
-        message: 'OTP sent successfully',
-        data: response,
+        success: response.status !== false,
+        message: response.message || 'OTP sent successfully',
+        data: response.data ?? response,
       };
     } catch (err: any) {
       setLoading(false);
@@ -277,9 +291,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const response = await authApi.verifyOTP(email, otp);
       setLoading(false);
       return {
-        success: true,
-        message: 'OTP verified successfully',
-        data: response,
+        success: response.status !== false,
+        message: response.message || 'OTP verified successfully',
+        data: response.data ?? response,
       };
     } catch (err: any) {
       setLoading(false);

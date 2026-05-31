@@ -1,120 +1,77 @@
 import React, { useState } from 'react';
-import signupImg1 from '../../../assets/images/signupImg1.png';
-import signupImg2 from '../../../assets/images/signupImg2.png';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import HomesafeLogo from '../../../assets/images/HomesafeLogo.png';
+import {
+  AuthSplitPage,
+  AuthHeader,
+  AuthPrimaryButton,
+  AuthBackLink,
+} from '../shared/AuthLayout';
+import {
+  authPillInputClass,
+  authPillInputBorderStyle,
+} from '../shared/authStyles.ts';
+import { authTokens } from '../shared/authTokens.ts';
 
-const SigninCreatePasswordPage: React.FC = () => {
+const EmployeeCreatePasswordPage: React.FC = () => {
   const [password, setPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Password submitted:', password);
-  };
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
+    navigate('/employee/dashboard');
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      <div className="hidden md:flex md:w-1/2 bg-white relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-1/2">
-          <div className="relative w-full h-full">
-            <img
-              src={signupImg1}
-              alt="Top signup image"
-              className="w-full h-full object-cover"
+    <AuthSplitPage>
+      <AuthHeader
+        title="Create password"
+        subtitle="Choose a secure password for your account."
+      />
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label
+            htmlFor="password"
+            className="block text-sm font-medium mb-2"
+            style={{ color: authTokens.titleColor }}
+          >
+            New Password
+          </label>
+          <div className="relative">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              id="password"
+              placeholder="Enter password"
+              className={`${authPillInputClass} pl-4 pr-12`}
+              style={authPillInputBorderStyle}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              autoComplete="new-password"
             />
-            <div className="absolute inset-0 bg-[#1D2125D9]" />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-[#9CA3AF] hover:text-gray-700"
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+            >
+              {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+            </button>
           </div>
+          <p className="mt-2 text-xs" style={{ color: authTokens.bodyColor }}>
+            Password must be 8 letters long and should contain special
+            characters &amp; numbers (e.g @#23)
+          </p>
         </div>
 
-        <div className="absolute bottom-0 left-0 w-full h-1/2">
-          <div className="relative w-full h-full">
-            <img
-              src={signupImg2}
-              alt="Bottom signup image"
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-[#1D2125D9]" />
-          </div>
-        </div>
+        <AuthPrimaryButton>Continue</AuthPrimaryButton>
+      </form>
 
-        <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
-          <div className="mb-8">
-            <img src={HomesafeLogo} alt="Homesafe Logo" className="" />
-          </div>
-
-          <div className="max-w-md">
-            <p className="text-center text-[#F4F4F4] text-[24px] font-normal">
-              "Our Mission at Homesafe is to make hiring safe, simple, and
-              efficient for every Living Space, and to create a job search space
-              for Artisans to apply through".
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="w-full md:w-1/2 flex items-center justify-center px-4 py-6 md:p-6">
-        <div className="flex flex-col items-center w-full max-w-[545px] space-y-4">
-          <div className="w-full bg-white rounded-lg shadow-lg p-4 md:p-8">
-            <h1 className="text-2xl md:text-[36px] text-[#24292E] font-semibold">
-              Create Password
-            </h1>
-
-            <form onSubmit={handleSubmit} role="form">
-              <div className="mb-4 mt-4 md:mt-[1rem]">
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  New Password
-                </label>
-                <div className="relative">
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    id="password"
-                    placeholder="*******"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-sm md:text-base"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={togglePasswordVisibility}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                  >
-                    {showPassword ? (
-                      <FaEyeSlash size={20} />
-                    ) : (
-                      <FaEye size={20} />
-                    )}
-                  </button>
-                </div>
-                <p className="mt-2 text-xs text-gray-500">
-                  Password must be 8 letters long and should contain special
-                  characters & numbers (e.g @#23)
-                </p>
-              </div>
-
-              <Link to="/employee/dashboard" className="block w-full">
-                <button
-                  type="submit"
-                  className="w-full bg-green-300 text-black py-2 px-4 rounded-md hover:bg-green-400 transition-colors"
-                >
-                  Continue
-                </button>
-              </Link>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
+      <AuthBackLink to="/employee/forgot-password/otp" label="Back" />
+    </AuthSplitPage>
   );
 };
 
-export default SigninCreatePasswordPage;
+export default EmployeeCreatePasswordPage;

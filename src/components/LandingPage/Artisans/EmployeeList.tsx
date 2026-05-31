@@ -170,7 +170,7 @@ const EmployeeList = () => {
         <input
           type="text"
           placeholder="Search by role, location or skills"
-          className="w-full h-[42px] pl-10 pr-4 py-2 border border-gray-100 rounded-[16px] text-[16px] text-[#5A6672] focus:outline-none focus:ring-1 focus:ring-green-500 transition-shadow hover:shadow-sm"
+          className="w-full h-[42px] pl-10 pr-4 py-2 border border-border-default rounded-[16px] text-[16px] text-[#5A6672] focus:outline-none focus:ring-1 focus:ring-green-500 transition-shadow hover:shadow-sm"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />

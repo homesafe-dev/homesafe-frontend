@@ -216,7 +216,7 @@ const EmployerReview: React.FC<EmployerReviewProps> = ({
                 </div>
 
                 {selectedEmployer && (
-                  <div className="mt-2 p-3 bg-gray-50 border border-gray-200 dark:border-gray-700 rounded-lg relative">
+                  <div className="mt-2 p-3 bg-gray-50 border border-border-default rounded-lg relative">
                     <button
                       type="button"
                       className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 dark:text-gray-400"
