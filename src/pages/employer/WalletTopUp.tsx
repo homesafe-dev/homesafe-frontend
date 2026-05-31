@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { IoIosArrowBack } from 'react-icons/io';
 import { FaCreditCard } from 'react-icons/fa';
 import PaystackPaymentModal from '../../components/Employer/PaystackPaymentModal';
+import { getWalletBasePath, walletRoutes } from '../../utils/walletPaths';
 
 const WalletTopUp: React.FC = () => {
+  const { pathname } = useLocation();
+  const routes = walletRoutes(getWalletBasePath(pathname));
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => {
@@ -17,13 +21,13 @@ const WalletTopUp: React.FC = () => {
   return (
     <div className="bg-white dark:bg-gray-800 w-full h-full p-4 sm:p-6 lg:p-8">
       <div className="flex items-center mb-6 sm:mb-8">
-        <IoIosArrowBack
-          className="text-gray-600 dark:text-gray-400 mr-2"
-          size={20}
-        />
-        <h2 className="text-gray-800 dark:text-gray-200 font-medium text-lg sm:text-xl">
-          Wallet Top Up
-        </h2>
+        <Link
+          to={routes.wallet}
+          className="flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
+        >
+          <IoIosArrowBack className="mr-2" size={20} />
+          <h2 className="font-medium text-lg sm:text-xl">Wallet Top Up</h2>
+        </Link>
       </div>
 
       <div className="mb-6 sm:mb-8">
@@ -34,7 +38,7 @@ const WalletTopUp: React.FC = () => {
 
       <div className="space-y-4 w-full max-w-[470px]">
         <div
-          className="flex items-center justify-between border border-gray-200 dark:border-gray-700 rounded-lg p-3 sm:p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 hover:border-green-300 transition-colors"
+          className="flex items-center justify-between border border-border-default rounded-lg p-3 sm:p-4 cursor-pointer hover:bg-elevated/50 hover:border-green-300 transition-colors"
           onClick={handleOpenModal}
         >
           <div className="flex items-center">

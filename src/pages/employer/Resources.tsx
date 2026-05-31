@@ -156,16 +156,16 @@ const ResourcesPage: React.FC = () => {
       </div>
 
       {/* Main Content */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100">
+      <div className="bg-surface rounded-lg shadow-sm border border-border-default">
         {/* Search Section */}
-        <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-gray-100">
+        <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-border-default">
           <div className="flex flex-col sm:flex-row gap-4 mb-4">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
                 placeholder="Search for video, link, or description..."
-                className="w-full pl-10 pr-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
+                className="w-full pl-10 pr-4 py-2.5 border border-border-default rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -221,7 +221,7 @@ const ResourcesPage: React.FC = () => {
               {filteredResources.map((resource) => (
                 <div
                   key={resource.id}
-                  className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
+                  className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm border border-border-default hover:shadow-md transition-shadow"
                 >
                   <div className="relative">
                     <img
@@ -260,18 +260,18 @@ const ResourcesPage: React.FC = () => {
                         </button>
                         {activeMenuId === resource.id.toString() && (
                           <div
-                            className="absolute top-8 right-0 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-100 overflow-hidden z-10 w-40"
+                            className="absolute top-8 right-0 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-border-default overflow-hidden z-10 w-40"
                             onClick={(e) => e.stopPropagation()}
                           >
                             <div
-                              className="px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-700/50 flex items-center gap-2 cursor-pointer text-sm text-gray-700 dark:text-gray-300"
+                              className="px-4 py-2 hover:bg-elevated/50 flex items-center gap-2 cursor-pointer text-sm text-gray-700 dark:text-gray-300"
                               onClick={() => handleShare(resource)}
                             >
                               <Share2 className="w-4 h-4" />
                               Share
                             </div>
                             <div
-                              className="px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-700/50 flex items-center gap-2 cursor-pointer text-sm text-gray-700 dark:text-gray-300"
+                              className="px-4 py-2 hover:bg-elevated/50 flex items-center gap-2 cursor-pointer text-sm text-gray-700 dark:text-gray-300"
                               onClick={handleDownload}
                             >
                               <Download className="w-4 h-4" />
@@ -286,7 +286,7 @@ const ResourcesPage: React.FC = () => {
                       {resource.description}
                     </p>
 
-                    <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+                    <div className="flex items-center justify-between pt-3 border-t border-border-default">
                       <button
                         onClick={() => handleWatchVideo(resource)}
                         className="inline-flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors"
@@ -303,7 +303,7 @@ const ResourcesPage: React.FC = () => {
 
           {/* Pagination */}
           {paginationMeta && paginationMeta.last_page > 1 && (
-            <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-gray-100 px-4 sm:px-6">
+            <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-border-default px-4 sm:px-6">
               <div className="text-sm text-gray-700 dark:text-gray-300">
                 Page{' '}
                 <span className="font-medium">
@@ -322,7 +322,7 @@ const ResourcesPage: React.FC = () => {
                   className={`px-4 py-2 rounded-lg border transition-colors ${
                     paginationMeta.current_page === 1
                       ? 'border-gray-200 dark:border-gray-700 text-gray-300 cursor-not-allowed'
-                      : 'border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                      : 'border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-elevated/50'
                   }`}
                 >
                   Previous
@@ -345,7 +345,7 @@ const ResourcesPage: React.FC = () => {
                         className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
                           page === paginationMeta.current_page
                             ? 'bg-green-600 text-white'
-                            : 'border border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                            : 'border border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-elevated/50'
                         }`}
                       >
                         {page}
@@ -377,7 +377,7 @@ const ResourcesPage: React.FC = () => {
                   className={`px-4 py-2 rounded-lg border transition-colors ${
                     paginationMeta.current_page === paginationMeta.last_page
                       ? 'border-gray-200 dark:border-gray-700 text-gray-300 cursor-not-allowed'
-                      : 'border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                      : 'border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-elevated/50'
                   }`}
                 >
                   Next
@@ -434,7 +434,7 @@ const ResourcesPage: React.FC = () => {
                   href={selectedResource.video_link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors text-sm font-medium"
+                  className="inline-flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-elevated/50 transition-colors text-sm font-medium"
                 >
                   Open on YouTube
                 </a>

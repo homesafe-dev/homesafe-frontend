@@ -41,7 +41,7 @@ const TerminateContractConfirmation: React.FC<
 
           <button
             onClick={onClose}
-            className="w-full py-3 border border-green-400 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700/50 transition duration-200"
+            className="w-full py-3 border border-green-400 text-gray-700 dark:text-gray-300 rounded-md hover:bg-elevated/50 transition duration-200"
           >
             Closed
           </button>

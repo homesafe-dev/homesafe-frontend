@@ -289,7 +289,7 @@ const AdminSecurityPage: React.FC = () => {
 
       <div className="space-y-6">
         {/* Change Password Section */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-border-default">
           <div className="p-6 sm:p-8">
             <div className="flex items-start gap-4 mb-6">
               <div className="w-12 h-12 bg-blue-50 dark:bg-blue-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -333,7 +333,7 @@ const AdminSecurityPage: React.FC = () => {
                         value={passwordFormData.currentPassword}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 dark:bg-gray-800 dark:border-gray-700 pr-10"
+                        className="w-full px-4 py-2.5 border border-border-default rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 dark:bg-gray-800 dark:border-gray-700 pr-10"
                         placeholder="Enter current password"
                       />
                       <button
@@ -367,7 +367,7 @@ const AdminSecurityPage: React.FC = () => {
                         value={passwordFormData.newPassword}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 dark:bg-gray-800 dark:border-gray-700 pr-10"
+                        className="w-full px-4 py-2.5 border border-border-default rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 dark:bg-gray-800 dark:border-gray-700 pr-10"
                         placeholder="Enter new password"
                       />
                       <button
@@ -402,7 +402,7 @@ const AdminSecurityPage: React.FC = () => {
                         value={passwordFormData.confirmPassword}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 dark:bg-gray-800 dark:border-gray-700 pr-10"
+                        className="w-full px-4 py-2.5 border border-border-default rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 dark:bg-gray-800 dark:border-gray-700 pr-10"
                         placeholder="Confirm new password"
                       />
                       <button
@@ -422,12 +422,12 @@ const AdminSecurityPage: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex gap-3 mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+                <div className="flex gap-3 mt-6 pt-6 border-t border-border-default dark:border-gray-700">
                   <button
                     type="button"
                     onClick={handleCancel}
                     disabled={loading}
-                    className="px-5 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-5 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-elevated/50 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <X className="w-4 h-4" />
                     Cancel
@@ -457,7 +457,7 @@ const AdminSecurityPage: React.FC = () => {
         </div>
 
         {/* Two-Factor Authentication Section */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-border-default">
           <div className="p-6 sm:p-8">
             <div className="flex items-start gap-4 mb-6">
               <div className="w-12 h-12 bg-purple-50 dark:bg-purple-900/30 rounded-lg flex items-center justify-center flex-shrink-0">

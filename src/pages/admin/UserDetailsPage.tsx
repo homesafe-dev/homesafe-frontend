@@ -363,7 +363,7 @@ export default function UserDetailsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Profile Card */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+          <div className="bg-white rounded-2xl p-6 border border-border-default shadow-sm">
             <div className="flex flex-col items-center">
               {/* Avatar */}
               <div className="mb-4">
@@ -428,7 +428,7 @@ export default function UserDetailsPage() {
 
         {/* Details Card */}
         <div className="lg:col-span-2">
-          <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+          <div className="bg-white rounded-2xl p-6 border border-border-default shadow-sm">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center">
                 <User className="w-4 h-4 text-indigo-600" />

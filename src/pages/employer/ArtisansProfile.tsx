@@ -6,7 +6,6 @@ import {
   MapPin,
   Calendar,
   Clock,
-  Star,
   FileText,
   Send,
 } from 'lucide-react';
@@ -15,6 +14,8 @@ import artisanApi from '../../api/artisanApi';
 import contractApi from '../../api/contractApi';
 import { calculateAge, extractLocation } from '../../utils/dateUtils';
 import Avatar from '../../components/common/Avatar';
+import StarRating from '../../components/common/StarRating';
+import { parseRating, parseReviewCount } from '../../utils/starRatingUtils';
 import Toast from '../../components/common/Toast';
 
 interface Occupation {
@@ -54,7 +55,9 @@ interface Artisan {
   profile_description: string | null;
   created_at: string;
   updated_at: string;
-  average_rating: number | null;
+  average_rating: number | string | null;
+  total_reviews?: number | string | null;
+  is_employed?: boolean;
   occupations: Occupation[];
   reviews: Review[];
 }
@@ -254,7 +257,7 @@ const ArtisanProfileView: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+          <div className="bg-surface rounded-lg shadow-sm border border-border-default overflow-hidden">
             <div className="flex flex-col lg:flex-row">
               {/* Profile section */}
               <div className="w-full lg:w-1/2 lg:border-r border-gray-200 dark:border-gray-700 p-6 sm:p-8 flex flex-col items-center bg-gradient-to-br from-gray-50 to-white">
@@ -289,20 +292,22 @@ const ArtisanProfileView: React.FC = () => {
                     : 'Professional'}
                 </div>
 
-                <div className="flex items-center gap-1 mb-6">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star
-                      key={star}
-                      className={`w-5 h-5 ${
-                        star <= (artisan.average_rating || 0)
-                          ? 'text-yellow-400 fill-yellow-400'
-                          : 'text-gray-300'
-                      }`}
+                <div className="mb-6">
+                  {parseRating(artisan.average_rating) > 0 ? (
+                    <StarRating
+                      rating={parseRating(artisan.average_rating)}
+                      reviewCount={
+                        parseReviewCount(artisan.total_reviews) ||
+                        (Array.isArray(artisan.reviews)
+                          ? artisan.reviews.length
+                          : 0)
+                      }
+                      showValue
+                      size={20}
                     />
-                  ))}
-                  {artisan.average_rating && (
-                    <span className="ml-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-                      ({artisan.average_rating.toFixed(1)})
+                  ) : (
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                      No reviews yet
                     </span>
                   )}
                 </div>
@@ -316,7 +321,7 @@ const ArtisanProfileView: React.FC = () => {
                       About
                     </h3>
                   </div>
-                  <div className="bg-white dark:bg-gray-800 border border-gray-100 rounded-lg p-4">
+                  <div className="bg-white dark:bg-gray-800 border border-border-default rounded-lg p-4">
                     {artisan.profile_description ? (
                       <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                         {artisan.profile_description}
@@ -364,7 +369,7 @@ const ArtisanProfileView: React.FC = () => {
                     <input
                       type="date"
                       name="start_date"
-                      className="w-full border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
+                      className="w-full border border-border-default rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
                       value={formData.start_date}
                       onChange={handleInputChange}
                     />
@@ -379,7 +384,7 @@ const ArtisanProfileView: React.FC = () => {
                     <div className="relative">
                       <select
                         name="duration_months"
-                        className="appearance-none w-full border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-2.5 pr-10 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white dark:bg-gray-800"
+                        className="appearance-none w-full border border-border-default rounded-lg px-4 py-2.5 pr-10 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white dark:bg-gray-800"
                         value={formData.duration_months}
                         onChange={handleInputChange}
                       >
@@ -410,7 +415,7 @@ const ArtisanProfileView: React.FC = () => {
                     <div className="relative">
                       <select
                         name="working_hours_start"
-                        className="appearance-none w-full border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-2.5 pr-10 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white dark:bg-gray-800"
+                        className="appearance-none w-full border border-border-default rounded-lg px-4 py-2.5 pr-10 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white dark:bg-gray-800"
                         value={formData.working_hours_start}
                         onChange={handleInputChange}
                       >
@@ -434,7 +439,7 @@ const ArtisanProfileView: React.FC = () => {
                     <div className="relative">
                       <select
                         name="working_hours_end"
-                        className="appearance-none w-full border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-2.5 pr-10 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white dark:bg-gray-800"
+                        className="appearance-none w-full border border-border-default rounded-lg px-4 py-2.5 pr-10 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-white dark:bg-gray-800"
                         value={formData.working_hours_end}
                         onChange={handleInputChange}
                       >
@@ -468,10 +473,20 @@ const ArtisanProfileView: React.FC = () => {
                 </div>
 
                 {/* Submit Button */}
-                <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                <div className="pt-4 border-t border-border-default dark:border-gray-700">
+                  {artisan.is_employed && (
+                    <p className="mb-3 text-sm text-gray-500 dark:text-gray-400">
+                      This artisan is already hired and cannot receive new
+                      proposals.
+                    </p>
+                  )}
                   <button
                     onClick={handleSubmitProposal}
-                    disabled={submitting || !formData.start_date}
+                    disabled={
+                      submitting ||
+                      !formData.start_date ||
+                      artisan.is_employed === true
+                    }
                     className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {submitting ? (
@@ -479,10 +494,12 @@ const ArtisanProfileView: React.FC = () => {
                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
                         <span>Sending Proposal...</span>
                       </>
+                    ) : artisan.is_employed ? (
+                      <span>Already Hired</span>
                     ) : (
                       <>
                         <Send className="w-4 h-4" />
-                        <span>Send Proposal</span>
+                        <span>Hire Now</span>
                       </>
                     )}
                   </button>

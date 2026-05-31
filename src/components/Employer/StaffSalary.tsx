@@ -86,7 +86,7 @@ const Salary: React.FC<SalaryProps> = ({
         </div>
 
         {/* Salary Advanced/Loan Card */}
-        <div className="flex-1 bg-white dark:bg-gray-800 rounded-xl p-6 relative overflow-hidden">
+        <div className="flex-1 bg-surface rounded-xl p-6 relative overflow-hidden">
           {/* Smooth S-curves decoration */}
           <div className="absolute bottom-0 right-0">
             <svg width="280" height="200" viewBox="0 0 280 200" fill="none">

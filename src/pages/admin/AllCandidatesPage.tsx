@@ -165,9 +165,9 @@ const AllCandidatesPage = () => {
       )}
 
       {/* Main Content */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-100">
+      <div className="bg-white rounded-lg shadow-sm border border-border-default">
         {/* Tabs */}
-        <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-gray-100">
+        <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-border-default">
           <div className="flex flex-wrap gap-2 sm:gap-0 sm:space-x-1">
             <button
               className={`px-4 py-2.5 text-sm font-medium rounded-lg transition-colors ${
@@ -212,7 +212,7 @@ const AllCandidatesPage = () => {
         </div>
 
         {/* Search and Filters Section */}
-        <div className="p-4 sm:p-6 border-b border-gray-100">
+        <div className="p-4 sm:p-6 border-b border-border-default">
           <div className="flex flex-col lg:flex-row gap-4">
             {/* Search Bar */}
             <div className="flex-1 relative">
@@ -252,7 +252,7 @@ const AllCandidatesPage = () => {
           </div>
 
           {/* Results Count */}
-          <div className="mt-4 pt-4 border-t border-gray-100">
+          <div className="mt-4 pt-4 border-t border-border-default">
             <p className="text-sm text-gray-600">
               Showing{' '}
               <span className="font-semibold text-gray-900">
@@ -267,7 +267,7 @@ const AllCandidatesPage = () => {
         {/* Table */}
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-100">
+            <thead className="bg-elevated border-b border-border-default">
               <tr>
                 <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                   Full Name
@@ -292,7 +292,7 @@ const AllCandidatesPage = () => {
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-100">
+            <tbody className="bg-white divide-y divide-border-default">
               {isLoading ? (
                 // Loading state
                 [...Array(5)].map((_, index) => (
@@ -458,7 +458,7 @@ const AllCandidatesPage = () => {
 
         {/* Pagination */}
         {!isLoading && filteredUsers.length > 0 && totalPages > 1 && (
-          <div className="px-4 sm:px-6 py-4 border-t border-gray-100 flex items-center justify-between">
+          <div className="px-4 sm:px-6 py-4 border-t border-border-default flex items-center justify-between">
             <div className="text-sm text-gray-600">
               Showing{' '}
               <span className="font-medium">{(currentPage - 1) * 10 + 1}</span>{' '}

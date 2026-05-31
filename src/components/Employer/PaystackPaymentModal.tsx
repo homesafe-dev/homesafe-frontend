@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { FiX } from 'react-icons/fi';
+import { useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import walletApi from '../../api/walletApi';
+import { getWalletBasePath, walletRoutes } from '../../utils/walletPaths';
 import Toast from '../common/Toast';
 
 interface PaystackPaymentModalProps {
@@ -18,6 +20,9 @@ const PaystackPaymentModal: React.FC<PaystackPaymentModalProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
+  const { pathname } = useLocation();
+  const basePath = getWalletBasePath(pathname);
+  const routes = walletRoutes(basePath);
   const [toast, setToast] = useState({
     message: '',
     type: 'success' as 'success' | 'error' | 'info',
@@ -50,7 +55,7 @@ const PaystackPaymentModal: React.FC<PaystackPaymentModalProps> = ({
 
       // Get the current domain for callback URL
       const currentDomain = window.location.origin;
-      const callbackUrl = `${currentDomain}/employer/wallet/payment/verify`;
+      const callbackUrl = `${currentDomain}${routes.paymentVerify}`;
 
       console.log('Initializing payment with:', {
         amount: parseFloat(amount),

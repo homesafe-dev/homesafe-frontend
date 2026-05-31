@@ -9,6 +9,7 @@ const USER_ENDPOINTS = {
   EMPLOYER_LIST: '/users',
   CHANGE_PASSWORD: '/change-password',
   SALARY: (userId: number) => `/profile/${userId}/salary`,
+  SALARY_HISTORY: (userId: number) => `/profile/${userId}/salary-history`,
   TFA_STATUS: '/tfa/status',
   TFA_SETUP: '/tfa/setup',
   TFA_ENABLE: '/tfa/enable',
@@ -257,6 +258,27 @@ const userApi = {
       return response.data;
     } catch (error) {
       console.error('Error updating salary:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Get salary change history for a user
+   * @param userId - ID of the user
+   * @param page - Page number for pagination
+   * @param perPage - Number of items per page (max 100)
+   */
+  getSalaryHistory: async (userId: number, page = 1, perPage = 15) => {
+    try {
+      const response = await axiosInstance.get(
+        USER_ENDPOINTS.SALARY_HISTORY(userId),
+        {
+          params: { page, per_page: perPage },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching salary history:', error);
       throw error;
     }
   },

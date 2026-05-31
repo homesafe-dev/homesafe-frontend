@@ -122,9 +122,9 @@ const PayrollPage: React.FC = () => {
       </div>
 
       {/* Main Content */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100">
+      <div className="bg-surface rounded-lg shadow-sm border border-border-default">
         {/* Header with View All */}
-        <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-gray-100">
+        <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-border-default">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
               Payroll History
@@ -153,7 +153,7 @@ const PayrollPage: React.FC = () => {
           ) : payrollEntries.length > 0 ? (
             <>
               <table className="w-full">
-                <thead className="bg-gray-50 border-b border-gray-100">
+                <thead className="bg-elevated border-b border-border-default">
                   <tr>
                     <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                       Staff
@@ -175,11 +175,11 @@ const PayrollPage: React.FC = () => {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-100">
+                <tbody className="bg-surface divide-y divide-border-default">
                   {payrollEntries.map((entry, index) => (
                     <tr
                       key={entry.id || index}
-                      className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                      className="hover:bg-elevated/50 transition-colors"
                     >
                       <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-2">
@@ -240,7 +240,7 @@ const PayrollPage: React.FC = () => {
 
               {/* Pagination */}
               {totalPages > 1 && (
-                <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-gray-100 px-4 sm:px-6">
+                <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-border-default px-4 sm:px-6">
                   <div className="text-sm text-gray-700 dark:text-gray-300">
                     Page <span className="font-medium">{currentPage}</span> of{' '}
                     <span className="font-medium">{totalPages}</span>
@@ -253,7 +253,7 @@ const PayrollPage: React.FC = () => {
                       className={`px-4 py-2 rounded-lg border transition-colors ${
                         currentPage === 1
                           ? 'border-gray-200 dark:border-gray-700 text-gray-300 cursor-not-allowed'
-                          : 'border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                          : 'border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-elevated/50'
                       }`}
                     >
                       <ChevronLeft className="w-5 h-5" />
@@ -273,7 +273,7 @@ const PayrollPage: React.FC = () => {
                               className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
                                 currentPage === page
                                   ? 'bg-green-600 text-white'
-                                  : 'border border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                                  : 'border border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-elevated/50'
                               }`}
                             >
                               {page}
@@ -302,7 +302,7 @@ const PayrollPage: React.FC = () => {
                       className={`px-4 py-2 rounded-lg border transition-colors ${
                         currentPage === totalPages
                           ? 'border-gray-200 dark:border-gray-700 text-gray-300 cursor-not-allowed'
-                          : 'border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                          : 'border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-elevated/50'
                       }`}
                     >
                       <ChevronRight className="w-5 h-5" />

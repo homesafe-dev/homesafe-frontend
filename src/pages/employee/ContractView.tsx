@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { IoArrowBack } from 'react-icons/io5';
 import contractApi from '../../api/contractApi';
+import { savePdfResponseAsDownload } from '../../utils/downloadBlob';
 
 interface ProposalDetails {
   start_date: string;
@@ -68,6 +69,7 @@ const ContractViewPage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [responding, setResponding] = useState<boolean>(false);
+  const [downloading, setDownloading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchProposalDetails = async () => {
@@ -160,9 +162,28 @@ const ContractViewPage: React.FC = () => {
     }
   };
 
-  const handleDownloadPDF = () => {
-    // Generate and download PDF
-    window.print();
+  const handleDownloadPDF = async () => {
+    if (!proposalData?.contract?.id) {
+      setError('Contract not found');
+      return;
+    }
+
+    try {
+      setDownloading(true);
+      setError(null);
+      const response = await contractApi.downloadContract(
+        proposalData.contract.id
+      );
+      savePdfResponseAsDownload(
+        response,
+        `employment-contract-${proposalData.contract.id}.pdf`
+      );
+    } catch (err) {
+      console.error('Error downloading contract PDF:', err);
+      setError('Failed to download contract PDF. Please try again.');
+    } finally {
+      setDownloading(false);
+    }
   };
 
   if (loading) {
@@ -404,10 +425,12 @@ const ContractViewPage: React.FC = () => {
           {proposalData.proposal.status === 'accepted' ? (
             // Show Download PDF button if contract is accepted
             <button
+              type="button"
               onClick={handleDownloadPDF}
-              className="px-8 py-3 bg-[#37A379] text-white rounded-md hover:bg-[#2d8a63] transition-colors"
+              disabled={downloading}
+              className="px-8 py-3 bg-[#37A379] text-white rounded-md hover:bg-[#2d8a63] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              Download PDF
+              {downloading ? 'Downloading...' : 'Download PDF'}
             </button>
           ) : proposalData.proposal.status === 'pending' ? (
             // Show Accept/Decline buttons if contract is pending

@@ -11,6 +11,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import ContractImg from '../../assets/images/Contract.png';
 import contractApi from '../../api/contractApi';
+import { savePdfResponseAsDownload } from '../../utils/downloadBlob';
 import { format } from 'date-fns';
 
 interface ProposalDetails {
@@ -78,6 +79,7 @@ interface ContractCardProps {
 
 const ContractCard: React.FC<ContractCardProps> = ({ proposal, imageUrl }) => {
   const navigate = useNavigate();
+  const [downloading, setDownloading] = useState(false);
 
   // Add safety checks for the proposal structure
   if (!proposal || !proposal.contract || !proposal.proposal) {
@@ -109,6 +111,21 @@ const ContractCard: React.FC<ContractCardProps> = ({ proposal, imageUrl }) => {
     navigate(`/employee/${contract.id}/proposal`);
   };
 
+  const handleDownload = async () => {
+    try {
+      setDownloading(true);
+      const response = await contractApi.downloadContract(contract.id);
+      savePdfResponseAsDownload(
+        response,
+        `employment-contract-${contract.id}.pdf`
+      );
+    } catch (err) {
+      console.error('Error downloading contract:', err);
+    } finally {
+      setDownloading(false);
+    }
+  };
+
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
       case 'pending':
@@ -123,7 +140,7 @@ const ContractCard: React.FC<ContractCardProps> = ({ proposal, imageUrl }) => {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-all overflow-hidden">
+    <div className="bg-white dark:bg-gray-800 rounded-lg border border-border-default shadow-sm hover:shadow-md transition-all overflow-hidden">
       <div className="relative">
         <img
           src={imageUrl}
@@ -173,10 +190,17 @@ const ContractCard: React.FC<ContractCardProps> = ({ proposal, imageUrl }) => {
             <Eye className="w-4 h-4" />
             View Details
           </button>
-          <button className="flex items-center justify-center gap-2 border border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 text-sm font-medium py-2 px-4 rounded-lg transition-colors">
+          <button
+            type="button"
+            onClick={handleDownload}
+            disabled={downloading}
+            className="flex items-center justify-center gap-2 border border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-elevated/50 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium py-2 px-4 rounded-lg transition-colors"
+          >
             <Download className="w-4 h-4" />
-            <span className="hidden sm:inline">Download</span>
-            <span className="sm:hidden">PDF</span>
+            <span className="hidden sm:inline">
+              {downloading ? 'Downloading...' : 'Download'}
+            </span>
+            <span className="sm:hidden">{downloading ? '...' : 'PDF'}</span>
           </button>
         </div>
       </div>
@@ -272,16 +296,16 @@ const ContractsPage: React.FC<ContractsPageProps> = ({
       </div>
 
       {/* Main Content */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100">
+      <div className="bg-surface rounded-lg shadow-sm border border-border-default">
         {/* Search Section */}
-        <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-gray-100">
+        <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-border-default">
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
                 placeholder="Search by employer, position, status..."
-                className="w-full pl-10 pr-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
+                className="w-full pl-10 pr-4 py-2.5 border border-border-default rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />

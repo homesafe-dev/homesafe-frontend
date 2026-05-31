@@ -205,7 +205,7 @@ const EmployeeResourceShareModal: React.FC<EmployeeResourceShareModalProps> = ({
               </div>
 
               {selectedEmployee && (
-                <div className="mt-2 p-3 bg-gray-50 border border-gray-200 dark:border-gray-700 rounded-lg relative">
+                <div className="mt-2 p-3 bg-gray-50 border border-border-default rounded-lg relative">
                   <button
                     type="button"
                     className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 dark:text-gray-400"
@@ -272,7 +272,7 @@ const EmployeeResourceShareModal: React.FC<EmployeeResourceShareModalProps> = ({
           <div className="flex gap-3">
             <button
               onClick={handleClose}
-              className="flex-1 border border-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-md py-3 font-medium text-gray-700 dark:text-gray-300"
+              className="flex-1 border border-gray-300 hover:bg-elevated/50 rounded-md py-3 font-medium text-gray-700 dark:text-gray-300"
             >
               Cancel
             </button>

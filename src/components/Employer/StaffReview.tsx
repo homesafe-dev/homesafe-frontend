@@ -161,7 +161,7 @@ const StaffReview: React.FC<StaffReviewProps> = ({
       {reviews.map((review) => (
         <div
           key={review.id}
-          className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3 sm:p-4"
+          className="bg-white dark:bg-gray-800 border border-border-default rounded-lg p-3 sm:p-4"
         >
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2 gap-2">
             <div className="flex items-center space-x-2">
@@ -186,7 +186,7 @@ const StaffReview: React.FC<StaffReviewProps> = ({
           )}
 
           {(review.reviewer || review.reviewer_name) && (
-            <div className="flex items-center mt-2 sm:mt-3 pt-2 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex items-center mt-2 sm:mt-3 pt-2 border-t border-border-default dark:border-gray-700">
               {review.reviewer?.avatar && (
                 <img
                   src={review.reviewer.avatar}

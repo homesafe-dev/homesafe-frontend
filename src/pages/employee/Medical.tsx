@@ -38,7 +38,7 @@ const MedicalReportCard: React.FC<MedicalReportCardProps> = ({ record }) => {
   const fileUrl = `http://192.227.190.166${record.medical_file}`;
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-hidden">
+    <div className="bg-white dark:bg-gray-800 rounded-lg border border-border-default shadow-sm hover:shadow-md transition-shadow overflow-hidden">
       <div className="relative">
         <img
           src={MedicalImg}
@@ -64,7 +64,7 @@ const MedicalReportCard: React.FC<MedicalReportCardProps> = ({ record }) => {
           href={fileUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center justify-center gap-2 w-full px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+          className="inline-flex items-center justify-center gap-2 w-full px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 border border-gray-300 rounded-lg hover:bg-elevated/50 transition-colors"
         >
           <Eye className="w-4 h-4" />
           View Record
@@ -217,16 +217,16 @@ const Medical: React.FC = () => {
       </div>
 
       {/* Main Content */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100">
+      <div className="bg-surface rounded-lg shadow-sm border border-border-default">
         {/* Search Section */}
-        <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-gray-100">
+        <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-border-default">
           <div className="flex flex-col sm:flex-row gap-4 mb-4">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
                 placeholder="Search by date..."
-                className="w-full pl-10 pr-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
+                className="w-full pl-10 pr-4 py-2.5 border border-border-default rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -240,9 +240,9 @@ const Medical: React.FC = () => {
         </div>
 
         {/* Upload Medical Record Section */}
-        <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-gray-100">
+        <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-border-default">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-green-50 dark:bg-green-500/20 rounded-lg flex items-center justify-center">
               <Upload className="w-4 h-4 text-green-600" />
             </div>
             <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
@@ -252,15 +252,15 @@ const Medical: React.FC = () => {
 
           <div className="space-y-4">
             <div>
-              <label className="w-full flex items-center gap-3 px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg hover:border-green-500 transition-colors cursor-pointer bg-gray-50 hover:bg-green-50/10">
-                <Upload className="w-5 h-5 text-gray-400 flex-shrink-0" />
+              <label className="w-full flex items-center gap-3 px-4 py-3 border-2 border-dashed border-border-default rounded-lg hover:border-green-500 dark:hover:border-green-400 transition-colors cursor-pointer bg-elevated hover:bg-green-500/5">
+                <Upload className="w-5 h-5 text-content-muted flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <span className="text-sm text-gray-600 dark:text-gray-400 block truncate">
+                  <span className="text-sm text-content-secondary block truncate">
                     {selectedFile
                       ? selectedFile.name
                       : 'Click to upload or drag and drop'}
                   </span>
-                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                  <span className="text-xs text-content-muted">
                     PNG, JPG, PDF up to 5MB
                   </span>
                 </div>
@@ -275,13 +275,13 @@ const Medical: React.FC = () => {
             </div>
 
             {selectedFile && (
-              <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
-                <FileText className="w-5 h-5 text-green-600 flex-shrink-0" />
+              <div className="flex items-center gap-2 p-3 bg-green-50 dark:bg-green-500/15 border border-green-200 dark:border-green-500/30 rounded-lg">
+                <FileText className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-green-900 truncate">
+                  <p className="text-sm font-medium text-green-900 dark:text-green-200 truncate">
                     {selectedFile.name}
                   </p>
-                  <p className="text-xs text-green-700">
+                  <p className="text-xs text-green-700 dark:text-green-300">
                     {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
                   </p>
                 </div>
@@ -311,7 +311,7 @@ const Medical: React.FC = () => {
               disabled={isUploading || !selectedFile}
               className={`w-full sm:w-auto px-6 py-2.5 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
                 !selectedFile || isUploading
-                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  ? 'bg-elevated text-content-muted cursor-not-allowed'
                   : 'bg-green-600 text-white hover:bg-green-700'
               }`}
             >

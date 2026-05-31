@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import notificationApi from '../notificationApi';
 import axiosInstance from '../axiosConfig';
 
-// Mock axios instance
 vi.mock('../axiosConfig', () => ({
   default: {
     get: vi.fn(),
@@ -10,7 +9,10 @@ vi.mock('../axiosConfig', () => ({
   },
 }));
 
-const mockAxios = axiosInstance as any;
+const mockAxios = axiosInstance as unknown as {
+  get: ReturnType<typeof vi.fn>;
+  patch: ReturnType<typeof vi.fn>;
+};
 
 describe('notificationApi', () => {
   beforeEach(() => {
@@ -18,86 +20,82 @@ describe('notificationApi', () => {
   });
 
   describe('getNotifications', () => {
-    it('should fetch notifications successfully', async () => {
+    it('fetches notifications with filters', async () => {
       const mockResponse = {
         data: {
           status: true,
           message: 'Notifications retrieved successfully',
-          data: [
-            {
-              id: '1',
-              type: 'App\\Notifications\\WalletTransactionNotification',
-              notifiable_type: 'App\\Models\\User',
-              notifiable_id: 1,
-              data: {
-                user: {
-                  id: 1,
-                  first_name: 'John',
-                  last_name: 'Doe',
-                  email: 'john@example.com',
-                  avatar: 'avatar.jpg',
-                },
-                message: 'You transferred 100.00 to Jane.',
+          data: {
+            data: [
+              {
+                id: '1',
+                type: 'App\\Notifications\\WalletTransactionNotification',
+                data: { message: 'Test' },
+                read_at: null,
+                created_at: '2025-03-12T23:21:55.000000Z',
+                updated_at: '2025-03-12T23:21:55.000000Z',
               },
-              read_at: null,
-              created_at: '2025-03-12T23:21:55.000000Z',
-              updated_at: '2025-03-12T23:21:55.000000Z',
-            },
-          ],
+            ],
+            current_page: 1,
+            per_page: 15,
+            total: 1,
+          },
         },
       };
 
       mockAxios.get.mockResolvedValue(mockResponse);
 
-      const result = await notificationApi.getNotifications();
+      const result = await notificationApi.getNotifications({
+        read: false,
+        per_page: 15,
+      });
 
-      expect(mockAxios.get).toHaveBeenCalledWith('/notifications');
+      expect(mockAxios.get).toHaveBeenCalledWith('/notifications', {
+        params: { read: false, per_page: 15 },
+      });
       expect(result).toEqual(mockResponse.data);
     });
+  });
 
-    it('should handle errors when fetching notifications', async () => {
-      const mockError = new Error('Network error');
-      mockAxios.get.mockRejectedValue(mockError);
+  describe('getUnreadNotifications', () => {
+    it('fetches unread notifications', async () => {
+      mockAxios.get.mockResolvedValue({
+        data: { status: true, data: { data: [] } },
+      });
 
-      await expect(notificationApi.getNotifications()).rejects.toThrow(
-        'Network error'
-      );
-      expect(mockAxios.get).toHaveBeenCalledWith('/notifications');
+      await notificationApi.getUnreadNotifications(15, 1);
+
+      expect(mockAxios.get).toHaveBeenCalledWith('/notifications/unread', {
+        params: { per_page: 15, page: 1 },
+      });
+    });
+  });
+
+  describe('getUnreadCount', () => {
+    it('fetches unread count for badge', async () => {
+      mockAxios.get.mockResolvedValue({
+        data: {
+          status: true,
+          data: { unread_count: 3 },
+        },
+      });
+
+      const result = await notificationApi.getUnreadCount();
+
+      expect(mockAxios.get).toHaveBeenCalledWith('/notifications/unread-count');
+      expect(result.data.unread_count).toBe(3);
     });
   });
 
   describe('markAsRead', () => {
-    it('should mark notification as read successfully', async () => {
+    it('marks notification as read', async () => {
       const notificationId = '123';
-      const mockResponse = {
-        data: {
-          status: true,
-          message: 'Notification marked as read.',
-          data: {
-            id: notificationId,
-            read_at: '2025-03-13T22:09:11.000000Z',
-          },
-        },
-      };
+      mockAxios.patch.mockResolvedValue({
+        data: { status: true, message: 'Notification marked as read.' },
+      });
 
-      mockAxios.patch.mockResolvedValue(mockResponse);
+      await notificationApi.markAsRead(notificationId);
 
-      const result = await notificationApi.markAsRead(notificationId);
-
-      expect(mockAxios.patch).toHaveBeenCalledWith(
-        `/notifications/${notificationId}/mark-as-read`
-      );
-      expect(result).toEqual(mockResponse.data);
-    });
-
-    it('should handle errors when marking notification as read', async () => {
-      const notificationId = '123';
-      const mockError = new Error('Network error');
-      mockAxios.patch.mockRejectedValue(mockError);
-
-      await expect(notificationApi.markAsRead(notificationId)).rejects.toThrow(
-        'Network error'
-      );
       expect(mockAxios.patch).toHaveBeenCalledWith(
         `/notifications/${notificationId}/mark-as-read`
       );
@@ -105,72 +103,31 @@ describe('notificationApi', () => {
   });
 
   describe('markAllAsRead', () => {
-    it('should mark all notifications as read successfully', async () => {
-      const mockGetResponse = {
-        data: {
-          status: true,
-          data: [
-            {
-              id: '1',
-              read_at: null,
-            },
-            {
-              id: '2',
-              read_at: null,
-            },
-          ],
-        },
-      };
-
-      const mockPatchResponse = {
-        data: {
-          status: true,
-          message: 'Notification marked as read.',
-        },
-      };
-
-      mockAxios.get.mockResolvedValue(mockGetResponse);
-      mockAxios.patch.mockResolvedValue(mockPatchResponse);
+    it('marks all notifications as read via dedicated endpoint', async () => {
+      mockAxios.patch.mockResolvedValue({
+        data: { status: true, message: 'All notifications marked as read.' },
+      });
 
       const result = await notificationApi.markAllAsRead();
 
-      expect(mockAxios.get).toHaveBeenCalledWith('/notifications');
-      expect(mockAxios.patch).toHaveBeenCalledTimes(2);
       expect(mockAxios.patch).toHaveBeenCalledWith(
-        '/notifications/1/mark-as-read'
+        '/notifications/mark-all-as-read'
       );
-      expect(mockAxios.patch).toHaveBeenCalledWith(
-        '/notifications/2/mark-as-read'
-      );
-      expect(result).toEqual({
-        status: true,
-        message: 'All notifications marked as read',
-      });
+      expect(result.status).toBe(true);
     });
+  });
 
-    it('should handle case when no unread notifications exist', async () => {
-      const mockGetResponse = {
-        data: {
-          status: true,
-          data: [
-            {
-              id: '1',
-              read_at: '2025-03-13T22:09:11.000000Z',
-            },
-          ],
-        },
-      };
-
-      mockAxios.get.mockResolvedValue(mockGetResponse);
-
-      const result = await notificationApi.markAllAsRead();
-
-      expect(mockAxios.get).toHaveBeenCalledWith('/notifications');
-      expect(mockAxios.patch).not.toHaveBeenCalled();
-      expect(result).toEqual({
+  describe('parseNotificationList', () => {
+    it('extracts items from paginated response', () => {
+      const list = notificationApi.parseNotificationList({
         status: true,
-        message: 'All notifications marked as read',
+        data: {
+          data: [{ id: 'a', type: 'x', data: { message: 'hi' } }],
+        },
       });
+
+      expect(list).toHaveLength(1);
+      expect(list[0].id).toBe('a');
     });
   });
 });

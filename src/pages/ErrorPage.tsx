@@ -161,7 +161,7 @@ const ErrorPage: React.FC<ErrorPageProps> = ({ error, resetError }) => {
         </div>
 
         {/* Additional Help Text */}
-        <div className="pt-6 border-t border-gray-200">
+        <div className="pt-6 border-t border-border-default">
           <p className="text-sm text-gray-500">
             {is404
               ? 'If you believe this is a mistake, please check the URL or contact support.'

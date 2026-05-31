@@ -142,8 +142,8 @@ export default function AdminDashboard() {
 
   if (isLoading) {
     return (
-      <div className="h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500" />
       </div>
     );
   }
@@ -217,7 +217,7 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 sm:p-6 lg:p-8">
+    <div className="p-4 sm:p-6 lg:p-8 bg-page">
       {/* Welcome Section */}
       <div className="mb-6">
         <div className="flex justify-between items-start mb-4">
@@ -237,7 +237,7 @@ export default function AdminDashboard() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6">
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 border border-gray-100 dark:border-gray-700 shadow-sm">
+        <div className="bg-surface rounded-2xl p-4 sm:p-6 border border-border-default dark:border-gray-700 shadow-sm">
           <div className="flex items-center justify-between mb-3">
             <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
               Total Users
@@ -254,7 +254,7 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 border border-gray-100 dark:border-gray-700 shadow-sm">
+        <div className="bg-surface rounded-2xl p-4 sm:p-6 border border-border-default dark:border-gray-700 shadow-sm">
           <div className="flex items-center justify-between mb-3">
             <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
               Pending Approvals
@@ -271,7 +271,7 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 border border-gray-100 dark:border-gray-700 shadow-sm">
+        <div className="bg-surface rounded-2xl p-4 sm:p-6 border border-border-default dark:border-gray-700 shadow-sm">
           <div className="flex items-center justify-between mb-3">
             <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
               Total Transactions
@@ -288,7 +288,7 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 border border-gray-100 dark:border-gray-700 shadow-sm">
+        <div className="bg-surface rounded-2xl p-4 sm:p-6 border border-border-default dark:border-gray-700 shadow-sm">
           <div className="flex items-center justify-between mb-3">
             <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
               Wallet Balance
@@ -309,7 +309,7 @@ export default function AdminDashboard() {
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         {/* User Distribution */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 border border-gray-100 dark:border-gray-700 shadow-sm">
+        <div className="bg-surface rounded-2xl p-4 sm:p-6 border border-border-default dark:border-gray-700 shadow-sm">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
               <Users className="w-4 h-4 text-blue-600" />
@@ -355,7 +355,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Registration Trend */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 border border-gray-100 dark:border-gray-700 shadow-sm">
+        <div className="bg-surface rounded-2xl p-4 sm:p-6 border border-border-default dark:border-gray-700 shadow-sm">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
               <TrendingUp className="w-4 h-4 text-blue-600" />
@@ -412,7 +412,7 @@ export default function AdminDashboard() {
       {/* Recent Activities & Transactions */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         {/* Recent Activity Logs */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 border border-gray-100 dark:border-gray-700 shadow-sm">
+        <div className="bg-surface rounded-2xl p-4 sm:p-6 border border-border-default dark:border-gray-700 shadow-sm">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center">
@@ -458,7 +458,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Recent Transactions */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 border border-gray-100 dark:border-gray-700 shadow-sm">
+        <div className="bg-surface rounded-2xl p-4 sm:p-6 border border-border-default dark:border-gray-700 shadow-sm">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
@@ -533,7 +533,7 @@ export default function AdminDashboard() {
 
       {/* Quick Stats Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 shadow-sm">
+        <div className="bg-surface rounded-xl p-4 border border-border-default dark:border-gray-700 shadow-sm">
           <div className="flex items-center justify-between mb-2">
             <div className="text-xs text-gray-500 dark:text-gray-400">
               Verified Users
@@ -546,7 +546,7 @@ export default function AdminDashboard() {
             {dashboardData.users.verified_count}
           </div>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 shadow-sm">
+        <div className="bg-surface rounded-xl p-4 border border-border-default dark:border-gray-700 shadow-sm">
           <div className="flex items-center justify-between mb-2">
             <div className="text-xs text-gray-500 dark:text-gray-400">
               Approved This Month
@@ -559,7 +559,7 @@ export default function AdminDashboard() {
             {dashboardData.approvals.approved_this_month}
           </div>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 shadow-sm">
+        <div className="bg-surface rounded-xl p-4 border border-border-default dark:border-gray-700 shadow-sm">
           <div className="flex items-center justify-between mb-2">
             <div className="text-xs text-gray-500 dark:text-gray-400">
               New This Week
@@ -572,7 +572,7 @@ export default function AdminDashboard() {
             {dashboardData.activity.new_registrations_this_week}
           </div>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 shadow-sm">
+        <div className="bg-surface rounded-xl p-4 border border-border-default dark:border-gray-700 shadow-sm">
           <div className="flex items-center justify-between mb-2">
             <div className="text-xs text-gray-500 dark:text-gray-400">
               Unread Notifications
@@ -588,7 +588,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Activities Section with Tabs */}
-      <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 border border-gray-100 dark:border-gray-700 shadow-sm">
+      <div className="bg-surface rounded-2xl p-4 sm:p-6 border border-border-default dark:border-gray-700 shadow-sm">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0 mb-6">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">

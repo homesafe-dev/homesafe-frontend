@@ -10,7 +10,7 @@ export default function CoreValues() {
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
+          <div className="bg-white rounded-lg shadow-sm border border-border-default p-6 hover:shadow-md transition-shadow">
             <div className="flex mb-4">
               <div className="w-12 sm:w-16 h-12 sm:h-16 flex items-center justify-center">
                 <div className="relative">
@@ -32,7 +32,7 @@ export default function CoreValues() {
             </p>
           </div>
 
-          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
+          <div className="bg-white rounded-lg shadow-sm border border-border-default p-6 hover:shadow-md transition-shadow">
             <div className="flex mb-4">
               <div className="w-12 sm:w-16 h-12 sm:h-16 flex items-center justify-center">
                 <div className="relative">
@@ -54,7 +54,7 @@ export default function CoreValues() {
             </p>
           </div>
 
-          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
+          <div className="bg-white rounded-lg shadow-sm border border-border-default p-6 hover:shadow-md transition-shadow">
             <div className="flex mb-4">
               <div className="w-12 sm:w-16 h-12 sm:h-16 flex items-center justify-center">
                 <div className="relative">

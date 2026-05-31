@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Bell, BellDot, ChevronDown, Menu } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import NotificationsModal from '../../common/NotificationsModal';
@@ -63,6 +63,17 @@ const Header: React.FC<HeaderProps> = ({
     navigate('/login');
   };
 
+  const fetchUnreadCount = useCallback(async () => {
+    try {
+      const response = await notificationApi.getUnreadCount();
+      if (response.status && response.data) {
+        setUnreadCount(response.data.unread_count ?? 0);
+      }
+    } catch (err) {
+      console.error('Error fetching unread count:', err);
+    }
+  }, []);
+
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
@@ -81,23 +92,9 @@ const Header: React.FC<HeaderProps> = ({
       }
     };
 
-    const fetchUnreadCount = async () => {
-      try {
-        const response = await notificationApi.getNotifications();
-        if (response.status && response.data) {
-          const unread = response.data.filter(
-            (notif: any) => !notif.read_at
-          ).length;
-          setUnreadCount(unread);
-        }
-      } catch (err) {
-        console.error('Error fetching notifications:', err);
-      }
-    };
-
     fetchUserProfile();
     fetchUnreadCount();
-  }, []);
+  }, [fetchUnreadCount]);
 
   // Handle click outside dropdown to close it
   useEffect(() => {
@@ -133,7 +130,7 @@ const Header: React.FC<HeaderProps> = ({
     hasUsableAvatarUrl(userProfile?.avatar) && !avatarLoadFailed;
 
   return (
-    <header className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-700">
+    <header className="bg-surface border-b border-border-default">
       <div className="px-3 sm:px-4 lg:px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Left side - Welcome + Environment */}
@@ -143,12 +140,12 @@ const Header: React.FC<HeaderProps> = ({
               <button
                 id="mobile-menu-button"
                 onClick={onMenuToggle}
-                className="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-500 lg:hidden flex-shrink-0"
+                className="p-2 rounded-lg text-content-secondary hover:text-content hover:bg-elevated focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-500 lg:hidden flex-shrink-0"
               >
                 <Menu className="w-5 h-5" />
               </button>
             )}
-            <span className="hidden sm:block text-lg font-semibold text-gray-900 dark:text-gray-100 truncate">
+            <span className="hidden sm:block text-lg font-semibold text-content truncate">
               Welcome, {userName}
             </span>
             <div className="hidden sm:block flex-shrink-0">
@@ -162,7 +159,7 @@ const Header: React.FC<HeaderProps> = ({
 
             {/* Notification bell with badge */}
             <button
-              className="relative p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-full transition-colors"
+              className="relative p-2 text-content-secondary hover:bg-elevated rounded-full transition-colors"
               onClick={() => setIsModalOpen(true)}
             >
               {unreadCount > 0 ? (
@@ -177,7 +174,7 @@ const Header: React.FC<HeaderProps> = ({
 
             {/* User profile with border separator */}
             {userProfile && (
-              <div className="flex items-center gap-3 pl-3 border-l border-gray-200 dark:border-gray-700">
+              <div className="flex items-center gap-3 pl-3 border-l border-border-default">
                 <div className="relative" ref={dropdownRef}>
                   <button
                     className="flex items-center gap-3"
@@ -196,7 +193,7 @@ const Header: React.FC<HeaderProps> = ({
                       )}
                     </div>
                     <div className="text-right hidden sm:block">
-                      <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                      <div className="text-sm font-medium text-content">
                         {fullName}
                       </div>
                     </div>
@@ -205,13 +202,13 @@ const Header: React.FC<HeaderProps> = ({
 
                   {/* Dropdown Menu */}
                   {showDropdown && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-100 dark:border-gray-700 py-1 z-50">
+                    <div className="absolute right-0 mt-2 w-48 bg-surface rounded-lg shadow-lg border border-border-default py-1 z-50">
                       <button
                         onClick={() => {
                           setShowDropdown(false);
                           navigate('/employer/profile');
                         }}
-                        className="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                        className="flex items-center w-full px-4 py-2 text-sm text-content-secondary hover:bg-elevated transition-colors"
                       >
                         <img
                           src={ProfileIcon}
@@ -225,7 +222,7 @@ const Header: React.FC<HeaderProps> = ({
                           setShowDropdown(false);
                           navigate('/employer/security');
                         }}
-                        className="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                        className="flex items-center w-full px-4 py-2 text-sm text-content-secondary hover:bg-elevated transition-colors"
                       >
                         <img
                           src={SecurityIcon}
@@ -239,7 +236,7 @@ const Header: React.FC<HeaderProps> = ({
                           setShowDropdown(false);
                           navigate('/employer/kyc');
                         }}
-                        className="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                        className="flex items-center w-full px-4 py-2 text-sm text-content-secondary hover:bg-elevated transition-colors"
                       >
                         <img src={KycIcon} className="mr-3 w-4 h-4" alt="" />
                         KYC
@@ -249,7 +246,7 @@ const Header: React.FC<HeaderProps> = ({
                           setShowDropdown(false);
                           handleLogout();
                         }}
-                        className="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                        className="flex items-center w-full px-4 py-2 text-sm text-content-secondary hover:bg-elevated transition-colors"
                       >
                         <img
                           src={LogoutIcon}
@@ -270,7 +267,11 @@ const Header: React.FC<HeaderProps> = ({
       {/* Notifications Modal */}
       <NotificationsModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          setIsModalOpen(false);
+          fetchUnreadCount();
+        }}
+        onUnreadCountChange={fetchUnreadCount}
         portalType="employer"
       />
 

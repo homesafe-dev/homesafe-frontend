@@ -1,11 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
-import signupImg1 from '../../../assets/images/signupImg1.png';
-import signupImg2 from '../../../assets/images/signupImg2.png';
-import { useNavigate, Link } from 'react-router-dom';
-import HomesafeLogo from '../../../assets/images/HomesafeLogo.png';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
 import { RegistrationData } from '../../../contexts/types';
 import { IoCloudUploadOutline } from 'react-icons/io5';
+import {
+  AuthSplitPage,
+  AuthHeader,
+  AuthPrimaryButton,
+} from '../shared/AuthLayout';
+import { authTokens } from '../shared/authTokens.ts';
 
 const FacialCapturePage: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -90,12 +93,37 @@ const FacialCapturePage: React.FC = () => {
     }
   };
 
-  const handleSavePicture = async () => {
-    if (!selectedImage) {
-      setErrorMessage('Please upload a profile picture to continue');
-      return;
+  const buildRegistrationFormData = (
+    includeAvatar: boolean
+  ): FormData | null => {
+    if (!registrationData) {
+      return null;
     }
 
+    const formData = new FormData();
+    formData.append('email', registrationData.email);
+    formData.append('password', registrationData.password);
+    formData.append('first_name', registrationData.first_name);
+    formData.append('last_name', registrationData.last_name);
+    formData.append('phone', registrationData.phone);
+    formData.append('address', registrationData.address);
+    formData.append('gender', registrationData.gender);
+
+    const isEmployer = registrationData.is_employer === true;
+    formData.append('is_employer', isEmployer ? '1' : '0');
+
+    if (registrationData.occupation) {
+      formData.append('occupation', registrationData.occupation.toString());
+    }
+
+    if (includeAvatar && selectedImage) {
+      formData.append('avatar', selectedImage);
+    }
+
+    return formData;
+  };
+
+  const finishRegistration = async (includeAvatar: boolean) => {
     if (!registrationData) {
       setErrorMessage(
         'Registration data is missing. Please go back and try again.'
@@ -103,37 +131,15 @@ const FacialCapturePage: React.FC = () => {
       return;
     }
 
+    const formData = buildRegistrationFormData(includeAvatar);
+    if (!formData) {
+      return;
+    }
+
     setIsSubmitting(true);
     setErrorMessage(null);
 
     try {
-      // Create FormData object for file upload
-      const formData = new FormData();
-
-      // Add all registration data fields individually
-      formData.append('email', registrationData.email);
-      formData.append('password', registrationData.password);
-      formData.append('first_name', registrationData.first_name);
-      formData.append('last_name', registrationData.last_name);
-      formData.append('phone', registrationData.phone);
-      formData.append('address', registrationData.address);
-      formData.append('gender', registrationData.gender);
-
-      // For is_employer, we need to send it as a boolean
-      // Let's try a different approach - send it as a numeric value
-      const isEmployer = registrationData.is_employer === true;
-      formData.append('is_employer', isEmployer ? '1' : '0');
-
-      // Add occupation if it exists
-      if (registrationData.occupation) {
-        formData.append('occupation', registrationData.occupation.toString());
-      }
-
-      // Add the image file as 'avatar'
-      formData.append('avatar', selectedImage);
-
-      // Use the AuthContext's completeRegistration function
-      // This ensures the auth state is properly updated
       const response = await auth.completeRegistration(formData);
 
       // Process the response
@@ -184,127 +190,91 @@ const FacialCapturePage: React.FC = () => {
     }
   };
 
+  const handleCompleteRegistration = () => finishRegistration(true);
+  const handleSkipForNow = () => finishRegistration(false);
+
   return (
-    <div className="flex h-screen bg-gray-100">
-      <div className="hidden md:flex md:w-1/2 bg-white relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-1/2">
-          <div className="relative w-full h-full">
-            <img
-              src={signupImg1}
-              alt="Top signup image"
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-[#1D2125D9]" />
-          </div>
-        </div>
+    <AuthSplitPage>
+      <AuthHeader
+        title="Profile picture"
+        subtitle="Add a photo from your device. You can skip for now."
+      />
 
-        <div className="absolute bottom-0 left-0 w-full h-1/2">
-          <div className="relative w-full h-full">
-            <img
-              src={signupImg2}
-              alt="Bottom signup image"
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-[#1D2125D9]" />
-          </div>
-        </div>
-
-        <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
-          <div className="mb-8">
-            <Link to="/">
-              <img src={HomesafeLogo} alt="Homesafe Logo" className="" />
-            </Link>
-          </div>
-
-          <div className="max-w-md">
-            <p className="text-center text-[#F4F4F4] text-[24px] font-normal">
-              "Our Mission at Homesafe is to make hiring safe, simple, and
-              efficient for every Living Space, and to create a job search space
-              for Artisans to apply through".
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="w-full md:w-1/2 flex items-center justify-center p-6">
-        <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
-          <div className="text-center mb-6">
-            <h1 className="text-2xl font-semibold text-gray-800">
-              Profile Picture
-            </h1>
-            <p className="text-sm text-gray-600 mt-2">
-              Please upload a profile picture to complete your registration
-            </p>
-          </div>
-
-          <div className="flex flex-col items-center justify-center">
-            <div className="bg-white p-6 rounded-lg drop-shadow-[0_0_10px_rgba(0,0,0,0.15)] w-[344px] flex flex-col justify-center items-center">
-              <div className="w-full flex justify-center mb-4">
-                <div className="w-40 h-40 rounded-full overflow-hidden border border-gray-200 flex items-center justify-center bg-gray-100 relative">
-                  {previewImage ? (
-                    <img
-                      src={previewImage}
-                      alt="Profile picture"
-                      className="absolute inset-0 w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="flex flex-col items-center justify-center text-gray-400">
-                      <IoCloudUploadOutline size={32} />
-                      <span className="text-xs mt-2 text-center">
-                        No image selected
-                      </span>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <input
-                type="file"
-                ref={fileInputRef}
-                className="hidden"
-                accept="image/jpeg,image/jpg,image/png"
-                onChange={handleFileChange}
-              />
-
+      <div className="flex flex-col items-center justify-center">
+        <div className="bg-white p-6 rounded-lg drop-shadow-[0_0_10px_rgba(0,0,0,0.15)] w-[344px] flex flex-col justify-center items-center">
+          <div className="w-full flex justify-center mb-4">
+            <div className="w-40 h-40 rounded-full overflow-hidden border border-gray-200 flex items-center justify-center bg-gray-100 relative">
               {previewImage ? (
-                <div className="flex items-center space-x-2 mb-4 mt-4">
-                  <button
-                    onClick={removeImage}
-                    className="px-4 py-2 border border-gray-300 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
-                    disabled={isSubmitting}
-                  >
-                    Remove Image
-                  </button>
-                </div>
+                <img
+                  src={previewImage}
+                  alt="Profile picture"
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
               ) : (
-                <button
-                  onClick={triggerFileInput}
-                  className="px-4 py-2 bg-green-300 text-black rounded-md hover:bg-green-400 transition-colors text-sm font-medium mb-4 mt-4"
-                >
-                  Upload Picture
-                </button>
-              )}
-              {errorMessage && (
-                <p className="mt-2 text-sm text-red-600 text-center">
-                  {errorMessage}
-                </p>
+                <div className="flex flex-col items-center justify-center text-gray-400">
+                  <IoCloudUploadOutline size={32} />
+                  <span className="text-xs mt-2 text-center">
+                    No image selected
+                  </span>
+                </div>
               )}
             </div>
-
-            <button
-              onClick={handleSavePicture}
-              className="w-full bg-green-500 text-white py-3 px-4 rounded-md hover:bg-green-600 transition-colors mt-8 font-medium text-lg"
-              disabled={isSubmitting || !selectedImage}
-            >
-              {isSubmitting ? 'Processing...' : 'Complete Registration'}
-            </button>
-            <p className="text-xs text-gray-500 text-center mt-2">
-              Click to complete your registration and proceed to your dashboard
-            </p>
           </div>
+
+          <input
+            type="file"
+            ref={fileInputRef}
+            className="hidden"
+            accept="image/jpeg,image/jpg,image/png"
+            onChange={handleFileChange}
+          />
+
+          {previewImage ? (
+            <div className="flex items-center space-x-2 mb-4 mt-4">
+              <button
+                onClick={removeImage}
+                className="px-4 py-2 border border-gray-300 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
+                disabled={isSubmitting}
+              >
+                Remove Image
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={triggerFileInput}
+              className="px-4 py-2 bg-green-300 text-black rounded-md hover:bg-green-400 transition-colors text-sm font-medium mb-4 mt-4"
+            >
+              Upload Picture
+            </button>
+          )}
+          {errorMessage && (
+            <p className="mt-2 text-sm text-red-600 text-center">
+              {errorMessage}
+            </p>
+          )}
+        </div>
+
+        <div className="w-full mt-6 space-y-3">
+          <AuthPrimaryButton
+            type="button"
+            onClick={handleCompleteRegistration}
+            loading={isSubmitting}
+            loadingLabel="Processing..."
+          >
+            Complete registration
+          </AuthPrimaryButton>
+          <button
+            type="button"
+            onClick={handleSkipForNow}
+            disabled={isSubmitting}
+            className="w-full text-sm font-semibold hover:underline disabled:opacity-60"
+            style={{ color: authTokens.primaryDark }}
+          >
+            Skip for now
+          </button>
         </div>
       </div>
-    </div>
+    </AuthSplitPage>
   );
 };
 

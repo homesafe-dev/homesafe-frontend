@@ -284,16 +284,16 @@ const SuggestionsPage: React.FC = () => {
       </div>
 
       {/* Main Content */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100">
+      <div className="bg-surface rounded-lg shadow-sm border border-border-default">
         {/* Search Section */}
-        <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-gray-100">
+        <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-border-default">
           <div className="flex flex-col sm:flex-row gap-4 mb-4">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
                 placeholder="Search by employee name, agent name, email, or reason..."
-                className="w-full pl-10 pr-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
+                className="w-full pl-10 pr-4 py-2.5 border border-border-default rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -330,11 +330,11 @@ const SuggestionsPage: React.FC = () => {
               </p>
             </div>
           ) : (
-            <div className="divide-y divide-gray-100">
+            <div className="divide-y divide-border-default">
               {filteredSuggestions.map((suggestion) => (
                 <div
                   key={suggestion.id}
-                  className="p-4 sm:p-6 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                  className="p-4 sm:p-6 hover:bg-elevated/50 transition-colors"
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div className="flex items-start sm:items-center gap-4 flex-1 min-w-0">
@@ -383,7 +383,7 @@ const SuggestionsPage: React.FC = () => {
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => handleViewDetails(suggestion)}
-                        className="inline-flex items-center gap-2 px-4 py-2 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                        className="inline-flex items-center gap-2 px-4 py-2 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-elevated/50 transition-colors"
                       >
                         <Eye className="w-4 h-4" />
                         View Details
@@ -398,7 +398,7 @@ const SuggestionsPage: React.FC = () => {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-gray-100 px-4 sm:px-6">
+          <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-border-default px-4 sm:px-6">
             <div className="text-sm text-gray-700 dark:text-gray-300">
               Page <span className="font-medium">{currentPage}</span> of{' '}
               <span className="font-medium">{totalPages}</span>
@@ -411,7 +411,7 @@ const SuggestionsPage: React.FC = () => {
                 className={`px-4 py-2 rounded-lg border transition-colors ${
                   currentPage === 1
                     ? 'border-gray-200 dark:border-gray-700 text-gray-300 cursor-not-allowed'
-                    : 'border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                    : 'border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-elevated/50'
                 }`}
               >
                 Previous
@@ -431,7 +431,7 @@ const SuggestionsPage: React.FC = () => {
                         className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
                           currentPage === page
                             ? 'bg-green-600 text-white'
-                            : 'border border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                            : 'border border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-elevated/50'
                         }`}
                       >
                         {page}
@@ -462,7 +462,7 @@ const SuggestionsPage: React.FC = () => {
                 className={`px-4 py-2 rounded-lg border transition-colors ${
                   currentPage === totalPages
                     ? 'border-gray-200 dark:border-gray-700 text-gray-300 cursor-not-allowed'
-                    : 'border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                    : 'border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-elevated/50'
                 }`}
               >
                 Next
@@ -617,7 +617,7 @@ const SuggestionsPage: React.FC = () => {
                 <div className="flex gap-3 pt-4">
                   <button
                     onClick={handleCloseModal}
-                    className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                    className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-elevated/50"
                   >
                     Close
                   </button>
@@ -682,7 +682,7 @@ const SuggestionsPage: React.FC = () => {
                 <button
                   onClick={handleCloseRejectModal}
                   disabled={isProcessing}
-                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 disabled:opacity-50"
+                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-elevated/50 disabled:opacity-50"
                 >
                   Cancel
                 </button>
@@ -721,7 +721,7 @@ const SuggestionsPage: React.FC = () => {
 
             <div className="space-y-6">
               {/* Employee Summary */}
-              <div className="bg-gray-50 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+              <div className="bg-gray-50 border border-border-default rounded-lg p-4">
                 <h3 className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-2">
                   Employee
                 </h3>
@@ -969,7 +969,7 @@ const SuggestionsPage: React.FC = () => {
                 <button
                   onClick={handleCloseAcceptModal}
                   disabled={isProcessing}
-                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 disabled:opacity-50"
+                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-elevated/50 disabled:opacity-50"
                 >
                   Cancel
                 </button>

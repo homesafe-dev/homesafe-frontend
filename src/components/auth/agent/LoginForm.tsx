@@ -1,7 +1,20 @@
+import React from 'react';
+import {
+  AuthSplitPage,
+  AuthHeader,
+  AuthPrimaryButton,
+} from '../shared/AuthLayout';
+
 export default function AgentLoginForm() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900">
-      Agent login
-    </div>
+    <AuthSplitPage>
+      <AuthHeader
+        title="Agent sign in"
+        subtitle="Agent login will be available soon."
+      />
+      <AuthPrimaryButton type="button" disabled>
+        Coming soon
+      </AuthPrimaryButton>
+    </AuthSplitPage>
   );
 }

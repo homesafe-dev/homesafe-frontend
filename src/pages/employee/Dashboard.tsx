@@ -6,6 +6,7 @@ import {
   Briefcase,
   Wallet,
   Eye,
+  EyeOff,
   TrendingUp,
   TrendingDown,
   CheckCircle,
@@ -29,6 +30,10 @@ import {
 import dashboardApi from '../../api/dashboardApi';
 import transactionApi, { Transaction } from '../../api/transactionApi';
 import { useAuth } from '../../contexts/useAuth';
+import {
+  formatNgnCurrency,
+  formatMaskedNgnCurrency,
+} from '../../utils/formatCurrency';
 
 interface EmployeeDashboardData {
   profile: {
@@ -69,6 +74,7 @@ const DashboardContent: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [transactions, setTransactions] = useState<any[]>([]);
+  const [showWalletBalance, setShowWalletBalance] = useState(true);
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -179,8 +185,8 @@ const DashboardContent: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="h-screen flex items-center justify-center bg-gray-50">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500" />
       </div>
     );
   }
@@ -250,8 +256,8 @@ const DashboardContent: React.FC = () => {
 
       {/* Top 3 Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8">
-        {/* Salary Card */}
-        <div className="bg-[#174B35] text-white p-4 sm:p-6 rounded-2xl shadow-lg relative overflow-hidden">
+        {/* Wallet Balance Card — primary (green) */}
+        <div className="bg-gradient-to-br from-[#174B35] to-[#246D51] text-white p-4 sm:p-6 rounded-2xl shadow-lg relative overflow-hidden">
           <div className="absolute top-0 right-0 w-[120px] h-[120px] sm:w-[180px] sm:h-[180px] opacity-10">
             <svg width="100%" height="100%" viewBox="0 0 100 100">
               <line
@@ -280,47 +286,75 @@ const DashboardContent: React.FC = () => {
               />
             </svg>
           </div>
-          <div className="mb-4 sm:mb-6 relative z-10">
-            <p className="text-white/80 text-sm mb-2">Monthly Salary</p>
-            <h2 className="text-xl sm:text-2xl font-semibold">
-              {dashboardData.financial.current_salary
-                ? formatCurrency(dashboardData.financial.current_salary)
-                : '₦ 0.00'}
+          <div className="relative z-10">
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-white/80 text-sm">Wallet Balance</p>
+              <button
+                type="button"
+                onClick={() => setShowWalletBalance(!showWalletBalance)}
+                className="text-white/80 hover:text-white p-1.5 rounded-lg hover:bg-white/10 transition-colors"
+                aria-label="Toggle wallet balance visibility"
+              >
+                {showWalletBalance ? (
+                  <Eye className="w-4 h-4" />
+                ) : (
+                  <EyeOff className="w-4 h-4" />
+                )}
+              </button>
+            </div>
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-4">
+              {showWalletBalance
+                ? dashboardData.financial.wallet_balance
+                  ? formatNgnCurrency(dashboardData.financial.wallet_balance)
+                  : formatNgnCurrency(0)
+                : formatMaskedNgnCurrency(
+                    dashboardData.financial.wallet_balance || 0
+                  )}
             </h2>
-          </div>
-          <div className="flex gap-4 relative z-10">
-            <Link to="/employee/salary">
-              <button className="bg-white dark:bg-gray-800 text-[#246D51] h-[42px] py-2 px-3 sm:px-4 rounded flex items-center gap-2 text-sm">
-                <Eye size={12} />
-                <span className="hidden sm:inline">View Details</span>
-                <span className="sm:hidden">View</span>
+            <Link to="/employee/wallet">
+              <button
+                type="button"
+                className="bg-white text-[#246D51] h-[42px] py-2 px-3 sm:px-4 rounded flex items-center gap-2 text-sm font-medium hover:bg-gray-50 transition-colors"
+              >
+                <Wallet size={14} />
+                <span className="hidden sm:inline">View Wallet</span>
+                <span className="sm:hidden">Wallet</span>
               </button>
             </Link>
           </div>
         </div>
 
-        {/* Wallet Balance Card */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+        {/* Monthly Salary Card */}
+        <div className="bg-surface rounded-2xl p-4 sm:p-6 border border-border-default shadow-sm">
           <div className="flex items-center justify-between mb-3">
             <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
-              Wallet Balance
+              Monthly Salary
             </span>
             <div className="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
-              <Wallet className="w-4 h-4 text-green-600" />
+              <CreditCard className="w-4 h-4 text-green-600" />
             </div>
           </div>
           <div className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-1">
-            {dashboardData.financial.wallet_balance
-              ? formatCurrency(dashboardData.financial.wallet_balance)
-              : '₦ 0.00'}
+            {dashboardData.financial.current_salary
+              ? formatNgnCurrency(dashboardData.financial.current_salary)
+              : formatNgnCurrency(0)}
           </div>
-          <div className="text-xs text-gray-500 dark:text-gray-400">
-            Available balance
+          <div className="text-xs text-gray-500 dark:text-gray-400 mb-4">
+            Payment is automated
           </div>
+          <Link to="/employee/salary">
+            <button
+              type="button"
+              className="text-sm font-medium text-[#246D51] hover:text-[#174B35] flex items-center gap-1"
+            >
+              View salary history
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </Link>
         </div>
 
         {/* Educational Resources Card */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+        <div className="bg-surface rounded-2xl p-4 sm:p-6 border border-border-default shadow-sm">
           <div className="flex items-center justify-between mb-3">
             <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
               Educational Resources
@@ -341,7 +375,7 @@ const DashboardContent: React.FC = () => {
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         {/* Employment Status */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+        <div className="bg-surface rounded-2xl p-4 sm:p-6 border border-border-default shadow-sm">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
               <Briefcase className="w-4 h-4 text-blue-600" />
@@ -387,7 +421,7 @@ const DashboardContent: React.FC = () => {
         </div>
 
         {/* Profile & Performance */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+        <div className="bg-surface rounded-2xl p-4 sm:p-6 border border-border-default shadow-sm">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-8 h-8 bg-purple-50 rounded-lg flex items-center justify-center">
               <User className="w-4 h-4 text-purple-600" />
@@ -514,7 +548,7 @@ const DashboardContent: React.FC = () => {
       {/* Recent Learning Resources */}
       {dashboardData.learning.recent_resources.length > 0 && (
         <div className="mb-8">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+          <div className="bg-surface rounded-2xl p-4 sm:p-6 border border-border-default shadow-sm">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center">
@@ -581,7 +615,7 @@ const DashboardContent: React.FC = () => {
 
       {/* Quick Stats Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 mt-6">
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 sm:p-5 border border-gray-100 shadow-sm">
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 sm:p-5 border border-border-default shadow-sm">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400">
               KYC Status
@@ -604,7 +638,7 @@ const DashboardContent: React.FC = () => {
             )}
           </div>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 sm:p-5 border border-gray-100 shadow-sm">
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 sm:p-5 border border-border-default shadow-sm">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400">
               Active Contracts
@@ -617,7 +651,7 @@ const DashboardContent: React.FC = () => {
             {dashboardData.employment.active_contracts_count}
           </div>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 sm:p-5 border border-gray-100 shadow-sm">
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 sm:p-5 border border-border-default shadow-sm">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400">
               Average Rating
@@ -632,7 +666,7 @@ const DashboardContent: React.FC = () => {
               : '0.0'}
           </div>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 sm:p-5 border border-gray-100 shadow-sm">
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 sm:p-5 border border-border-default shadow-sm">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400">
               Unread Notifications
@@ -649,7 +683,7 @@ const DashboardContent: React.FC = () => {
 
       {/* Transaction History Section */}
       <div className="mt-8">
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+        <div className="bg-surface rounded-2xl p-4 sm:p-6 border border-border-default shadow-sm">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-2 sm:gap-0">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
@@ -669,7 +703,7 @@ const DashboardContent: React.FC = () => {
 
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-100">
+              <thead className="bg-elevated border-b border-border-default">
                 <tr>
                   <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                     Type
@@ -691,12 +725,12 @@ const DashboardContent: React.FC = () => {
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-100">
+              <tbody className="bg-surface divide-y divide-border-default">
                 {transactions.length > 0 ? (
                   transactions.slice(0, 6).map((transaction) => (
                     <tr
                       key={transaction.id}
-                      className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                      className="hover:bg-elevated/50 transition-colors"
                     >
                       <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                         <div className="flex items-center gap-2">

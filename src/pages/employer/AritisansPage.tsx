@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Search, ChevronDown, Users, Star, MapPin } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Search, ChevronDown, Users } from 'lucide-react';
 import artisanApi from '../../api/artisanApi';
-import Avatar from '../../components/common/Avatar';
+import ArtisanCard from '../../components/Employer/ArtisanCard';
 import Toast from '../../components/common/Toast';
 
 interface Occupation {
@@ -42,7 +41,8 @@ interface Artisan {
   profile_description: string | null;
   created_at: string;
   updated_at: string;
-  average_rating: number | null;
+  average_rating: number | string | null;
+  total_reviews?: number | string | null;
   is_employed: boolean;
   occupations: Occupation[];
   reviews: Review[];
@@ -110,12 +110,8 @@ const ArtisansPage: React.FC = () => {
           itemsPerPage
         );
 
-        console.log('Artisans API Response:', response); // Debug log
-
         if (response.status && response.data) {
-          // Handle the new paginated response structure
           const artisanData = response.data?.data || response.data || [];
-          console.log('Extracted artisan data:', artisanData); // Debug log
 
           setArtisans(artisanData);
           setTotalPages(response.data?.last_page || 1);
@@ -151,21 +147,6 @@ const ArtisansPage: React.FC = () => {
     fetchArtisans();
   }, [currentPage, itemsPerPage]);
 
-  const renderStars = (rating: number) => {
-    const stars = [];
-    for (let i = 1; i <= 5; i++) {
-      stars.push(
-        <span
-          key={i}
-          className={`text-yellow-400 text-lg ${i <= rating ? 'opacity-100' : 'opacity-30'}`}
-        >
-          ★
-        </span>
-      );
-    }
-    return stars;
-  };
-
   // Function to extract location from address
   const extractLocation = (address: string | null): string | null => {
     if (!address) return null;
@@ -179,64 +160,6 @@ const ArtisansPage: React.FC = () => {
     // If no comma, return first few words
     const words = address.split(' ');
     return words.slice(0, 2).join(' ');
-  };
-
-  // Calculate age from date of birth
-  const getAge = (dob: string | null): string | null => {
-    if (!dob) return null;
-
-    const birthDate = new Date(dob);
-    const today = new Date();
-
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const monthDifference = today.getMonth() - birthDate.getMonth();
-
-    if (
-      monthDifference < 0 ||
-      (monthDifference === 0 && today.getDate() < birthDate.getDate())
-    ) {
-      age--;
-    }
-
-    return `${age} yrs old`;
-  };
-
-  // Format location and age display
-  const getLocationAgeDisplay = (
-    address: string | null,
-    dob: string | null
-  ): string => {
-    const location = extractLocation(address);
-    const age = getAge(dob);
-
-    if (location && age) {
-      return `${location} | ${age}`;
-    } else if (location) {
-      return location;
-    } else if (age) {
-      return age;
-    }
-
-    return '';
-  };
-
-  // Get occupation name or default to "Professional"
-  const getOccupation = (artisan: Artisan): string => {
-    if (artisan.occupations && artisan.occupations.length > 0) {
-      return (
-        artisan.occupations[0].name.charAt(0).toUpperCase() +
-        artisan.occupations[0].name.slice(1)
-      );
-    }
-    return 'Professional';
-  };
-
-  // Get rating or default to 0
-  const getRating = (artisan: Artisan): number => {
-    const rating = artisan.average_rating;
-    if (rating === null || rating === undefined) return 0;
-    const numRating = typeof rating === 'string' ? parseFloat(rating) : rating;
-    return isNaN(numRating) ? 0 : numRating;
   };
 
   // Get salary filter label
@@ -325,9 +248,9 @@ const ArtisansPage: React.FC = () => {
       </div>
 
       {/* Main Content */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100">
+      <div className="bg-surface rounded-lg shadow-sm border border-border-default">
         {/* Search and Filters Section */}
-        <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-gray-100">
+        <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-border-default">
           <div className="flex flex-col sm:flex-row gap-4 mb-4">
             {/* Search Input */}
             <div className="flex-1 relative">
@@ -335,7 +258,7 @@ const ArtisansPage: React.FC = () => {
               <input
                 type="text"
                 placeholder="Search by name, occupation or location..."
-                className="w-full pl-10 pr-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
+                className="w-full pl-10 pr-4 py-2.5 border border-border-default rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -348,7 +271,7 @@ const ArtisansPage: React.FC = () => {
                   setShowSalaryDropdown(!showSalaryDropdown);
                   setShowJobTypeDropdown(false);
                 }}
-                className="flex items-center gap-2 px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 min-w-[160px] justify-between"
+                className="flex items-center gap-2 px-4 py-2.5 border border-border-default rounded-lg text-sm text-gray-700 dark:text-gray-300 hover:bg-elevated/50 min-w-[160px] justify-between"
               >
                 <span className="truncate">
                   {salaryFilter
@@ -360,13 +283,13 @@ const ArtisansPage: React.FC = () => {
                 />
               </button>
               {showSalaryDropdown && (
-                <div className="absolute top-full left-0 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-10">
+                <div className="absolute top-full left-0 mt-1 w-full bg-white dark:bg-gray-800 border border-border-default rounded-lg shadow-lg z-10">
                   <button
                     onClick={() => {
                       setSalaryFilter('');
                       setShowSalaryDropdown(false);
                     }}
-                    className="w-full px-3 sm:px-4 py-2 text-left text-xs sm:text-sm hover:bg-gray-50 dark:hover:bg-gray-700/50 first:rounded-t-lg"
+                    className="w-full px-3 sm:px-4 py-2 text-left text-xs sm:text-sm hover:bg-elevated/50 first:rounded-t-lg"
                   >
                     All Salaries
                   </button>
@@ -375,7 +298,7 @@ const ArtisansPage: React.FC = () => {
                       setSalaryFilter('under-50k');
                       setShowSalaryDropdown(false);
                     }}
-                    className="w-full px-3 sm:px-4 py-2 text-left text-xs sm:text-sm hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                    className="w-full px-3 sm:px-4 py-2 text-left text-xs sm:text-sm hover:bg-elevated/50"
                   >
                     Under ₦50,000
                   </button>
@@ -384,7 +307,7 @@ const ArtisansPage: React.FC = () => {
                       setSalaryFilter('50k-100k');
                       setShowSalaryDropdown(false);
                     }}
-                    className="w-full px-3 sm:px-4 py-2 text-left text-xs sm:text-sm hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                    className="w-full px-3 sm:px-4 py-2 text-left text-xs sm:text-sm hover:bg-elevated/50"
                   >
                     ₦50,000 - ₦100,000
                   </button>
@@ -393,7 +316,7 @@ const ArtisansPage: React.FC = () => {
                       setSalaryFilter('100k-200k');
                       setShowSalaryDropdown(false);
                     }}
-                    className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                    className="w-full px-4 py-2 text-left text-sm hover:bg-elevated/50"
                   >
                     ₦100,000 - ₦200,000
                   </button>
@@ -402,7 +325,7 @@ const ArtisansPage: React.FC = () => {
                       setSalaryFilter('over-200k');
                       setShowSalaryDropdown(false);
                     }}
-                    className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-700/50 last:rounded-b-lg"
+                    className="w-full px-4 py-2 text-left text-sm hover:bg-elevated/50 last:rounded-b-lg"
                   >
                     Over ₦200,000
                   </button>
@@ -417,7 +340,7 @@ const ArtisansPage: React.FC = () => {
                   setShowJobTypeDropdown(!showJobTypeDropdown);
                   setShowSalaryDropdown(false);
                 }}
-                className="flex items-center gap-2 px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 min-w-[160px] justify-between"
+                className="flex items-center gap-2 px-4 py-2.5 border border-border-default rounded-lg text-sm text-gray-700 dark:text-gray-300 hover:bg-elevated/50 min-w-[160px] justify-between"
               >
                 <span className="truncate">
                   {jobTypeFilter || 'Filter by Job Type'}
@@ -427,13 +350,13 @@ const ArtisansPage: React.FC = () => {
                 />
               </button>
               {showJobTypeDropdown && (
-                <div className="absolute top-full left-0 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto">
+                <div className="absolute top-full left-0 mt-1 w-full bg-white dark:bg-gray-800 border border-border-default rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto">
                   <button
                     onClick={() => {
                       setJobTypeFilter('');
                       setShowJobTypeDropdown(false);
                     }}
-                    className="w-full px-3 sm:px-4 py-2 text-left text-xs sm:text-sm hover:bg-gray-50 dark:hover:bg-gray-700/50 first:rounded-t-lg"
+                    className="w-full px-3 sm:px-4 py-2 text-left text-xs sm:text-sm hover:bg-elevated/50 first:rounded-t-lg"
                   >
                     All Job Types
                   </button>
@@ -444,7 +367,7 @@ const ArtisansPage: React.FC = () => {
                         setJobTypeFilter(jobType);
                         setShowJobTypeDropdown(false);
                       }}
-                      className="w-full px-3 sm:px-4 py-2 text-left text-xs sm:text-sm hover:bg-gray-50 dark:hover:bg-gray-700/50 last:rounded-b-lg"
+                      className="w-full px-3 sm:px-4 py-2 text-left text-xs sm:text-sm hover:bg-elevated/50 last:rounded-b-lg"
                     >
                       {jobType}
                     </button>
@@ -479,91 +402,16 @@ const ArtisansPage: React.FC = () => {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid gap-4 [grid-template-columns:repeat(auto-fill,minmax(260px,300px))]">
               {filteredArtisans.map((artisan) => (
-                <div
-                  key={artisan.id}
-                  className={`bg-white dark:bg-gray-800 rounded-lg border border-gray-100 shadow-sm p-6 relative transition-all hover:shadow-md ${
-                    artisan.is_employed ? 'opacity-60' : ''
-                  }`}
-                >
-                  {/* Hired Badge */}
-                  {artisan.is_employed && (
-                    <div className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-xs font-medium">
-                      HIRED
-                    </div>
-                  )}
-
-                  {/* Verified Badge */}
-                  {artisan.status === 1 && (
-                    <div className="absolute top-4 right-4 bg-green-50 text-green-600 px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
-                      <Star className="w-3 h-3 fill-current" />
-                      Verified
-                    </div>
-                  )}
-
-                  <div className="flex flex-col items-center mb-4">
-                    <Avatar
-                      src={artisan.avatar}
-                      firstName={artisan.first_name}
-                      lastName={artisan.last_name}
-                      size="lg"
-                      showStatus={false}
-                      isOnline={artisan.status === 1}
-                    />
-                  </div>
-
-                  <h3 className="font-semibold text-center text-lg text-gray-900 dark:text-gray-100 mb-2">
-                    {artisan.first_name} {artisan.last_name}
-                  </h3>
-
-                  {getLocationAgeDisplay(artisan.address, artisan.dob) && (
-                    <div className="flex items-center justify-center gap-1 text-sm text-gray-500 dark:text-gray-400 mb-3">
-                      <MapPin className="w-4 h-4" />
-                      <span>
-                        {getLocationAgeDisplay(artisan.address, artisan.dob)}
-                      </span>
-                    </div>
-                  )}
-
-                  <div className="flex items-center justify-center mb-3">
-                    <span className="bg-green-50 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
-                      {getOccupation(artisan)}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-center gap-1 mb-4">
-                    {renderStars(getRating(artisan))}
-                    {getRating(artisan) > 0 && (
-                      <span className="text-sm text-gray-600 dark:text-gray-400 ml-1">
-                        ({getRating(artisan).toFixed(1)})
-                      </span>
-                    )}
-                  </div>
-
-                  <Link
-                    to={`/employer/artisan/profile?id=${artisan.id}`}
-                    className="block"
-                  >
-                    <button
-                      className={`w-full px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                        artisan.is_employed
-                          ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                          : 'bg-green-600 hover:bg-green-700 text-white'
-                      }`}
-                      disabled={artisan.is_employed}
-                    >
-                      View Profile
-                    </button>
-                  </Link>
-                </div>
+                <ArtisanCard key={artisan.id} artisan={artisan} />
               ))}
             </div>
           )}
 
           {/* Pagination */}
           {!loading && !error && totalPages > 1 && (
-            <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-gray-100">
+            <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-border-default">
               <div className="text-sm text-gray-700 dark:text-gray-300">
                 Page <span className="font-medium">{currentPage}</span> of{' '}
                 <span className="font-medium">{totalPages}</span>
@@ -578,7 +426,7 @@ const ArtisansPage: React.FC = () => {
                   className={`px-4 py-2 rounded-lg border transition-colors ${
                     currentPage === 1
                       ? 'border-gray-200 dark:border-gray-700 text-gray-300 cursor-not-allowed'
-                      : 'border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                      : 'border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-elevated/50'
                   }`}
                 >
                   Previous
@@ -598,7 +446,7 @@ const ArtisansPage: React.FC = () => {
                           className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
                             currentPage === page
                               ? 'bg-green-600 text-white'
-                              : 'border border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                              : 'border border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-elevated/50'
                           }`}
                         >
                           {page}
@@ -629,7 +477,7 @@ const ArtisansPage: React.FC = () => {
                   className={`px-4 py-2 rounded-lg border transition-colors ${
                     currentPage === totalPages
                       ? 'border-gray-200 dark:border-gray-700 text-gray-300 cursor-not-allowed'
-                      : 'border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                      : 'border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-elevated/50'
                   }`}
                 >
                   Next

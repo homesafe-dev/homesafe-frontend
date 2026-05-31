@@ -168,7 +168,7 @@ const StaffProfile: React.FC = () => {
   if (!employee) {
     return (
       <div className="p-0">
-        <div className="bg-gray-50 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 px-4 py-3 rounded-lg text-center">
+        <div className="bg-gray-50 border border-border-default text-gray-600 dark:text-gray-400 px-4 py-3 rounded-lg text-center">
           Employee not found
         </div>
       </div>
@@ -217,7 +217,7 @@ const StaffProfile: React.FC = () => {
       <div className="flex flex-col lg:flex-row gap-6">
         {/* Left panel - Profile About */}
         <div className="w-full lg:w-1/3">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
+          <div className="bg-surface rounded-2xl shadow-sm border border-border-default p-4 sm:p-6">
             <StaffProfileAbout
               name={`${employee.first_name} ${employee.last_name}`}
               location={extractLocation(employee.address)}
@@ -244,15 +244,15 @@ const StaffProfile: React.FC = () => {
 
         {/* Right panel - Tabs */}
         <div className="w-full lg:w-2/3">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100">
+          <div className="bg-surface rounded-2xl shadow-sm border border-border-default">
             {/* Tabs */}
-            <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-gray-100">
+            <div className="px-4 sm:px-6 pt-6 pb-4 border-b border-border-default">
               <div className="flex flex-wrap gap-2">
                 <button
                   className={`px-4 py-2.5 text-sm font-medium rounded-lg transition-colors flex items-center gap-2 ${
                     activeTab === 'medical'
                       ? 'bg-green-50 text-green-700 border border-green-200'
-                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-gray-100 hover:bg-elevated/50'
                   }`}
                   onClick={() => setActiveTab('medical')}
                 >
@@ -263,7 +263,7 @@ const StaffProfile: React.FC = () => {
                   className={`px-4 py-2.5 text-sm font-medium rounded-lg transition-colors flex items-center gap-2 ${
                     activeTab === 'educational'
                       ? 'bg-green-50 text-green-700 border border-green-200'
-                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-gray-100 hover:bg-elevated/50'
                   }`}
                   onClick={() => setActiveTab('educational')}
                 >
@@ -274,7 +274,7 @@ const StaffProfile: React.FC = () => {
                   className={`px-4 py-2.5 text-sm font-medium rounded-lg transition-colors flex items-center gap-2 ${
                     activeTab === 'reviews'
                       ? 'bg-green-50 text-green-700 border border-green-200'
-                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-gray-100 hover:bg-elevated/50'
                   }`}
                   onClick={() => setActiveTab('reviews')}
                 >

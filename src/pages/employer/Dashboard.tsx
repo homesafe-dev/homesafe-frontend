@@ -31,6 +31,7 @@ import {
 import dashboardApi from '../../api/dashboardApi';
 import transactionApi, { Transaction } from '../../api/transactionApi';
 import { useAuth } from '../../contexts/useAuth';
+import { useChartTheme } from '../../utils/chartTheme';
 
 interface EmployerDashboardData {
   employees: {
@@ -84,6 +85,7 @@ interface LocalTransaction extends Omit<Transaction, 'amount' | 'user'> {
 const DashboardContent: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const chartTheme = useChartTheme();
   const [dashboardData, setDashboardData] =
     useState<EmployerDashboardData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -225,8 +227,8 @@ const DashboardContent: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="h-screen flex items-center justify-center bg-gray-50">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500" />
       </div>
     );
   }
@@ -282,43 +284,20 @@ const DashboardContent: React.FC = () => {
     },
   ];
 
-  const isDarkMode =
-    typeof document !== 'undefined' &&
-    document.documentElement.classList.contains('dark');
-  const chartTooltipContentStyle = {
-    backgroundColor: isDarkMode ? '#111827' : '#ffffff',
-    border: `1px solid ${isDarkMode ? '#374151' : '#e5e7eb'}`,
-    borderRadius: '12px',
-    fontSize: '12px',
-    color: isDarkMode ? '#e5e7eb' : '#111827',
-    boxShadow: isDarkMode
-      ? '0 10px 15px -3px rgb(0 0 0 / 0.35)'
-      : '0 4px 6px -1px rgb(0 0 0 / 0.1)',
-  };
-  const chartTooltipLabelStyle = {
-    color: isDarkMode ? '#e5e7eb' : '#111827',
-  };
-  const chartTooltipItemStyle = {
-    color: isDarkMode ? '#e5e7eb' : '#111827',
-  };
-  const chartTooltipCursor = {
-    fill: isDarkMode ? 'rgba(148, 163, 184, 0.14)' : 'rgba(59, 130, 246, 0.08)',
-  };
-
   return (
-    <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
+    <div>
       {/* Welcome Section */}
       <div className="mb-6">
         <div className="flex justify-between items-start mb-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+            <h1 className="text-2xl sm:text-3xl font-bold text-content mb-2">
               Welcome Back, {user?.name || 'User'}
             </h1>
-            <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400">
+            <p className="text-sm sm:text-base text-content-muted">
               Employer Dashboard Overview
             </p>
           </div>
-          <div className="bg-[#EFAE73] text-gray-900 dark:text-gray-100 h-[42px] w-full sm:w-[165px] flex justify-center items-center px-4 py-1 rounded-full text-sm">
+          <div className="bg-[#EFAE73] text-content h-[42px] w-full sm:w-[165px] flex justify-center items-center px-4 py-1 rounded-full text-sm">
             Ruby Subscription
           </div>
         </div>
@@ -364,13 +343,13 @@ const DashboardContent: React.FC = () => {
           </div>
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 relative z-10">
             <Link to="/employer/wallet/top-up">
-              <button className="bg-white dark:bg-gray-800 hover:bg-green-600 text-[#246D51] h-[42px] w-full sm:w-auto py-2 px-4 rounded flex items-center justify-center gap-2 text-sm cursor-pointer">
+              <button className="bg-white hover:bg-white/90 text-[#174B35] h-[42px] w-full sm:w-auto py-2 px-4 rounded flex items-center justify-center gap-2 text-sm font-medium cursor-pointer shadow-sm transition-colors">
                 <TrendingUp size={12} />
                 Top-up
               </button>
             </Link>
             <Link to="/employer/wallet">
-              <button className="bg-white dark:bg-gray-800 text-green-800 h-[42px] w-full sm:w-auto py-2 px-4 rounded flex items-center justify-center gap-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer">
+              <button className="bg-white/15 hover:bg-white/25 text-white border border-white/40 h-[42px] w-full sm:w-auto py-2 px-4 rounded flex items-center justify-center gap-2 text-sm font-medium transition-colors">
                 <Wallet size={12} />
                 Withdraw
               </button>
@@ -379,75 +358,71 @@ const DashboardContent: React.FC = () => {
         </div>
 
         {/* Staff Count Card */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+        <div className="bg-surface rounded-2xl p-4 sm:p-6 border border-border-default shadow-sm">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+            <span className="text-sm font-medium text-content-secondary">
               Total Staff
             </span>
-            <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-blue-50 dark:bg-blue-500/20 rounded-lg flex items-center justify-center">
               <Users className="w-4 h-4 text-blue-600" />
             </div>
           </div>
-          <div className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-1">
+          <div className="text-2xl font-bold text-content mb-1">
             {dashboardData.employees.total_count}
           </div>
-          <div className="text-xs text-gray-500 dark:text-gray-400">
+          <div className="text-xs text-content-muted">
             {dashboardData.employees.active_count} active
           </div>
         </div>
 
         {/* Active Contracts Card */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+        <div className="bg-surface rounded-2xl p-4 sm:p-6 border border-border-default shadow-sm">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+            <span className="text-sm font-medium text-content-secondary">
               Active Contracts
             </span>
-            <div className="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-green-50 dark:bg-green-500/20 rounded-lg flex items-center justify-center">
               <Briefcase className="w-4 h-4 text-green-600" />
             </div>
           </div>
-          <div className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-1">
+          <div className="text-2xl font-bold text-content mb-1">
             {dashboardData.contracts.active_count}
           </div>
-          <div className="text-xs text-gray-500 dark:text-gray-400">
+          <div className="text-xs text-content-muted">
             {dashboardData.contracts.pending_proposals_count} pending
           </div>
         </div>
 
         {/* Total Payroll Card */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+        <div className="bg-surface rounded-2xl p-4 sm:p-6 border border-border-default shadow-sm">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+            <span className="text-sm font-medium text-content-secondary">
               Monthly Payroll
             </span>
-            <div className="w-8 h-8 bg-purple-50 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-purple-50 dark:bg-purple-500/20 rounded-lg flex items-center justify-center">
               <DollarSign className="w-4 h-4 text-purple-600" />
             </div>
           </div>
-          <div className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-1">
+          <div className="text-2xl font-bold text-content mb-1">
             {formatCurrency(dashboardData.payroll.this_month_total)}
           </div>
-          <div className="text-xs text-gray-500 dark:text-gray-400">
-            This month
-          </div>
+          <div className="text-xs text-content-muted">This month</div>
         </div>
       </div>
 
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         {/* Contract Status */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+        <div className="bg-surface rounded-2xl p-4 sm:p-6 border border-border-default shadow-sm">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-blue-50 dark:bg-blue-500/20 rounded-lg flex items-center justify-center">
               <Briefcase className="w-4 h-4 text-blue-600" />
             </div>
             <div>
-              <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100">
+              <h2 className="text-base font-semibold text-content">
                 Contract Status
               </h2>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                By status
-              </p>
+              <p className="text-xs text-content-muted mt-0.5">By status</p>
             </div>
           </div>
           <ResponsiveContainer width="100%" height={280}>
@@ -467,31 +442,31 @@ const DashboardContent: React.FC = () => {
                 ))}
               </Pie>
               <Tooltip
-                contentStyle={chartTooltipContentStyle}
-                labelStyle={chartTooltipLabelStyle}
-                itemStyle={chartTooltipItemStyle}
-                cursor={chartTooltipCursor}
+                contentStyle={chartTheme.tooltip.contentStyle}
+                labelStyle={chartTheme.tooltip.labelStyle}
+                itemStyle={chartTheme.tooltip.itemStyle}
+                cursor={chartTheme.tooltip.cursor}
               />
               <Legend
                 verticalAlign="bottom"
                 height={36}
-                wrapperStyle={{ fontSize: '11px' }}
+                wrapperStyle={chartTheme.legend.wrapperStyle}
               />
             </PieChart>
           </ResponsiveContainer>
         </div>
 
         {/* Employee Status */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+        <div className="bg-surface rounded-2xl p-4 sm:p-6 border border-border-default shadow-sm">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-green-50 dark:bg-green-500/20 rounded-lg flex items-center justify-center">
               <Users className="w-4 h-4 text-green-600" />
             </div>
             <div>
-              <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100">
+              <h2 className="text-base font-semibold text-content">
                 Employee Status
               </h2>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+              <p className="text-xs text-content-muted mt-0.5">
                 Active vs Inactive
               </p>
             </div>
@@ -500,27 +475,29 @@ const DashboardContent: React.FC = () => {
             <BarChart data={employeeStatusData}>
               <CartesianGrid
                 strokeDasharray="3 3"
-                stroke="#f3f4f6"
+                stroke={chartTheme.gridColor}
                 vertical={false}
               />
               <XAxis
                 dataKey="name"
-                stroke="#9ca3af"
+                stroke={chartTheme.axisColor}
+                tick={{ fill: chartTheme.axisColor }}
                 style={{ fontSize: '11px' }}
                 axisLine={false}
                 tickLine={false}
               />
               <YAxis
-                stroke="#9ca3af"
+                stroke={chartTheme.axisColor}
+                tick={{ fill: chartTheme.axisColor }}
                 style={{ fontSize: '11px' }}
                 axisLine={false}
                 tickLine={false}
               />
               <Tooltip
-                contentStyle={chartTooltipContentStyle}
-                labelStyle={chartTooltipLabelStyle}
-                itemStyle={chartTooltipItemStyle}
-                cursor={chartTooltipCursor}
+                contentStyle={chartTheme.tooltip.contentStyle}
+                labelStyle={chartTheme.tooltip.labelStyle}
+                itemStyle={chartTheme.tooltip.itemStyle}
+                cursor={chartTheme.tooltip.cursor}
               />
               <Bar dataKey="value" fill="#3b82f6" radius={[8, 8, 0, 0]}>
                 {employeeStatusData.map((entry, index) => (
@@ -535,13 +512,13 @@ const DashboardContent: React.FC = () => {
       {/* Recent Activities & Transactions */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         {/* Recent Payroll */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+        <div className="bg-surface rounded-2xl p-4 sm:p-6 border border-border-default shadow-sm">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-indigo-50 dark:bg-indigo-500/20 rounded-lg flex items-center justify-center">
                 <FileText className="w-4 h-4 text-indigo-600" />
               </div>
-              <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100">
+              <h2 className="text-base font-semibold text-content">
                 Recent Payroll
               </h2>
             </div>
@@ -559,24 +536,24 @@ const DashboardContent: React.FC = () => {
               .map((payroll: any) => (
                 <div
                   key={payroll.id}
-                  className="flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg transition"
+                  className="flex items-center justify-between p-3 hover:bg-elevated rounded-lg transition"
                 >
                   <div className="flex items-center gap-3 flex-1 min-w-0">
                     <div className="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center flex-shrink-0">
                       <DollarSign className="w-4 h-4 text-green-600" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                      <p className="text-sm font-medium text-content">
                         Payroll #{payroll.id}
                       </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                      <p className="text-xs text-content-muted mt-0.5">
                         {payroll.employees_count || 0} employees •{' '}
                         {formatDate(payroll.payment_date)}
                       </p>
                     </div>
                   </div>
                   <div className="text-right flex-shrink-0 ml-3">
-                    <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                    <p className="text-sm font-semibold text-content">
                       {formatCurrency(payroll.total_amount)}
                     </p>
                     <span
@@ -592,7 +569,7 @@ const DashboardContent: React.FC = () => {
                 </div>
               ))}
             {dashboardData.payroll.recent_payrolls.length === 0 && (
-              <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-4">
+              <p className="text-sm text-content-muted text-center py-4">
                 No recent payroll records
               </p>
             )}
@@ -600,13 +577,13 @@ const DashboardContent: React.FC = () => {
         </div>
 
         {/* Recent Transactions */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+        <div className="bg-surface rounded-2xl p-4 sm:p-6 border border-border-default shadow-sm">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-green-50 dark:bg-green-500/20 rounded-lg flex items-center justify-center">
                 <CreditCard className="w-4 h-4 text-green-600" />
               </div>
-              <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100">
+              <h2 className="text-base font-semibold text-content">
                 Recent Transactions
               </h2>
             </div>
@@ -624,7 +601,7 @@ const DashboardContent: React.FC = () => {
               .map((transaction: any) => (
                 <div
                   key={transaction.id}
-                  className="flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg transition"
+                  className="flex items-center justify-between p-3 hover:bg-elevated rounded-lg transition"
                 >
                   <div className="flex items-center gap-3 flex-1 min-w-0">
                     <div
@@ -641,10 +618,10 @@ const DashboardContent: React.FC = () => {
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
+                      <p className="text-sm font-medium text-content truncate">
                         {transaction.description || transaction.source}
                       </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                      <p className="text-xs text-content-muted mt-0.5">
                         {formatTime(transaction.created_at)}
                       </p>
                     </div>
@@ -664,7 +641,7 @@ const DashboardContent: React.FC = () => {
                 </div>
               ))}
             {dashboardData.financial.recent_transactions.length === 0 && (
-              <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-4">
+              <p className="text-sm text-content-muted text-center py-4">
                 No recent transactions
               </p>
             )}
@@ -674,68 +651,64 @@ const DashboardContent: React.FC = () => {
 
       {/* Quick Stats Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 shadow-sm">
+        <div className="bg-surface rounded-xl p-4 border border-border-default shadow-sm">
           <div className="flex items-center justify-between mb-2">
-            <div className="text-xs text-gray-500 dark:text-gray-400">
+            <div className="text-xs text-content-muted">
               Pending Suggestions
             </div>
             <div className="w-8 h-8 bg-orange-50 rounded-lg flex items-center justify-center">
               <Send className="w-4 h-4 text-orange-600" />
             </div>
           </div>
-          <div className="text-lg font-bold text-gray-900 dark:text-gray-100">
+          <div className="text-lg font-bold text-content">
             {dashboardData.suggestions.pending_count}
           </div>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 shadow-sm">
+        <div className="bg-surface rounded-xl p-4 border border-border-default shadow-sm">
           <div className="flex items-center justify-between mb-2">
-            <div className="text-xs text-gray-500 dark:text-gray-400">
-              Active Advances
-            </div>
-            <div className="w-8 h-8 bg-purple-50 rounded-lg flex items-center justify-center">
+            <div className="text-xs text-content-muted">Active Advances</div>
+            <div className="w-8 h-8 bg-purple-50 dark:bg-purple-500/20 rounded-lg flex items-center justify-center">
               <CalendarSync className="w-4 h-4 text-purple-600" />
             </div>
           </div>
-          <div className="text-lg font-bold text-gray-900 dark:text-gray-100">
+          <div className="text-lg font-bold text-content">
             {dashboardData.payroll.employees_with_active_advances_count}
           </div>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 shadow-sm">
+        <div className="bg-surface rounded-xl p-4 border border-border-default shadow-sm">
           <div className="flex items-center justify-between mb-2">
-            <div className="text-xs text-gray-500 dark:text-gray-400">
-              Average Rating
-            </div>
+            <div className="text-xs text-content-muted">Average Rating</div>
             <div className="w-8 h-8 bg-yellow-50 rounded-lg flex items-center justify-center">
               <Star className="w-4 h-4 text-yellow-600" />
             </div>
           </div>
-          <div className="text-lg font-bold text-gray-900 dark:text-gray-100">
+          <div className="text-lg font-bold text-content">
             {dashboardData.reviews.average_rating.toFixed(1) || '0.0'}
           </div>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 shadow-sm">
+        <div className="bg-surface rounded-xl p-4 border border-border-default shadow-sm">
           <div className="flex items-center justify-between mb-2">
-            <div className="text-xs text-gray-500 dark:text-gray-400">
+            <div className="text-xs text-content-muted">
               Unread Notifications
             </div>
-            <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-blue-50 dark:bg-blue-500/20 rounded-lg flex items-center justify-center">
               <Bell className="w-4 h-4 text-blue-600" />
             </div>
           </div>
-          <div className="text-lg font-bold text-gray-900 dark:text-gray-100">
+          <div className="text-lg font-bold text-content">
             {dashboardData.notifications.unread_count}
           </div>
         </div>
       </div>
 
       {/* Transaction History Table */}
-      <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+      <div className="bg-surface rounded-2xl p-4 sm:p-6 border border-border-default shadow-sm">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-2 sm:gap-0">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-blue-50 dark:bg-blue-500/20 rounded-lg flex items-center justify-center">
               <CreditCard className="w-4 h-4 text-blue-600" />
             </div>
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+            <h2 className="text-lg font-semibold text-content">
               Transaction History
             </h2>
           </div>
@@ -749,36 +722,36 @@ const DashboardContent: React.FC = () => {
 
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-100">
+            <thead className="bg-elevated border-b border-border-default">
               <tr>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-content-secondary uppercase tracking-wider">
                   Type
                 </th>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-content-secondary uppercase tracking-wider">
                   Reference
                 </th>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-content-secondary uppercase tracking-wider">
                   Date
                 </th>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-content-secondary uppercase tracking-wider">
                   Amount
                 </th>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-content-secondary uppercase tracking-wider">
                   Payment Method
                 </th>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-content-secondary uppercase tracking-wider">
                   Status
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-100">
+            <tbody className="bg-surface divide-y divide-border-default">
               {transactions.length > 0 ? (
                 transactions.slice(0, 6).map((transaction) => (
                   <tr
                     key={transaction.id}
-                    className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                    className="hover:bg-elevated transition-colors"
                   >
-                    <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                    <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-content">
                       <div className="flex items-center gap-2">
                         {transaction.type === 'wallet_deposit' ||
                         transaction.type === 'salary_payment' ? (
@@ -791,18 +764,18 @@ const DashboardContent: React.FC = () => {
                         </span>
                       </div>
                     </td>
-                    <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 font-mono">
+                    <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-content font-mono">
                       {transaction.reference_code ||
                         transaction.reference ||
                         'N/A'}
                     </td>
-                    <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                    <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-content">
                       {format(new Date(transaction.created_at), 'MMM dd, yyyy')}
                     </td>
-                    <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900 dark:text-gray-100">
+                    <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-semibold text-content">
                       {formatCurrency(transaction.amount)}
                     </td>
-                    <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                    <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-content">
                       <span className="capitalize">
                         {transaction.payment_method?.replace('_', ' ') || 'N/A'}
                       </span>
@@ -822,15 +795,15 @@ const DashboardContent: React.FC = () => {
                 <tr>
                   <td
                     colSpan={6}
-                    className="px-4 sm:px-6 py-12 text-center text-gray-500 dark:text-gray-400"
+                    className="px-4 sm:px-6 py-12 text-center text-content-muted"
                   >
                     <div className="flex flex-col items-center gap-3">
                       <CreditCard className="w-12 h-12 text-gray-300" />
                       <div>
-                        <p className="font-medium text-gray-900 dark:text-gray-100">
+                        <p className="font-medium text-content">
                           No transactions found
                         </p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                        <p className="text-sm text-content-muted mt-1">
                           Transactions will appear here once they are processed
                         </p>
                       </div>

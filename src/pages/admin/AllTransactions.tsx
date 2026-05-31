@@ -283,7 +283,7 @@ const AllTransactions: React.FC = () => {
 
         {/* Tabs with border around all */}
         <div className="mb-6">
-          <div className="flex flex-col sm:flex-row border border-gray-200 dark:border-gray-700 rounded-md overflow-hidden">
+          <div className="flex flex-col sm:flex-row border border-border-default rounded-md overflow-hidden">
             <button
               className={`px-3 sm:px-4 py-2 text-sm flex-1 ${
                 activeTab === 'top-up'
@@ -424,7 +424,7 @@ const AllTransactions: React.FC = () => {
                             </button>
 
                             {showOptionsFor === transaction.id && (
-                              <div className="absolute right-8 top-10 bg-white dark:bg-gray-800 shadow-lg rounded-md py-2 w-48 z-10 border border-gray-100 dark:border-gray-700">
+                              <div className="absolute right-8 top-10 bg-white dark:bg-gray-800 shadow-lg rounded-md py-2 w-48 z-10 border border-border-default dark:border-gray-700">
                                 <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm">
                                   View Details
                                 </div>

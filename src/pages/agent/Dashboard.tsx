@@ -128,8 +128,8 @@ export default function AgentDashboard() {
 
   if (isLoading) {
     return (
-      <div className="h-screen flex items-center justify-center bg-gray-50">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500" />
       </div>
     );
   }
@@ -204,7 +204,7 @@ export default function AgentDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
+    <div>
       {/* Welcome Section */}
       <div className="mb-6">
         <div className="flex justify-between items-start mb-4">
@@ -225,7 +225,7 @@ export default function AgentDashboard() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6">
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+        <div className="bg-surface rounded-2xl p-4 sm:p-6 border border-border-default shadow-sm">
           <div className="flex items-center justify-between mb-3">
             <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
               Total Candidates
@@ -242,7 +242,7 @@ export default function AgentDashboard() {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+        <div className="bg-surface rounded-2xl p-4 sm:p-6 border border-border-default shadow-sm">
           <div className="flex items-center justify-between mb-3">
             <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
               On Placement
@@ -259,7 +259,7 @@ export default function AgentDashboard() {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+        <div className="bg-surface rounded-2xl p-4 sm:p-6 border border-border-default shadow-sm">
           <div className="flex items-center justify-between mb-3">
             <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
               Terminated
@@ -276,7 +276,7 @@ export default function AgentDashboard() {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+        <div className="bg-surface rounded-2xl p-4 sm:p-6 border border-border-default shadow-sm">
           <div className="flex items-center justify-between mb-3">
             <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
               Wallet Balance
@@ -297,7 +297,7 @@ export default function AgentDashboard() {
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         {/* Placement Status */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+        <div className="bg-surface rounded-2xl p-4 sm:p-6 border border-border-default shadow-sm">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
               <UserCheck className="w-4 h-4 text-green-600" />
@@ -343,7 +343,7 @@ export default function AgentDashboard() {
         </div>
 
         {/* Suggestions Status */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+        <div className="bg-surface rounded-2xl p-4 sm:p-6 border border-border-default shadow-sm">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
               <FileText className="w-4 h-4 text-blue-600" />
@@ -396,7 +396,7 @@ export default function AgentDashboard() {
       {/* Recent Activities & Transactions */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         {/* Recent Registrations */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+        <div className="bg-surface rounded-2xl p-4 sm:p-6 border border-border-default shadow-sm">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center">
@@ -420,7 +420,7 @@ export default function AgentDashboard() {
               .map((registration: any) => (
                 <div
                   key={registration.id}
-                  className="flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg transition"
+                  className="flex items-center justify-between p-3 hover:bg-elevated/50 rounded-lg transition"
                 >
                   <div className="flex items-center gap-3 flex-1 min-w-0">
                     <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
@@ -458,7 +458,7 @@ export default function AgentDashboard() {
         </div>
 
         {/* Recent Transactions */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+        <div className="bg-surface rounded-2xl p-4 sm:p-6 border border-border-default shadow-sm">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
@@ -482,7 +482,7 @@ export default function AgentDashboard() {
               .map((transaction: any) => (
                 <div
                   key={transaction.id}
-                  className="flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg transition"
+                  className="flex items-center justify-between p-3 hover:bg-elevated/50 rounded-lg transition"
                 >
                   <div className="flex items-center gap-3 flex-1 min-w-0">
                     <div
@@ -532,7 +532,7 @@ export default function AgentDashboard() {
 
       {/* Quick Stats Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 shadow-sm">
+        <div className="bg-surface rounded-xl p-4 border border-border-default shadow-sm">
           <div className="flex items-center justify-between mb-2">
             <div className="text-xs text-gray-500 dark:text-gray-400">
               Verified Candidates
@@ -545,7 +545,7 @@ export default function AgentDashboard() {
             {dashboardData.registered_employees.verified_count}
           </div>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 shadow-sm">
+        <div className="bg-surface rounded-xl p-4 border border-border-default shadow-sm">
           <div className="flex items-center justify-between mb-2">
             <div className="text-xs text-gray-500 dark:text-gray-400">
               Total Suggestions
@@ -558,7 +558,7 @@ export default function AgentDashboard() {
             {dashboardData.suggestions.total_count}
           </div>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 shadow-sm">
+        <div className="bg-surface rounded-xl p-4 border border-border-default shadow-sm">
           <div className="flex items-center justify-between mb-2">
             <div className="text-xs text-gray-500 dark:text-gray-400">
               Active Contracts
@@ -571,7 +571,7 @@ export default function AgentDashboard() {
             {dashboardData.contracts.employees_with_active_contracts_count}
           </div>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 shadow-sm">
+        <div className="bg-surface rounded-xl p-4 border border-border-default shadow-sm">
           <div className="flex items-center justify-between mb-2">
             <div className="text-xs text-gray-500 dark:text-gray-400">
               Average Rating
@@ -587,7 +587,7 @@ export default function AgentDashboard() {
       </div>
 
       {/* Candidates Table */}
-      <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+      <div className="bg-surface rounded-2xl p-4 sm:p-6 border border-border-default shadow-sm">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center">
@@ -612,7 +612,7 @@ export default function AgentDashboard() {
 
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-100">
+            <thead className="bg-elevated border-b border-border-default">
               <tr>
                 <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
                   Candidate
@@ -628,7 +628,7 @@ export default function AgentDashboard() {
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-100">
+            <tbody className="bg-surface divide-y divide-border-default">
               {dashboardData.activity.recent_registrations.length === 0 ? (
                 <tr>
                   <td
@@ -654,7 +654,7 @@ export default function AgentDashboard() {
                   .map((registration: any) => (
                     <tr
                       key={registration.id}
-                      className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                      className="hover:bg-elevated/50 transition-colors"
                     >
                       <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
                         {registration.name || 'N/A'}

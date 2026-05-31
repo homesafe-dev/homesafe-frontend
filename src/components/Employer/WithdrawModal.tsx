@@ -155,7 +155,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
               </button>
 
               {isDropdownOpen && (
-                <div className="absolute z-10 mt-1 w-full bg-white dark:bg-gray-800 shadow-lg max-h-60 rounded-md overflow-auto border border-gray-200 dark:border-gray-700">
+                <div className="absolute z-10 mt-1 w-full bg-white dark:bg-gray-800 shadow-lg max-h-60 rounded-md overflow-auto border border-border-default">
                   <ul className="py-1">
                     {banks.map((bank) => (
                       <li

@@ -1,5 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../../api/axiosConfig';
+import {
+  AuthSplitPage,
+  AuthHeader,
+  AuthPrimaryButton,
+} from '../../components/auth/shared/AuthLayout';
+import {
+  authFieldClass,
+  authFieldDisabledClass,
+  authTextareaClass,
+  authLabelClass,
+  authPillInputBorderStyle,
+} from '../../components/auth/shared/authStyles.ts';
+import { authTokens } from '../../components/auth/shared/authTokens.ts';
 
 interface Occupation {
   id: number;
@@ -165,257 +178,319 @@ const GoogleProfileCompletion: React.FC = () => {
     }
   };
 
+  const fieldStyle = authPillInputBorderStyle;
+
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">
-            Complete Your Profile
-          </h1>
-          <p className="mt-2 text-gray-600">
-            Please provide the following information to complete your account
-            setup
-          </p>
+    <AuthSplitPage wide>
+      <AuthHeader
+        title="Complete your profile"
+        subtitle="Please provide the following information to complete your account setup."
+      />
+
+      <form onSubmit={handleSubmit} className="space-y-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="space-y-5">
+            <h2
+              className="text-lg font-semibold border-b pb-2"
+              style={{
+                color: authTokens.titleColor,
+                borderColor: authTokens.fieldBorder,
+              }}
+            >
+              Personal Information
+            </h2>
+            <div>
+              <label
+                className={authLabelClass}
+                style={{ color: authTokens.titleColor }}
+              >
+                Title
+              </label>
+              <select
+                name="title"
+                value={formData.title}
+                onChange={handleInputChange}
+                required
+                className={authFieldClass}
+                style={fieldStyle}
+              >
+                <option value="">Select Title</option>
+                <option value="mr">Mr</option>
+                <option value="mrs">Mrs</option>
+                <option value="ms">Ms</option>
+                <option value="dr">Dr</option>
+              </select>
+            </div>
+
+            <div>
+              <label
+                className={authLabelClass}
+                style={{ color: authTokens.titleColor }}
+              >
+                Email Address
+              </label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                disabled
+                className={authFieldDisabledClass}
+                style={fieldStyle}
+              />
+              <p
+                className="text-xs mt-1"
+                style={{ color: authTokens.bodyColor }}
+              >
+                Email from Google account (verified)
+              </p>
+            </div>
+
+            <div>
+              <label
+                className={authLabelClass}
+                style={{ color: authTokens.titleColor }}
+              >
+                First Name
+              </label>
+              <input
+                type="text"
+                name="first_name"
+                value={formData.first_name}
+                disabled
+                className={authFieldDisabledClass}
+                style={fieldStyle}
+              />
+              <p
+                className="text-xs mt-1"
+                style={{ color: authTokens.bodyColor }}
+              >
+                Name from Google account
+              </p>
+            </div>
+
+            <div>
+              <label
+                className={authLabelClass}
+                style={{ color: authTokens.titleColor }}
+              >
+                Last Name
+              </label>
+              <input
+                type="text"
+                name="last_name"
+                value={formData.last_name}
+                disabled
+                className={authFieldDisabledClass}
+                style={fieldStyle}
+              />
+              <p
+                className="text-xs mt-1"
+                style={{ color: authTokens.bodyColor }}
+              >
+                Name from Google account
+              </p>
+            </div>
+
+            <div>
+              <label
+                className={authLabelClass}
+                style={{ color: authTokens.titleColor }}
+              >
+                Phone Number
+              </label>
+              <input
+                type="tel"
+                name="phone"
+                value={formData.phone}
+                onChange={handleInputChange}
+                required
+                className={authFieldClass}
+                style={fieldStyle}
+              />
+            </div>
+
+            <div>
+              <label
+                className={authLabelClass}
+                style={{ color: authTokens.titleColor }}
+              >
+                Address
+              </label>
+              <textarea
+                name="address"
+                value={formData.address}
+                onChange={handleTextareaChange}
+                required
+                rows={3}
+                className={authTextareaClass}
+                style={fieldStyle}
+              />
+            </div>
+
+            <div>
+              <label
+                className={authLabelClass}
+                style={{ color: authTokens.titleColor }}
+              >
+                Gender
+              </label>
+              <select
+                name="gender"
+                value={formData.gender}
+                onChange={handleInputChange}
+                required
+                className={authFieldClass}
+                style={fieldStyle}
+              >
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
+            </div>
+
+            <div>
+              <label
+                className={authLabelClass}
+                style={{ color: authTokens.titleColor }}
+              >
+                Date of Birth (Optional)
+              </label>
+              <input
+                type="date"
+                name="dob"
+                value={formData.dob}
+                onChange={handleInputChange}
+                max={
+                  new Date(
+                    new Date().setFullYear(new Date().getFullYear() - 18)
+                  )
+                    .toISOString()
+                    .split('T')[0]
+                }
+                className={authFieldClass}
+                style={fieldStyle}
+              />
+              <p
+                className="text-xs mt-1"
+                style={{ color: authTokens.bodyColor }}
+              >
+                Must be at least 18 years old
+              </p>
+            </div>
+          </div>
+
+          <div className="space-y-5">
+            <h2
+              className="text-lg font-semibold border-b pb-2"
+              style={{
+                color: authTokens.titleColor,
+                borderColor: authTokens.fieldBorder,
+              }}
+            >
+              Choose Your Role
+            </h2>
+
+            <div className="space-y-4">
+              <div className="flex items-center space-x-3">
+                <input
+                  type="radio"
+                  id="employer"
+                  name="role"
+                  value="employer"
+                  checked={formData.role === 'employer'}
+                  onChange={handleInputChange}
+                  className="h-4 w-4"
+                  style={{ accentColor: authTokens.primaryDark }}
+                />
+                <label
+                  htmlFor="employer"
+                  className="text-base font-medium"
+                  style={{ color: authTokens.titleColor }}
+                >
+                  I am an Employer
+                </label>
+              </div>
+
+              <div className="flex items-center space-x-3">
+                <input
+                  type="radio"
+                  id="employee"
+                  name="role"
+                  value="employee"
+                  checked={formData.role === 'employee'}
+                  onChange={handleInputChange}
+                  className="h-4 w-4"
+                  style={{ accentColor: authTokens.primaryDark }}
+                />
+                <label
+                  htmlFor="employee"
+                  className="text-base font-medium"
+                  style={{ color: authTokens.titleColor }}
+                >
+                  I am an Employee/Artisan
+                </label>
+              </div>
+            </div>
+
+            {formData.role === 'employee' && (
+              <div
+                className="mt-4 p-4 rounded-xl border"
+                style={{
+                  borderColor: authTokens.fieldBorder,
+                  backgroundColor: '#fff',
+                }}
+              >
+                <h3
+                  className="text-base font-semibold mb-4"
+                  style={{ color: authTokens.titleColor }}
+                >
+                  Select Your Occupations
+                </h3>
+                <div className="grid grid-cols-2 gap-3">
+                  {occupations.map((occupation) => (
+                    <label
+                      key={occupation.id}
+                      className="flex items-center space-x-2"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={formData.occupations.includes(occupation.id)}
+                        onChange={() => handleOccupationChange(occupation.id)}
+                        className="h-4 w-4"
+                        style={{ accentColor: authTokens.primaryDark }}
+                      />
+                      <span
+                        className="text-sm"
+                        style={{ color: authTokens.bodyColor }}
+                      >
+                        {occupation.name}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+                {formData.occupations.length === 0 && (
+                  <p className="text-red-500 text-sm mt-2">
+                    Please select at least one occupation
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
         </div>
 
-        <form
-          onSubmit={handleSubmit}
-          className="bg-white shadow-lg rounded-lg p-8"
+        <div
+          className="pt-6 border-t"
+          style={{ borderColor: authTokens.fieldBorder }}
         >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Left Side - Personal Information */}
-            <div className="space-y-6">
-              <h2 className="text-xl font-semibold text-gray-900 border-b pb-2">
-                Personal Information
-              </h2>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Title
-                </label>
-                <select
-                  name="title"
-                  value={formData.title}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                >
-                  <option value="">Select Title</option>
-                  <option value="mr">Mr</option>
-                  <option value="mrs">Mrs</option>
-                  <option value="ms">Ms</option>
-                  <option value="dr">Dr</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  disabled
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-600 cursor-not-allowed"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  Email from Google account (verified)
-                </p>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  First Name
-                </label>
-                <input
-                  type="text"
-                  name="first_name"
-                  value={formData.first_name}
-                  disabled
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-600 cursor-not-allowed"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  Name from Google account
-                </p>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Last Name
-                </label>
-                <input
-                  type="text"
-                  name="last_name"
-                  value={formData.last_name}
-                  disabled
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-600 cursor-not-allowed"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  Name from Google account
-                </p>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Phone Number
-                </label>
-                <input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Address
-                </label>
-                <textarea
-                  name="address"
-                  value={formData.address}
-                  onChange={handleTextareaChange}
-                  required
-                  rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Gender
-                </label>
-                <select
-                  name="gender"
-                  value={formData.gender}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                >
-                  <option value="">Select Gender</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Date of Birth (Optional)
-                </label>
-                <input
-                  type="date"
-                  name="dob"
-                  value={formData.dob}
-                  onChange={handleInputChange}
-                  max={
-                    new Date(
-                      new Date().setFullYear(new Date().getFullYear() - 18)
-                    )
-                      .toISOString()
-                      .split('T')[0]
-                  }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  Must be at least 18 years old
-                </p>
-              </div>
-            </div>
-
-            {/* Right Side - Role Selection */}
-            <div className="space-y-6">
-              <h2 className="text-xl font-semibold text-gray-900 border-b pb-2">
-                Choose Your Role
-              </h2>
-
-              <div className="space-y-4">
-                <div className="flex items-center space-x-3">
-                  <input
-                    type="radio"
-                    id="employer"
-                    name="role"
-                    value="employer"
-                    checked={formData.role === 'employer'}
-                    onChange={handleInputChange}
-                    className="h-4 w-4 text-green-600 focus:ring-green-500"
-                  />
-                  <label
-                    htmlFor="employer"
-                    className="text-lg font-medium text-gray-900"
-                  >
-                    I am an Employer
-                  </label>
-                </div>
-
-                <div className="flex items-center space-x-3">
-                  <input
-                    type="radio"
-                    id="employee"
-                    name="role"
-                    value="employee"
-                    checked={formData.role === 'employee'}
-                    onChange={handleInputChange}
-                    className="h-4 w-4 text-green-600 focus:ring-green-500"
-                  />
-                  <label
-                    htmlFor="employee"
-                    className="text-lg font-medium text-gray-900"
-                  >
-                    I am an Employee/Artisan
-                  </label>
-                </div>
-              </div>
-
-              {/* Occupation Selection for Employees */}
-              {formData.role === 'employee' && (
-                <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">
-                    Select Your Occupations
-                  </h3>
-                  <div className="grid grid-cols-2 gap-3">
-                    {occupations.map((occupation) => (
-                      <label
-                        key={occupation.id}
-                        className="flex items-center space-x-2"
-                      >
-                        <input
-                          type="checkbox"
-                          checked={formData.occupations.includes(occupation.id)}
-                          onChange={() => handleOccupationChange(occupation.id)}
-                          className="h-4 w-4 text-green-600 focus:ring-green-500"
-                        />
-                        <span className="text-sm text-gray-700">
-                          {occupation.name}
-                        </span>
-                      </label>
-                    ))}
-                  </div>
-                  {formData.role === 'employee' &&
-                    formData.occupations.length === 0 && (
-                      <p className="text-red-500 text-sm mt-2">
-                        Please select at least one occupation
-                      </p>
-                    )}
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Submit Button */}
-          <div className="mt-8 pt-6 border-t">
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-green-600 text-white py-3 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? 'Completing Profile...' : 'Complete Profile'}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+          <AuthPrimaryButton
+            loading={loading}
+            loadingLabel="Completing profile..."
+          >
+            Complete Profile
+          </AuthPrimaryButton>
+        </div>
+      </form>
+    </AuthSplitPage>
   );
 };
 

@@ -94,7 +94,7 @@ const AllAdmins: React.FC = () => {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-100 dark:border-gray-700">
+    <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-border-default dark:border-gray-700">
       <div className="mb-6">
         <button
           className="flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100"
@@ -178,7 +178,7 @@ const AllAdmins: React.FC = () => {
                     </button>
 
                     {showOptionsFor === admin.id && (
-                      <div className="absolute right-8 top-10 bg-white dark:bg-gray-800 shadow-lg rounded-md py-2 w-48 z-10 border border-gray-100 dark:border-gray-700">
+                      <div className="absolute right-8 top-10 bg-white dark:bg-gray-800 shadow-lg rounded-md py-2 w-48 z-10 border border-border-default dark:border-gray-700">
                         <div
                           className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                           onClick={() => handleRemoveAdmin(admin.id)}
