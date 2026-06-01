@@ -9,6 +9,7 @@
 node_modules
 dist
 dist-ssr
+dev-dist
 *.local
 
 # testing
@@ -45,3 +46,4 @@ lerna-debug.log*
 next-env.d.ts
 temp_auto_push.bat
 temp_interactive_push.bat
+branch_structure.json
