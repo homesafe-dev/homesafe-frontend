@@ -11,6 +11,7 @@ import SecurityIcon from '../../../assets/icons/security.svg';
 import userApi from '../../../api/userApi';
 import notificationApi from '../../../api/notificationApi';
 import { hasUsableAvatarUrl } from '../../../utils/avatarUrl';
+import { useRealtimeUnreadCount } from '../../../realtime/useRealtimeUnreadCount';
 import Toast from '../../common/Toast';
 
 interface UserProfile {
@@ -76,6 +77,8 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, isMobile = false }) => {
       console.error('Error fetching unread count:', err);
     }
   }, []);
+
+  useRealtimeUnreadCount(setUnreadCount);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
