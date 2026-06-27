@@ -136,10 +136,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (response.status && response.data) {
         // Create user object based on the response data
         const userObj = {
-          id: response.data.id || '1', // Use ID from response if available
-          email: email,
+          id: String(response.data.id ?? ''),
+          email: response.data.email || email,
           name: `${response.data.first_name || ''}`,
-          type: (response.data.role as UserType) || type, // Use provided type as fallback
+          type: (response.data.role as UserType) || type,
         };
 
         // Set user in state
@@ -201,7 +201,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (response.status && response.data) {
         const userObj = {
-          id: response.data.id || '1',
+          id: String(response.data.id ?? ''),
           email: email,
           name: `${response.data.first_name || ''}`,
           type: (response.data.role as UserType) || type,
@@ -319,7 +319,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (response.status && response.data) {
         const userObj = {
-          id: response.data.id || '1',
+          id: String(response.data.id ?? ''),
           email:
             data instanceof FormData
               ? (data.get('email') as string)
@@ -376,7 +376,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (response.status && response.data) {
         // Create user object based on the response data
         const userObj = {
-          id: response.data.id || '1', // Use ID from response if available
+          id: String(response.data.id ?? ''), // Use ID from response if available
           email: response.data.email || '', // Email might be provided in the response
           name: `${response.data.first_name} ${response.data.last_name}`,
           type: response.data.role as UserType, // Convert role to UserType
