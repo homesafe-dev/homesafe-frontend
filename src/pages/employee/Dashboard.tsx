@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   CreditCard,
@@ -34,6 +34,7 @@ import {
   formatNgnCurrency,
   formatMaskedNgnCurrency,
 } from '../../utils/formatCurrency';
+import { useRealtimeWalletBalance } from '../../realtime/useRealtimeWalletBalance';
 
 interface EmployeeDashboardData {
   profile: {
@@ -75,6 +76,22 @@ const DashboardContent: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [transactions, setTransactions] = useState<any[]>([]);
   const [showWalletBalance, setShowWalletBalance] = useState(true);
+
+  const handleWalletBalanceUpdate = useCallback((balance: string) => {
+    setDashboardData((prev) =>
+      prev
+        ? {
+            ...prev,
+            financial: {
+              ...prev.financial,
+              wallet_balance: balance,
+            },
+          }
+        : prev
+    );
+  }, []);
+
+  useRealtimeWalletBalance(handleWalletBalanceUpdate);
 
   useEffect(() => {
     const fetchDashboardData = async () => {
