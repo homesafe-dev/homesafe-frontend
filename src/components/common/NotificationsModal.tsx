@@ -113,6 +113,21 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
     }
   }, [isOpen, fetchNotifications]);
 
+  useEffect(() => {
+    const refresh = () => {
+      if (isOpen) {
+        void fetchNotifications();
+      }
+      onUnreadCountChange?.();
+    };
+
+    window.addEventListener('homesafe:notification-received', refresh);
+
+    return () => {
+      window.removeEventListener('homesafe:notification-received', refresh);
+    };
+  }, [isOpen, fetchNotifications, onUnreadCountChange]);
+
   if (!isOpen) return null;
 
   const unreadInList = notifications.filter((n) => !n.read).length;

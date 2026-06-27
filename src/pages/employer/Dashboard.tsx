@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Users,
@@ -32,6 +32,12 @@ import dashboardApi from '../../api/dashboardApi';
 import transactionApi, { Transaction } from '../../api/transactionApi';
 import { useAuth } from '../../contexts/useAuth';
 import { useChartTheme } from '../../utils/chartTheme';
+import {
+  REALTIME_EVENTS,
+  TransactionCreatedDetail,
+} from '../../realtime/events';
+import { useRealtimeEvent } from '../../realtime/useRealtimeEvent';
+import { useRealtimeWalletBalance } from '../../realtime/useRealtimeWalletBalance';
 
 interface EmployerDashboardData {
   employees: {
@@ -91,6 +97,22 @@ const DashboardContent: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [transactions, setTransactions] = useState<LocalTransaction[]>([]);
+
+  const handleWalletBalanceUpdate = useCallback((balance: string) => {
+    setDashboardData((prev) =>
+      prev
+        ? {
+            ...prev,
+            financial: {
+              ...prev.financial,
+              wallet_balance: balance,
+            },
+          }
+        : prev
+    );
+  }, []);
+
+  useRealtimeWalletBalance(handleWalletBalanceUpdate);
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -188,6 +210,38 @@ const DashboardContent: React.FC = () => {
 
     fetchTransactions();
   }, []);
+
+  useRealtimeEvent<TransactionCreatedDetail>(
+    REALTIME_EVENTS.TRANSACTION_CREATED,
+    useCallback(() => {
+      transactionApi
+        .getTransactions({ limit: 6, page: 1 })
+        .then((response) => {
+          if (!response.status || !response.data) {
+            return;
+          }
+
+          const data = response.data as any;
+          let txData: LocalTransaction[] = [];
+
+          if (data.transactions && Array.isArray(data.transactions)) {
+            txData = data.transactions.map((tx: Transaction) => ({
+              ...tx,
+              reference_code: tx.reference || tx.id?.toString(),
+              amount:
+                typeof tx.amount === 'string'
+                  ? tx.amount
+                  : tx.amount.toString(),
+            }));
+          }
+
+          setTransactions(txData);
+        })
+        .catch((error) => {
+          console.error('Error refreshing transactions:', error);
+        });
+    }, [])
+  );
 
   const formatCurrency = (amount: number | string) => {
     const numAmount = typeof amount === 'string' ? parseFloat(amount) : amount;

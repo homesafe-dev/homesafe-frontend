@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Activity,
@@ -29,6 +29,7 @@ import {
 } from 'recharts';
 import dashboardApi from '../../api/dashboardApi';
 import { useAuth } from '../../contexts/useAuth';
+import { useRealtimeWalletBalance } from '../../realtime/useRealtimeWalletBalance';
 
 interface AgentDashboardData {
   registered_employees: {
@@ -77,6 +78,22 @@ export default function AgentDashboard() {
   );
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const handleWalletBalanceUpdate = useCallback((balance: string) => {
+    setDashboardData((prev) =>
+      prev
+        ? {
+            ...prev,
+            financial: {
+              ...prev.financial,
+              wallet_balance: balance,
+            },
+          }
+        : prev
+    );
+  }, []);
+
+  useRealtimeWalletBalance(handleWalletBalanceUpdate);
 
   useEffect(() => {
     const fetchDashboardData = async () => {
