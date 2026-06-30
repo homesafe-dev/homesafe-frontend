@@ -6,7 +6,7 @@ import HomesafeLogo2 from '../../../assets/images/HomesafeLogo2.svg';
 import BrandMark from '../../../assets/images/logo.svg';
 import GoogleLogo from '../../../assets/images/google_logo.png';
 import AppleLogo from '../../../assets/images/apple_logo.png';
-import { getBackendBaseUrl } from '../../../utils/config';
+import { buildGoogleOAuthUrl } from '../../../utils/googleAuth';
 import { authTokens } from './authTokens';
 
 export const AuthBrandLogo: React.FC<{ size?: number }> = ({ size = 72 }) => {
@@ -222,28 +222,21 @@ type AuthSocialFooterProps = {
   onGoogle?: () => void;
   onApple?: () => void;
   googleHref?: string;
+  googleFlow?: 'login' | 'signup';
 };
 
 export const AuthSocialFooter: React.FC<AuthSocialFooterProps> = ({
   onGoogle,
   onApple,
   googleHref,
+  googleFlow = 'login',
 }) => {
   const handleGoogleClick = () => {
     if (onGoogle) {
       onGoogle();
       return;
     }
-    if (googleHref) {
-      window.location.href = googleHref;
-      return;
-    }
-    const baseUrl = getBackendBaseUrl();
-    const currentOrigin = window.location.origin;
-    const callbackPath = '/auth/google/callback';
-    const redirectUrl = `${currentOrigin}${callbackPath}`;
-    const encodedRedirect = encodeURIComponent(redirectUrl);
-    window.location.href = `${baseUrl}/auth/google/login?redirect_url=${encodedRedirect}`;
+    window.location.href = googleHref ?? buildGoogleOAuthUrl(googleFlow);
   };
 
   return (
