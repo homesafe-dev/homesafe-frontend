@@ -5,6 +5,7 @@ import {
   AuthHeader,
 } from '../../components/auth/shared/AuthLayout';
 import { authTokens } from '../../components/auth/shared/authTokens.ts';
+import { oauthErrorRedirectPath } from '../../utils/googleAuth';
 
 const GoogleAuthCallback: React.FC = () => {
   const [message, setMessage] = React.useState<string>('Completing sign-in...');
@@ -24,11 +25,11 @@ const GoogleAuthCallback: React.FC = () => {
         if (jsonData && jsonData.redirect_url) {
           if (jsonData.status === false && jsonData.error) {
             console.error('OAuth error:', jsonData.error);
-            setMessage(
-              `OAuth error: ${jsonData.error}. Redirecting to login...`
-            );
+            setMessage(`OAuth error: ${jsonData.error}. Redirecting...`);
             setTimeout(() => {
-              window.location.replace('/login');
+              window.location.replace(
+                oauthErrorRedirectPath(String(jsonData.error))
+              );
             }, 2000);
             return;
           }
@@ -52,9 +53,9 @@ const GoogleAuthCallback: React.FC = () => {
 
           if (error) {
             console.error('OAuth error:', error);
-            setMessage(`OAuth error: ${error}. Redirecting to login...`);
+            setMessage(`OAuth error: ${error}. Redirecting...`);
             setTimeout(() => {
-              window.location.replace('/login');
+              window.location.replace(oauthErrorRedirectPath(error));
             }, 2000);
             return;
           }

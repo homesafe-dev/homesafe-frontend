@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import authApi from '../../../api/authApi';
 import { useAuth } from '../../../contexts/AuthContext';
@@ -14,6 +14,7 @@ import {
   authPillInputBorderStyle,
 } from '../shared/authStyles.ts';
 import { authTokens } from '../shared/authTokens.ts';
+import { readOAuthErrorFromSearch } from '../../../utils/googleAuth';
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -36,7 +37,16 @@ const HomesafeSignupPage: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { login, completeTfaLogin, loading } = useAuth();
+
+  useEffect(() => {
+    const oauthError = readOAuthErrorFromSearch(searchParams.toString());
+    if (oauthError) {
+      setErrorMessage(oauthError);
+      setSearchParams({}, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
 
   useEffect(() => {
     const remembered = localStorage.getItem(REMEMBER_ME_KEY) === 'true';
