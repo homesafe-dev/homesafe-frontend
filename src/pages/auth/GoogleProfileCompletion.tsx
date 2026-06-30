@@ -55,13 +55,6 @@ const GoogleProfileCompletion: React.FC = () => {
     const firstName = params.get('first_name');
     const lastName = params.get('last_name');
 
-    console.log('Google Profile Completion - URL Parameters:', {
-      email,
-      firstName,
-      lastName,
-      allParams: Object.fromEntries(params.entries()),
-    });
-
     // Pre-fill form with Google data
     if (email && firstName && lastName) {
       setFormData((prev) => ({
@@ -70,18 +63,6 @@ const GoogleProfileCompletion: React.FC = () => {
         first_name: firstName,
         last_name: lastName,
       }));
-
-      console.log('Google Profile Completion - Form data updated:', {
-        email,
-        first_name: firstName,
-        last_name: lastName,
-      });
-    } else {
-      console.warn('Google Profile Completion - Missing required parameters:', {
-        email: !!email,
-        firstName: !!firstName,
-        lastName: !!lastName,
-      });
     }
 
     // Fetch occupations for employee role
