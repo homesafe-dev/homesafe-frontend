@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
-import { getBackendBaseUrl } from '../../../utils/config';
 import { markOtpSent, OTP_STORAGE_KEYS } from '../../../utils/otpInput';
+import { readOAuthErrorFromSearch } from '../../../utils/googleAuth';
 import {
   AuthSplitPage,
   AuthHeader,
@@ -21,6 +21,15 @@ const SignupPage: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { sendOTP, loading } = useAuth();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    const oauthError = readOAuthErrorFromSearch(searchParams.toString());
+    if (oauthError) {
+      setErrorMessage(oauthError);
+      setSearchParams({}, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -132,9 +141,7 @@ const SignupPage: React.FC = () => {
         </Link>
       </p>
 
-      <AuthSocialFooter
-        googleHref={`${getBackendBaseUrl()}/auth/google/signup`}
-      />
+      <AuthSocialFooter googleFlow="signup" />
     </AuthSplitPage>
   );
 };
