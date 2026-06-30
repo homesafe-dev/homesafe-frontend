@@ -43,14 +43,6 @@ const GoogleAuthCallback: React.FC = () => {
           const googleSignup = params.get('google_signup');
           const profileIncomplete = params.get('profile_incomplete');
 
-          console.log('GoogleAuthCallback - URL Parameters:', {
-            token: !!token,
-            error,
-            googleSignup,
-            profileIncomplete,
-            allParams: Object.fromEntries(params.entries()),
-          });
-
           if (error) {
             console.error('OAuth error:', error);
             setMessage(`OAuth error: ${error}. Redirecting...`);
