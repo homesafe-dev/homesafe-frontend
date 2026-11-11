@@ -24,9 +24,10 @@ const authApi = {
    * @param email - User's email address
    * @returns Promise with the API response
    */
-  sendOTP: async (email: string) => {
+  sendOTP: async (email: string, recaptchaToken?: string) => {
     const response = await axiosInstance.post(AUTH_ENDPOINTS.SEND_OTP, {
       email,
+      ...(recaptchaToken ? { recaptcha_token: recaptchaToken } : {}),
     });
     return response.data;
   },
@@ -117,10 +118,11 @@ const authApi = {
    * @param password - User's password
    * @returns Promise with the API response
    */
-  login: async (email: string, password: string) => {
+  login: async (email: string, password: string, recaptchaToken?: string) => {
     const response = await axiosInstance.post(AUTH_ENDPOINTS.LOGIN, {
       email,
       password,
+      ...(recaptchaToken ? { recaptcha_token: recaptchaToken } : {}),
     });
     return response.data;
   },
@@ -159,9 +161,10 @@ const authApi = {
    * @param email - User's email address
    * @returns Promise with the API response
    */
-  forgotPassword: async (email: string) => {
+  forgotPassword: async (email: string, recaptchaToken?: string) => {
     const response = await axiosInstance.post(AUTH_ENDPOINTS.FORGOT_PASSWORD, {
       email,
+      ...(recaptchaToken ? { recaptcha_token: recaptchaToken } : {}),
     });
     return response.data;
   },

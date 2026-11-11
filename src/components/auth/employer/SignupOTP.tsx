@@ -19,6 +19,7 @@ import {
   authPillInputBorderStyle,
 } from '../shared/authStyles.ts';
 import { authTokens } from '../shared/authTokens.ts';
+import { getRecaptchaToken } from '../../../utils/recaptcha';
 
 const SignupOTPPage: React.FC = () => {
   const [otp, setOtp] = useState<string[]>(new Array(OTP_LENGTH).fill(''));
@@ -109,7 +110,8 @@ const SignupOTPPage: React.FC = () => {
   const handleResetCode = async () => {
     setErrorMessage(null);
     try {
-      const response = await sendOTP(email);
+      const recaptchaToken = await getRecaptchaToken('signup');
+      const response = await sendOTP(email, recaptchaToken);
       if (response.success) {
         setOtp(new Array(OTP_LENGTH).fill(''));
         resetCountdown();
@@ -117,8 +119,12 @@ const SignupOTPPage: React.FC = () => {
       } else {
         setErrorMessage(response.message);
       }
-    } catch {
-      setErrorMessage('Failed to resend OTP. Please try again.');
+    } catch (err) {
+      setErrorMessage(
+        err instanceof Error && err.message.includes('reCAPTCHA')
+          ? 'Unable to verify you are human. Please refresh and try again.'
+          : 'Failed to resend OTP. Please try again.'
+      );
     }
   };
 

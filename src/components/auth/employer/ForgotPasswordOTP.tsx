@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import authApi from '../../../api/authApi';
 import { useOtpCountdown } from '../../../hooks/useOtpCountdown';
+import { getRecaptchaToken } from '../../../utils/recaptcha';
 import {
   OTP_LENGTH,
   OTP_STORAGE_KEYS,
@@ -106,7 +107,8 @@ const ForgotPasswordOTPPage: React.FC = () => {
     setResending(true);
     setError(null);
     try {
-      const response = await authApi.forgotPassword(email);
+      const recaptchaToken = await getRecaptchaToken('forgot_password');
+      const response = await authApi.forgotPassword(email, recaptchaToken);
       if (response.status) {
         setOtp(new Array(OTP_LENGTH).fill(''));
         resetCountdown();
@@ -115,11 +117,17 @@ const ForgotPasswordOTPPage: React.FC = () => {
         setError(response.message || 'Failed to resend OTP. Please try again.');
       }
     } catch (err: unknown) {
-      const axiosErr = err as { response?: { data?: { message?: string } } };
-      setError(
-        axiosErr.response?.data?.message ||
-          'An error occurred. Please try again.'
-      );
+      if (err instanceof Error && err.message.includes('reCAPTCHA')) {
+        setError(
+          'Unable to verify you are human. Please refresh and try again.'
+        );
+      } else {
+        const axiosErr = err as { response?: { data?: { message?: string } } };
+        setError(
+          axiosErr.response?.data?.message ||
+            'An error occurred. Please try again.'
+        );
+      }
     } finally {
       setResending(false);
     }

@@ -15,6 +15,7 @@ import {
 } from '../shared/authStyles.ts';
 import { authTokens } from '../shared/authTokens.ts';
 import { readOAuthErrorFromSearch } from '../../../utils/googleAuth';
+import { getRecaptchaToken } from '../../../utils/recaptcha';
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -90,8 +91,15 @@ const HomesafeSignupPage: React.FC = () => {
         localStorage.removeItem(REMEMBER_EMAIL_KEY);
       }
 
+      const recaptchaToken = await getRecaptchaToken('login');
+
       // Use 'employer' as default type, but the role will come from the response
-      const response = await login(trimmed, password, 'employer');
+      const response = await login(
+        trimmed,
+        password,
+        'employer',
+        recaptchaToken
+      );
 
       if (response.success && response.data) {
         if (response.data.requires_tfa) {
@@ -177,7 +185,11 @@ const HomesafeSignupPage: React.FC = () => {
       }
     } catch (err) {
       console.error('Login error:', err);
-      setErrorMessage('An error occurred during login. Please try again.');
+      const message =
+        err instanceof Error && err.message.includes('reCAPTCHA')
+          ? 'Unable to verify you are human. Please refresh and try again.'
+          : 'An error occurred during login. Please try again.';
+      setErrorMessage(message);
     } finally {
       setIsSubmitting(false);
     }

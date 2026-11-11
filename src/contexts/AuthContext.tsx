@@ -100,13 +100,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (
     email: string,
     password: string,
-    type: UserType
+    type: UserType,
+    recaptchaToken?: string
   ): Promise<OtpResponse> => {
     setLoading(true);
     setError(null);
 
     try {
-      const response = await authApi.login(email, password);
+      const response = await authApi.login(email, password, recaptchaToken);
       setLoading(false);
 
       // Handle TFA challenge without creating an authenticated session yet
@@ -257,12 +258,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return user.type === role;
   };
 
-  const sendOTP = async (email: string): Promise<OtpResponse> => {
+  const sendOTP = async (
+    email: string,
+    recaptchaToken?: string
+  ): Promise<OtpResponse> => {
     setLoading(true);
     setError(null);
 
     try {
-      const response = await authApi.sendOTP(email);
+      const response = await authApi.sendOTP(email, recaptchaToken);
       setLoading(false);
       return {
         success: response.status !== false,

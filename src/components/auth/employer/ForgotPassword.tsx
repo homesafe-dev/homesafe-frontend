@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import authApi from '../../../api/authApi';
 import { markOtpSent, OTP_STORAGE_KEYS } from '../../../utils/otpInput';
+import { getRecaptchaToken } from '../../../utils/recaptcha';
 import {
   AuthSplitPage,
   AuthHeader,
@@ -25,7 +26,8 @@ const ForgotPassword: React.FC = () => {
     setError(null);
 
     try {
-      const response = await authApi.forgotPassword(email);
+      const recaptchaToken = await getRecaptchaToken('forgot_password');
+      const response = await authApi.forgotPassword(email, recaptchaToken);
 
       if (response.status) {
         sessionStorage.setItem('resetEmail', email);
@@ -35,11 +37,17 @@ const ForgotPassword: React.FC = () => {
         setError(response.message || 'Failed to send OTP. Please try again.');
       }
     } catch (err: unknown) {
-      const axiosErr = err as { response?: { data?: { message?: string } } };
-      setError(
-        axiosErr.response?.data?.message ||
-          'An error occurred. Please try again.'
-      );
+      if (err instanceof Error && err.message.includes('reCAPTCHA')) {
+        setError(
+          'Unable to verify you are human. Please refresh and try again.'
+        );
+      } else {
+        const axiosErr = err as { response?: { data?: { message?: string } } };
+        setError(
+          axiosErr.response?.data?.message ||
+            'An error occurred. Please try again.'
+        );
+      }
     } finally {
       setLoading(false);
     }

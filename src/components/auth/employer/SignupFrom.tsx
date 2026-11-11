@@ -3,6 +3,7 @@ import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
 import { markOtpSent, OTP_STORAGE_KEYS } from '../../../utils/otpInput';
 import { readOAuthErrorFromSearch } from '../../../utils/googleAuth';
+import { getRecaptchaToken } from '../../../utils/recaptcha';
 import {
   AuthSplitPage,
   AuthHeader,
@@ -36,7 +37,8 @@ const SignupPage: React.FC = () => {
     setIsSubmitting(true);
     setErrorMessage(null);
     try {
-      const response = await sendOTP(email);
+      const recaptchaToken = await getRecaptchaToken('signup');
+      const response = await sendOTP(email, recaptchaToken);
 
       if (response.success) {
         sessionStorage.setItem('signupEmail', email);
@@ -56,7 +58,11 @@ const SignupPage: React.FC = () => {
       }
     } catch (err) {
       console.error('Error sending OTP:', err);
-      setErrorMessage('An unexpected error occurred. Please try again.');
+      setErrorMessage(
+        err instanceof Error && err.message.includes('reCAPTCHA')
+          ? 'Unable to verify you are human. Please refresh and try again.'
+          : 'An unexpected error occurred. Please try again.'
+      );
     } finally {
       setIsSubmitting(false);
     }

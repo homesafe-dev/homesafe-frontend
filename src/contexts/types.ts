@@ -37,7 +37,8 @@ export interface AuthContextType {
   login: (
     email: string,
     password: string,
-    type: UserType
+    type: UserType,
+    recaptchaToken?: string
   ) => Promise<OtpResponse>;
   completeTfaLogin: (
     email: string,
@@ -48,7 +49,7 @@ export interface AuthContextType {
   logout: () => void;
   isAuthenticated: boolean;
   hasRole: (role: UserType | UserType[]) => boolean;
-  sendOTP: (email: string) => Promise<OtpResponse>;
+  sendOTP: (email: string, recaptchaToken?: string) => Promise<OtpResponse>;
   verifyOTP: (email: string, otp: string) => Promise<OtpResponse>;
   completeRegistration: (
     data: RegistrationData | FormData
