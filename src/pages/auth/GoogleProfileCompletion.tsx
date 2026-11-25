@@ -135,9 +135,12 @@ const GoogleProfileCompletion: React.FC = () => {
     }
 
     try {
+      // One-time token from the Google redirect proves the Google sign-in
+      const profileToken =
+        new URLSearchParams(window.location.search).get('profile_token') ?? '';
       const response = await axiosInstance.post(
         '/auth/google/complete-profile',
-        formData
+        { ...formData, profile_token: profileToken }
       );
 
       if (response.data.status) {
