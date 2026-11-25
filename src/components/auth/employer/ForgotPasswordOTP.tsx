@@ -88,6 +88,7 @@ const ForgotPasswordOTPPage: React.FC = () => {
     try {
       const response = await authApi.verifyForgotPasswordOTP(email, otpString);
       if (response.status) {
+        sessionStorage.setItem('resetToken', response.data?.reset_token ?? '');
         navigate('/reset-password');
       } else {
         setError(response.message || 'Invalid OTP. Please try again.');

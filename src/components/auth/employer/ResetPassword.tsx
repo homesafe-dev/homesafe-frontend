@@ -16,6 +16,7 @@ import { authTokens } from '../shared/authTokens.ts';
 
 const ResetPasswordPage: React.FC = () => {
   const [email, setEmail] = useState<string>('');
+  const [resetToken, setResetToken] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -27,11 +28,13 @@ const ResetPasswordPage: React.FC = () => {
 
   useEffect(() => {
     const storedEmail = sessionStorage.getItem('resetEmail');
-    if (!storedEmail) {
+    const storedToken = sessionStorage.getItem('resetToken');
+    if (!storedEmail || !storedToken) {
       navigate('/signin/forgot-password');
       return;
     }
     setEmail(storedEmail);
+    setResetToken(storedToken);
   }, [navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -47,9 +50,10 @@ const ResetPasswordPage: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await authApi.resetPassword(email, password);
+      const response = await authApi.resetPassword(email, resetToken, password);
       if (response.status) {
         sessionStorage.removeItem('resetEmail');
+        sessionStorage.removeItem('resetToken');
         navigate('/login', {
           state: {
             message:
