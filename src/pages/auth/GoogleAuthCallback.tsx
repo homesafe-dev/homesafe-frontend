@@ -41,6 +41,7 @@ const GoogleAuthCallback: React.FC = () => {
           const token = params.get('token');
           const error = params.get('error');
           const googleSignup = params.get('google_signup');
+          const requiresTfa = params.get('requires_tfa');
           const profileIncomplete = params.get('profile_incomplete');
 
           if (error) {
@@ -49,6 +50,20 @@ const GoogleAuthCallback: React.FC = () => {
             setTimeout(() => {
               window.location.replace(oauthErrorRedirectPath(error));
             }, 2000);
+            return;
+          }
+
+          // 2FA users: hand the code step to the login form (no token issued yet)
+          if (requiresTfa === 'true') {
+            sessionStorage.setItem(
+              'pendingGoogleTfa',
+              JSON.stringify({
+                email: params.get('email') || '',
+                tfaToken: params.get('tfa_token') || '',
+                tfaMethod: params.get('tfa_method') || 'email',
+              })
+            );
+            window.location.replace('/login');
             return;
           }
 
