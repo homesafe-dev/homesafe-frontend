@@ -22,3 +22,6 @@
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
+    # Report-only first: the browser logs what it WOULD block; switch to Content-Security-Policy once clean.
+    # The sha256 is the dark-mode script in index.html; update it if that script changes.
+    Content-Security-Policy-Report-Only = "default-src 'self'; script-src 'self' 'sha256-ebqS75pedqs4YTeggTtBRZE/ibP4/ACiv2neV02eWK8=' https://www.google.com https://www.gstatic.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https://homesafeng.xyz wss://homesafeng.xyz https://www.google.com; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://www.google.com; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"

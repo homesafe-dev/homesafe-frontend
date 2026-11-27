@@ -49,6 +49,29 @@ const HomesafeSignupPage: React.FC = () => {
     }
   }, [searchParams, setSearchParams]);
 
+  // Google sign-in for a 2FA user lands here with the code step pending
+  useEffect(() => {
+    // Kept until verified or Back, so a repeated page load doesn't lose the step
+    const raw = sessionStorage.getItem('pendingGoogleTfa');
+    if (!raw) return;
+    try {
+      const pending = JSON.parse(raw) as {
+        email: string;
+        tfaToken: string;
+        tfaMethod: string;
+      };
+      if (pending.tfaToken && pending.email) {
+        setPendingTfaToken(pending.tfaToken);
+        setPendingTfaEmail(pending.email);
+        setPendingTfaMethod(
+          pending.tfaMethod === 'authenticator' ? 'authenticator' : 'email'
+        );
+      }
+    } catch {
+      // ignore malformed value
+    }
+  }, []);
+
   useEffect(() => {
     const remembered = localStorage.getItem(REMEMBER_ME_KEY) === 'true';
     setRememberMe(remembered);
@@ -228,6 +251,8 @@ const HomesafeSignupPage: React.FC = () => {
         return;
       }
 
+      sessionStorage.removeItem('pendingGoogleTfa');
+
       const userRole = result.data.role;
       if (userRole === 'employer') {
         navigate('/employer/dashboard');
@@ -326,6 +351,7 @@ const HomesafeSignupPage: React.FC = () => {
                 className="text-sm hover:underline"
                 style={{ color: authTokens.bodyColor }}
                 onClick={() => {
+                  sessionStorage.removeItem('pendingGoogleTfa');
                   setPendingTfaToken(null);
                   setPendingTfaEmail('');
                   setPendingTfaMethod('email');

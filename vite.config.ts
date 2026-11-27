@@ -4,7 +4,12 @@ import { VitePWA } from 'vite-plugin-pwa';
 import tailwindcss from '@tailwindcss/postcss';
 
 // https://vitejs.dev/config/
-export default defineConfig({
+export default defineConfig(({ command }) => ({
+  // Production builds drop debug console output (API responses, user objects); warn/error stay
+  esbuild:
+    command === 'build'
+      ? { pure: ['console.log', 'console.info', 'console.debug'] }
+      : undefined,
   plugins: [
     react(),
     VitePWA({
@@ -51,4 +56,4 @@ export default defineConfig({
   build: {
     rollupOptions: { output: { manualChunks: undefined } },
   },
-});
+}));

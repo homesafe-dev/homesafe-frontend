@@ -244,7 +244,7 @@ const SuggestionsPage: React.FC = () => {
     } catch (err: any) {
       console.error('Error accepting suggestion:', err);
       const errorMessage =
-        err.response?.data?.data ||
+        err.response?.data?.message ||
         err.message ||
         'Failed to accept suggestion';
       showToast(errorMessage, 'error');

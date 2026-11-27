@@ -189,12 +189,18 @@ const authApi = {
   /**
    * Reset user password
    * @param email - User's email address
+   * @param resetToken - One-time token returned by verifyForgotPasswordOTP
    * @param password - New password
    * @returns Promise with the API response
    */
-  resetPassword: async (email: string, password: string) => {
+  resetPassword: async (
+    email: string,
+    resetToken: string,
+    password: string
+  ) => {
     const response = await axiosInstance.post(AUTH_ENDPOINTS.RESET_PASSWORD, {
       email,
+      reset_token: resetToken,
       password,
     });
     return response.data;
